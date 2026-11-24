@@ -1,0 +1,50 @@
+name: automotive_scanner
+description: Professional OBD2 ELM327 Automotive Diagnostic App for Egyptian Workshops.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State Management & Utilities
+  provider: ^6.1.1
+  intl: ^0.19.0
+  shared_preferences: ^2.2.2
+
+  # Hardware Connectivity (Bluetooth & Sockets)
+  flutter_bluetooth_serial: ^0.4.0
+  permission_handler: ^11.3.0
+
+  # High-Performance Real-Time Charting
+  fl_chart: ^0.66.2
+
+  # PDF Generation & Printing
+  pdf: ^3.10.8
+  printing: ^5.12.0
+  share_plus: ^7.2.2
+
+  # Local Database
+  sqflite: ^2.3.2
+  path: ^1.9.0
+
+  # UI & Styling
+  google_fonts: ^6.1.0
+  flutter_animate: ^4.5.0
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/databases/
+    - assets/images/

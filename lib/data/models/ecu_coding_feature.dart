@@ -1,0 +1,190 @@
+import 'package:flutter/material.dart';
+
+/// Represents a customizable ECU Variant Coding feature or hidden option
+class EcuCodingFeature {
+  final String id;
+  final String title;
+  final String titleAr;
+  final String category;
+  final String description;
+  final String descriptionAr;
+  final List<String> applicableBrands;
+  final String ecuHeader;
+  final String readCommand;
+  final String writeCommandEnable;
+  final String writeCommandDisable;
+  final IconData icon;
+  bool isEnabled;
+
+  EcuCodingFeature({
+    required this.id,
+    required this.title,
+    required this.titleAr,
+    required this.category,
+    required this.description,
+    required this.descriptionAr,
+    required this.applicableBrands,
+    required this.ecuHeader,
+    required this.readCommand,
+    required this.writeCommandEnable,
+    required this.writeCommandDisable,
+    required this.icon,
+    this.isEnabled = false,
+  });
+
+  /// 10 Core high-demand vehicle customization and coding features in Egyptian workshops
+  static List<EcuCodingFeature> getDefaultFeatures() {
+    return [
+      EcuCodingFeature(
+        id: "needle_sweep",
+        title: "Gauge Needle Sweep on Ignition (Staging)",
+        titleAr: "حركة مؤشرات العدادات عند فتح الكونتاك (Staging)",
+        category: "Dashboard & Cluster",
+        description: "Commands speedometer and tachometer needles to sweep across the full dial scale and return to zero upon turning ignition ON.",
+        descriptionAr: "تحريك إبر السرعة وعداد الـ RPM حتى أقصى المدى ثم العودة فور تشغيل الكونتاك لمظهر رياضي.",
+        applicableBrands: ["Volkswagen", "Skoda", "Audi", "Seat", "Ford", "Hyundai", "Kia", "MG"],
+        ecuHeader: "7E4",
+        readCommand: "22 01 40",
+        writeCommandEnable: "2E 01 40 01",
+        writeCommandDisable: "2E 01 40 00",
+        icon: Icons.speed,
+        isEnabled: false,
+      ),
+      EcuCodingFeature(
+        id: "mirror_fold",
+        title: "Automatic Wing Mirror Fold on Remote Lock",
+        titleAr: "ضم المرايات الجانبية أوتوماتيكياً مع ريموت القفل",
+        category: "Comfort & Convenience",
+        description: "Automatically folds electric side view mirrors inward when locking doors via keyless remote fob.",
+        descriptionAr: "طي المرايات الكهربائية تلقائياً بمجرد غلق السيارة بالريموت لحمايتها من الخدش في الشوارع الضيقة.",
+        applicableBrands: ["Nissan", "Renault", "Peugeot", "Citroen", "Kia", "Hyundai", "MG", "Fiat"],
+        ecuHeader: "7E4",
+        readCommand: "22 01 41",
+        writeCommandEnable: "2E 01 41 01",
+        writeCommandDisable: "2E 01 41 00",
+        icon: Icons.unfold_less,
+        isEnabled: false,
+      ),
+      EcuCodingFeature(
+        id: "drl_activation",
+        title: "Daytime Running Lights (DRL) Always Active",
+        titleAr: "تفعيل إضاءة الليد النهارية DRL بشكل دائم",
+        category: "Lighting & Vision",
+        description: "Powers LED strip daytime running lamps continuously whenever ignition key is ON for increased highway visibility.",
+        descriptionAr: "تشغيل الإضاءة النهارية الليد تلقائياً مع فتح الكونتاك لزيادة الأمان على الطرق السريعة.",
+        applicableBrands: ["Renault", "Dacia", "Peugeot", "Nissan", "Fiat", "Chevrolet", "Chery"],
+        ecuHeader: "7E4",
+        readCommand: "22 01 42",
+        writeCommandEnable: "2E 01 42 01",
+        writeCommandDisable: "2E 01 42 00",
+        icon: Icons.lightbulb,
+        isEnabled: false,
+      ),
+      EcuCodingFeature(
+        id: "cornering_fog_lights",
+        title: "Cornering Fog Lamp Assist on Turn Signal",
+        titleAr: "إضاءة كشاف الضباب جهة الانعطاف (Cornering Lights)",
+        category: "Lighting & Vision",
+        description: "Illuminates left or right front fog lamp when steering wheel turns or turn signal is engaged below 40 km/h.",
+        descriptionAr: "إضاءة الفوج الأيمن أو الأيسر تلقائياً مع لفة الدركسيون لكشف الزوايا المعتمة.",
+        applicableBrands: ["Volkswagen", "Skoda", "Seat", "Fiat", "Ford", "Renault"],
+        ecuHeader: "7E4",
+        readCommand: "22 01 43",
+        writeCommandEnable: "2E 01 43 01",
+        writeCommandDisable: "2E 01 43 00",
+        icon: Icons.turn_right,
+        isEnabled: false,
+      ),
+      EcuCodingFeature(
+        id: "seatbelt_chime_off",
+        title: "Seatbelt Warning Audible Chime Suppression",
+        titleAr: "إلغاء جرس تنبيه حزام الأمان الصوتي",
+        category: "Safety & Chimes",
+        description: "Disables repetitive acoustic speaker chime while keeping the visual instrument cluster red indicator lamp active.",
+        descriptionAr: "كتم التنبيه الصوتي المزعج لحزام الأمان مع استمرار إضاءة اللمبة الحمراء التحذيرية.",
+        applicableBrands: ["Toyota", "Nissan", "Hyundai", "Kia", "Mitsubishi", "Chevrolet", "Subaru"],
+        ecuHeader: "7E4",
+        readCommand: "22 01 44",
+        writeCommandEnable: "2E 01 44 00",
+        writeCommandDisable: "2E 01 44 01",
+        icon: Icons.volume_off,
+        isEnabled: false,
+      ),
+      EcuCodingFeature(
+        id: "speed_warning_120",
+        title: "Egyptian 120 km/h Highway Speed Alarm Toggle",
+        titleAr: "تفعيل / إلغاء جرس السرعة الزائدة (120 كم/س)",
+        category: "Safety & Chimes",
+        description: "Configures or silences continuous 120 km/h highway speed overspeed warning chime mandated on Gulf & Middle East spec cars.",
+        descriptionAr: "التحكم في صفارة التنبيه المزعجة عند تجاوز سرعة 120 كم/ساعة على الطرق السفرية المصرية.",
+        applicableBrands: ["Toyota", "Nissan", "Mitsubishi", "Kia", "Hyundai", "BYD", "Chery"],
+        ecuHeader: "7E4",
+        readCommand: "22 01 45",
+        writeCommandEnable: "2E 01 45 01",
+        writeCommandDisable: "2E 01 45 00",
+        icon: Icons.notifications_active,
+        isEnabled: true,
+      ),
+      EcuCodingFeature(
+        id: "auto_door_lock_speed",
+        title: "Auto Door Lock at 15 km/h",
+        titleAr: "القفل التلقائي للأبواب مع سرعة 15 كم/س",
+        category: "Comfort & Convenience",
+        description: "Automatically triggers central door locking when vehicle speed reaches 15 km/h to protect cabin occupants.",
+        descriptionAr: "غلق سنتر لوك الأبواب أوتوماتيكياً بمجرد تحرك السيارة لتأمين الأطفال وحماية الحقائب.",
+        applicableBrands: ["Nissan", "Renault", "Hyundai", "Kia", "Chery", "MG", "BYD"],
+        ecuHeader: "7E4",
+        readCommand: "22 01 46",
+        writeCommandEnable: "2E 01 46 01",
+        writeCommandDisable: "2E 01 46 00",
+        icon: Icons.lock,
+        isEnabled: false,
+      ),
+      EcuCodingFeature(
+        id: "emergency_braking_flashers",
+        title: "Emergency Hard-Braking Hazard Flashers",
+        titleAr: "تشغيل الانتظار التلقائي عند الفرملة المفاجئة",
+        category: "Safety & Chimes",
+        description: "Automatically pulses emergency hazard blinkers rapidly when decelerating at > 7 m/s² to prevent rear-end collisions.",
+        descriptionAr: "تشغيل فلاشات الانتظار السريع تلقائياً عند الدوس بقوة على الفرامل لتنبيه السيارات الخلفية.",
+        applicableBrands: ["Volkswagen", "Skoda", "Peugeot", "Citroen", "Renault", "Ford"],
+        ecuHeader: "7E4",
+        readCommand: "22 01 47",
+        writeCommandEnable: "2E 01 47 01",
+        writeCommandDisable: "2E 01 47 00",
+        icon: Icons.warning_amber,
+        isEnabled: false,
+      ),
+      EcuCodingFeature(
+        id: "comfort_turn_signals",
+        title: "Comfort Turn Signals (5 Flashes vs 3)",
+        titleAr: "زيادة ومضات إشارة التخطي إلى 5 ومضات بدلاً من 3",
+        category: "Lighting & Vision",
+        description: "Extends highway lane-change tap indicator blinks from factory 3 pulses to 5 pulses for clearer lane transition.",
+        descriptionAr: "تمديد عدد ومضات لمسة ذراع الإشارة على الطرق السريعة لتسهيل المناورة وتغيير الحارة.",
+        applicableBrands: ["Volkswagen", "Skoda", "Audi", "Seat", "BMW", "Ford"],
+        ecuHeader: "7E4",
+        readCommand: "22 01 48",
+        writeCommandEnable: "2E 01 48 05",
+        writeCommandDisable: "2E 01 48 03",
+        icon: Icons.compare_arrows,
+        isEnabled: false,
+      ),
+      EcuCodingFeature(
+        id: "acoustic_lock_chirp",
+        title: "Acoustic Horn Chirp on Remote Lock Confirmation",
+        titleAr: "صوت كلاكس تأكيد خفيف عند القفل بالريموت",
+        category: "Comfort & Convenience",
+        description: "Sounds a short horn tap or siren chirp when all doors and trunk are successfully latched and locked via remote.",
+        descriptionAr: "إصدار تنبيه صوتي قصير يؤكد إحكام غلق جميع الأبواب والشنطة من مسافة بعيدة.",
+        applicableBrands: ["Chevrolet", "Toyota", "Jeep", "Ford", "Nissan", "Hyundai"],
+        ecuHeader: "7E4",
+        readCommand: "22 01 49",
+        writeCommandEnable: "2E 01 49 01",
+        writeCommandDisable: "2E 01 49 00",
+        icon: Icons.campaign,
+        isEnabled: false,
+      ),
+    ];
+  }
+}
