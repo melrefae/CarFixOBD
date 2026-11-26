@@ -61,7 +61,9 @@ class MockObdConnection implements ObdConnection {
         cmd.startsWith("AT H") ||
         cmd.startsWith("AT SP") ||
         cmd.startsWith("AT AT") ||
-        cmd.startsWith("AT ST")) {
+        cmd.startsWith("AT ST") ||
+        cmd.startsWith("AT CRA") ||
+        cmd == "AT AR") {
       reply = "OK\r\r>";
     } else if (cmd == "AT RV") {
       // محاكاة فولت البطارية والشحن
@@ -226,10 +228,39 @@ class MockObdConnection implements ObdConnection {
     } else if (cmd.startsWith("08")) {
       // Mode 08 Request Control of On-Board Component
       reply = "48 01 00\r\r>";
+    } else if (cmd == "0600" || cmd == "06 00") {
+      // Mode 06 Supported MIDs bitmask (MIDs 01, 02, 21, 3A, A1-A5)
+      reply = "46 00 C0 00 00 00\r\r>";
+    } else if (cmd == "0601" || cmd == "06 01") {
+      // O2 Sensor Bank 1 Sensor 1 Rich-to-Lean Voltage Threshold (MID 01, TID 01, UASID 0A = mV)
+      reply = "46 01 01 0A 01 90 00 64 03 E8\r\r>";
+    } else if (cmd == "0602" || cmd == "06 02") {
+      // O2 Sensor Bank 1 Sensor 2 Lean-to-Rich Threshold (MID 02, TID 01, UASID 0A = mV)
+      reply = "46 02 01 0A 01 C2 00 64 03 E8\r\r>";
+    } else if (cmd == "0621" || cmd == "06 21") {
+      // Catalyst Monitor Bank 1 Efficiency Index (MID 21, TID 80, UASID 10 = ms/index)
+      reply = "46 21 80 10 00 B4 00 64 03 E8\r\r>";
+    } else if (cmd == "063A" || cmd == "06 3A") {
+      // EVAP Purge Flow Monitor (MID 3A, TID 01, UASID 24 = counts)
+      reply = "46 3A 01 24 00 05 00 00 00 32\r\r>";
+    } else if (cmd == "06A1" || cmd == "06 A1") {
+      // Total Misfire Data (MID A1, TID 0C, UASID 24 = counts)
+      reply = "46 A1 0C 24 00 02 00 00 00 32\r\r>";
+    } else if (cmd == "06A2" || cmd == "06 A2") {
+      // Cylinder 1 Misfire Monitor (MID A2, TID 0B, UASID 24, Val: 0, Max: 25)
+      reply = "46 A2 0B 24 00 00 00 00 00 19\r\r>";
+    } else if (cmd == "06A3" || cmd == "06 A3") {
+      // Cylinder 2 Misfire Monitor (MID A3, TID 0B, UASID 24, Val: 1, Max: 25)
+      reply = "46 A3 0B 24 00 01 00 00 00 19\r\r>";
+    } else if (cmd == "06A4" || cmd == "06 A4") {
+      // Cylinder 3 Misfire Monitor (MID A4, TID 0B, UASID 24, Val: 0, Max: 25)
+      reply = "46 A4 0B 24 00 00 00 00 00 19\r\r>";
+    } else if (cmd == "06A5" || cmd == "06 A5") {
+      // Cylinder 4 Misfire Monitor (MID A5, TID 0B, UASID 24, Val: 1, Max: 25)
+      reply = "46 A5 0B 24 00 01 00 00 00 19\r\r>";
     } else if (cmd.startsWith("06")) {
-      // Mode 06 On-Board Diagnostic Component Monitoring (TIDs/CIDs)
-      // Simulating Misfire Monitor Cylinder 1 (TID $A2, CID $0B, Val: 0, Max Limit: 25 counts)
-      reply = "46 A2 0B 00 00 00 00 00 19\r\r>";
+      // Unsupported Mode 06 MID returns standard NO DATA
+      reply = "NO DATA\r\r>";
     } else if (cmd.startsWith("0132") || cmd.startsWith("01 32")) {
       // EVAP Vapor Pressure (0.00 kPa / 0 Pa)
       reply = "41 32 80 00\r\r>";

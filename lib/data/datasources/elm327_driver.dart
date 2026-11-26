@@ -111,17 +111,40 @@ class Elm327Driver {
   }
 
   /// Send command to a specific CAN ECU module by setting header (e.g., 7E0=ECM, 7E1=TCM, 7E2=ABS, 7E3=SRS, 7E4=BCM)
-  Future<String> sendToModule(String moduleHeaderHex, String command, {Duration timeout = const Duration(seconds: 3)}) async {
+  Future<String> sendToModule(
+    String moduleHeaderHex,
+    String command, {
+    Duration timeout = const Duration(seconds: 3),
+    bool setRxFilter = true,
+  }) async {
+    final cleanHeader = moduleHeaderHex.trim().toUpperCase();
+    final rxHeader = _deriveCanRxHeader(cleanHeader);
     try {
-      await executeCommand("AT SH $moduleHeaderHex", timeout: const Duration(milliseconds: 600));
+      await executeCommand("AT SH $cleanHeader", timeout: const Duration(milliseconds: 600));
+      if (setRxFilter && rxHeader != null && (_activeProtocol.isEmpty || _activeProtocol.toUpperCase().contains('CAN') || _activeProtocol.contains('15765') || _activeProtocol == 'Unknown')) {
+        await _sendAtCommandSafe("AT CRA $rxHeader", timeout: const Duration(milliseconds: 500));
+      }
       final resp = await executeCommand(command, timeout: timeout);
       return resp;
     } finally {
-      // Restore broadcast header
+      // Restore broadcast header and clear CAN receive filter
       try {
+        await _sendAtCommandSafe("AT AR", timeout: const Duration(milliseconds: 400));
         await executeCommand("AT SH 7DF", timeout: const Duration(milliseconds: 400));
       } catch (_) {}
     }
+  }
+
+  static String? _deriveCanRxHeader(String txHeaderHex) {
+    final clean = txHeaderHex.replaceAll('0X', '').trim();
+    if (clean.length != 3) return null;
+    final txVal = int.tryParse(clean, radix: 16);
+    if (txVal == null) return null;
+    // Standard 11-bit OBD/UDS physical addressing: RX = TX + 8 (7E0->7E8, 7E1->7E9, 720->728, 760->768)
+    if (txVal >= 0x700 && txVal <= 0x7F7) {
+      return (txVal + 8).toRadixString(16).toUpperCase().padLeft(3, '0');
+    }
+    return null;
   }
 
   /// Gentle AT command sequence with clone tolerance
@@ -141,27 +164,45 @@ class Elm327Driver {
     try {
       // 1. Clear any pending UART line garbage
       await connection.send("\r\r\r");
-      await Future.delayed(const Duration(milliseconds: 200));
+      await Future.delayed(const Duration(milliseconds: 120));
+
+      bool adapterResponded = false;
 
       // 2. Warm start / Reset ELM327
-      final resetResp = await _sendAtCommandSafe(ObdCommands.reset, timeout: const Duration(seconds: 2));
-      if (resetResp.isNotEmpty && !resetResp.contains("TIMEOUT")) {
+      final resetResp = await _sendAtCommandSafe(ObdCommands.reset, timeout: const Duration(milliseconds: 1800));
+      if (resetResp.isNotEmpty && resetResp != "TIMEOUT") {
+        adapterResponded = true;
         _elmVersion = resetResp;
+        await Future.delayed(const Duration(milliseconds: 220));
+      } else {
+        // Fallback fast identity probe (AT I) if AT Z reset didn't wake a sleeping chip
+        final idResp = await _sendAtCommandSafe("AT I", timeout: const Duration(milliseconds: 1000));
+        if (idResp.isNotEmpty && idResp != "TIMEOUT") {
+          adapterResponded = true;
+          _elmVersion = idResp;
+        }
       }
 
-      await Future.delayed(const Duration(milliseconds: 300));
-
       // 3. Disable echo, linefeeds, and headers for high parsing speed
-      await _sendAtCommandSafe(ObdCommands.echoOff);
-      await _sendAtCommandSafe(ObdCommands.linefeedsOff);
-      await _sendAtCommandSafe(ObdCommands.headersOff);
+      final echoResp = await _sendAtCommandSafe(ObdCommands.echoOff, timeout: const Duration(milliseconds: 900));
+      if (echoResp.isNotEmpty && echoResp != "TIMEOUT") {
+        adapterResponded = true;
+      }
+
+      if (!adapterResponded) {
+        _state = ElmDriverState.error;
+        return false;
+      }
+
+      await _sendAtCommandSafe(ObdCommands.linefeedsOff, timeout: const Duration(milliseconds: 800));
+      await _sendAtCommandSafe(ObdCommands.headersOff, timeout: const Duration(milliseconds: 800));
       // Adaptive timing - some clones return '?' on AT AT 1 so we tolerate it
-      await _sendAtCommandSafe(ObdCommands.adaptiveTimingOn);
+      await _sendAtCommandSafe(ObdCommands.adaptiveTimingOn, timeout: const Duration(milliseconds: 800));
       // Set reasonable ELM timeout (64 = ~400ms, prevents slow freezes)
-      await _sendAtCommandSafe("AT ST 64");
+      await _sendAtCommandSafe("AT ST 64", timeout: const Duration(milliseconds: 800));
 
       // 4. Read battery voltage (AT RV)
-      final voltResp = await _sendAtCommandSafe(ObdCommands.readVoltage);
+      final voltResp = await _sendAtCommandSafe(ObdCommands.readVoltage, timeout: const Duration(milliseconds: 1200));
       final parsedVolt = HexParser.parseVoltage(voltResp);
       if (parsedVolt != null && parsedVolt > 5.0) {
         _lastBatteryVoltage = parsedVolt;

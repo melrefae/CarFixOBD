@@ -9,6 +9,32 @@ class WifiObdConnection implements ObdConnection {
   StreamSubscription<List<int>>? _socketSubscription;
   final StreamController<String> _responseController = StreamController<String>.broadcast();
   bool _isConnected = false;
+  void Function()? onDisconnected;
+
+  static const List<String> commonWifiEndpoints = [
+    "192.168.0.10:35000",
+    "192.168.1.10:35000",
+    "192.168.4.1:333",
+    "192.168.8.1:35000",
+  ];
+
+  /// Fast non-blocking reachability probe for auto-detecting Wi-Fi ELM327 dongles
+  static Future<String?> detectReachableWifiEndpoint({
+    Duration probeTimeout = const Duration(milliseconds: 900),
+  }) async {
+    for (final ep in commonWifiEndpoints) {
+      final parts = ep.split(':');
+      final host = parts[0];
+      final port = int.parse(parts[1]);
+      try {
+        final sock = await Socket.connect(host, port, timeout: probeTimeout);
+        await sock.close();
+        sock.destroy();
+        return ep;
+      } catch (_) {}
+    }
+    return null;
+  }
 
   @override
   bool get isConnected => _isConnected && _socket != null;
@@ -36,7 +62,7 @@ class WifiObdConnection implements ObdConnection {
         host = target;
       }
 
-      _socket = await Socket.connect(host, port, timeout: const Duration(seconds: 6));
+      _socket = await Socket.connect(host, port, timeout: const Duration(seconds: 4));
       _isConnected = true;
 
       _socketSubscription?.cancel();
@@ -47,9 +73,11 @@ class WifiObdConnection implements ObdConnection {
         },
         onDone: () {
           _isConnected = false;
+          onDisconnected?.call();
         },
         onError: (err) {
           _isConnected = false;
+          onDisconnected?.call();
         },
       );
 

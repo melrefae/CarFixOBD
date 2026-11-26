@@ -23,9 +23,9 @@ class EcuModuleNode {
   final String description;
   final IconData icon;
   final CanBusType busType;
-  final String softwarePartNumber;
-  final String hardwarePartNumber;
-  final String codingHex;
+  String softwarePartNumber;
+  String hardwarePartNumber;
+  String codingHex;
   final String baudRate;
   EcuModuleStatus status;
   List<String> dtcs;
@@ -40,9 +40,9 @@ class EcuModuleNode {
     required this.description,
     required this.icon,
     this.busType = CanBusType.ptCan500k,
-    this.softwarePartNumber = "03C 906 014 CF",
-    this.hardwarePartNumber = "03C 907 309 J",
-    this.codingHex = "0000072",
+    this.softwarePartNumber = "N/A",
+    this.hardwarePartNumber = "N/A",
+    this.codingHex = "N/A",
     this.baudRate = "500 kbps",
     this.status = EcuModuleStatus.notScanned,
     List<String>? dtcs,
@@ -104,9 +104,6 @@ class EcuModuleNode {
         icon: Icons.speed,
         busType: CanBusType.ptCan500k,
         baudRate: "500 kbps",
-        softwarePartNumber: "03C 906 014 CF",
-        hardwarePartNumber: "03C 907 309 J",
-        codingHex: "0000072",
       ),
       EcuModuleNode(
         header: "7E1",
@@ -116,9 +113,6 @@ class EcuModuleNode {
         icon: Icons.change_circle,
         busType: CanBusType.ptCan500k,
         baudRate: "500 kbps",
-        softwarePartNumber: "0AM 300 048 M",
-        hardwarePartNumber: "0AM 927 769 D",
-        codingHex: "0000020",
       ),
       EcuModuleNode(
         header: "7E2",
@@ -128,9 +122,6 @@ class EcuModuleNode {
         icon: Icons.pan_tool,
         busType: CanBusType.chassisCan500k,
         baudRate: "500 kbps",
-        softwarePartNumber: "1K0 907 379 BE",
-        hardwarePartNumber: "1K0 907 379 AD",
-        codingHex: "113B200D092400FB880C04E5901A00413000",
       ),
       EcuModuleNode(
         header: "7E3",
@@ -140,9 +131,6 @@ class EcuModuleNode {
         icon: Icons.security,
         busType: CanBusType.chassisCan500k,
         baudRate: "500 kbps",
-        softwarePartNumber: "5N0 959 655 R",
-        hardwarePartNumber: "5N0 959 655 J",
-        codingHex: "0012338",
       ),
       EcuModuleNode(
         header: "7E4",
@@ -152,9 +140,6 @@ class EcuModuleNode {
         icon: Icons.dashboard,
         busType: CanBusType.bodyCan125k,
         baudRate: "125 kbps",
-        softwarePartNumber: "1K0 937 087 Q",
-        hardwarePartNumber: "1K0 937 087 K",
-        codingHex: "40180A3B88251AC04008008034000124435500",
       ),
     ];
   }
@@ -170,9 +155,6 @@ class EcuModuleNode {
         icon: Icons.speed,
         busType: CanBusType.ptCan500k,
         baudRate: "500 kbps",
-        softwarePartNumber: "03C 906 014 CF",
-        hardwarePartNumber: "03C 907 309 J",
-        codingHex: "0000072",
       ),
       EcuModuleNode(
         header: "7E1",
@@ -182,9 +164,6 @@ class EcuModuleNode {
         icon: Icons.change_circle,
         busType: CanBusType.ptCan500k,
         baudRate: "500 kbps",
-        softwarePartNumber: "0AM 300 048 M",
-        hardwarePartNumber: "0AM 927 769 D",
-        codingHex: "0000020",
       ),
       EcuModuleNode(
         header: "7E7",
@@ -194,9 +173,6 @@ class EcuModuleNode {
         icon: Icons.alt_route,
         busType: CanBusType.ptCan500k,
         baudRate: "500 kbps",
-        softwarePartNumber: "0AY 907 554 J",
-        hardwarePartNumber: "0AY 907 554 D",
-        codingHex: "0000005",
       ),
 
       // --- Trunk 2: Chassis & Safety CAN (500 kbps) ---
@@ -208,9 +184,6 @@ class EcuModuleNode {
         icon: Icons.pan_tool,
         busType: CanBusType.chassisCan500k,
         baudRate: "500 kbps",
-        softwarePartNumber: "1K0 907 379 BE",
-        hardwarePartNumber: "1K0 907 379 AD",
-        codingHex: "113B200D092400FB880C04E5901A00413000",
       ),
       EcuModuleNode(
         header: "7E5",
@@ -220,9 +193,6 @@ class EcuModuleNode {
         icon: Icons.disc_full,
         busType: CanBusType.chassisCan500k,
         baudRate: "500 kbps",
-        softwarePartNumber: "3C0 907 801 J",
-        hardwarePartNumber: "3C0 907 801 E",
-        codingHex: "0000010",
       ),
       EcuModuleNode(
         header: "7E6",
@@ -232,9 +202,6 @@ class EcuModuleNode {
         icon: Icons.sports_motorsports,
         busType: CanBusType.chassisCan500k,
         baudRate: "500 kbps",
-        softwarePartNumber: "1K0 909 144 J",
-        hardwarePartNumber: "1K0 909 144 E",
-        codingHex: "0000002",
       ),
       EcuModuleNode(
         header: "7E3",
@@ -244,9 +211,6 @@ class EcuModuleNode {
         icon: Icons.security,
         busType: CanBusType.chassisCan500k,
         baudRate: "500 kbps",
-        softwarePartNumber: "5N0 959 655 R",
-        hardwarePartNumber: "5N0 959 655 J",
-        codingHex: "0012338",
       ),
 
       // --- Trunk 3: Body & Comfort CAN (125 kbps) ---
@@ -258,9 +222,6 @@ class EcuModuleNode {
         icon: Icons.dashboard,
         busType: CanBusType.bodyCan125k,
         baudRate: "125 kbps",
-        softwarePartNumber: "1K0 937 087 Q",
-        hardwarePartNumber: "1K0 937 087 K",
-        codingHex: "40180A3B88251AC04008008034000124435500",
       ),
       EcuModuleNode(
         header: "7E8",
@@ -270,9 +231,6 @@ class EcuModuleNode {
         icon: Icons.ac_unit,
         busType: CanBusType.bodyCan125k,
         baudRate: "125 kbps",
-        softwarePartNumber: "5K0 907 044 EA",
-        hardwarePartNumber: "5K0 907 044 BT",
-        codingHex: "0000000002",
       ),
       EcuModuleNode(
         header: "7E9",
@@ -282,9 +240,6 @@ class EcuModuleNode {
         icon: Icons.dialpad,
         busType: CanBusType.bodyCan125k,
         baudRate: "125 kbps",
-        softwarePartNumber: "5K0 920 870 F",
-        hardwarePartNumber: "5K0 920 870 C",
-        codingHex: "110F00",
       ),
       EcuModuleNode(
         header: "7EA",
@@ -294,9 +249,6 @@ class EcuModuleNode {
         icon: Icons.sensor_door,
         busType: CanBusType.bodyCan125k,
         baudRate: "125 kbps",
-        softwarePartNumber: "1K0 959 701 Q",
-        hardwarePartNumber: "1K0 959 701 M",
-        codingHex: "0000180",
       ),
 
       // --- Trunk 4: Sub-Bus LIN (19.2 kbps) ---
@@ -308,9 +260,6 @@ class EcuModuleNode {
         icon: Icons.battery_charging_full,
         busType: CanBusType.lin19k,
         baudRate: "19.2 kbps",
-        softwarePartNumber: "BOSCH-LIN2-014",
-        hardwarePartNumber: "06F 903 023 F",
-        codingHex: "01",
       ),
       EcuModuleNode(
         header: "LIN-2",
@@ -320,9 +269,6 @@ class EcuModuleNode {
         icon: Icons.water_drop,
         busType: CanBusType.lin19k,
         baudRate: "19.2 kbps",
-        softwarePartNumber: "1K0 955 559 AH",
-        hardwarePartNumber: "1K0 955 559 M",
-        codingHex: "0730ED",
       ),
       EcuModuleNode(
         header: "LIN-3",
@@ -332,9 +278,6 @@ class EcuModuleNode {
         icon: Icons.window,
         busType: CanBusType.lin19k,
         baudRate: "19.2 kbps",
-        softwarePartNumber: "1K6 959 591 E",
-        hardwarePartNumber: "1K6 959 591 B",
-        codingHex: "05",
       ),
     ];
   }

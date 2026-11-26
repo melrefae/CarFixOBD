@@ -20,14 +20,14 @@ class _HudDisplayScreenState extends State<HudDisplayScreen> {
 
     double speed = 0.0;
     double rpm = 0.0;
-    double coolant = 85.0;
+    double coolant = 0.0;
     double voltage = state.batteryVoltage;
 
     for (var s in state.sensors) {
-      if (s.pid == "0D") speed = s.currentValue;
-      if (s.pid == "0C") rpm = s.currentValue;
-      if (s.pid == "05") coolant = s.currentValue;
-      if (s.pid == "42") voltage = s.currentValue;
+      if (s.pid == "0D" && s.hasValidReading) speed = s.currentValue;
+      if (s.pid == "0C" && s.hasValidReading) rpm = s.currentValue;
+      if (s.pid == "05" && s.hasValidReading) coolant = s.currentValue;
+      if (s.pid == "42" && s.hasValidReading && s.currentValue > 5.0) voltage = s.currentValue;
     }
 
     final isCoolantCritical = coolant >= 105.0;

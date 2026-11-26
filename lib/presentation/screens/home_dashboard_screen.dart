@@ -45,6 +45,7 @@ import 'voice_inspection_assistant_screen.dart';
 import 'ar_engine_bay_hud_screen.dart';
 import 'customer_dispatch_hub_screen.dart';
 import 'offline_vault_protocol_sniffer_screen.dart';
+import 'mode06_monitor_screen.dart';
 
 /// Main Workshop Dashboard Screen for Automotive Diagnostic Center
 class HomeDashboardScreen extends StatelessWidget {
@@ -503,6 +504,17 @@ class HomeDashboardScreen extends StatelessWidget {
                 ),
                 _buildActionCard(
                   context: context,
+                  title: "Mode \$06 Misfires",
+                  subtitle: "On-Board Monitors & Misfire Counters",
+                  icon: Icons.monitor_heart_outlined,
+                  accentColor: AppColors.accentCyan,
+                  badgeText: "\$06",
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const Mode06MonitorScreen()));
+                  },
+                ),
+                _buildActionCard(
+                  context: context,
                   title: AppStrings.liveSensors,
                   subtitle: "Real-Time Sensor Monitoring Gauges",
                   icon: Icons.speed,
@@ -804,16 +816,42 @@ class HomeDashboardScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  statusTitle,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        statusTitle,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (state.isVehicleAutoDetected && state.detectedVehicleInfo != null) ...[
+                      const SizedBox(width: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: AppColors.successGreen.withOpacity(0.18),
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: AppColors.successGreen.withOpacity(0.5)),
+                        ),
+                        child: const Text(
+                          "AUTO-DETECTED",
+                          style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: AppColors.successGreen),
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
                 const SizedBox(height: 2),
                 Text(
                   state.isConnected
-                      ? "Battery: ${state.batteryVoltage.toStringAsFixed(1)}V | Vehicle: ${state.selectedVehicle?.model ?? 'Generic'}"
+                      ? (state.isVehicleAutoDetected && state.detectedVehicleInfo != null
+                          ? "Battery: ${state.batteryVoltage.toStringAsFixed(1)}V | ${state.detectedVehicleInfo!.displaySummary}"
+                          : "Battery: ${state.batteryVoltage.toStringAsFixed(1)}V | Vehicle: ${state.selectedVehicle?.model ?? 'Generic'}")
                       : state.statusMessage,
                   style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),

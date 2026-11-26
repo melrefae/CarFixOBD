@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/vehicle_profile.dart';
 import '../models/worldwide_brand.dart';
+import '../../domain/services/vin_decoder_service.dart';
 
 /// Repository managing vehicle profiles for the Egyptian market
 class VehicleRepository {
@@ -117,6 +118,107 @@ class VehicleRepository {
       region: brand.region,
       customPids: [],
     );
+  }
+
+  /// Automatically match the closest preset or synthesize a tailored profile from decoded VIN / ECU telemetry
+  VehicleProfile autoMatchOrCreateProfile(DecodedVehicleInfo info) {
+    final targetMake = info.make.toLowerCase();
+    final aliasMakes = <String>{targetMake};
+    if (targetMake == 'chevrolet') aliasMakes.add('daewoo');
+    if (targetMake == 'daewoo') aliasMakes.add('chevrolet');
+    if (targetMake == 'chery') aliasMakes.add('speranza');
+    if (targetMake == 'speranza') aliasMakes.add('chery');
+
+    final candidates = _profiles.where((p) {
+      final pm = p.make.toLowerCase();
+      return aliasMakes.any((a) => pm == a || pm.contains(a));
+    }).toList();
+
+    VehicleProfile? bestMatch;
+    if (candidates.isNotEmpty) {
+      int bestScore = -1;
+      final hintTokens = info.modelHint
+          .toLowerCase()
+          .split(RegExp(r'[\s/()]+'))
+          .where((t) => t.length >= 2)
+          .toList();
+
+      for (final p in candidates) {
+        int score = p.make.toLowerCase() == targetMake ? 20 : 10;
+        final modelLower = p.model.toLowerCase();
+
+        for (final token in hintTokens) {
+          if (modelLower.contains(token)) {
+            score += 35;
+          }
+        }
+
+        if (info.year != null) {
+          final yearMatch = RegExp(r'(\d{4})\s*[-–]\s*(\d{4})').firstMatch(p.years);
+          if (yearMatch != null) {
+            final startY = int.tryParse(yearMatch.group(1)!) ?? 1990;
+            final endY = int.tryParse(yearMatch.group(2)!) ?? 2030;
+            if (info.year! >= startY && info.year! <= endY) {
+              score += 25;
+            } else {
+              score -= 10;
+            }
+          }
+        }
+
+        if (info.suggestedProtocolCmd != null && p.atProtocolCmd == info.suggestedProtocolCmd) {
+          score += 5;
+        }
+
+        if (score > bestScore) {
+          bestScore = score;
+          bestMatch = p;
+        }
+      }
+    }
+
+    if (bestMatch != null) {
+      selectProfile(bestMatch);
+      return bestMatch;
+    }
+
+    // Fallback to WorldwideBrandCatalog match
+    final catalogMatches = WorldwideBrandCatalog.allBrands.where(
+      (b) => b.name.toLowerCase() == targetMake || b.name.toLowerCase().contains(targetMake),
+    );
+    final brand = catalogMatches.isNotEmpty
+        ? catalogMatches.first
+        : WorldwideBrand(
+            name: info.make,
+            nameAr: info.make,
+            region: info.region,
+            country: info.country,
+          );
+
+    final yrStr = info.year != null ? '${info.year}' : 'All Production Years';
+    final modStr = info.modelHint.isNotEmpty ? info.modelHint : 'Auto-Detected OBD2 / UDS';
+    final autoProfile = VehicleProfile(
+      id: "auto_${info.make.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '_')}_${info.year ?? 'gen'}",
+      make: brand.name,
+      makeAr: brand.nameAr,
+      model: modStr,
+      years: yrStr,
+      engine: 'Auto-Detected via ${info.detectionSource}',
+      protocol: info.suggestedProtocolCmd == 'AT SP 6'
+          ? 'ISO 15765-4 (CAN 11/500)'
+          : 'Auto OBD-II / UDS',
+      atProtocolCmd: info.suggestedProtocolCmd ?? 'AT SP 0',
+      transmission: 'Automatic / Manual',
+      notesAr: 'تم التعرف تلقائياً على السيارة ${brand.nameAr} $modStr ($yrStr) عبر ${info.detectionSource}.',
+      notesEn: 'Auto-detected ${brand.name} $modStr ($yrStr) via ${info.detectionSource}. VIN: ${info.vin}.',
+      region: brand.region,
+      customPids: [],
+    );
+
+    _profiles.removeWhere((p) => p.id == autoProfile.id);
+    _profiles.insert(0, autoProfile);
+    selectProfile(autoProfile);
+    return autoProfile;
   }
 
   /// Add custom workshop vehicle profile

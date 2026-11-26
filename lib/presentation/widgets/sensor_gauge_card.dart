@@ -26,9 +26,19 @@ class SensorGaugeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final catColor = _getCategoryColor(sensor.category);
+    final catColor = !sensor.isSupported
+        ? AppColors.textDisabled
+        : _getCategoryColor(sensor.category);
     final range = (sensor.max - sensor.min).clamp(1.0, 99999.0);
-    final normalized = ((sensor.currentValue - sensor.min) / range).clamp(0.0, 1.0);
+    final normalized = sensor.hasValidReading
+        ? ((sensor.currentValue - sensor.min) / range).clamp(0.0, 1.0)
+        : 0.0;
+
+    final String readoutText = !sensor.isSupported
+        ? "N/A"
+        : (!sensor.hasValidReading
+            ? "--"
+            : sensor.currentValue.toStringAsFixed(sensor.unit == "RPM" ? 0 : 1));
 
     return Card(
       child: InkWell(
@@ -50,16 +60,18 @@ class SensorGaugeCard extends StatelessWidget {
                       children: [
                         Text(
                           sensor.name,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.textWhite,
+                            color: sensor.isSupported ? AppColors.textWhite : AppColors.textMuted,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          "PID 0x${sensor.pid} • ${sensor.category}",
+                          sensor.isSupported
+                              ? "Mode ${sensor.mode} 0x${sensor.pid} • ${sensor.category}"
+                              : "0x${sensor.pid} • Unsupported by ECU",
                           style: const TextStyle(fontSize: 10, color: AppColors.textMuted),
                         ),
                       ],
@@ -69,7 +81,9 @@ class SensorGaugeCard extends StatelessWidget {
                     width: 10,
                     height: 10,
                     decoration: BoxDecoration(
-                      color: catColor,
+                      color: sensor.hasValidReading
+                          ? AppColors.successGreen
+                          : (sensor.isSupported ? catColor.withOpacity(0.5) : AppColors.textDisabled),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -84,18 +98,18 @@ class SensorGaugeCard extends StatelessWidget {
                 textBaseline: TextBaseline.alphabetic,
                 children: [
                   Text(
-                    sensor.currentValue.toStringAsFixed(sensor.unit == "RPM" ? 0 : 1),
+                    readoutText,
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: catColor,
+                      color: sensor.hasValidReading ? catColor : AppColors.textDisabled,
                       fontFamily: 'monospace',
                     ),
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    sensor.unit,
-                    style: const TextStyle(fontSize: 14, color: AppColors.textMuted, fontWeight: FontWeight.bold),
+                    sensor.isSupported ? (sensor.hasValidReading ? sensor.unit : "Waiting...") : "",
+                    style: const TextStyle(fontSize: 13, color: AppColors.textMuted, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

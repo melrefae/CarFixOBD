@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/localization/app_strings_en.dart';
+import '../../core/utils/hex_parser.dart';
 import '../../domain/analyzers/fuel_trim_analyzer.dart';
 import '../../domain/analyzers/battery_health_checker.dart';
 import '../providers/obd_state.dart';
@@ -22,16 +24,114 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
   double _ltftIdle = 16.0;
   double _stftLoad = 2.0;
   double _ltftLoad = 4.0;
+  bool _isCapturingTrims = false;
+  String? _trimCaptureNote;
 
   // Battery test values
   double _restingVoltage = 12.5;
   double _crankingVoltage = 10.2;
   double _runningVoltage = 14.2;
+  bool _isSamplingBattery = false;
+  Timer? _batteryTimer;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _batteryTimer?.cancel();
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _captureLiveTrims(ObdState state, {required bool isLoad}) async {
+    if (!state.isConnected) return;
+    setState(() {
+      _isCapturingTrims = true;
+      _trimCaptureNote = isLoad ? "Reading 2500 RPM STFT / LTFT from ECU..." : "Reading Idle STFT / LTFT from ECU...";
+    });
+
+    try {
+      double? stft;
+      double? ltft;
+      final stftRaw = await state.sendCommand("0106");
+      final stftP = HexParser.extractPayload(HexParser.extractBytes(stftRaw), 0x01, 0x06);
+      if (stftP.isNotEmpty) stft = ((stftP[0] - 128.0) * 100.0) / 128.0;
+
+      final ltftRaw = await state.sendCommand("0107");
+      final ltftP = HexParser.extractPayload(HexParser.extractBytes(ltftRaw), 0x01, 0x07);
+      if (ltftP.isNotEmpty) ltft = ((ltftP[0] - 128.0) * 100.0) / 128.0;
+
+      if (!mounted) return;
+      if (stft != null || ltft != null) {
+        setState(() {
+          if (isLoad) {
+            if (stft != null) _stftLoad = stft.clamp(-25.0, 25.0);
+            if (ltft != null) _ltftLoad = ltft.clamp(-25.0, 25.0);
+          } else {
+            if (stft != null) _stftIdle = stft.clamp(-25.0, 25.0);
+            if (ltft != null) _ltftIdle = ltft.clamp(-25.0, 25.0);
+          }
+          _trimCaptureNote =
+              "Captured live (${state.currentRpm.round()} RPM): STFT ${stft?.toStringAsFixed(1) ?? 'N/A'}%, LTFT ${ltft?.toStringAsFixed(1) ?? 'N/A'}%";
+        });
+      } else {
+        setState(() {
+          _trimCaptureNote = "ECU returned no 0106/0107 Fuel Trim data.";
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isCapturingTrims = false);
+      }
+    }
+  }
+
+  void _toggleLiveCrankingTest(ObdState state) {
+    if (_isSamplingBattery) {
+      _batteryTimer?.cancel();
+      _batteryTimer = null;
+      setState(() => _isSamplingBattery = false);
+      return;
+    }
+
+    if (!state.isConnected || state.driver == null) return;
+    double lowestSeen = state.batteryVoltage;
+    double highestSeen = state.batteryVoltage;
+
+    setState(() {
+      _isSamplingBattery = true;
+      _restingVoltage = state.batteryVoltage.clamp(10.0, 13.5);
+      _crankingVoltage = state.batteryVoltage.clamp(7.0, 12.0);
+      _runningVoltage = state.batteryVoltage.clamp(11.5, 16.0);
+    });
+
+    _batteryTimer = Timer.periodic(const Duration(milliseconds: 120), (timer) async {
+      if (!mounted || !state.isConnected || state.driver == null) {
+        timer.cancel();
+        if (mounted) setState(() => _isSamplingBattery = false);
+        return;
+      }
+      final v = await state.driver!.refreshBatteryVoltage();
+      if (!mounted || v <= 5.0) return;
+
+      if (v < lowestSeen) lowestSeen = v;
+      if (v > highestSeen) highestSeen = v;
+
+      setState(() {
+        if (lowestSeen < 12.0) {
+          _crankingVoltage = lowestSeen.clamp(7.0, 12.0);
+        }
+        if (v >= 13.2 || highestSeen >= 13.2) {
+          _runningVoltage = v.clamp(11.5, 16.0);
+        } else {
+          _restingVoltage = v.clamp(10.0, 13.5);
+        }
+      });
+    });
   }
 
   @override
@@ -56,16 +156,16 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
         controller: _tabController,
         children: [
           // 1. Fuel Trim & Vacuum Diagnostic Matrix
-          _buildFuelTrimTab(),
+          _buildFuelTrimTab(state),
 
           // 2. Electrical System Diagnostic Tab
-          _buildBatteryTab(state.batteryVoltage),
+          _buildBatteryTab(state),
         ],
       ),
     );
   }
 
-  Widget _buildFuelTrimTab() {
+  Widget _buildFuelTrimTab(ObdState state) {
     final result = FuelTrimAnalyzer.analyze(
       stftIdle: _stftIdle,
       ltftIdle: _ltftIdle,
@@ -89,6 +189,49 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
               style: TextStyle(fontSize: 12, color: AppColors.textWhite, height: 1.4),
             ),
           ),
+          const SizedBox(height: 12),
+
+          // Live ECU Capture Controls
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryYellow,
+                    foregroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                  ),
+                  icon: const Icon(Icons.sensors, size: 18),
+                  label: const Text("Capture Idle Live", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                  onPressed: state.isConnected && !_isCapturingTrims
+                      ? () => _captureLiveTrims(state, isLoad: false)
+                      : null,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.electricBlue,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                  ),
+                  icon: const Icon(Icons.speed, size: 18),
+                  label: const Text("Capture 2500 RPM", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                  onPressed: state.isConnected && !_isCapturingTrims
+                      ? () => _captureLiveTrims(state, isLoad: true)
+                      : null,
+                ),
+              ),
+            ],
+          ),
+          if (_trimCaptureNote != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              _trimCaptureNote!,
+              style: const TextStyle(fontSize: 11, color: AppColors.accentCyan, fontWeight: FontWeight.w600),
+            ),
+          ],
           const SizedBox(height: 16),
 
           // Idle Trims
@@ -193,7 +336,7 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
     );
   }
 
-  Widget _buildBatteryTab(double liveVoltage) {
+  Widget _buildBatteryTab(ObdState state) {
     final result = BatteryHealthChecker.evaluate(
       restingVoltage: _restingVoltage,
       minCrankingVoltage: _crankingVoltage,
@@ -208,10 +351,27 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(color: AppColors.cardSurfaceHighlight, borderRadius: BorderRadius.circular(10)),
-            child: const Text(
-              "This diagnostic evaluates key 12V automotive battery stages: resting open-circuit voltage, starter motor cranking drop (<9.6V indicates failing plates), and alternator regulation under load.",
-              style: TextStyle(fontSize: 12, color: AppColors.textWhite, height: 1.4),
+            child: Text(
+              "Live Adapter Voltage: ${state.batteryVoltage.toStringAsFixed(2)}V • Start Live Cranking Test with engine off, then crank starter & let engine idle to automatically record sag & charging output.",
+              style: const TextStyle(fontSize: 12, color: AppColors.textWhite, height: 1.4),
             ),
+          ),
+          const SizedBox(height: 12),
+
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: _isSamplingBattery ? AppColors.dangerRed : AppColors.successGreen,
+              foregroundColor: _isSamplingBattery ? Colors.white : Colors.black,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+            ),
+            icon: Icon(_isSamplingBattery ? Icons.stop_circle : Icons.bolt),
+            label: Text(
+              _isSamplingBattery
+                  ? "Stop Live Cranking & Alternator Sampling (${state.batteryVoltage.toStringAsFixed(2)}V)"
+                  : "Start Live 12V Cranking & Alternator Test",
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+            ),
+            onPressed: state.isConnected ? () => _toggleLiveCrankingTest(state) : null,
           ),
           const SizedBox(height: 16),
 

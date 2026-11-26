@@ -6,9 +6,10 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/localization/app_strings_en.dart';
 import '../../data/models/adapter_profile.dart';
+import '../../data/datasources/wifi_obd_connection.dart';
 import '../providers/obd_state.dart';
 
-/// Connection manager screen for Bluetooth ELM327, Wi-Fi, and Simulator
+/// Connection manager screen for Bluetooth Classic, BLE 5.0, Wi-Fi, USB-OTG / Serial, and Universal Auto-Detect
 class ConnectionScreen extends StatefulWidget {
   const ConnectionScreen({Key? key}) : super(key: key);
 
@@ -19,8 +20,8 @@ class ConnectionScreen extends StatefulWidget {
 class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final TextEditingController _wifiIpController = TextEditingController(text: "192.168.0.10:35000");
-  final TextEditingController _bleIdController = TextEditingController(text: "OBDII-BLE");
-  final TextEditingController _usbPortController = TextEditingController(text: "/dev/bus/usb/001/002");
+  final TextEditingController _bleIdController = TextEditingController();
+  final TextEditingController _usbPortController = TextEditingController();
   int _selectedUsbBaud = 115200;
 
   List<BluetoothDevice> _pairedDevices = [];
@@ -34,6 +35,11 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
     _loadPairedDevices();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        Provider.of<ObdState>(context, listen: false).scanSerialDevices();
+      }
+    });
   }
 
   @override
@@ -138,7 +144,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
             Tab(icon: Icon(Icons.bluetooth), text: "BT Classic"),
             Tab(icon: Icon(Icons.bluetooth_searching), text: "BLE 5.0"),
             Tab(icon: Icon(Icons.wifi), text: "Wi-Fi"),
-            Tab(icon: Icon(Icons.usb), text: "USB OTG"),
+            Tab(icon: Icon(Icons.usb), text: "USB / Serial"),
           ],
         ),
       ),
@@ -255,7 +261,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
     return ListView(
       padding: const EdgeInsets.all(14),
       children: [
-        // 1. One-Tap Auto Detect & Connect Hero Card
+        // 1. Universal Multi-Transport Auto Detect & Connect Hero Card
         Card(
           elevation: 3,
           color: const Color(0xFF1A2634),
@@ -289,7 +295,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                           ),
                           SizedBox(height: 3),
                           Text(
-                            AppStrings.autoDetectSubtitle,
+                            "Probes USB-OTG / Paired Serial, BT Classic, BLE 5.0 & Wi-Fi automatically + auto-detects car VIN/Model",
                             style: TextStyle(fontSize: 11, color: AppColors.textMuted),
                           ),
                         ],
@@ -313,14 +319,13 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                         )
                       : const Icon(Icons.flash_on),
                   label: Text(
-                    state.isConnecting ? "Connecting..." : "⚡ Auto-Connect Best Adapter",
+                    state.isConnecting ? "Auto-Detecting..." : "Auto-Detect & Connect Any OBD Adapter",
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   ),
                   onPressed: state.isConnecting
                       ? null
                       : () async {
-                          final combined = [..._pairedDevices, ..._discoveredDevices];
-                          final ok = await state.autoConnectBestAdapter(devices: combined.isNotEmpty ? combined : null);
+                          final ok = await state.autoDetectAndConnectAny();
                           if (ok && mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -336,12 +341,11 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                   spacing: 6,
                   runSpacing: 4,
                   children: [
-                    _buildHardwareChip("vLinker MC+/FD+", AppColors.accentCyan),
-                    _buildHardwareChip("OBDLink CX/MX+", AppColors.accentCyan),
-                    _buildHardwareChip("Veepeak BLE+", AppColors.primaryYellow),
-                    _buildHardwareChip("Carista BLE", AppColors.primaryYellow),
-                    _buildHardwareChip("Viecar 4.0", AppColors.primaryYellow),
-                    _buildHardwareChip("ELM327 BT", AppColors.textMuted),
+                    _buildHardwareChip("USB / Serial", AppColors.successGreen),
+                    _buildHardwareChip("BT Classic SPP", AppColors.primaryYellow),
+                    _buildHardwareChip("BLE 4.0 / 5.0", AppColors.accentCyan),
+                    _buildHardwareChip("Wi-Fi TCP", AppColors.electricBlue),
+                    _buildHardwareChip("Auto Car VIN", AppColors.primaryAmber),
                   ],
                 ),
               ],
@@ -395,7 +399,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                 Text(AppStrings.noPairedDevices, style: TextStyle(color: AppColors.textWhite, fontWeight: FontWeight.bold)),
                 SizedBox(height: 6),
                 Text(
-                  AppStrings.pairDevicePrompt,
+                  "On laptop/desktop or non-Android devices, check USB / Serial tab for paired Bluetooth COM/cu ports or BLE 5.0 tab.",
                   style: TextStyle(fontSize: 11, color: AppColors.textMuted),
                   textAlign: TextAlign.center,
                 ),
@@ -565,53 +569,84 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
   }
 
   Widget _buildWifiTab(ObdState state) {
-    return Padding(
+    return ListView(
       padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text(
-            AppStrings.wifiSettingsTitle,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primaryYellow),
+      children: [
+        const Text(
+          AppStrings.wifiSettingsTitle,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primaryYellow),
+        ),
+        const SizedBox(height: 10),
+        const Text(
+          AppStrings.wifiDescription,
+          style: TextStyle(fontSize: 12, color: AppColors.textMuted, height: 1.4),
+        ),
+        const SizedBox(height: 14),
+        Wrap(
+          spacing: 8,
+          runSpacing: 6,
+          children: WifiObdConnection.commonWifiEndpoints.map((ep) {
+            return ActionChip(
+              label: Text(ep, style: const TextStyle(fontSize: 11, color: AppColors.textWhite)),
+              backgroundColor: AppColors.cardSurface,
+              onPressed: () {
+                setState(() {
+                  _wifiIpController.text = ep;
+                });
+              },
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 14),
+        TextField(
+          controller: _wifiIpController,
+          decoration: const InputDecoration(
+            labelText: AppStrings.adapterAddressLabel,
+            prefixIcon: Icon(Icons.settings_ethernet, color: AppColors.primaryYellow),
           ),
-          const SizedBox(height: 12),
-          const Text(
-            AppStrings.wifiDescription,
-            style: TextStyle(fontSize: 12, color: AppColors.textMuted, height: 1.4),
-          ),
-          const SizedBox(height: 20),
-          TextField(
-            controller: _wifiIpController,
-            decoration: const InputDecoration(
-              labelText: AppStrings.adapterAddressLabel,
-              prefixIcon: Icon(Icons.settings_ethernet, color: AppColors.primaryYellow),
-            ),
-          ),
-          const SizedBox(height: 24),
-          ElevatedButton.icon(
-            icon: const Icon(Icons.wifi, color: Colors.black),
-            label: const Text(AppStrings.connectWifi),
-            onPressed: state.isConnecting
-                ? null
-                : () async {
-                    final ok = await state.connectWifi(_wifiIpController.text.trim());
-                    if (ok && mounted) {
-                      Navigator.pop(context);
-                    }
-                  },
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 18),
+        ElevatedButton.icon(
+          icon: const Icon(Icons.wifi, color: Colors.black),
+          label: const Text(AppStrings.connectWifi),
+          onPressed: state.isConnecting
+              ? null
+              : () async {
+                  final ok = await state.connectWifi(_wifiIpController.text.trim());
+                  if (ok && mounted) {
+                    Navigator.pop(context);
+                  }
+                },
+        ),
+        const SizedBox(height: 10),
+        OutlinedButton.icon(
+          icon: const Icon(Icons.radar, color: AppColors.accentCyan),
+          label: const Text("Auto-Probe Active Wi-Fi OBD Gateway", style: TextStyle(color: AppColors.accentCyan)),
+          onPressed: state.isConnecting
+              ? null
+              : () async {
+                  final ep = await WifiObdConnection.detectReachableWifiEndpoint();
+                  if (!mounted) return;
+                  if (ep != null) {
+                    _wifiIpController.text = ep;
+                    final ok = await state.connectWifi(ep);
+                    if (ok && mounted) Navigator.pop(context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("No Wi-Fi ELM327 gateway responded on standard ports."),
+                        backgroundColor: AppColors.warningOrange,
+                      ),
+                    );
+                  }
+                },
+        ),
+      ],
     );
   }
 
   Widget _buildBleTab(ObdState state) {
-    final bleAdapters = [
-      {"name": "Vgate iCar Pro BLE 4.0", "id": "00:1B:10:E2:33:44", "chip": "ARM Cortex-M0"},
-      {"name": "OBDLink CX BLE", "id": "OBDLink-CX", "chip": "OBDLink STN BLE"},
-      {"name": "Veepeak OBDCheck BLE+", "id": "VEEPEAK", "chip": "TI CC2541 BLE"},
-      {"name": "Carista OBD BLE", "id": "Carista-BLE", "chip": "Custom BLE"},
-    ];
+    final discoveredBle = state.discoveredBleDevices;
 
     return ListView(
       padding: const EdgeInsets.all(16),
@@ -631,92 +666,171 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                   children: const [
                     Icon(Icons.bluetooth_searching, color: AppColors.accentCyan, size: 24),
                     SizedBox(width: 8),
-                    Text(
-                      "Bluetooth Low Energy (BLE 4.0/5.0)",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
+                    Expanded(
+                      child: Text(
+                        "Bluetooth Low Energy (BLE 4.0 / 5.0 GATT)",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
+                      ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  "Connect to modern low-power OBD adapters supporting Nordic UART (0xFFE0 / 0xFFF0) and OBDLink BLE GATT profiles. Requires no PIN code pairing.",
+                  "Scans live nearby BLE peripherals supporting Nordic UART (6E400001), 0xFFF0 (Veepeak/Vgate), 0x18F0 (OBDLink/vLinker), and 0xFFE0 GATT characteristics.",
                   style: TextStyle(fontSize: 12, color: AppColors.textMuted, height: 1.4),
                 ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _bleIdController,
-                  decoration: const InputDecoration(
-                    labelText: "BLE Device Name / UUID / MAC",
-                    prefixIcon: Icon(Icons.fingerprint, color: AppColors.accentCyan),
-                  ),
-                ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.accentCyan,
                     foregroundColor: Colors.black,
                     minimumSize: const Size(double.infinity, 44),
                   ),
-                  icon: const Icon(Icons.link),
-                  label: const Text("Connect BLE Adapter", style: TextStyle(fontWeight: FontWeight.bold)),
-                  onPressed: state.isConnecting
-                      ? null
-                      : () async {
-                          final ok = await state.connectBle(
-                            _bleIdController.text.trim(),
-                            deviceName: _bleIdController.text.trim(),
-                          );
-                          if (ok && mounted) {
-                            Navigator.pop(context);
-                          }
-                        },
+                  icon: state.isScanningBle
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
+                        )
+                      : const Icon(Icons.radar),
+                  label: Text(
+                    state.isScanningBle ? "Scanning Nearby BLE Peripherals..." : "Scan Nearby BLE OBD Adapters",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: state.isScanningBle ? null : () => state.scanBleDevices(),
                 ),
               ],
             ),
           ),
         ),
-        const SizedBox(height: 16),
-        const Text(
-          "Common BLE OBD Adapters:",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.textWhite),
+        const SizedBox(height: 14),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Live BLE Scan Results (${discoveredBle.length})",
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.accentCyan),
+            ),
+            if (state.isScanningBle)
+              const Text("Listening...", style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
+          ],
         ),
         const SizedBox(height: 8),
-        ...bleAdapters.map((item) {
-          return Card(
-            margin: const EdgeInsets.symmetric(vertical: 4),
-            color: AppColors.cardSurface,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: ListTile(
-              leading: const Icon(Icons.bluetooth_audio, color: AppColors.accentCyan),
-              title: Text(item["name"]!, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.textWhite)),
-              subtitle: Text("ID: ${item["id"]} • Chip: ${item["chip"]}", style: const TextStyle(fontSize: 11, color: AppColors.textMuted)),
-              trailing: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.cardSurfaceHighlight,
-                  foregroundColor: AppColors.accentCyan,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  minimumSize: Size.zero,
+        if (discoveredBle.isEmpty)
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: AppColors.cardSurface,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              state.isScanningBle
+                  ? "Searching BLE advertisements..."
+                  : "Tap 'Scan Nearby BLE OBD Adapters' above to discover powered BLE dongles.",
+              style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
+              textAlign: TextAlign.center,
+            ),
+          )
+        else
+          ...discoveredBle.map((item) {
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 4),
+              color: AppColors.cardSurface,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: BorderSide(
+                  color: item.isKnownObd ? AppColors.accentCyan.withOpacity(0.6) : const Color(0xFF263238),
                 ),
-                onPressed: state.isConnecting
-                    ? null
-                    : () async {
-                        _bleIdController.text = item["id"]!;
-                        final ok = await state.connectBle(item["id"]!, deviceName: item["name"]);
-                        if (ok && mounted) {
-                          Navigator.pop(context);
-                        }
-                      },
-                child: const Text("Connect", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+              ),
+              child: ListTile(
+                leading: Icon(
+                  Icons.bluetooth_audio,
+                  color: item.isKnownObd ? AppColors.accentCyan : AppColors.textMuted,
+                ),
+                title: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        item.name.isNotEmpty ? item.name : item.remoteId,
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.textWhite),
+                      ),
+                    ),
+                    if (item.isKnownObd)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: AppColors.accentCyan.withOpacity(0.18),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          item.matchedProfileBrand,
+                          style: const TextStyle(fontSize: 10, color: AppColors.accentCyan, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                  ],
+                ),
+                subtitle: Text(
+                  "ID: ${item.remoteId} • RSSI: ${item.rssi} dBm",
+                  style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+                ),
+                trailing: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: item.isKnownObd ? AppColors.accentCyan : AppColors.cardSurfaceHighlight,
+                    foregroundColor: item.isKnownObd ? Colors.black : AppColors.textWhite,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    minimumSize: Size.zero,
+                  ),
+                  onPressed: state.isConnecting
+                      ? null
+                      : () async {
+                          final ok = await state.connectBle(
+                            item.remoteId,
+                            deviceName: item.name.isNotEmpty ? item.name : item.matchedProfileBrand,
+                          );
+                          if (ok && mounted) Navigator.pop(context);
+                        },
+                  child: const Text("Connect", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                ),
+              ),
+            );
+          }),
+        const SizedBox(height: 18),
+        const Text(
+          "Manual BLE Remote ID / Address:",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.textMuted),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _bleIdController,
+                decoration: const InputDecoration(
+                  hintText: "e.g. 00:1B:10:E2:33:44 or device UUID",
+                  prefixIcon: Icon(Icons.fingerprint, color: AppColors.accentCyan),
+                ),
               ),
             ),
-          );
-        }),
+            const SizedBox(width: 8),
+            ElevatedButton(
+              onPressed: state.isConnecting || _bleIdController.text.trim().isEmpty
+                  ? null
+                  : () async {
+                      final target = _bleIdController.text.trim();
+                      final ok = await state.connectBle(target, deviceName: target);
+                      if (ok && mounted) Navigator.pop(context);
+                    },
+              child: const Text("Connect"),
+            ),
+          ],
+        ),
       ],
     );
   }
 
   Widget _buildUsbSerialTab(ObdState state) {
     const baudRates = [38400, 115200, 230400, 500000];
+    final attachedSerial = state.discoveredSerialDevices;
 
     return ListView(
       padding: const EdgeInsets.all(16),
@@ -736,27 +850,123 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                   children: const [
                     Icon(Icons.usb, color: AppColors.successGreen, size: 24),
                     SizedBox(width: 8),
-                    Text(
-                      "USB Serial / OTG Cable Hardware",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
+                    Expanded(
+                      child: Text(
+                        "USB OTG & Serial / Paired COM Ports",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
+                      ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  "High-speed wired connection using USB-OTG. Direct hardware UART access with 0% wireless packet drop. Supports FTDI FT232R, WCH CH340, CP2102, PL2303, and CDC-ACM adapters (e.g. OBDLink EX/SX, vLinker FS).",
+                  "Real Android USB-OTG drivers (FTDI, CH340, CP2102, PL2303, CDC-ACM) plus macOS/Linux POSIX serial & paired Bluetooth serial ports (/dev/cu.*).",
                   style: TextStyle(fontSize: 12, color: AppColors.textMuted, height: 1.4),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.successGreen,
+                    foregroundColor: Colors.black,
+                    minimumSize: const Size(double.infinity, 42),
+                  ),
+                  icon: state.isScanningSerial
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
+                        )
+                      : const Icon(Icons.refresh),
+                  label: Text(
+                    state.isScanningSerial ? "Enumerating Attached Ports..." : "Refresh Attached USB / Serial Devices",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: state.isScanningSerial ? null : () => state.scanSerialDevices(),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 14),
+        Text(
+          "Detected Hardware Serial Ports (${attachedSerial.length}):",
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.successGreen),
+        ),
+        const SizedBox(height: 8),
+        if (attachedSerial.isEmpty)
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: AppColors.cardSurface,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Text(
+              "No USB OTG cables or OBD serial ports detected right now. Plug in USB cable or pair Bluetooth adapter, then tap Refresh.",
+              style: TextStyle(fontSize: 12, color: AppColors.textMuted),
+              textAlign: TextAlign.center,
+            ),
+          )
+        else
+          ...attachedSerial.map((dev) {
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 4),
+              color: AppColors.cardSurface,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              child: ListTile(
+                leading: Icon(
+                  dev.isLikelyBluetoothSerial ? Icons.bluetooth_connected : Icons.usb,
+                  color: AppColors.successGreen,
+                ),
+                title: Text(
+                  dev.displayName,
+                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.textWhite),
+                ),
+                subtitle: Text(
+                  "Port: ${dev.portId} • ${dev.transportKind}${dev.chipsetName != null ? ' • ${dev.chipsetName}' : ''}",
+                  style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+                ),
+                trailing: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.successGreen,
+                    foregroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    minimumSize: Size.zero,
+                  ),
+                  onPressed: state.isConnecting
+                      ? null
+                      : () async {
+                          _usbPortController.text = dev.portId;
+                          final ok = await state.connectUsbSerial(
+                            "${dev.portId}:$_selectedUsbBaud",
+                            deviceName: dev.displayName,
+                          );
+                          if (ok && mounted) Navigator.pop(context);
+                        },
+                  child: const Text("Connect", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                ),
+              ),
+            );
+          }),
+        const SizedBox(height: 16),
+        Card(
+          color: AppColors.cardSurface,
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("Manual Serial Port / Baud Override",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.textWhite)),
+                const SizedBox(height: 10),
                 TextField(
                   controller: _usbPortController,
                   decoration: const InputDecoration(
-                    labelText: "USB Serial Port / Device Node",
+                    labelText: "USB / Serial Port Path or Device ID",
                     prefixIcon: Icon(Icons.cable, color: AppColors.successGreen),
-                    hintText: "/dev/bus/usb/001/002 or COM1",
+                    hintText: "/dev/cu.987696098341 or Android USB ID",
                   ),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 10),
                 Row(
                   children: [
                     const Text("UART Baud Rate: ", style: TextStyle(fontSize: 12, color: AppColors.textWhite)),
@@ -781,53 +991,29 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.successGreen,
-                    foregroundColor: Colors.black,
-                    minimumSize: const Size(double.infinity, 44),
+                    backgroundColor: AppColors.cardSurfaceHighlight,
+                    foregroundColor: AppColors.successGreen,
+                    minimumSize: const Size(double.infinity, 42),
                   ),
                   icon: const Icon(Icons.power),
-                  label: const Text("Open USB Serial Port", style: TextStyle(fontWeight: FontWeight.bold)),
+                  label: const Text("Open Specified Serial Port", style: TextStyle(fontWeight: FontWeight.bold)),
                   onPressed: state.isConnecting
                       ? null
                       : () async {
-                          final portBaud = "${_usbPortController.text.trim()}@$_selectedUsbBaud";
+                          final rawPort = _usbPortController.text.trim();
+                          if (rawPort.isEmpty) return;
                           final ok = await state.connectUsbSerial(
-                            portBaud,
-                            deviceName: "USB Serial (${_selectedUsbBaud}bps)",
+                            "$rawPort:$_selectedUsbBaud",
+                            deviceName: "Serial ($rawPort @ $_selectedUsbBaud)",
                           );
-                          if (ok && mounted) {
-                            Navigator.pop(context);
-                          }
+                          if (ok && mounted) Navigator.pop(context);
                         },
                 ),
               ],
             ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: AppColors.cardSurface,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColors.cardBorder),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
-                "Compatible USB Hardware Adapters:",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.textWhite),
-              ),
-              SizedBox(height: 6),
-              Text("• OBDLink EX / SX USB (FTDI 115200 - 500000 baud)", style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
-              Text("• vLinker FS USB (CDC-ACM up to 3Mbps)", style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
-              Text("• ELM327 USB with CH340 / CP2102 chip (38400 baud)", style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
-              Text("• Tactrix OpenPort 2.0 / J2534 PassThru cable", style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
-            ],
           ),
         ),
       ],

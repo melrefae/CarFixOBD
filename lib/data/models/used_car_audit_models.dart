@@ -933,11 +933,23 @@ class PrePurchaseAuditScorecard {
     required double ltft,
     required double o2Voltage,
     double batteryVolts = 12.6,
+    int? tcmOdometerKm,
+    int? absOdometerKm,
+    String? ecmVin,
+    String? bcmVin,
+    String? srsVin,
+    String? tcmVin,
+    bool hasSrsCrashData = false,
+    int srsSquibDeploymentCount = 0,
+    double? relativeCompressionBalancePercent,
+    double? transmissionFluidTempC,
+    bool? hasMisfireDetected,
+    int totalMisfireCount = 0,
   }) {
     final odo = OdometerCrossCheckResult.evaluate(
       ecm: liveEcmKm,
-      tcm: liveEcmKm > 0 ? liveEcmKm : 0,
-      abs: liveEcmKm > 0 ? liveEcmKm : 0,
+      tcm: tcmOdometerKm ?? liveEcmKm,
+      abs: absOdometerKm ?? liveEcmKm,
       cluster: liveClusterKm,
     );
 
@@ -949,28 +961,33 @@ class PrePurchaseAuditScorecard {
 
     final vin = VinIntegrityAudit.evaluate(
       targetVin: liveVin,
-      ecm: liveVin,
-      bcm: liveVin,
-      srs: liveVin,
-      tcm: liveVin,
+      ecm: ecmVin ?? liveVin,
+      bcm: bcmVin ?? liveVin,
+      srs: srsVin ?? liveVin,
+      tcm: tcmVin ?? liveVin,
     );
 
-    final srs = const SrsCrashRecord(
-      hasCrashData: false,
-      squibDeploymentCount: 0,
-      frontalImpactRecorded: false,
+    final srs = SrsCrashRecord(
+      hasCrashData: hasSrsCrashData,
+      squibDeploymentCount: srsSquibDeploymentCount,
+      frontalImpactRecorded: hasSrsCrashData,
     );
 
+    final misfiresDetected = hasMisfireDetected ?? (totalMisfireCount > 10);
     final drivetrain = DrivetrainMechanicalHealthReport(
-      relativeCompressionBalancePercent: 96.5,
+      relativeCompressionBalancePercent: relativeCompressionBalancePercent ?? 96.5,
       shortTermFuelTrimPercent: stft,
       longTermFuelTrimPercent: ltft,
       catalyticO2DownstreamVoltage: o2Voltage,
-      transmissionFluidTempC: 86.0,
-      hasMisfireDetected: false,
-      totalMisfireCount: 0,
-      healthSummaryEn: "Live powertrain telemetry acquired via OBD.",
-      healthSummaryAr: "تم سحب قراءات المحرك الحية عبر فيشة OBD.",
+      transmissionFluidTempC: transmissionFluidTempC ?? 0.0,
+      hasMisfireDetected: misfiresDetected,
+      totalMisfireCount: totalMisfireCount,
+      healthSummaryEn: misfiresDetected
+          ? "Live OBD scan detected $totalMisfireCount misfire events."
+          : "Live powertrain telemetry acquired via OBD.",
+      healthSummaryAr: misfiresDetected
+          ? "تم رصد $totalMisfireCount تفويت إشعال في المحرك عبر الفحص الحي."
+          : "تم سحب قراءات المحرك الحية عبر فيشة OBD.",
     );
 
     // Calculate dynamic scores based on live values
@@ -979,6 +996,8 @@ class PrePurchaseAuditScorecard {
     if (fraud.isRecentlyCleared) pts -= 25;
     if (storedDtcCount > 0) pts -= min(storedDtcCount * 8, 30);
     if (!vin.isVinMatched) pts -= 20;
+    if (hasSrsCrashData) pts -= 20;
+    if (misfiresDetected) pts -= 10;
     pts = pts.clamp(15, 100);
 
     final isDamaged = pts < 75;
@@ -998,7 +1017,7 @@ class PrePurchaseAuditScorecard {
       powertrainScore: pts >= 80 ? 92 : 60,
       chassisAbsScore: pts >= 80 ? 94 : 65,
       electronicsNetworkScore: pts >= 80 ? 95 : 70,
-      safetySrsScore: pts >= 80 ? 98 : 55,
+      safetySrsScore: hasSrsCrashData ? 30 : (pts >= 80 ? 98 : 55),
       emissionsCatalystScore: fraud.isRecentlyCleared ? 50 : 90,
       odometerAudit: odo,
       codeClearingAudit: fraud,

@@ -37,10 +37,47 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
         ? state.sensors
         : state.sensors.where((s) => s.category == _selectedCategory).toList();
 
+    // Sort supported & active readings before unsupported ones in "All" view
+    final sortedSensors = List.of(filteredSensors)
+      ..sort((a, b) {
+        if (a.hasValidReading != b.hasValidReading) return a.hasValidReading ? -1 : 1;
+        if (a.isSupported != b.isSupported) return a.isSupported ? -1 : 1;
+        return 0;
+      });
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(isAr ? "البيانات الحية والحساسات" : AppStrings.liveSensors),
+        title: Row(
+          children: [
+            Flexible(
+              child: Text(
+                isAr ? "البيانات الحية والحساسات" : AppStrings.liveSensors,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            if (state.isPolling && state.pollingRateHz > 0) ...[
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.successGreen.withOpacity(0.18),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: AppColors.successGreen.withOpacity(0.6)),
+                ),
+                child: Text(
+                  "${state.pollingRateHz.toStringAsFixed(1)} Hz",
+                  style: const TextStyle(fontSize: 10, color: AppColors.successGreen, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ],
+        ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.radar, color: AppColors.primaryYellow),
+            tooltip: isAr ? "اكتشاف الحساسات المدعومة" : "Discover Supported PIDs",
+            onPressed: state.isConnected ? () => state.refreshSupportedPidsAndPoll() : null,
+          ),
           IconButton(
             icon: Icon(
               state.isPolling ? Icons.pause_circle_filled : Icons.play_circle_fill,
@@ -69,17 +106,21 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
               children: [
                 _buildFilterChip("All", isAr ? "جميع الحساسات" : AppStrings.allSensors),
                 _buildFilterChip("Engine", isAr ? "المحرك" : AppStrings.engineSensors),
-                _buildFilterChip("Fuel & Turbo", isAr ? "الوقود والتوربو" : "Fuel & Turbo OEM"),
-                _buildFilterChip("ABS Speeds", isAr ? "سرعات العجلات (ABS)" : "4-Wheel Speeds"),
-                _buildFilterChip("Transmission", isAr ? "الفتيس والحرارة" : "Transmission"),
+                _buildFilterChip("FuelAir", isAr ? "الهواء والبنزين" : "Fuel & Air"),
+                _buildFilterChip("Fuel & Turbo", isAr ? "التوربو والمسطرة" : "Rail & Turbo"),
                 _buildFilterChip("Cooling", isAr ? "دورة التبريد" : AppStrings.coolingSensors),
                 _buildFilterChip("Electrical", isAr ? "الكهرباء والشحن" : AppStrings.electricalSensors),
+                _buildFilterChip("Transmission", isAr ? "الفتيس" : "Transmission"),
+                _buildFilterChip("ABS Speeds", isAr ? "سرعات العجلات" : "4-Wheel ABS"),
+                if (state.sensors.any((s) => s.category == "Custom"))
+                  _buildFilterChip("Custom", isAr ? "حساسات الموديل" : "OEM Custom"),
               ],
             ),
           ),
 
-          // 4-Wheel Speed Comparison Banner if viewing ABS or All
-          if (_selectedCategory == "ABS Speeds" || _selectedCategory == "All")
+          // 4-Wheel Speed Comparison Banner if viewing ABS or when ABS sensors have readings
+          if (_selectedCategory == "ABS Speeds" ||
+              (_selectedCategory == "All" && state.sensors.any((s) => s.category == "ABS Speeds" && s.hasValidReading)))
             _build4WheelSpeedCard(state, isAr),
 
           // Turbo & Rail Pressure Target vs Actual Comparison Banner
@@ -88,7 +129,7 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
 
           // Responsive Sensors Grid
           Expanded(
-            child: filteredSensors.isEmpty
+            child: sortedSensors.isEmpty
                 ? Center(
                     child: Text(
                       isAr ? "لا توجد حساسات في هذا التصنيف" : "No sensors found in this category",
@@ -103,9 +144,9 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
                       mainAxisSpacing: 8,
                       childAspectRatio: 1.25,
                     ),
-                    itemCount: filteredSensors.length,
+                    itemCount: sortedSensors.length,
                     itemBuilder: (context, index) {
-                      final sensor = filteredSensors[index];
+                      final sensor = sortedSensors[index];
                       return SensorGaugeCard(
                         sensor: sensor,
                         onTap: () {
@@ -150,29 +191,26 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
     );
   }
 
-  Widget _build4WheelSpeedCard(ObdState state, bool isAr) {
-    final fl = state.sensors.firstWhere(
-      (s) => s.category == "ABS Speeds" && s.name.contains("Front-Left"),
-      orElse: () => state.sensors.first,
-    ).currentValue;
-    final fr = state.sensors.firstWhere(
-      (s) => s.category == "ABS Speeds" && s.name.contains("Front-Right"),
-      orElse: () => state.sensors.first,
-    ).currentValue;
-    final rl = state.sensors.firstWhere(
-      (s) => s.category == "ABS Speeds" && s.name.contains("Rear-Left"),
-      orElse: () => state.sensors.first,
-    ).currentValue;
-    final rr = state.sensors.firstWhere(
-      (s) => s.category == "ABS Speeds" && s.name.contains("Rear-Right"),
-      orElse: () => state.sensors.first,
-    ).currentValue;
+  double? _findSensorVal(ObdState state, String category, String match) {
+    for (final s in state.sensors) {
+      if (s.category == category && (s.name.contains(match) || s.pid == match)) {
+        return s.hasValidReading ? s.currentValue : null;
+      }
+    }
+    return null;
+  }
 
-    final speeds = [fl, fr, rl, rr];
-    final maxSpeed = speeds.reduce((a, b) => a > b ? a : b);
-    final minSpeed = speeds.reduce((a, b) => a < b ? a : b);
+  Widget _build4WheelSpeedCard(ObdState state, bool isAr) {
+    final fl = _findSensorVal(state, "ABS Speeds", "Front-Left");
+    final fr = _findSensorVal(state, "ABS Speeds", "Front-Right");
+    final rl = _findSensorVal(state, "ABS Speeds", "Rear-Left");
+    final rr = _findSensorVal(state, "ABS Speeds", "Rear-Right");
+
+    final speeds = [fl, fr, rl, rr].whereType<double>().toList();
+    final maxSpeed = speeds.isNotEmpty ? speeds.reduce((a, b) => a > b ? a : b) : 0.0;
+    final minSpeed = speeds.isNotEmpty ? speeds.reduce((a, b) => a < b ? a : b) : 0.0;
     final variance = maxSpeed - minSpeed;
-    final hasSpeedVariance = variance > 5.0 && maxSpeed > 15.0;
+    final hasSpeedVariance = speeds.length >= 2 && variance > 5.0 && maxSpeed > 15.0;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -228,7 +266,7 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
     );
   }
 
-  Widget _buildWheelBadge(String label, double val) {
+  Widget _buildWheelBadge(String label, double? val) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
@@ -241,8 +279,12 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
           Text(label, style: const TextStyle(fontSize: 11, color: AppColors.textMuted, fontWeight: FontWeight.bold)),
           const SizedBox(height: 2),
           Text(
-            "${val.toStringAsFixed(1)} km/h",
-            style: const TextStyle(fontSize: 13, color: AppColors.primaryYellow, fontWeight: FontWeight.bold),
+            val != null ? "${val.toStringAsFixed(1)} km/h" : "--",
+            style: TextStyle(
+              fontSize: 13,
+              color: val != null ? AppColors.primaryYellow : AppColors.textDisabled,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
@@ -250,22 +292,10 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
   }
 
   Widget _buildTargetVsActualCard(ObdState state, bool isAr) {
-    final railActual = state.sensors.firstWhere(
-      (s) => s.pid == "23" && s.category == "Fuel & Turbo",
-      orElse: () => state.sensors.first,
-    ).currentValue;
-    final railTarget = state.sensors.firstWhere(
-      (s) => s.pid == "24" && s.category == "Fuel & Turbo",
-      orElse: () => state.sensors.first,
-    ).currentValue;
-    final turboActual = state.sensors.firstWhere(
-      (s) => s.pid == "70" && s.category == "Fuel & Turbo",
-      orElse: () => state.sensors.first,
-    ).currentValue;
-    final turboTarget = state.sensors.firstWhere(
-      (s) => s.pid == "71" && s.category == "Fuel & Turbo",
-      orElse: () => state.sensors.first,
-    ).currentValue;
+    final railActual = _findSensorVal(state, "Fuel & Turbo", "23");
+    final railTarget = _findSensorVal(state, "Fuel & Turbo", "24");
+    final turboActual = _findSensorVal(state, "Fuel & Turbo", "70");
+    final turboTarget = _findSensorVal(state, "Fuel & Turbo", "71");
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -299,8 +329,8 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
                     children: [
                       Text(isAr ? "ضغط مسطرة الوقود" : "Common Rail Fuel Pressure", style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
                       const SizedBox(height: 4),
-                      Text("Actual: ${railActual.toStringAsFixed(1)} bar", style: const TextStyle(fontSize: 12, color: AppColors.accentCyan, fontWeight: FontWeight.bold)),
-                      Text("Target: ${railTarget.toStringAsFixed(1)} bar", style: const TextStyle(fontSize: 11, color: AppColors.textWhite)),
+                      Text("Actual: ${railActual != null ? '${railActual.toStringAsFixed(1)} bar' : '--'}", style: const TextStyle(fontSize: 12, color: AppColors.accentCyan, fontWeight: FontWeight.bold)),
+                      Text("Target: ${railTarget != null ? '${railTarget.toStringAsFixed(1)} bar' : '--'}", style: const TextStyle(fontSize: 11, color: AppColors.textWhite)),
                     ],
                   ),
                 ),
@@ -315,8 +345,8 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
                     children: [
                       Text(isAr ? "ضغط شاحن التوربو" : "Turbo Boost Pressure", style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
                       const SizedBox(height: 4),
-                      Text("Actual: ${turboActual.toStringAsFixed(2)} bar", style: const TextStyle(fontSize: 12, color: AppColors.primaryYellow, fontWeight: FontWeight.bold)),
-                      Text("Target: ${turboTarget.toStringAsFixed(2)} bar", style: const TextStyle(fontSize: 11, color: AppColors.textWhite)),
+                      Text("Actual: ${turboActual != null ? '${turboActual.toStringAsFixed(2)} bar' : '--'}", style: const TextStyle(fontSize: 12, color: AppColors.primaryYellow, fontWeight: FontWeight.bold)),
+                      Text("Target: ${turboTarget != null ? '${turboTarget.toStringAsFixed(2)} bar' : '--'}", style: const TextStyle(fontSize: 11, color: AppColors.textWhite)),
                     ],
                   ),
                 ),
