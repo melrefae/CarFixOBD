@@ -63,3 +63,6 @@ Tested only with a scripted adapter double (test/legacy_protocol_test.dart), NOT
 - Legacy Mode 03/07/0A replies (7-byte groups per ECU) parsed per group.
 - Clear DTC: snapshot saved first (last 20, in app preferences), success only if the read-back shows no codes.
 Needs a real-car test: Hyundai Matrix 2007 and an old-protocol adapter.
+
+## Milestone 12 (adapter check)
+Scripted-adapter tests only. Connection screen: "Check adapter" (AT I, AT @1, ST I, AT RV, AT DP/DPN, 10x 0100, VIN long reply). Slow adapters (median > 500 ms) get double timeouts for the session. A device that never answers ELM327 commands is reported as possibly proprietary (e.g. some Launch/DiagZone dongles).

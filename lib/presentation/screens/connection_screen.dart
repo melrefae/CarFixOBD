@@ -8,6 +8,7 @@ import '../../core/localization/app_strings_en.dart';
 import '../../data/models/adapter_profile.dart';
 import '../../data/datasources/wifi_obd_connection.dart';
 import '../providers/obd_state.dart';
+import '../../domain/services/adapter_check.dart';
 
 /// Connection manager screen for Bluetooth Classic, BLE 5.0, Wi-Fi, USB-OTG / Serial, and Universal Auto-Detect
 class ConnectionScreen extends StatefulWidget {
@@ -201,6 +202,27 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
               ),
             ),
           ]),
+          if (state.isConnected)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                icon: const Icon(Icons.fact_check_outlined, size: 18),
+                label: const Text('Check adapter (about 20 s)', style: TextStyle(fontSize: 12)),
+                onPressed: () async {
+                  final d = state.driver;
+                  if (d == null) return;
+                  showDialog(context: context, barrierDismissible: false, builder: (_) => const AlertDialog(content: SizedBox(height: 60, child: Center(child: CircularProgressIndicator()))));
+                  final r = await AdapterCheck.run(d);
+                  if (!mounted) return;
+                  Navigator.of(context).pop();
+                  showDialog(context: context, builder: (_) => AlertDialog(
+                    title: const Text('Adapter check'),
+                    content: SingleChildScrollView(child: Text(r.toText(), style: const TextStyle(fontSize: 12))),
+                    actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK'))],
+                  ));
+                },
+              ),
+            ),
           if (attempts.isNotEmpty && !state.isEcuReady)
             Text('Last attempt:\n${attempts.join("\n")}', style: const TextStyle(fontSize: 10.5, color: AppColors.textMuted)),
         ],

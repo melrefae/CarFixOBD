@@ -24,6 +24,11 @@ class Elm327Driver {
   String _elmVersion = "ELM327 v1.5";
   bool _isEcuConnected = false;
 
+  /// Multiplier for every command timeout. Raised for slow adapters (measured by the adapter check).
+  double timeoutScale = 1.0;
+  /// Why the adapter was rejected at start, in plain words (empty when fine).
+  String initProblem = '';
+
   Completer<String>? _currentCommandCompleter;
   final StringBuffer _receiveBuffer = StringBuffer();
   StreamSubscription<String>? _streamSub;
@@ -89,7 +94,7 @@ class Elm327Driver {
 
     try {
       final response = await completer.future.timeout(
-        timeout,
+        Duration(milliseconds: (timeout.inMilliseconds * timeoutScale).round()),
         onTimeout: () {
           AppLogger().warning("Command TIMEOUT -> $command");
           return "TIMEOUT";
@@ -171,7 +176,13 @@ class Elm327Driver {
       bool adapterResponded = false;
 
       // 2. Warm start / Reset ELM327
-      final resetResp = await _sendAtCommandSafe(ObdCommands.reset, timeout: const Duration(milliseconds: 1800));
+      var resetResp = await _sendAtCommandSafe(ObdCommands.reset, timeout: const Duration(milliseconds: 3000));
+      if (resetResp.isEmpty || resetResp == "TIMEOUT") {
+        // slow or sleeping adapter: wake it and try once more
+        await connection.send("\r\r");
+        await Future.delayed(const Duration(milliseconds: 500));
+        resetResp = await _sendAtCommandSafe(ObdCommands.reset, timeout: const Duration(milliseconds: 4000));
+      }
       if (resetResp.isNotEmpty && resetResp != "TIMEOUT") {
         adapterResponded = true;
         _elmVersion = resetResp;
@@ -192,6 +203,7 @@ class Elm327Driver {
       }
 
       if (!adapterResponded) {
+        initProblem = 'The device did not answer ELM327 commands (AT Z / AT E0). It may be a proprietary dongle that only works with its own app (for example some Launch / DiagZone connectors), or it is not an OBD adapter, or it is asleep.';
         _state = ElmDriverState.error;
         return false;
       }

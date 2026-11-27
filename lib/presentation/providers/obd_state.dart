@@ -1205,7 +1205,7 @@ class ObdState extends ChangeNotifier {
       return true;
     } else {
       _connectionState = ElmDriverState.error;
-      _statusMessage = "Failed to initialize ELM327 adapter. Check connection.";
+      _statusMessage = "Failed to initialize ELM327 adapter. ${_driver?.initProblem ?? "Check connection."}";
       notifyListeners();
       return false;
     }
