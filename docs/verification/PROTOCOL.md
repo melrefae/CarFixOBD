@@ -17,3 +17,9 @@ Every command that passes goes into a table: brand, model, year range, ECU addre
 - No value is shown as measured unless it was read from the car. Anything computed or estimated must say so on screen.
 - No success message without a positive ECU reply.
 - Commands that write to the car stay in the Lab section until verified for that car.
+
+## Milestone 3 changes (not verified on a car)
+- `kTrustUnverifiedDids = false`: TCM 22 11 05 / 21 01, ABS 22 2B 01/02, SRS 22 3C 01, HVAC 22 4D 01 replies are logged but no longer decoded as values.
+- DPF screen shows only Mode 01 PIDs 78, 7C, 7A read on demand ("not supported" if no reply). Soot mass, ash, AdBlue, NOx conversion removed (not readable over standard OBD).
+- Used-car audit: battery cranking/alternator/ripple are "not measured" (NaN), not invented. A notice lists the sections that are manual / not measured (paint, flood, title, checklist, estimates, sub-scores).
+- New raw command log screen (dashboard card "Raw command log") with export, for test evidence.
