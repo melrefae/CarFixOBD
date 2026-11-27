@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../core/utils/traffic_log.dart';
+import '../../core/constants/feature_status.dart';
 
 /// Shows the raw request/response log of every command sent to the adapter.
 /// Export it after a real-car test: it is the evidence a feature needs to be marked verified.
@@ -22,6 +23,14 @@ class _TrafficLogScreenState extends State<TrafficLogScreen> {
             icon: const Icon(Icons.ios_share),
             tooltip: 'Export',
             onPressed: entries.isEmpty ? null : () => Share.share(TrafficLog.instance.export(), subject: 'CarFixOBD raw log'),
+          ),
+          IconButton(
+            icon: const Icon(Icons.fact_check_outlined),
+            tooltip: 'Export log + feature status',
+            onPressed: () {
+              final reg = kFeatureRegistry.map((f) => '${f.id}: ${f.status.name} ${f.evidence}').join('\n');
+              Share.share('FEATURE STATUS\n$reg\n\nRAW LOG\n${TrafficLog.instance.export()}', subject: 'CarFixOBD test evidence');
+            },
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline),
