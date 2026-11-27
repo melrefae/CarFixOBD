@@ -1387,7 +1387,7 @@ class _UsedCarAuditScreenState extends State<UsedCarAuditScreen> with SingleTick
                 const SizedBox(height: 14),
                 Divider(color: isLight ? AppColors.lightCardBorder : AppColors.cardBorder),
                 const SizedBox(height: 8),
-                _buildAuditRow("Relative Compression Balance:", "${mech.relativeCompressionBalancePercent.toStringAsFixed(1)}%", mech.relativeCompressionBalancePercent > 90 ? okColor : errColor, isLight: isLight),
+                _buildAuditRow("Relative Compression Balance:", (mech.relativeCompressionBalancePercent.isNaN ? "not measured" : "${mech.relativeCompressionBalancePercent.toStringAsFixed(1)}%"), mech.relativeCompressionBalancePercent > 90 ? okColor : errColor, isLight: isLight),
                 _buildAuditRow("Short-Term Fuel Trim (STFT):", "${mech.shortTermFuelTrimPercent > 0 ? '+' : ''}${mech.shortTermFuelTrimPercent.toStringAsFixed(1)}%", mech.shortTermFuelTrimPercent.abs() < 10 ? okColor : warnColor, isLight: isLight),
                 _buildAuditRow("Long-Term Fuel Trim (LTFT):", "${mech.longTermFuelTrimPercent > 0 ? '+' : ''}${mech.longTermFuelTrimPercent.toStringAsFixed(1)}%", mech.longTermFuelTrimPercent.abs() < 10 ? okColor : errColor, isLight: isLight),
                 _buildAuditRow("Downstream O2 Sensor Voltage:", "${mech.catalyticO2DownstreamVoltage.toStringAsFixed(2)} V", (mech.catalyticO2DownstreamVoltage >= 0.5 && mech.catalyticO2DownstreamVoltage <= 0.8) ? okColor : warnColor, isLight: isLight),
@@ -1870,7 +1870,7 @@ class _UsedCarAuditScreenState extends State<UsedCarAuditScreen> with SingleTick
                 const SizedBox(height: 12),
                 _buildAuditRow(
                   isAr ? "مقاومة خط إنهاء الـ CAN Bus" : "CAN Bus Termination Resistance",
-                  "${flood.canBusTerminationOhms.toStringAsFixed(1)} Ohms",
+                  (flood.canBusTerminationOhms.isNaN ? "not measured" : "${flood.canBusTerminationOhms.toStringAsFixed(1)} Ohms"),
                   (flood.canBusTerminationOhms >= 55 && flood.canBusTerminationOhms <= 65) ? okColor : warnColor,
                   isLight: isLight,
                 ),

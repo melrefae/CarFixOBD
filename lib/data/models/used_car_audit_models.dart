@@ -363,6 +363,13 @@ class BodyPaintThicknessAudit {
     required this.verdictAr,
   });
 
+  const BodyPaintThicknessAudit.notAssessed()
+      : panelMicrons = const {},
+        hasBondoDetected = false,
+        hasStructuralDamageSuspected = false,
+        verdictEn = "NOT ASSESSED: paint thickness needs a physical gauge. No value was measured.",
+        verdictAr = "لم يتم التقييم: سماكة الدهان تحتاج جهاز قياس خارجي ولم تُقَس أي قيمة.";
+
   const BodyPaintThicknessAudit.defaultClean()
       : panelMicrons = const {
           'Hood': 112,
@@ -398,6 +405,13 @@ class FloodImmersionAudit {
     required this.verdictEn,
     required this.verdictAr,
   });
+
+  const FloodImmersionAudit.notAssessed()
+      : floodRiskPercent = 0,
+        canBusTerminationOhms = double.nan,
+        hasMoistureFaultDetected = false,
+        verdictEn = "NOT ASSESSED: flood risk and CAN termination resistance were not measured.",
+        verdictAr = "لم يتم التقييم: لم يتم قياس خطر الغرق ولا مقاومة خط CAN.";
 
   const FloodImmersionAudit.defaultClean()
       : floodRiskPercent = 0,
@@ -805,6 +819,14 @@ class TitleSalvageCheckAudit {
     required this.verdictAr,
   });
 
+  const TitleSalvageCheckAudit.notAssessed()
+      : isCleanTitle = false,
+        isBankLienActive = false,
+        isSalvageTotalLoss = false,
+        reportedAuctionCount = 0,
+        verdictEn = "NOT CHECKED: title, lien and salvage status need an official registry check. Nothing was looked up.",
+        verdictAr = "لم يتم الفحص: حالة الملكية والحظر والهلاك تحتاج استعلام رسمي ولم يتم أي استعلام.";
+
   const TitleSalvageCheckAudit.defaultClean()
       : isCleanTitle = true,
         isBankLienActive = false,
@@ -991,7 +1013,7 @@ class PrePurchaseAuditScorecard {
 
     final misfiresDetected = hasMisfireDetected ?? (totalMisfireCount > 10);
     final drivetrain = DrivetrainMechanicalHealthReport(
-      relativeCompressionBalancePercent: relativeCompressionBalancePercent ?? 96.5,
+      relativeCompressionBalancePercent: relativeCompressionBalancePercent ?? double.nan,
       shortTermFuelTrimPercent: stft,
       longTermFuelTrimPercent: ltft,
       catalyticO2DownstreamVoltage: o2Voltage,
@@ -1017,16 +1039,16 @@ class PrePurchaseAuditScorecard {
     pts = pts.clamp(15, 100);
 
     final isDamaged = pts < 75;
-    final estimates = DefectRepairEstimateReport.generateDefault(hasDefects: isDamaged);
+    final estimates = const DefectRepairEstimateReport(defectItems: [], totalEstimatedRepairCostEgp: 0, totalEstimatedRepairCostUsd: 0, recommendedBuyerNegotiationDeductionEgp: 0, financialVerdictEn: 'No repair estimate: costs are not measured by the app. Enter from a real quote.', financialVerdictAr: 'لا يوجد تقدير: التكاليف لا يقيسها التطبيق. أدخلها من عرض سعر فعلي.');
 
     final hashNum = (liveVin.hashCode ^ DateTime.now().millisecondsSinceEpoch).abs() % 0xFFFF;
     final hashStr = "AUDIT-LIVE-${hashNum.toRadixString(16).toUpperCase().padLeft(4, '0')}";
 
     final batteryAudit = BatteryCrankingHealthAudit.fromLiveTelemetry(batteryVolts);
-    const floodAudit = FloodImmersionAudit.defaultClean();
-    const paintAudit = BodyPaintThicknessAudit.defaultClean();
+    const floodAudit = FloodImmersionAudit.notAssessed();
+    const paintAudit = BodyPaintThicknessAudit.notAssessed();
     final manualCheck = ManualInspectionReport.defaultWorkshopChecklist();
-    const titleCheck = TitleSalvageCheckAudit.defaultClean();
+    const titleCheck = TitleSalvageCheckAudit.notAssessed();
 
     return PrePurchaseAuditScorecard(
       overallScore: pts,

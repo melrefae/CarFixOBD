@@ -178,7 +178,7 @@ class UsedCarPdfReportService {
             pw.TableHelper.fromTextArray(
               headers: ["Subsystem", "Diagnostic Parameter", "Measured Telemetry", "Condition"],
               data: [
-                ["Engine Compression", "Relative Cranking Balance", "${mech.relativeCompressionBalancePercent.toStringAsFixed(1)}%", mech.relativeCompressionBalancePercent > 90 ? "OPTIMAL" : "LOW COMPRESSION"],
+                ["Engine Compression", "Relative Cranking Balance", mech.relativeCompressionBalancePercent.isNaN ? "not measured" : "${mech.relativeCompressionBalancePercent.toStringAsFixed(1)}%", mech.relativeCompressionBalancePercent.isNaN ? "NOT MEASURED" : (mech.relativeCompressionBalancePercent > 90 ? "OPTIMAL" : "LOW COMPRESSION")],
                 ["Fuel Delivery", "Short Term Fuel Trim (STFT)", "${mech.shortTermFuelTrimPercent > 0 ? '+' : ''}${mech.shortTermFuelTrimPercent.toStringAsFixed(1)}%", "Nominal Target: ±5%"],
                 ["Engine Mixture", "Long Term Fuel Trim (LTFT)", "${mech.longTermFuelTrimPercent > 0 ? '+' : ''}${mech.longTermFuelTrimPercent.toStringAsFixed(1)}%", "Nominal Target: ±8%"],
                 ["Catalytic Converter", "Downstream O2 Sensor Voltage", "${mech.catalyticO2DownstreamVoltage.toStringAsFixed(2)} V", mech.catalyticO2DownstreamVoltage > 0.6 ? "ACTIVE" : "DEGRADED"],
@@ -273,11 +273,11 @@ class UsedCarPdfReportService {
             pw.TableHelper.fromTextArray(
               headers: ["Audit Subsystem", "Monitored Metric", "Measured Telemetry", "Status Evaluation"],
               data: [
-                ["Flood Immersion Risk", "Water Immersion Score", "${flood.floodRiskPercent}%", flood.floodRiskPercent > 30 ? "HIGH RISK" : "CLEAN (Passed)"],
-                ["CAN Bus Termination", "Network Bus Resistance", "${flood.canBusTerminationOhms.toStringAsFixed(1)} Ohms", (flood.canBusTerminationOhms >= 55 && flood.canBusTerminationOhms <= 65) ? "NOMINAL (60 Ohms)" : "ABNORMAL"],
+                ["Flood Immersion Risk", "Water Immersion Score", flood.canBusTerminationOhms.isNaN ? "not measured" : "${flood.floodRiskPercent}%", flood.canBusTerminationOhms.isNaN ? "NOT ASSESSED" : (flood.floodRiskPercent > 30 ? "HIGH RISK" : "CLEAN (Passed)")],
+                ["CAN Bus Termination", "Network Bus Resistance", flood.canBusTerminationOhms.isNaN ? "not measured" : "${flood.canBusTerminationOhms.toStringAsFixed(1)} Ohms", flood.canBusTerminationOhms.isNaN ? "NOT ASSESSED" : ((flood.canBusTerminationOhms >= 55 && flood.canBusTerminationOhms <= 65) ? "NOMINAL (60 Ohms)" : "ABNORMAL")],
                 ["12V Battery Cranking", "Starter Voltage Dip", battery.crankingDipVoltage.isNaN ? "not measured" : "${battery.crankingDipVoltage.toStringAsFixed(1)} V", battery.crankingDipVoltage.isNaN ? "NOT MEASURED" : (battery.crankingDipVoltage >= 9.6 ? "HEALTHY (>9.6V)" : "WEAK BATTERY")],
                 ["Alternator Charging", "Regulated Output Voltage", battery.chargingAlternatorVoltage.isNaN ? "not measured" : "${battery.chargingAlternatorVoltage.toStringAsFixed(1)} V", battery.chargingAlternatorVoltage.isNaN ? "NOT MEASURED" : "OPTIMAL CHARGING"],
-                ["Official Title & Liens", "Title Brand & Bank Mortgages", title.isCleanTitle && !title.isBankLienActive ? "CLEAN TITLE" : "MORTGAGE / LIEN FOUND", title.isBankLienActive ? "ACTIVE LIEN ALERT" : "NO LIENS"],
+                ["Official Title & Liens", "Title Brand & Bank Mortgages", title.verdictEn.startsWith("NOT CHECKED") ? "not checked" : (title.isCleanTitle && !title.isBankLienActive ? "CLEAN TITLE" : "MORTGAGE / LIEN FOUND"), title.verdictEn.startsWith("NOT CHECKED") ? "NOT CHECKED" : (title.isBankLienActive ? "ACTIVE LIEN ALERT" : "NO LIENS")],
               ],
               headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9, color: PdfColors.white),
               headerDecoration: const pw.BoxDecoration(color: PdfColors.blueGrey700),

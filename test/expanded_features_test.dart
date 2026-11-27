@@ -869,7 +869,7 @@ void main() {
       expect(liveScorecard.codeClearingAudit.isRecentlyCleared, false);
       expect(liveScorecard.vinAudit.isVinMatched, true);
       expect(liveScorecard.srsCrash.hasCrashData, false);
-      expect(liveScorecard.drivetrainHealth.relativeCompressionBalancePercent, greaterThan(90.0));
+      expect(liveScorecard.drivetrainHealth.relativeCompressionBalancePercent.isNaN, true); // not measured, never invented
       expect(liveScorecard.repairEstimates.totalEstimatedRepairCostEgp, 0.0);
     });
 

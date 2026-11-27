@@ -862,7 +862,7 @@ class ObdState extends ChangeNotifier {
         "Warmups Since Cleared": "${scorecard.codeClearingAudit.warmUpCyclesSinceDtcCleared}",
         "VIN Integrity Match": scorecard.vinAudit.isVinMatched ? "MATCHED" : "MISMATCH DETECTED",
         "SRS Airbag Crash History": scorecard.srsCrash.hasCrashData ? "CRASH RECORDED (${scorecard.srsCrash.squibDeploymentCount} squibs)" : "CLEAN",
-        "Drivetrain Compression": "${scorecard.drivetrainHealth.relativeCompressionBalancePercent.toStringAsFixed(1)}%",
+        "Drivetrain Compression": (scorecard.drivetrainHealth.relativeCompressionBalancePercent.isNaN ? "not measured" : "${scorecard.drivetrainHealth.relativeCompressionBalancePercent.toStringAsFixed(1)}%"),
         "Estimated Repair Cost": "\$${scorecard.repairEstimates.totalEstimatedCostUsd.toStringAsFixed(0)}",
         "Verification Hash": scorecard.verificationHash,
       },
