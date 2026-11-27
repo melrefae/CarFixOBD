@@ -1,3 +1,4 @@
+import '../../core/utils/traffic_log.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -223,7 +224,9 @@ class ObdState extends ChangeNotifier {
   /// Send raw OBD command string to driver
   Future<String> sendCommand(String command) async {
     if (!isConnected || _driver == null) return "ERROR: Not connected";
-    return await _driver!.sendRaw(command);
+    final reply = await _driver!.sendRaw(command);
+    TrafficLog.instance.add(command, reply);
+    return reply;
   }
 
   /// Alias for sendCommand for raw OBD/CAN frame transmission
@@ -751,9 +754,8 @@ class ObdState extends ChangeNotifier {
 
     // 6. Read genuine odometer across PID A6 / UDS cluster / PID 31
     final odoReading = await _obdRepo!.readGenuineOdometer();
-    final int finalOdo = odoReading.isClusterOdometerAvailable
-        ? odoReading.totalOdometerKm
-        : (distCleared > 0 ? distCleared : odoReading.totalOdometerKm);
+    // 0 = not read. Distance-since-cleared is NOT an odometer and is never used as one.
+    final int finalOdo = odoReading.isClusterOdometerAvailable ? odoReading.totalOdometerKm : 0;
 
     // 7. Read Mode $06 Misfire counts + TCM fluid temp + multi-module VINs if CAN
     int totalMisfires = 0;
@@ -808,7 +810,7 @@ class ObdState extends ChangeNotifier {
     final scorecard = PrePurchaseAuditScorecard.fromLiveVehicle(
       liveVin: vin,
       liveClusterKm: finalOdo,
-      liveEcmKm: finalOdo,
+      liveEcmKm: 0, // no independent ECM odometer read yet
       distanceSinceClearedKm: distCleared > 0 ? distCleared : odoReading.distanceSinceDtcClearedKm,
       warmUpsSinceCleared: warmups,
       engineRunTimeMinutes: runTimeMin,
@@ -853,9 +855,9 @@ class ObdState extends ChangeNotifier {
       dtcsFound: _storedDtcs,
       liveSensorsSnapshot: {
         "Audit Health Index": "${scorecard.overallScore}/100 (${scorecard.overallVerdictEn})",
-        "Odometer Verified": "${scorecard.odometerAudit.clusterMileageKm} km (ECU: ${scorecard.odometerAudit.ecmMileageKm} km)",
+        "Odometer Read": scorecard.odometerAudit.clusterMileageKm > 0 ? "${scorecard.odometerAudit.clusterMileageKm} km" : "NOT AVAILABLE",
         "Odometer Discrepancy": "${scorecard.odometerAudit.maxDeltaKm} km",
-        "Odometer Tampered": scorecard.odometerAudit.isRollbackSuspected ? "SUSPECTED" : "NO",
+        "Odometer Tampered": scorecard.odometerAudit.isRollbackSuspected ? "SUSPECTED" : (scorecard.odometerAudit.verdictEn.startsWith("CANNOT VERIFY") ? "NOT VERIFIABLE" : "NO"),
         "Code Clearing Risk": scorecard.codeClearingAudit.riskRatingEn,
         "Distance Since DTCs Cleared": "${scorecard.codeClearingAudit.distanceSinceDtcClearedKm} km",
         "Warmups Since Cleared": "${scorecard.codeClearingAudit.warmUpCyclesSinceDtcCleared}",

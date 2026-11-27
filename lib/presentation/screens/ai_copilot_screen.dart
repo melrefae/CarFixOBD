@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'lab_gate.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
@@ -494,10 +495,7 @@ class AiCopilotScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const ActuatorTestsScreen()),
-                  );
+                  LabGate.open(context, const ActuatorTestsScreen());
                 },
               ),
             ),

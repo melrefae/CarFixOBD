@@ -136,83 +136,12 @@ class EvBatteryPackSummary {
     required bool isConnected,
     double? coolantTemp,
   }) {
-    if (!isConnected) {
-      return empty();
-    }
-
-    final effectivePackVoltage = batteryVoltage > 60.0 ? batteryVoltage : 382.4 + ((batteryVoltage - 12.0) * 8.0);
-    const totalCells = 96;
-    final nominalCellV = effectivePackVoltage / totalCells;
-    final baseTemp = coolantTemp ?? 27.0;
-    final List<CellVoltageData> cellList = [];
-
-    final seed = (batteryVoltage * 100).toInt();
-    final random = Random(seed);
-
-    final tempVoltages = List<double>.generate(totalCells, (i) {
-      final jitter = (random.nextDouble() - 0.5) * 0.012;
-      return double.parse((nominalCellV + jitter).toStringAsFixed(3));
-    });
-
-    final avg = tempVoltages.reduce((a, b) => a + b) / totalCells;
-    final maxV = tempVoltages.reduce(max);
-    final minV = tempVoltages.reduce(min);
-
-    for (int i = 0; i < totalCells; i++) {
-      final v = tempVoltages[i];
-      cellList.add(
-        CellVoltageData(
-          cellNumber: i + 1,
-          voltage: v,
-          isHighest: v == maxV,
-          isLowest: v == minV,
-          deltaFromAvgMv: double.parse(((v - avg) * 1000).toStringAsFixed(1)),
-        ),
-      );
-    }
-
-    final thermalZones = [
-      ThermalZoneData(
-        zoneId: "T1",
-        locationNameEn: "Module 1-4 (Front Left)",
-        locationNameAr: "مصفوفة 1-4 (أمامي يسار)",
-        tempCelsius: double.parse((baseTemp - 0.8).toStringAsFixed(1)),
-      ),
-      ThermalZoneData(
-        zoneId: "T2",
-        locationNameEn: "Module 5-8 (Front Right)",
-        locationNameAr: "مصفوفة 5-8 (أمامي يمين)",
-        tempCelsius: double.parse((baseTemp + 0.2).toStringAsFixed(1)),
-      ),
-      ThermalZoneData(
-        zoneId: "T3",
-        locationNameEn: "Module 9-12 (Rear Left)",
-        locationNameAr: "مصفوفة 9-12 (خلفي يسار)",
-        tempCelsius: double.parse((baseTemp - 0.4).toStringAsFixed(1)),
-      ),
-      ThermalZoneData(
-        zoneId: "T4",
-        locationNameEn: "Module 13-16 (Rear Right)",
-        locationNameAr: "مصفوفة 13-16 (خلفي يمين)",
-        tempCelsius: double.parse((baseTemp + 0.6).toStringAsFixed(1)),
-      ),
-    ];
-
-    final calculatedSoc = ((nominalCellV - 3.2) / (4.2 - 3.2) * 100.0).clamp(5.0, 100.0);
-
-    return EvBatteryPackSummary(
-      totalVoltage: double.parse(effectivePackVoltage.toStringAsFixed(1)),
-      totalCurrentAmps: 0.0,
-      socPercent: double.parse(calculatedSoc.toStringAsFixed(1)),
-      sohPercent: 96.5,
-      remainingCapacityKwh: double.parse((64.0 * (calculatedSoc / 100.0)).toStringAsFixed(1)),
-      nominalCapacityKwh: 64.0,
-      totalDischargeCycles: 388,
-      cells: cellList,
-      thermalZones: thermalZones,
-      safetyStatus: const HighVoltageSafetyStatus(),
-    );
+    // Per-cell voltages, pack voltage and temperatures are NOT available through
+    // standard OBD-II (they need brand-specific BMS requests that are not verified).
+    // Nothing is estimated or generated here: always return the empty state.
+    return empty();
   }
+
 
   /// Empty / offline state when hardware interface is not connected
   static EvBatteryPackSummary empty() {

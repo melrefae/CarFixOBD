@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../screens/lab_gate.dart';
 import 'package:flutter/services.dart';
 import '../../core/constants/app_colors.dart';
 import '../../data/models/full_test_result.dart';
@@ -479,10 +480,7 @@ class StageDetailModal extends StatelessWidget {
               ),
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ActuatorTestsScreen()),
-                );
+                LabGate.open(context, const ActuatorTestsScreen());
               },
             ),
           ),

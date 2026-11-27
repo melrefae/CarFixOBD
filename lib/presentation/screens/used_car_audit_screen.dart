@@ -469,7 +469,7 @@ class _UsedCarAuditScreenState extends State<UsedCarAuditScreen> with SingleTick
           Text(
             isAr
                 ? "فحص شامل متعدد الكمبيوترات لقراءة بيانات السيارة الحقيقية (العداد الحقيقي عبر ECM/TCM/ABS، كشف مسح الأعطال الحديث، مطابقة رقم الشاسيه VIN، وسجلات فتح الوسائد الهوائية). جميع البيانات تُقرأ حياً من السيارة 100% بدون أي محاكاة أو بيانات افتراضية."
-                : "Multi-ECU forensic audit interrogating genuine vehicle hardware (odometer verification across ECM/TCM/ABS, trouble-code clearing fraud detection, network VIN matching, and SRS crash event logs). 100% genuine vehicle telemetry with zero simulation or mock data.",
+                : "Multi-ECU forensic audit interrogating genuine vehicle hardware (odometer verification across ECM/TCM/ABS, trouble-code clearing fraud detection, network VIN matching, and SRS crash event logs). Only values actually read from the car are used; anything the car does not expose is shown as unavailable.",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 12,

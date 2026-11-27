@@ -17,7 +17,7 @@ class WorkshopTheme {
         onSurface: AppColors.textWhite,
       ),
       fontFamily: 'Roboto', // يدعم الحروف العربية بوضوح ممتاز
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: AppColors.cardSurface,
         elevation: 3,
         shape: RoundedRectangleBorder(
@@ -101,7 +101,7 @@ class WorkshopTheme {
         onSurface: AppColors.lightTextPrimary,
       ),
       fontFamily: 'Roboto',
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: AppColors.lightCardSurface,
         elevation: 0.5,
         shadowColor: const Color(0x0F000000),

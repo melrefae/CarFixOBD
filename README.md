@@ -1,3 +1,13 @@
+> **Status note (milestone 1).** This README describes the original vision. What is actually verified:
+> - Verified by unit tests only (not yet on a real car): standard OBD2 parsing, DTC/PID logic, reports.
+> - The DTC database contains 78 codes (not 3500+). A larger open database is planned.
+> - Features that write to the car or use unverified commands (special functions, ECU coding, SGW, actuator tests, ADAS, DPF) are only reachable from the **Lab (experimental)** screen, are marked UNVERIFIED, and show a warning first. A write counts as successful only if the ECU answers with a positive response.
+> - Immobilizer/key programming was removed.
+> - EV battery cell data is not generated; it stays empty until real brand-specific BMS reads are verified.
+> - Odometer cross-check compares only values really read from the car; with fewer than two readings it reports "cannot verify".
+> - Several lab-scope/aftertreatment analyses still derive values from RPM/voltage and are NOT measured data (to be fixed).
+> - Requires Flutter stable with intl ^0.20.
+
 # سكانر الورشة | تطبيق تشخيص وصيانة السيارات عبر OBD2 (ELM327)
 
 تطبيق أندرويد احترافي متكامل مخصص لبيئة ورش ومراكز صيانة السيارات في مصر (للاستخدام الداخلي الفني). يعمل التطبيق عبر محولات **ELM327** الشائعة (Bluetooth Classic SPP و Wi-Fi TCP)، ويتميز بسرعة الاستجابة وسهولة الاستخدام مع شاشات مخصصة للهواتف والتابلت، وقاعدة بيانات تشخيصية محلية تفهم لغة الورشة المصرية وتفاصيل أعطال السيارات الأكثر انتشاراً.

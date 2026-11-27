@@ -21,8 +21,8 @@ import 'package:automotive_scanner/data/repositories/dtc_repository.dart';
 import 'package:automotive_scanner/data/models/actuation_test_model.dart';
 import 'package:automotive_scanner/domain/services/cloud_backup_service.dart';
 import 'package:automotive_scanner/data/models/ecu_module_node.dart';
-import 'package:automotive_scanner/data/models/immo_key_models.dart';
 import 'package:automotive_scanner/data/models/ev_battery_models.dart';
+import 'package:automotive_scanner/data/models/immo_key_models.dart';
 import 'package:automotive_scanner/data/models/used_car_audit_models.dart';
 import 'package:automotive_scanner/data/models/lab_scope_models.dart';
 import 'package:automotive_scanner/data/models/wiring_schematic_models.dart';
@@ -639,6 +639,7 @@ void main() {
       }
     });
   });
+
 
   group('Pillar 13: Diagzone Flagship 2 - Anti-Theft IMMO & Key Programming Suite', () {
     test('Preset transponder chips include ID46, ID48, ID8A, and ID8E with EEPROM dumps', () {
@@ -1664,17 +1665,14 @@ void main() {
       expect(emptyPack.totalVoltage, 0.0);
       expect(emptyPack.safetyStatus.hvilLoopClosed, false);
 
+      // Per-cell EV data is not available over standard OBD-II: never generated.
       final livePack = EvBatteryPackSummary.fromLiveTelemetry(
         batteryVoltage: 14.2,
         isConnected: true,
         coolantTemp: 32.0,
       );
-      expect(livePack.cells.length, 96);
-      expect(livePack.thermalZones.length, 4);
-      expect(livePack.totalVoltage, greaterThan(350.0));
-      expect(livePack.socPercent, greaterThan(50.0));
-      expect(livePack.safetyStatus.hvilLoopClosed, true);
-      expect(livePack.deltaMilliVolts, lessThan(35.0));
+      expect(livePack.cells.isEmpty, true);
+      expect(livePack.totalVoltage, 0.0);
     });
 
     test('Zero Arabic character leakage in Pillar 34 models and English outputs', () {

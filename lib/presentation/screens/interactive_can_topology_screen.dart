@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'lab_gate.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../data/models/ecu_module_node.dart';
@@ -875,7 +876,7 @@ class _InteractiveCanTopologyScreenState extends State<InteractiveCanTopologyScr
                       label: const Text("Actuator Tests", style: TextStyle(fontSize: 12)),
                       onPressed: () {
                         Navigator.pop(ctx);
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => const ActuatorTestsScreen()));
+                        LabGate.open(context, const ActuatorTestsScreen());
                       },
                     ),
                   ),
@@ -890,7 +891,7 @@ class _InteractiveCanTopologyScreenState extends State<InteractiveCanTopologyScr
                       label: const Text("ECU Coding", style: TextStyle(fontSize: 12)),
                       onPressed: () {
                         Navigator.pop(ctx);
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => const EcuCodingScreen()));
+                        LabGate.open(context, const EcuCodingScreen());
                       },
                     ),
                   ),

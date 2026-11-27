@@ -28,7 +28,21 @@ class OdometerCrossCheckResult {
     required int abs,
     required int cluster,
   }) {
-    final values = [ecm, tcm, abs, cluster];
+    // A value <= 0 means "not read from the car". Only values really read are
+    // compared; with fewer than 2 independent readings nothing can be verified.
+    final values = [ecm, tcm, abs, cluster].where((v) => v > 0).toList();
+    if (values.length < 2) {
+      return OdometerCrossCheckResult(
+        ecmMileageKm: ecm,
+        tcmMileageKm: tcm,
+        absRevolutionsEquivalentKm: abs,
+        clusterMileageKm: cluster,
+        maxDeltaKm: 0,
+        isRollbackSuspected: false,
+        verdictEn: "CANNOT VERIFY: fewer than 2 independent odometer readings could be read from this car. No tampering conclusion.",
+        verdictAr: "لا يمكن التحقق: لم يتم قراءة أكثر من عداد واحد من هذه السيارة، لذلك لا يوجد استنتاج عن التلاعب.",
+      );
+    }
     final maxVal = values.reduce(max);
     final minVal = values.reduce(min);
     final delta = maxVal - minVal;
@@ -948,8 +962,8 @@ class PrePurchaseAuditScorecard {
   }) {
     final odo = OdometerCrossCheckResult.evaluate(
       ecm: liveEcmKm,
-      tcm: tcmOdometerKm ?? liveEcmKm,
-      abs: absOdometerKm ?? liveEcmKm,
+      tcm: tcmOdometerKm ?? 0,
+      abs: absOdometerKm ?? 0,
       cluster: liveClusterKm,
     );
 

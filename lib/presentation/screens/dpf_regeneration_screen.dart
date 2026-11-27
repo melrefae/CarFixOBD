@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../../core/utils/uds_response.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/localization/app_strings_en.dart';
@@ -97,7 +98,20 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
     }
 
     // Transmit genuine UDS StartRoutine 0x0203 (DPF Service Stationary Regeneration)
-    await state.sendCommand('31 01 02 03');
+    final startRaw = await state.sendCommand('31 01 02 03');
+    final startResult = UdsResult.evaluate(startRaw, 0x31);
+    if (!startResult.isPositive) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(isAr
+              ? "الكمبيوتر لم يقبل أمر التجديد (غير مدعوم أو لا يوجد رد). لم يبدأ أي إجراء. الرد: ${startResult.raw}"
+              : "The ECU did not accept the regeneration request (unsupported or no reply). Nothing was started. Reply: ${startResult.raw}"),
+          backgroundColor: AppColors.dangerRed,
+        ),
+      );
+      return;
+    }
 
     final phases = ForcedRegenerationPhase.getStandardPhases();
     setState(() {
@@ -121,13 +135,7 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
           if (_currentPhaseIndex >= phases.length) {
             timer.cancel();
             _isRegenRunning = false;
-            // Regen completed successfully -> update bundle to clean state
-            _bundle = ExhaustAftertreatmentBundle.fromLiveTelemetry(
-              coolantTempC: state.currentCoolantTemp,
-              rpm: state.currentRpm,
-              differentialPressureMbar: 9.8,
-              preCatEgtC: 450.0,
-            );
+            // No values are invented here: the result must be checked with live DPF data from the ECU.
             _showCompletionDialog();
           }
         }
@@ -171,15 +179,15 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
             Icon(Icons.check_circle, color: AppColors.successGreen, size: 28),
             SizedBox(width: 8),
             Text(
-              "Regeneration Successful",
+              "Regeneration request completed",
               style: TextStyle(color: AppColors.textWhite, fontWeight: FontWeight.bold, fontSize: 16),
             ),
           ],
         ),
         content: Text(
           isAr
-              ? "تم اكتمال دورة الحرق والتجديد الإجباري بنجاح!\nتم حرق الهباب وخفض ضغط الفلتر إلى المستوى الطبيعي (9.8 mbar)."
-              : "Stationary forced regeneration cycle completed successfully!\nSoot soot load burned off down to 9.8g (Differential pressure: 9.8 mbar).",
+              ? "انتهى المؤقت بعد أن قبل الكمبيوتر أمر التجديد. هذا لا يؤكد نجاح الحرق. تحقق من بيانات الفلتر الحية (الضغط التفاضلي وحمل الهباب) قبل الاعتماد على النتيجة."
+              : "The timer finished after the ECU accepted the regeneration request. This does not confirm the burn succeeded. Check live DPF data (differential pressure, soot load) before relying on the result.",
           style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
         ),
         actions: [

@@ -325,18 +325,20 @@ class ImmoKeyStatus {
         activeTransponder = null,
         isConnected = false;
 
+  /// Nothing is read from the car here, so no values are invented:
+  /// keys, authorization, coil resistance and transponder are reported as not read (0/false).
   factory ImmoKeyStatus.fromLiveTelemetry({
     required bool isConnected,
-    int programmedKeys = 2,
-    bool isAuthorized = true,
+    int programmedKeys = 0,
+    bool isAuthorized = false,
   }) => ImmoKeyStatus(
-    programmedKeysCount: isConnected ? programmedKeys : 0,
+    programmedKeysCount: 0,
     maxKeysAllowed: 8,
     isImmobilizerActive: false,
-    isKeyAuthorized: isConnected && isAuthorized,
-    coilResistanceOhms: isConnected ? 12.4 : 0.0,
-    eslUnlocked: isConnected,
-    transponderDetected: isConnected,
+    isKeyAuthorized: false,
+    coilResistanceOhms: 0.0,
+    eslUnlocked: false,
+    transponderDetected: false,
     isConnected: isConnected,
   );
 }

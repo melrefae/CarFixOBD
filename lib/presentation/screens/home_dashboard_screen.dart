@@ -21,8 +21,6 @@ import 'workshop_lan_sync_screen.dart';
 import 'dtc_encyclopedia_screen.dart';
 import 'adapter_benchmark_screen.dart';
 import 'workshop_settings_screen.dart';
-import 'diagzone_service_functions_screen.dart';
-import 'actuator_tests_screen.dart';
 import 'multi_ecu_topology_screen.dart';
 import 'o2_cat_analyzer_screen.dart';
 import 'flight_recorder_screen.dart';
@@ -30,22 +28,17 @@ import 'performance_dyno_screen.dart';
 import 'fuel_cost_calculator_screen.dart';
 import 'hud_display_screen.dart';
 import 'ai_copilot_screen.dart';
-import 'ecu_coding_screen.dart';
-import 'sgw_assistant_screen.dart';
 import 'full_vehicle_test_screen.dart';
 import 'interactive_can_topology_screen.dart';
-import 'immo_key_programming_screen.dart';
-import 'ev_hybrid_battery_lab_screen.dart';
 import 'used_car_audit_screen.dart';
 import 'lab_scope_waveform_screen.dart';
 import 'wiring_schematics_screen.dart';
-import 'adas_calibration_screen.dart';
-import 'dpf_regeneration_screen.dart';
 import 'voice_inspection_assistant_screen.dart';
 import 'ar_engine_bay_hud_screen.dart';
 import 'customer_dispatch_hub_screen.dart';
 import 'offline_vault_protocol_sniffer_screen.dart';
 import 'mode06_monitor_screen.dart';
+import 'lab_hub_screen.dart';
 
 /// Main Workshop Dashboard Screen for Automotive Diagnostic Center
 class HomeDashboardScreen extends StatelessWidget {
@@ -194,46 +187,13 @@ class HomeDashboardScreen extends StatelessWidget {
               children: [
                 _buildActionCard(
                   context: context,
-                  title: isAr ? AppStringsAr.diagzoneSpecialFunctions : "37+ Special Resets",
-                  subtitle: isAr ? AppStringsAr.diagzoneSubtitle : "Oil, EPB, SAS, BMS, DPF, Coolant, AdBlue, DSG Match",
-                  icon: Icons.tune,
-                  accentColor: AppColors.primaryYellow,
-                  badgeText: "37 Resets",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const DiagzoneServiceFunctionsScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? AppStringsAr.ecuCoding : AppStrings.ecuCoding,
-                  subtitle: isAr ? AppStringsAr.ecuCodingSubtitle : AppStrings.ecuCodingSubtitle,
-                  icon: Icons.code,
-                  accentColor: AppColors.accentCyan,
-                  badgeText: "Coding",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const EcuCodingScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? AppStringsAr.sgwAssistant : AppStrings.sgwAssistant,
-                  subtitle: isAr ? AppStringsAr.sgwAssistantSubtitle : AppStrings.sgwAssistantSubtitle,
-                  icon: Icons.security,
+                  title: isAr ? "المختبر (تجريبي)" : "Lab (experimental)",
+                  subtitle: isAr ? "ميزات قيد التطوير وغير مثبتة على سيارة حقيقية" : "Features under development, not verified on a real car",
+                  icon: Icons.science,
                   accentColor: AppColors.warningOrange,
-                  badgeText: "SGW 12+8",
+                  badgeText: "LAB",
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const SgwAssistantScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? AppStringsAr.actuatorTests : AppStrings.actuatorTesting,
-                  subtitle: isAr ? AppStringsAr.actuatorSubtitle : "Bi-Directional Tests (Fan, Pump, A/C, Sweeps)",
-                  icon: Icons.play_circle_fill,
-                  accentColor: AppColors.electricBlue,
-                  badgeText: "Bi-Direct",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const ActuatorTestsScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const LabHubScreen()));
                   },
                 ),
                 _buildActionCard(
@@ -290,28 +250,6 @@ class HomeDashboardScreen extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (_) => const InteractiveCanTopologyScreen()));
                   },
                 ),
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? "برمجة المفاتيح والإيموبليزر" : "IMMO & Key Programming",
-                  subtitle: isAr ? "قراءة الترانسبوندر، فحص التردد، وحساب كود PIN" : "RFID Transponder, RF Tester & PIN Calculator",
-                  icon: Icons.key,
-                  accentColor: AppColors.accentCyan,
-                  badgeText: "IMMO",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const ImmoKeyProgrammingScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? "مختبر بطاريات EV والهايبرد" : "EV & Hybrid Battery Lab",
-                  subtitle: isAr ? "مصفوفة 96 خلية، فارق الفولتية، وعزل الجهد العالي" : "96-Cell Delta (mV), HV Isolation & SOH%",
-                  icon: Icons.electric_bolt,
-                  accentColor: AppColors.successGreen,
-                  badgeText: "EV Lab",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const EvHybridBatteryLabScreen()));
-                  },
-                ),
               ],
             ),
 
@@ -363,28 +301,6 @@ class HomeDashboardScreen extends StatelessWidget {
                   badgeText: "PINOUT",
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (_) => const WiringSchematicsScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? AppStringsAr.adasCalibration : AppStrings.adasCalibration,
-                  subtitle: isAr ? AppStringsAr.adasCalibrationSubtitle : AppStrings.adasCalibrationSubtitle,
-                  icon: Icons.camera,
-                  accentColor: AppColors.electricBlue,
-                  badgeText: "ADAS",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const AdasCalibrationScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? AppStringsAr.dpfRegeneration : AppStrings.dpfRegeneration,
-                  subtitle: isAr ? AppStringsAr.dpfRegenerationSubtitle : AppStrings.dpfRegenerationSubtitle,
-                  icon: Icons.local_fire_department,
-                  accentColor: AppColors.warningOrange,
-                  badgeText: "DPF/SCR",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const DpfRegenerationScreen()));
                   },
                 ),
               ],

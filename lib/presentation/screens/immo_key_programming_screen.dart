@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/utils/uds_response.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
@@ -145,17 +146,20 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
     });
 
     // Query transponder RFID reader via UDS Service 31 RoutineControl
-    await state.sendCommand('31 01 0F 10');
+    final raw = await state.sendCommand('31 01 0F 10');
+    final result = UdsResult.evaluate(raw, 0x31);
 
     if (!mounted) return;
     setState(() {
-      _selectedChipIndex = (_selectedChipIndex + 1) % _presetChips.length;
       _isReadingTransponder = false;
     });
+    // No chip is invented: the reply is shown as received. Decoding of chip data is not implemented.
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text("Transponder chip detected: ${_presetChips[_selectedChipIndex].chipType} (${_presetChips[_selectedChipIndex].chipFamily})"),
-        backgroundColor: AppColors.successGreen,
+        content: Text(result.isPositive
+            ? "ECU accepted the request. Reply: ${result.raw}. Chip data is not decoded yet."
+            : "No valid transponder reply (unsupported or no response). Reply: ${result.raw}"),
+        backgroundColor: result.isPositive ? AppColors.primaryYellow : AppColors.dangerRed,
       ),
     );
   }
@@ -208,23 +212,29 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
 
     // Transmit genuine UDS key learning command for current guided step
     final step = _learningSteps[_currentStepIndex];
-    await state.sendCommand(step.commandHex);
+    final raw = await state.sendCommand(step.commandHex);
+    final stepResult = UdsResult.evaluate(raw, int.tryParse(step.commandHex.replaceAll(' ', '').substring(0, 2), radix: 16) ?? 0x31);
 
     if (!mounted) return;
 
     setState(() {
-      _learningSteps[_currentStepIndex].isCompleted = true;
       _isStepExecuting = false;
-      if (_currentStepIndex < _learningSteps.length - 1) {
-        _currentStepIndex++;
-      } else {
-        _immoStatus = ImmoKeyStatus.fromLiveTelemetry(
-          isConnected: true,
-          programmedKeys: 3,
-          isAuthorized: true,
-        );
+      // A step is completed only if the ECU gave a positive response.
+      if (stepResult.isPositive) {
+        _learningSteps[_currentStepIndex].isCompleted = true;
+        if (_currentStepIndex < _learningSteps.length - 1) {
+          _currentStepIndex++;
+        }
       }
     });
+    if (!stepResult.isPositive) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Step not accepted by the ECU. Reply: ${stepResult.raw}"),
+          backgroundColor: AppColors.dangerRed,
+        ),
+      );
+    }
   }
 
   @override
@@ -235,7 +245,6 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
     if (state.isConnected && !_immoStatus.isConnected) {
       _immoStatus = ImmoKeyStatus.fromLiveTelemetry(
         isConnected: true,
-        programmedKeys: _learningSteps.every((s) => s.isCompleted) ? 3 : 2,
       );
     } else if (!state.isConnected && _immoStatus.isConnected) {
       _immoStatus = const ImmoKeyStatus.disconnected();

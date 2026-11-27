@@ -1,5 +1,6 @@
 import '../../data/datasources/elm327_driver.dart';
 import '../../data/models/ecu_coding_feature.dart';
+import '../../core/utils/uds_response.dart';
 
 /// Service managing vehicle ECU Variant Coding, safety backups, and parameter write routines
 class EcuCodingService {
@@ -25,24 +26,22 @@ class EcuCodingService {
     // 1. Ensure backup is taken
     createBackupSnapshot();
 
-    // 2. Transmit UDS write command to ECU if connected
+    // 2. A write is reported as successful ONLY if the ECU answered with a
+    // positive response (6E for service 2E). No connection, no reply, or a
+    // negative response means failure and the state is left unchanged.
     final cmd = enable ? feature.writeCommandEnable : feature.writeCommandDisable;
-    if (driver != null) {
-      try {
-        final resp = await driver.sendToModule(feature.ecuHeader, cmd);
-        // Valid positive UDS reply is typically 6E (Positive Response to 2E WriteDataByIdentifier)
-        if (resp.contains("6E") || resp.contains("OK") || !resp.contains("7F")) {
-          feature.isEnabled = enable;
-          return true;
-        }
-      } catch (_) {
-        // Fallback for simulation / mock connection
+    if (driver == null) return false;
+    try {
+      final raw = await driver.sendToModule(feature.ecuHeader, cmd);
+      final result = UdsResult.evaluate(raw, 0x2E);
+      if (result.isPositive) {
+        feature.isEnabled = enable;
+        return true;
       }
+      return false;
+    } catch (_) {
+      return false;
     }
-
-    // Update in-memory state for offline or simulator mode
-    feature.isEnabled = enable;
-    return true;
   }
 
   /// Restore vehicle coding back to original factory snapshot
