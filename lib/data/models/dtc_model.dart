@@ -84,6 +84,28 @@ class DtcModel {
     );
   }
 
+  /// Definition from the open DTC database (English only). Nothing else is invented:
+  /// no symptoms or causes are listed because the source has none.
+  factory DtcModel.fromOpenDefinition(String code, String definitionEn, {Map<String, String> brandDefinitions = const {}, String dtcType = "Stored"}) {
+    final brands = brandDefinitions.entries.map((e) => '${e.key}: ${e.value}').join('\n');
+    return DtcModel(
+      code: code,
+      titleAr: "التعريف (بالإنجليزية): $definitionEn",
+      titleEn: definitionEn,
+      category: code.isNotEmpty ? code[0] : "P",
+      severity: "Unknown",
+      descriptionAr: "التعريف من قاعدة بيانات أكواد مفتوحة (MIT). لا توجد أسباب أو أعراض موثقة لهذا الكود في التطبيق." + (brands.isEmpty ? "" : "\nتعريفات حسب الماركة:\n$brands"),
+      descriptionEn: "Definition from an open DTC database (MIT). No verified symptoms or causes for this code in the app." + (brands.isEmpty ? "" : "\nBy brand:\n$brands"),
+      symptomsAr: const [],
+      symptomsEn: const [],
+      causesAr: const [],
+      causesEn: const [],
+      workshopCheckAr: "",
+      workshopCheckEn: "",
+      dtcType: dtcType,
+    );
+  }
+
   /// Fallback code when code is not in local database
   factory DtcModel.unknown(String code, {String dtcType = "Stored"}) {
     String categoryNameAr = "Powertrain (محرك / فتيس)";

@@ -1,11 +1,12 @@
 > **Status note (milestone 1).** This README describes the original vision. What is actually verified:
 > - Verified by unit tests only (not yet on a real car): standard OBD2 parsing, DTC/PID logic, reports.
-> - The DTC database contains 78 codes (not 3500+). A larger open database is planned.
+> - DTC data: 78 Arabic entries + 112 real repair guides; padding that generated placeholder guides for hundreds of codes was removed. About 9.4k generic and 2.9k manufacturer-specific code definitions (English only) come from an open MIT database, see NOTICE.md. Codes with only a definition show no symptoms or causes.
+> - Verification rules: docs/verification/PROTOCOL.md. Arabic/English audit: docs/BILINGUAL_AUDIT.md.
 > - Features that write to the car or use unverified commands (special functions, ECU coding, SGW, actuator tests, ADAS, DPF) are only reachable from the **Lab (experimental)** screen, are marked UNVERIFIED, and show a warning first. A write counts as successful only if the ECU answers with a positive response.
 > - Immobilizer/key programming was removed.
 > - EV battery cell data is not generated; it stays empty until real brand-specific BMS reads are verified.
 > - Odometer cross-check compares only values really read from the car; with fewer than two readings it reports "cannot verify".
-> - Several lab-scope/aftertreatment analyses still derive values from RPM/voltage and are NOT measured data (to be fixed).
+> - Lab scope, DPF aftertreatment values and dyno figures are estimates from formulas, not measurements; they sit in the Lab with a red warning banner.
 > - Requires Flutter stable with intl ^0.20.
 
 # سكانر الورشة | تطبيق تشخيص وصيانة السيارات عبر OBD2 (ELM327)

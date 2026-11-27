@@ -9,7 +9,7 @@ class DtcKnowledgeBase {
   static DtcRepairGuide? lookup(String code) {
     _ensureInitialized();
     final clean = code.trim().toUpperCase();
-    return _catalog[clean] ?? _generateFallbackGuide(clean);
+    return _catalog[clean];
   }
 
   /// Alias for lookup
@@ -1239,35 +1239,8 @@ class DtcKnowledgeBase {
       );
     }
 
-    // 6. Systematic generation across standard ranges (P0001 - P0999, C0000 - C0800, B0001 - B1800, U0001 - U0450)
-    // To ensure total guides exceeds 500:
-    for (int i = 1; i <= 350; i++) {
-      final pCode = "P${i.toString().padLeft(4, '0')}";
-      if (!_catalog.containsKey(pCode)) {
-        _catalog[pCode] = _generateFallbackGuide(pCode);
-      }
-    }
-
-    for (int i = 1; i <= 80; i++) {
-      final cCode = "C${i.toString().padLeft(4, '0')}";
-      if (!_catalog.containsKey(cCode)) {
-        _catalog[cCode] = _generateFallbackGuide(cCode);
-      }
-    }
-
-    for (int i = 1; i <= 80; i++) {
-      final bCode = "B${i.toString().padLeft(4, '0')}";
-      if (!_catalog.containsKey(bCode)) {
-        _catalog[bCode] = _generateFallbackGuide(bCode);
-      }
-    }
-
-    for (int i = 1; i <= 80; i++) {
-      final uCode = "U${i.toString().padLeft(4, '0')}";
-      if (!_catalog.containsKey(uCode)) {
-        _catalog[uCode] = _generateFallbackGuide(uCode);
-      }
-    }
+    // Padding with generated placeholder guides (to reach a code count) was removed:
+    // codes without a real entry now return null and fall through to the open definitions.
   }
 
   /// Systematically generates structured repair guides for unlisted codes

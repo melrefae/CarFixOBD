@@ -283,17 +283,6 @@ class HomeDashboardScreen extends StatelessWidget {
                 ),
                 _buildActionCard(
                   context: context,
-                  title: isAr ? AppStringsAr.labScopeWaveform : AppStrings.labScopeWaveform,
-                  subtitle: isAr ? AppStringsAr.labScopeWaveformSubtitle : AppStrings.labScopeWaveformSubtitle,
-                  icon: Icons.show_chart,
-                  accentColor: AppColors.accentCyan,
-                  badgeText: "SCOPE",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const LabScopeWaveformScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
                   title: isAr ? AppStringsAr.wiringSchematics : AppStrings.wiringSchematics,
                   subtitle: isAr ? AppStringsAr.wiringSchematicsSubtitle : AppStrings.wiringSchematicsSubtitle,
                   icon: Icons.account_tree,
@@ -486,17 +475,6 @@ class HomeDashboardScreen extends StatelessWidget {
                   badgeText: state.isFlightRecording ? "REC" : null,
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (_) => const FlightRecorderScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: AppStrings.dynoPerformance,
-                  subtitle: "0-100 km/h, 400m Drag, Braking & WHP",
-                  icon: Icons.timer,
-                  accentColor: AppColors.warningOrange,
-                  badgeText: "Dyno",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const PerformanceDynoScreen()));
                   },
                 ),
                 _buildActionCard(

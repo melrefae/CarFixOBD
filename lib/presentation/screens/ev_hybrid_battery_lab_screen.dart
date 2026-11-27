@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/utils/uds_response.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../data/models/ev_battery_models.dart';
@@ -72,23 +73,22 @@ class _EvHybridBatteryLabScreenState extends State<EvHybridBatteryLabScreen> {
     });
 
     // Transmit genuine ISO 14229 UDS RoutineControl (Service 0x31 01 0B 01: Start Routine BMS Cell Balancing)
-    await state.sendCommand('31 01 0B 01');
+    final raw = await state.sendCommand('31 01 0B 01');
+    final result = UdsResult.evaluate(raw, 0x31);
 
     if (!mounted) return;
 
+    // Cell data is not read from the car, so nothing is recalculated here.
     setState(() {
-      _pack = _pack.rebalanceCells();
       _isRebalancing = false;
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          isAr
-              ? "تم إرسال أمر الموازنة إلى وحدة BMS بنجاح! فارق الجهد الحالي: ${_pack.deltaMilliVolts.toStringAsFixed(1)} mV."
-              : "Passive cell rebalancing routine acknowledged! Pack delta reduced to ${_pack.deltaMilliVolts.toStringAsFixed(1)} mV.",
-        ),
-        backgroundColor: AppColors.successGreen,
+        content: Text(result.isPositive
+            ? (isAr ? "الـBMS قبل الأمر. الرد: ${result.raw}. لا توجد قراءة للخلايا للتأكد من النتيجة." : "The BMS accepted the request. Reply: ${result.raw}. Cell data is not read, so the result cannot be confirmed.")
+            : (isAr ? "الـBMS لم يقبل الأمر (غير مدعوم أو لا يوجد رد). الرد: ${result.raw}" : "The BMS did not accept the request (unsupported or no reply). Reply: ${result.raw}")),
+        backgroundColor: result.isPositive ? AppColors.primaryYellow : AppColors.dangerRed,
       ),
     );
   }

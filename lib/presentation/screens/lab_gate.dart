@@ -6,7 +6,7 @@ import '../providers/obd_state.dart';
 /// NOT yet verified on a real car. They live only in the Lab section.
 class LabGate {
   /// Opens [screen] only after the user confirms the experimental warning.
-  static Future<void> open(BuildContext context, Widget screen) async {
+  static Future<void> open(BuildContext context, Widget screen, {bool notMeasured = false}) async {
     final isAr = Provider.of<ObdState>(context, listen: false).isArabic;
     final ok = await showDialog<bool>(
       context: context,
@@ -25,7 +25,42 @@ class LabGate {
       ),
     );
     if (ok == true && context.mounted) {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
+      Navigator.push(context, MaterialPageRoute(builder: (_) => notMeasured ? NotMeasuredWrapper(child: screen) : screen));
     }
+  }
+}
+
+/// Persistent banner for screens whose numbers/graphs are computed from a few
+/// readings or formulas and are NOT measured from the car.
+class NotMeasuredWrapper extends StatelessWidget {
+  final Widget child;
+  const NotMeasuredWrapper({Key? key, required this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final isAr = Provider.of<ObdState>(context).isArabic;
+    return Column(
+      children: [
+        Material(
+          color: Colors.red.shade900,
+          child: SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Directionality(
+                textDirection: isAr ? TextDirection.rtl : TextDirection.ltr,
+                child: Text(
+                  isAr
+                      ? 'تحذير: الأرقام والرسومات في هذه الشاشة محسوبة تقديرياً من قراءات قليلة وليست قياساً حقيقياً من السيارة. لا تعتمد عليها في أي قرار.'
+                      : 'WARNING: values and graphs on this screen are estimated from a few readings, NOT measured from the car. Do not rely on them for any decision.',
+                  style: const TextStyle(color: Colors.white, fontSize: 12),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Expanded(child: MediaQuery.removePadding(context: context, removeTop: true, child: child)),
+      ],
+    );
   }
 }

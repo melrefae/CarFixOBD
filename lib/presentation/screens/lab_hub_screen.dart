@@ -10,12 +10,15 @@ import 'immo_key_programming_screen.dart';
 import 'ev_hybrid_battery_lab_screen.dart';
 import 'adas_calibration_screen.dart';
 import 'dpf_regeneration_screen.dart';
+import 'lab_scope_waveform_screen.dart';
+import 'performance_dyno_screen.dart';
 
 class _LabItem {
   final String titleEn, titleAr, noteEn, noteAr;
   final IconData icon;
   final Widget screen;
-  const _LabItem(this.titleEn, this.titleAr, this.noteEn, this.noteAr, this.icon, this.screen);
+  final bool notMeasured;
+  const _LabItem(this.titleEn, this.titleAr, this.noteEn, this.noteAr, this.icon, this.screen, [this.notMeasured = false]);
 }
 
 /// Lab: features still under development. Status of every item: UNVERIFIED.
@@ -33,7 +36,9 @@ class LabHubScreen extends StatelessWidget {
       _LabItem('Immobilizer and keys', 'الإيموبلايزر والمفاتيح', 'Status values are not read from the car; replies shown as received.', 'قيم الحالة لا تُقرأ من السيارة؛ تُعرض الردود كما وصلت.', Icons.key, ImmoKeyProgrammingScreen()),
       _LabItem('EV and hybrid battery', 'بطارية EV والهايبرد', 'Cell data is not read from the car yet.', 'بيانات الخلايا لا تُقرأ من السيارة بعد.', Icons.electric_bolt, EvHybridBatteryLabScreen()),
       _LabItem('ADAS calibration', 'معايرة ADAS', 'Not verified.', 'غير مثبت.', Icons.camera, AdasCalibrationScreen()),
-      _LabItem('DPF regeneration', 'تجديد فلتر DPF', 'Result is not read back from the ECU yet.', 'النتيجة لا تُقرأ من الكمبيوتر بعد.', Icons.local_fire_department, DpfRegenerationScreen()),
+      _LabItem('DPF regeneration', 'تجديد فلتر DPF', 'Result is not read back from the ECU yet.', 'النتيجة لا تُقرأ من الكمبيوتر بعد.', Icons.local_fire_department, DpfRegenerationScreen(), true),
+      _LabItem('Lab scope (estimated waveforms)', 'راسم الإشارة (رسومات تقديرية)', 'Waveforms are generated from formulas, not measured.', 'الرسومات مولّدة من معادلات وليست مقاسة.', Icons.waves, LabScopeWaveformScreen(), true),
+      _LabItem('Dyno and performance (estimates)', 'الأداء والداينو (تقديري)', 'Estimated from limited readings.', 'تقديرات من قراءات محدودة.', Icons.speed, PerformanceDynoScreen(), true),
     ];
     return Directionality(
       textDirection: isAr ? TextDirection.rtl : TextDirection.ltr,
@@ -59,7 +64,7 @@ class LabHubScreen extends StatelessWidget {
                   subtitle: Text('${isAr ? i.noteAr : i.noteEn}\n${isAr ? 'الحالة: غير مثبت' : 'Status: unverified'}'),
                   isThreeLine: true,
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () => LabGate.open(context, i.screen),
+                  onTap: () => LabGate.open(context, i.screen, notMeasured: i.notMeasured),
                 ),
               ),
           ],

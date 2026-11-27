@@ -1,3 +1,4 @@
+import '../../core/utils/traffic_log.dart';
 import 'dart:async';
 import 'obd_connection.dart';
 import '../../core/constants/obd_commands.dart';
@@ -102,6 +103,7 @@ class Elm327Driver {
 
       final clean = HexParser.cleanRawResponse(response);
       AppLogger().rx(clean);
+      TrafficLog.instance.add(command, clean);
       return clean;
     } finally {
       if (_currentCommandCompleter == completer) {

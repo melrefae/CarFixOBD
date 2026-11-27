@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/utils/uds_response.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../data/models/sgw_vehicle_guide.dart';
@@ -41,24 +42,24 @@ class _SgwAssistantScreenState extends State<SgwAssistantScreen> {
 
       // Live OBD test: query Extended Diagnostic Session (10 03) or Security Access (27 01)
       final resp = await state.sendCommand("27 01");
+      final r = UdsResult.evaluate(resp, 0x27);
       setState(() {
         _isTestingSgw = false;
-        if (resp.contains("7F") && (resp.contains("33") || resp.contains("22") || resp.contains("12"))) {
-          _sgwDetected = true;
-          _testResult = "SGW ACTIVE: ECU rejected security access (Raw: $resp). Connect bypass harness to unlock bi-directional controls.";
-        } else if (resp.contains("67") || resp.contains("41") || resp.contains("OK")) {
+        if (r.isPositive) {
           _sgwDetected = false;
-          _testResult = "UNLOCKED: Security Gateway bypassed or vehicle not equipped with SGW. Bi-directional writes enabled!";
-        } else {
+          _testResult = "The ECU answered the security access request positively (Raw: ${r.raw}). This does not prove there is no gateway.";
+        } else if (r.outcome == UdsOutcome.negative) {
           _sgwDetected = true;
-          _testResult = "Response: $resp. Security Gateway appears LOCKED. 12+8 harness recommended.";
+          _testResult = "The ECU rejected the request (negative code ${r.nrc}, Raw: ${r.raw}). A gateway may be present; the code alone does not prove it.";
+        } else {
+          _sgwDetected = false;
+          _testResult = "No valid reply (Raw: ${r.raw}). Cannot determine gateway status.";
         }
       });
     } catch (e) {
       setState(() {
         _isTestingSgw = false;
-        _sgwDetected = true;
-        _testResult = "Diagnostic check error: $e. SGW Bypass recommended.";
+        _testResult = "Diagnostic check error: $e. Cannot determine gateway status.";
       });
     }
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/utils/uds_response.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../data/models/adas_calibration_models.dart';
@@ -85,23 +86,23 @@ class _AdasCalibrationScreenState extends State<AdasCalibrationScreen> with Sing
     });
 
     // Transmit genuine UDS RoutineControl command 31 01 03 10 (StartRoutine: Dynamic Camera/Radar Optical Calibration)
-    await state.sendCommand('31 01 03 10');
+    final raw = await state.sendCommand('31 01 03 10');
+    final result = UdsResult.evaluate(raw, 0x31);
 
     if (!mounted) return;
 
     setState(() {
       _isCalibratingRoad = false;
-      _currentStepIndex++;
+      // The step advances only if the ECU accepted the routine.
+      if (result.isPositive && _currentStepIndex < _roadSteps.length - 1) _currentStepIndex++;
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          isAr
-              ? "تم إنجاز مرحلة المعايرة الديناميكية بنجاح! نسبة التقدم: ${_roadSteps[_currentStepIndex].progressPercent}%"
-              : "ADAS Calibration step completed! Progress: ${_roadSteps[_currentStepIndex].progressPercent}%",
-        ),
-        backgroundColor: AppColors.successGreen,
+        content: Text(result.isPositive
+            ? (isAr ? "الكمبيوتر قبل أمر المعايرة. الرد: ${result.raw}. تأكد من النتيجة بأداة معايرة معتمدة." : "The ECU accepted the calibration request. Reply: ${result.raw}. Confirm the result with an approved calibration tool.")
+            : (isAr ? "الكمبيوتر لم يقبل الأمر. الرد: ${result.raw}" : "The ECU did not accept the request. Reply: ${result.raw}")),
+        backgroundColor: result.isPositive ? AppColors.primaryYellow : AppColors.dangerRed,
       ),
     );
   }

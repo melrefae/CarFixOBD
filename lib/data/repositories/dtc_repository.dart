@@ -8,6 +8,18 @@ import '../datasources/dtc_knowledge_base.dart';
 class DtcRepository {
   Map<String, dynamic> _database = {};
   bool _isLoaded = false;
+  Map<String, dynamic> _openGeneric = {};
+  Map<String, dynamic> _openBrand = {};
+
+  /// Open definitions (see NOTICE.md). Loaded lazily; missing asset is not fatal.
+  Future<void> _loadOpen() async {
+    if (_openGeneric.isNotEmpty) return;
+    try {
+      final o = json.decode(await rootBundle.loadString('assets/databases/dtc_definitions_open.json')) as Map<String, dynamic>;
+      _openGeneric = (o['generic'] as Map<String, dynamic>);
+      _openBrand = (o['brand'] as Map<String, dynamic>);
+    } catch (_) {}
+  }
 
   /// Load localized database from asset JSON
   Future<void> loadDatabase() async {
@@ -38,7 +50,15 @@ class DtcRepository {
       return DtcModel.fromJson(cleanCode, data, dtcType: dtcType);
     }
 
-    // 3. Fallback generic code with category identification
+    // 3. Open definitions (English text only, with attribution in NOTICE.md)
+    await _loadOpen();
+    final brandDefs = (_openBrand[cleanCode] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, v.toString())) ?? const <String, String>{};
+    final generic = _openGeneric[cleanCode]?.toString() ?? (brandDefs.isNotEmpty ? brandDefs.values.first : null);
+    if (generic != null) {
+      return DtcModel.fromOpenDefinition(cleanCode, generic, brandDefinitions: _openGeneric.containsKey(cleanCode) ? brandDefs : (brandDefs.length > 1 ? brandDefs : const {}), dtcType: dtcType);
+    }
+
+    // 4. Fallback generic code with category identification
     return DtcModel.unknown(cleanCode, dtcType: dtcType);
   }
 

@@ -1,4 +1,4 @@
-import '../../core/utils/traffic_log.dart';
+import '../../core/utils/uds_response.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -224,9 +224,7 @@ class ObdState extends ChangeNotifier {
   /// Send raw OBD command string to driver
   Future<String> sendCommand(String command) async {
     if (!isConnected || _driver == null) return "ERROR: Not connected";
-    final reply = await _driver!.sendRaw(command);
-    TrafficLog.instance.add(command, reply);
-    return reply;
+    return await _driver!.sendRaw(command);
   }
 
   /// Alias for sendCommand for raw OBD/CAN frame transmission
@@ -1535,15 +1533,21 @@ class ObdState extends ChangeNotifier {
     }
   }
 
+  /// True only if [resp] is the positive response for the service in [command].
+  bool _isPositiveFor(String command, String resp) {
+    final hex = command.replaceAll(RegExp(r'[^0-9A-Fa-f]'), '');
+    if (hex.length < 2) return false;
+    final sid = int.tryParse(hex.substring(0, 2), radix: 16);
+    if (sid == null) return false;
+    return UdsResult.evaluate(resp, sid).isPositive;
+  }
+
   /// Execute Diagzone Pro automated OBD special reset routine
   Future<bool> executeSpecialFunction(SpecialFunctionModel function) async {
     if (!isConnected || _driver == null) return false;
     try {
       final resp = await _driver!.sendToModule(function.ecuHeader, function.automatedObdCommand);
-      if (resp.contains("71") || resp.contains("OK") || resp.contains("44") || !HexParser.isErrorResponse(resp)) {
-        return true;
-      }
-      return false;
+      return _isPositiveFor(function.automatedObdCommand, resp);
     } catch (_) {
       return false;
     }
@@ -1555,10 +1559,7 @@ class ObdState extends ChangeNotifier {
     try {
       final cmd = turnOn ? test.onCommand : test.offCommand;
       final resp = await _driver!.sendToModule(test.targetEcuHeader, cmd);
-      if (resp.contains("6F") || resp.contains("48") || resp.contains("OK") || !HexParser.isErrorResponse(resp)) {
-        return true;
-      }
-      return false;
+      return _isPositiveFor(cmd, resp);
     } catch (_) {
       return false;
     }

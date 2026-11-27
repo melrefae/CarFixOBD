@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../../core/utils/uds_response.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/localization/app_strings_en.dart';
@@ -328,7 +329,22 @@ class _GuidedActuationRunnerModalState extends State<_GuidedActuationRunnerModal
       });
 
       if (step.commandToSend.isNotEmpty) {
-        await widget.obdState.sendRawCommand(step.commandToSend);
+        final raw = await widget.obdState.sendRawCommand(step.commandToSend);
+        final sid = int.tryParse(step.commandToSend.replaceAll(RegExp(r'[^0-9A-Fa-f]'), '').substring(0, 2), radix: 16) ?? 0x2F;
+        final res = UdsResult.evaluate(raw, sid);
+        if (!res.isPositive) {
+          // The ECU did not accept the command: nothing is running, so stop the step.
+          if (mounted) {
+            setState(() => _isStepActive = false);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(widget.isArabic ? "الكمبيوتر لم يقبل الأمر. الرد: ${res.raw}" : "The ECU did not accept the command. Reply: ${res.raw}"),
+                backgroundColor: AppColors.dangerRed,
+              ),
+            );
+          }
+          return;
+        }
       }
 
       _stepTimer?.cancel();
