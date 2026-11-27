@@ -1,28 +1,28 @@
 import 'dart:typed_data';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:printing/printing.dart';
 import '../../data/models/workshop_records.dart';
 
 /// Quote / invoice PDF for a job card. Prices are exactly what the user typed.
 class JobCardPdfService {
-  /// Arabic-capable theme (Noto Sans Arabic via the printing package, downloaded once and cached).
-  /// If the phone is offline the PDF still builds with the default font, and Arabic letters may not print.
-  static Future<pw.ThemeData?> arabicTheme() async {
-    try {
-      final f = await PdfGoogleFonts.notoSansArabicRegular().timeout(const Duration(seconds: 6));
-      final b = await PdfGoogleFonts.notoSansArabicBold().timeout(const Duration(seconds: 6));
-      return pw.ThemeData.withFont(base: f, bold: b, fontFallback: [f]);
-    } catch (_) {
-      return null;
-    }
+  /// PDF theme with the Arabic font bundled in the app (assets/fonts, no download).
+  /// Latin text keeps the standard PDF font; Arabic glyphs come from Noto Sans Arabic.
+  static Future<pw.ThemeData> arabicTheme() async {
+    final f = pw.Font.ttf(await rootBundle.load('assets/fonts/NotoSansArabic-Regular.ttf'));
+    final b = pw.Font.ttf(await rootBundle.load('assets/fonts/NotoSansArabic-Bold.ttf'));
+    return pw.ThemeData.withFont(
+      base: pw.Font.helvetica(),
+      bold: pw.Font.helveticaBold(),
+      fontFallback: [f, b],
+    );
   }
 
   static String money(double v) => '${v.toStringAsFixed(2)} EGP';
 
-  static Future<Uint8List> build(JobCard j, {required bool invoice, String workshop = 'AutoSpect', bool arabicFont = false}) async {
-    final theme = arabicFont ? await arabicTheme() : null;
-    final pdf = pw.Document(theme: theme);
+  static Future<Uint8List> build(JobCard j, {required bool invoice, String workshop = 'AutoSpect'}) async {
+    final pdf = pw.Document(theme: await arabicTheme());
     final title = invoice ? 'INVOICE' : 'QUOTE';
     final d = j.createdAt.toIso8601String().substring(0, 10);
     pdf.addPage(pw.MultiPage(
@@ -77,7 +77,7 @@ class JobCardPdfService {
       '${invoice ? "Invoice" : "Quote"}_${j.plate.isEmpty ? j.id : j.plate.replaceAll(" ", "")}_${j.id}.pdf';
 
   static Future<void> share(JobCard j, {required bool invoice}) async {
-    final bytes = await build(j, invoice: invoice, arabicFont: true);
+    final bytes = await build(j, invoice: invoice);
     await Printing.sharePdf(bytes: bytes, filename: fileName(j, invoice));
   }
 }

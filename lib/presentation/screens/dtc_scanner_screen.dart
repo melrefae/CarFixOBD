@@ -94,12 +94,6 @@ class _DtcScannerScreenState extends State<DtcScannerScreen> with SingleTickerPr
                         },
                       )
                     : null,
-                filled: true,
-                fillColor: AppColors.cardSurface,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
             ),

@@ -145,7 +145,7 @@ class _JobCardEditScreenState extends State<JobCardEditScreen> {
           initialValue: init,
           maxLines: lines,
           keyboardType: type ?? (num ? const TextInputType.numberWithOptions(decimal: true) : null),
-          decoration: InputDecoration(labelText: label, border: const OutlineInputBorder(), isDense: true),
+          decoration: InputDecoration(labelText: label, isDense: true),
           onChanged: (v) => setState(() => on(v)),
         ),
       );
@@ -183,7 +183,7 @@ class _JobCardEditScreenState extends State<JobCardEditScreen> {
           _f(_t('Findings / work done', 'النتائج / الشغل'), _j.findings, (v) => _j.findings = v, lines: 2),
           DropdownButtonFormField<JobStatus>(
             value: _j.status,
-            decoration: InputDecoration(labelText: _t('Status', 'الحالة'), border: const OutlineInputBorder(), isDense: true),
+            decoration: InputDecoration(labelText: _t('Status', 'الحالة'), isDense: true),
             items: [for (final s in JobStatus.values) DropdownMenuItem(value: s, child: Text(names[s.index]))],
             onChanged: (v) => setState(() => _j.status = v ?? _j.status),
           ),

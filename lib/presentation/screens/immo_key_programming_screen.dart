@@ -638,7 +638,6 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
                   dropdownColor: AppColors.cardSurface,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                   items: List.generate(_supportedSystems.length, (i) {
                     return DropdownMenuItem(
@@ -687,9 +686,6 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
                     controller: _pinInputController,
                     style: const TextStyle(color: AppColors.textWhite, fontFamily: 'monospace', fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
-                      filled: true,
-                      fillColor: const Color(0xFF151B20),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                       hintText: system.exampleInput,
                       hintStyle: const TextStyle(color: Colors.white24),
                     ),

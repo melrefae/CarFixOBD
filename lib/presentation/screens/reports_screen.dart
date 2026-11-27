@@ -63,12 +63,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 hintText: "Search by plate number, VIN, or customer...",
                 hintStyle: const TextStyle(color: AppColors.textMuted),
                 prefixIcon: const Icon(Icons.search, color: AppColors.primaryYellow),
-                filled: true,
-                fillColor: AppColors.cardSurface,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
             ),

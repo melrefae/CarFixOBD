@@ -156,7 +156,6 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
       carRead: _hasCar,
       carSnapshot: _snapshot,
       checklist: _checklist,
-      arabicFont: true,
       // paint is hand-entered: included in the extra pages
     );
   }
@@ -446,7 +445,7 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
           initialValue: init,
           maxLines: lines,
           keyboardType: num ? TextInputType.number : TextInputType.text,
-          decoration: InputDecoration(labelText: label, isDense: true, border: const OutlineInputBorder()),
+          decoration: InputDecoration(labelText: label, isDense: true),
           onChanged: on,
         ),
       );

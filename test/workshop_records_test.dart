@@ -7,6 +7,7 @@ import 'package:automotive_scanner/domain/services/used_car_pdf_report_service.d
 import 'package:automotive_scanner/domain/services/visit_compare.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   test('InspectionExtra JSON round trip', () {
     final x = InspectionExtra()
       ..plate = 'ABC 123'
@@ -73,5 +74,12 @@ void main() {
       carSnapshot: {'VIN': 'ABC'}, checklist: ManualInspectionReport.defaultWorkshopChecklist(),
     );
     expect(b.length, greaterThan(500));
+  });
+
+  test('Arabic PDF builds with the bundled font (no network)', () async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    final j = JobCard(id: 'a', customer: 'محمد', vehicle: 'تويوتا', items: [JobLineItem(description: 'تيل فرامل', unitPrice: 450)]);
+    final b = await JobCardPdfService.build(j, invoice: true);
+    expect(b.length, greaterThan(5000)); // embeds the Arabic font subset
   });
 }

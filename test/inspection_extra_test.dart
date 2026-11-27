@@ -4,6 +4,7 @@ import 'package:automotive_scanner/domain/services/used_car_pdf_report_service.d
 import 'package:automotive_scanner/data/models/inspection_extra.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   test('paint audit with nothing entered is not assessed', () {
     final a = InspectionExtra().buildPaintAudit();
     expect(a.panelMicrons.isEmpty, true);

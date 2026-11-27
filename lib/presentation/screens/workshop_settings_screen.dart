@@ -417,9 +417,6 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
         labelText: label,
         labelStyle: const TextStyle(color: AppColors.textMuted),
         prefixIcon: Icon(icon, color: AppColors.primaryYellow, size: 20),
-        filled: true,
-        fillColor: AppColors.cardSurface,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
       ),
     );
   }

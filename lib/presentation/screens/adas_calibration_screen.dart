@@ -221,7 +221,6 @@ class _AdasCalibrationScreenState extends State<AdasCalibrationScreen> with Sing
                   dropdownColor: AppColors.cardSurface,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                   items: List.generate(_presets.length, (i) {
                     final p = _presets[i];

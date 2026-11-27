@@ -399,7 +399,6 @@ class _OfflineVaultProtocolSnifferScreenState
                         hintText: isArabic ? "بحث بهيكس البايت..." : "Filter hex...",
                         hintStyle: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
                         prefixIcon: const Icon(Icons.search, size: 16),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                       ),
                       onChanged: (val) {
                         setState(() {

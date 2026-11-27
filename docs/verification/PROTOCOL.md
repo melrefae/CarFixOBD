@@ -37,3 +37,7 @@ Dashboard rebuilt: Daily / Inspection & Customers / Analysis & Tools, then Lab (
 - "Save visit" stores the record (JSON in app storage) and the PDF file; history groups visits per car (plate, else VIN) and compares two visits. Only saved values are compared; empty = "not measured".
 - Job cards: parts and labour with prices typed by the user (EGP), discount, optional VAT %, quote/invoice PDF, WhatsApp via wa.me text plus the system share sheet for the PDF.
 - Verified here: unit tests (JSON round trips, compare, totals, PDF build) and widget renders. NOT verified: on-phone storage, share sheet, WhatsApp opening, Arabic font download for PDFs (needs internet once; offline falls back to default font and Arabic letters may not print).
+
+## Milestone 8: bundled Arabic font and shared input theme
+- Noto Sans Arabic is bundled in assets/fonts and used by every PDF (scorecard, hand-only inspection, quote/invoice, report) and as the UI fallback font. No download.
+- All text fields share AppInputTheme (lib/core/theme/input_theme.dart). Per-screen border/fill overrides were removed. Verified: analyze, tests, widget renders (dark and light) and a rendered Arabic PDF page. NOT verified on a phone.

@@ -219,16 +219,6 @@ class _UsedCarAuditScreenState extends State<UsedCarAuditScreen> with SingleTick
                   decoration: InputDecoration(
                     hintText: isAr ? "أدخل اسم العميل" : "Enter customer name",
                     hintStyle: TextStyle(color: isLight ? AppColors.lightTextMuted : AppColors.textMuted),
-                    filled: true,
-                    fillColor: isLight ? AppColors.lightCardSurfaceHighlight : AppColors.backgroundDark,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: isLight ? AppColors.lightCardBorder : Colors.transparent),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: isLight ? AppColors.lightCardBorder : Colors.transparent),
-                    ),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -244,16 +234,6 @@ class _UsedCarAuditScreenState extends State<UsedCarAuditScreen> with SingleTick
                   decoration: InputDecoration(
                     hintText: isAr ? "رقم الهاتف للتواصل" : "Contact phone number",
                     hintStyle: TextStyle(color: isLight ? AppColors.lightTextMuted : AppColors.textMuted),
-                    filled: true,
-                    fillColor: isLight ? AppColors.lightCardSurfaceHighlight : AppColors.backgroundDark,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: isLight ? AppColors.lightCardBorder : Colors.transparent),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: isLight ? AppColors.lightCardBorder : Colors.transparent),
-                    ),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -268,16 +248,6 @@ class _UsedCarAuditScreenState extends State<UsedCarAuditScreen> with SingleTick
                   decoration: InputDecoration(
                     hintText: isAr ? "رقم لوحة المركبة" : "Vehicle plate number",
                     hintStyle: TextStyle(color: isLight ? AppColors.lightTextMuted : AppColors.textMuted),
-                    filled: true,
-                    fillColor: isLight ? AppColors.lightCardSurfaceHighlight : AppColors.backgroundDark,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: isLight ? AppColors.lightCardBorder : Colors.transparent),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: isLight ? AppColors.lightCardBorder : Colors.transparent),
-                    ),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -293,16 +263,6 @@ class _UsedCarAuditScreenState extends State<UsedCarAuditScreen> with SingleTick
                   decoration: InputDecoration(
                     hintText: isAr ? "ملاحظات وتوصيات الفحص" : "Inspection recommendations & notes",
                     hintStyle: TextStyle(color: isLight ? AppColors.lightTextMuted : AppColors.textMuted),
-                    filled: true,
-                    fillColor: isLight ? AppColors.lightCardSurfaceHighlight : AppColors.backgroundDark,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: isLight ? AppColors.lightCardBorder : Colors.transparent),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: isLight ? AppColors.lightCardBorder : Colors.transparent),
-                    ),
                   ),
                 ),
               ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
+import 'input_theme.dart';
 
 /// ثيم واجهة المستخدم المصمم خصيصاً لبيئة ورشة الصيانة
 class WorkshopTheme {
@@ -16,7 +17,8 @@ class WorkshopTheme {
         onPrimary: Colors.black,
         onSurface: AppColors.textWhite,
       ),
-      fontFamily: 'Roboto', // يدعم الحروف العربية بوضوح ممتاز
+      fontFamily: 'Roboto',
+      fontFamilyFallback: const ['NotoSansArabic'], // bundled Arabic font
       cardTheme: CardThemeData(
         color: AppColors.cardSurface,
         elevation: 3,
@@ -62,25 +64,8 @@ class WorkshopTheme {
           ),
         ),
       ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: AppColors.cardSurfaceHighlight,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xFF37474F)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xFF37474F)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.primaryYellow, width: 2),
-        ),
-        hintStyle: const TextStyle(color: AppColors.textMuted),
-        labelStyle: const TextStyle(color: AppColors.primaryYellow),
-      ),
+      inputDecorationTheme: AppInputTheme.build(fill: AppColors.cardSurfaceHighlight, border: const Color(0xFF455A64), focus: AppColors.primaryYellow, label: AppColors.textMuted, hint: AppColors.textMuted, error: AppColors.dangerRed, text: AppColors.textWhite),
+      textSelectionTheme: AppInputTheme.selection(AppColors.primaryYellow),
     );
   }
 
@@ -147,25 +132,8 @@ class WorkshopTheme {
           ),
         ),
       ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: AppColors.lightCardSurfaceHighlight,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.lightCardBorder, width: 1.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.lightCardBorder, width: 1.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.lightPrimaryCobalt, width: 1.8),
-        ),
-        hintStyle: const TextStyle(color: AppColors.lightTextMuted),
-        labelStyle: const TextStyle(color: AppColors.lightPrimaryCobalt, fontWeight: FontWeight.w600),
-      ),
+      inputDecorationTheme: AppInputTheme.build(fill: AppColors.lightCardSurfaceHighlight, border: const Color(0xFFCBD5E1), focus: AppColors.lightPrimaryCobalt, label: AppColors.lightTextMuted, hint: AppColors.lightTextMuted, error: AppColors.dangerRed, text: AppColors.lightTextPrimary),
+      textSelectionTheme: AppInputTheme.selection(AppColors.lightPrimaryCobalt),
     );
   }
 }

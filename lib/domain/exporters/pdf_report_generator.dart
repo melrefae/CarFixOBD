@@ -2,12 +2,13 @@ import 'dart:typed_data';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:intl/intl.dart';
+import '../services/job_card_pdf_service.dart';
 import '../../data/models/inspection_report.dart';
 
 /// PDF inspection report generator for printing and customer sharing
 class PdfReportGenerator {
   static Future<Uint8List> generatePdf(InspectionReport report) async {
-    final pdf = pw.Document();
+    final pdf = pw.Document(theme: await JobCardPdfService.arabicTheme());
 
     final dateFormatted = DateFormat('yyyy-MM-dd HH:mm').format(report.timestamp);
 

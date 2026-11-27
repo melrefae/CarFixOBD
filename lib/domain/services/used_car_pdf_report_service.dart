@@ -16,7 +16,7 @@ class UsedCarPdfReportService {
     required bool isArabic,
     InspectionExtra? extra,
   }) async {
-    final pdf = pw.Document();
+    final pdf = pw.Document(theme: await JobCardPdfService.arabicTheme());
 
     final odo = scorecard.odometerAudit;
     final fraud = scorecard.codeClearingAudit;
@@ -383,9 +383,8 @@ class UsedCarPdfReportService {
     required Map<String, String> carSnapshot,
     required ManualInspectionReport checklist,
     DateTime? when,
-    bool arabicFont = false,
   }) async {
-    final pdf = pw.Document(theme: arabicFont ? await JobCardPdfService.arabicTheme() : null);
+    final pdf = pw.Document(theme: await JobCardPdfService.arabicTheme());
     final d = (when ?? DateTime.now()).toIso8601String().substring(0, 16).replaceFirst('T', ' ');
     pdf.addPage(pw.MultiPage(
       pageFormat: PdfPageFormat.a4,

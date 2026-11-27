@@ -82,12 +82,6 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
                         },
                       )
                     : null,
-                filled: true,
-                fillColor: AppColors.cardSurface,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
             ),

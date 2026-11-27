@@ -107,10 +107,7 @@ class _DtcEncyclopediaScreenState extends State<DtcEncyclopediaScreen> {
                         },
                       )
                     : null,
-                filled: true,
-                fillColor: AppColors.backgroundDark,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
               ),
             ),
           ),

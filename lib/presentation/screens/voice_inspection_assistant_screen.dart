@@ -149,9 +149,6 @@ class _VoiceInspectionAssistantScreenState extends State<VoiceInspectionAssistan
                   autofocus: true,
                   decoration: InputDecoration(
                     hintText: isAr ? "مثال: افحص جهد البطارية" : "e.g., Check battery voltage",
-                    filled: true,
-                    fillColor: AppColors.backgroundDark,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
                   ),
                 ),
                 const SizedBox(height: 14),
@@ -320,12 +317,6 @@ class _VoiceInspectionAssistantScreenState extends State<VoiceInspectionAssistan
                           decoration: InputDecoration(
                             hintText: isAr ? "أو اكتب الأمر هنا..." : "Or type diagnostic command...",
                             hintStyle: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
-                            filled: true,
-                            fillColor: AppColors.backgroundDark,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(24),
-                              borderSide: BorderSide.none,
-                            ),
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                           ),
                           onSubmitted: (val) {

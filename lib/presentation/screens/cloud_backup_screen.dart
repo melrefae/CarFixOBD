@@ -113,9 +113,6 @@ class _CloudBackupScreenState extends State<CloudBackupScreen> {
                 decoration: InputDecoration(
                   hintText: '{"schemaVersion": "1.0.0", "reports": [...]}',
                   hintStyle: const TextStyle(color: Colors.white24),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  filled: true,
-                  fillColor: AppColors.backgroundDark,
                 ),
               ),
             ],
@@ -360,9 +357,6 @@ class _CloudBackupScreenState extends State<CloudBackupScreen> {
                         decoration: InputDecoration(
                           hintText: "https://garage.example.com/api/v1/sync",
                           hintStyle: const TextStyle(color: Colors.white24, fontSize: 12),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                          filled: true,
-                          fillColor: AppColors.backgroundDark,
                           prefixIcon: const Icon(Icons.link, color: AppColors.primaryYellow, size: 18),
                         ),
                       ),
@@ -380,9 +374,6 @@ class _CloudBackupScreenState extends State<CloudBackupScreen> {
                         decoration: InputDecoration(
                           hintText: "Bearer token or secret key",
                           hintStyle: const TextStyle(color: Colors.white24, fontSize: 12),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                          filled: true,
-                          fillColor: AppColors.backgroundDark,
                           prefixIcon: const Icon(Icons.vpn_key, color: AppColors.primaryYellow, size: 18),
                         ),
                       ),

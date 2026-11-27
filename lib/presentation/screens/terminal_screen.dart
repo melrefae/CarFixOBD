@@ -167,12 +167,6 @@ class _TerminalScreenState extends State<TerminalScreen> {
                       hintText: "Enter AT or OBD command (e.g. AT RV or 01 0C)...",
                       hintStyle: const TextStyle(color: AppColors.textMuted),
                       prefixIcon: const Icon(Icons.chevron_right, color: AppColors.primaryYellow),
-                      filled: true,
-                      fillColor: AppColors.cardSurface,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
-                      ),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                     ),
                     onSubmitted: (val) => _sendCommand(val, state),

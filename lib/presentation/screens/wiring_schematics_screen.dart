@@ -65,7 +65,6 @@ class _WiringSchematicsScreenState extends State<WiringSchematicsScreen> {
                     dropdownColor: AppColors.cardSurface,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                     ),
                     items: List.generate(_diagrams.length, (i) {
                       final d = _diagrams[i];

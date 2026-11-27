@@ -50,12 +50,6 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
                 hintText: "Search service reset (e.g. Oil, EPB, SAS, BMS, Throttle)...",
                 hintStyle: const TextStyle(color: AppColors.textMuted),
                 prefixIcon: const Icon(Icons.search, color: AppColors.primaryYellow),
-                filled: true,
-                fillColor: AppColors.cardSurface,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
             ),
