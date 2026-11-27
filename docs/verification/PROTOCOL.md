@@ -48,3 +48,9 @@ Dashboard rebuilt: Daily / Inspection & Customers / Analysis & Tools, then Lab (
 - Search on Car History and Job Cards (plate, customer, phone, VIN; ignores case, spaces, Arabic digits and alef forms).
 - Arabic in PDFs: the `pdf` package orders and shapes Arabic wrongly (measured). Arabic lines are now laid out by Flutter's text engine with the bundled Noto Sans Arabic and placed in the PDF as images. Checked against an independent HarfBuzz render: pixel difference about 4 for correct layout versus about 50 for mirrored or word-swapped text. Regression tests: test/arabic_pdf_test.dart with golden images. Trade-off: Arabic lines in a PDF are not selectable or searchable.
 - NOT verified on a phone: file picker and share sheet, logo picker, and the fonts as they look on the device.
+
+## Milestone 10 (l10n start)
+ARB/gen-l10n added: lib/l10n/app_en.arb, app_ar.arb, l10n.yaml, generated code in lib/l10n/gen (committed).
+Regenerate: temporarily add `generate: true` under `flutter:` in pubspec.yaml, run `flutter gen-l10n`, remove it.
+Converted so far: history, job cards, used-car wizard, identity/backup card. App locale now follows the language switch.
+Other screens still use ObdState.isArabic / AppStrings* and are not yet migrated.

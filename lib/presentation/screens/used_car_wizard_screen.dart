@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
@@ -124,11 +125,11 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
     final go = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(_t('Continue saved draft?', 'متابعة المسودة المحفوظة؟')),
-        content: Text(plate.isEmpty ? _t('An unfinished inspection was saved on this phone.', 'يوجد فحص غير مكتمل محفوظ على الهاتف.') : _t('Unfinished inspection for $plate.', 'فحص غير مكتمل للوحة $plate.')),
+        title: Text(AppLocalizations.of(context).continueSavedDraft),
+        content: Text(plate.isEmpty ? AppLocalizations.of(context).anUnfinishedInspectionWasSaved : AppLocalizations.of(context).unfinishedInspectionFor(plate)),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(_t('Start new', 'ابدأ جديد'))),
-          TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text(_t('Continue', 'متابعة'))),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(AppLocalizations.of(context).startNew)),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text(AppLocalizations.of(context).continueAction)),
         ],
       ),
     );
@@ -180,7 +181,7 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
     await WorkshopStore.clearDraft();
     _saved = true;
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_t('Visit saved', 'تم حفظ الزيارة'))));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).visitSaved)));
     if (toJob) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => JobCardEditScreen(prefill: rec)));
     } else {
@@ -189,12 +190,11 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
   }
 
   bool get _isAr => Provider.of<ObdState>(context, listen: false).isArabic;
-  String _t(String en, String ar) => _isAr ? ar : en;
 
   Future<void> _readFromCar() async {
     final st = Provider.of<ObdState>(context, listen: false);
     if (!st.isConnected) {
-      setState(() => _error = _t('Connect the adapter to the car first.', 'وصّل الأداة بالسيارة أولاً.'));
+      setState(() => _error = AppLocalizations.of(context).connectTheAdapterToThe);
       return;
     }
     setState(() { _busy = true; _error = null; });
@@ -221,11 +221,11 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
   @override
   Widget build(BuildContext context) {
     final isAr = Provider.of<ObdState>(context).isArabic;
-    final titles = [_t('1. Read from car', '1. قراءة من السيارة'), _t('2. Inspection form', '2. نموذج الفحص'), _t('3. Report', '3. التقرير')];
+    final titles = [AppLocalizations.of(context).s1ReadFromCar, AppLocalizations.of(context).s2InspectionForm, AppLocalizations.of(context).s3Report];
     return Directionality(
       textDirection: isAr ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
-        appBar: AppBar(title: Text(_t('Used-car inspection', 'فحص سيارة مستعملة'))),
+        appBar: AppBar(title: Text(AppLocalizations.of(context).usedCarInspection)),
         body: Column(
           children: [
             Padding(
@@ -263,12 +263,12 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
                 child: Row(
                   children: [
                     if (_step > 0)
-                      OutlinedButton(onPressed: () => setState(() => _step--), child: Text(_t('Back', 'رجوع'))),
+                      OutlinedButton(onPressed: () => setState(() => _step--), child: Text(AppLocalizations.of(context).back)),
                     const Spacer(),
                     if (_step < 2)
                       ElevatedButton(
                         onPressed: !_canProceed ? null : () => setState(() => _step++),
-                        child: Text(_t('Next', 'التالي')),
+                        child: Text(AppLocalizations.of(context).next),
                       ),
                   ],
                 ),
@@ -287,38 +287,37 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
     return ListView(
       padding: const EdgeInsets.all(12),
       children: [
-        _note(_t('This step reads only what the car reports: odometer in the ECUs, stored codes and clearing history, VIN, battery voltage, misfires. Everything else is entered by hand in step 2.',
-            'هذه الخطوة تقرأ فقط ما تبلغ به السيارة: العداد في الوحدات والأعطال وتاريخ المسح والشاسيه وجهد البطارية والـ misfire. باقي الفحص يدوي في الخطوة 2.')),
+        _note(AppLocalizations.of(context).thisStepReadsOnlyWhat),
         const SizedBox(height: 8),
         Row(children: [
           Icon(st.isConnected ? Icons.bluetooth_connected : Icons.bluetooth_disabled, color: st.isConnected ? AppColors.successGreen : AppColors.dangerRed),
           const SizedBox(width: 8),
-          Expanded(child: Text(st.isConnected ? _t('Adapter connected', 'الأداة متصلة') : _t('Not connected', 'غير متصل'))),
+          Expanded(child: Text(st.isConnected ? AppLocalizations.of(context).adapterConnected : AppLocalizations.of(context).notConnected)),
           if (!st.isConnected)
-            TextButton(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ConnectionScreen())), child: Text(_t('Connect', 'اتصال'))),
+            TextButton(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ConnectionScreen())), child: Text(AppLocalizations.of(context).connect)),
         ]),
         const SizedBox(height: 8),
         ElevatedButton.icon(
           onPressed: _busy ? null : _readFromCar,
           icon: _busy ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)) : const Icon(Icons.download),
-          label: Text(_busy ? _t('Reading...', 'جارٍ القراءة...') : (c == null ? _t('Read from car', 'اقرأ من السيارة') : _t('Read again', 'اقرأ مرة أخرى'))),
+          label: Text(_busy ? AppLocalizations.of(context).reading : (c == null ? AppLocalizations.of(context).readFromCar : AppLocalizations.of(context).readAgain)),
         ),
         if (_snapshotOnly)
-          Padding(padding: const EdgeInsets.only(top: 8), child: _note(_t('Car readings restored from the saved draft. Read again to refresh them.', 'قراءات السيارة مستعادة من المسودة. اقرأ مرة أخرى لتحديثها.'))),
+          Padding(padding: const EdgeInsets.only(top: 8), child: _note(AppLocalizations.of(context).carReadingsRestoredFromThe)),
         TextButton.icon(
           onPressed: () => setState(() { _noCar = true; _step = 1; }),
           icon: const Icon(Icons.skip_next),
-          label: Text(_t('Skip, no car (hand inspection only)', 'تخطي، بدون سيارة (فحص يدوي فقط)')),
+          label: Text(AppLocalizations.of(context).skipNoCarHandInspection),
         ),
         if (_error != null) Padding(padding: const EdgeInsets.only(top: 8), child: Text(_error!, style: const TextStyle(color: AppColors.dangerRed))),
         if (c != null) ...[
           const SizedBox(height: 12),
-          _result(_t('Odometer (ECM / TCM / ABS / cluster)', 'العداد'), _isAr ? c.odometerAudit.verdictAr : c.odometerAudit.verdictEn, c.odometerAudit.isRollbackSuspected),
-          _result(_t('Code clearing history', 'تاريخ مسح الأعطال'), _isAr ? c.codeClearingAudit.explanationAr : c.codeClearingAudit.explanationEn, c.codeClearingAudit.isRecentlyCleared),
-          _result(_t('VIN', 'رقم الشاسيه'), 'VIN: ${c.vinAudit.registeredVin}', !c.vinAudit.isVinMatched),
-          _result(_t('Battery', 'البطارية'), _isAr ? c.batteryCrankingAudit.verdictAr : c.batteryCrankingAudit.verdictEn, c.batteryCrankingAudit.isWeakBattery),
-          _result(_t('Misfires', 'الـ Misfire'), _isAr ? c.drivetrainHealth.healthSummaryAr : c.drivetrainHealth.healthSummaryEn, c.drivetrainHealth.hasMisfireDetected),
-          _note(_t('Values the car did not answer are shown as not read. Not a final verdict: finish step 2.', 'القيم التي لم ترد من السيارة تظهر كغير مقروءة. ليس حكماً نهائياً: أكمل الخطوة 2.')),
+          _result(AppLocalizations.of(context).odometerEcmTcmAbsCluster, _isAr ? c.odometerAudit.verdictAr : c.odometerAudit.verdictEn, c.odometerAudit.isRollbackSuspected),
+          _result(AppLocalizations.of(context).codeClearingHistory, _isAr ? c.codeClearingAudit.explanationAr : c.codeClearingAudit.explanationEn, c.codeClearingAudit.isRecentlyCleared),
+          _result(AppLocalizations.of(context).vin, 'VIN: ${c.vinAudit.registeredVin}', !c.vinAudit.isVinMatched),
+          _result(AppLocalizations.of(context).battery, _isAr ? c.batteryCrankingAudit.verdictAr : c.batteryCrankingAudit.verdictEn, c.batteryCrankingAudit.isWeakBattery),
+          _result(AppLocalizations.of(context).misfires, _isAr ? c.drivetrainHealth.healthSummaryAr : c.drivetrainHealth.healthSummaryEn, c.drivetrainHealth.hasMisfireDetected),
+          _note(AppLocalizations.of(context).valuesTheCarDidNot),
         ],
       ],
     );
@@ -343,37 +342,37 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
     return ListView(
       padding: const EdgeInsets.all(12),
       children: [
-        _note(_t('Hand-entered. Anything left empty or "not checked" is printed as not checked, never as OK.', 'إدخال يدوي. أي حقل فارغ أو "لم يُفحص" يُطبع كما هو وليس كسليم.')),
-        _sec(_t('Vehicle', 'السيارة'), [
-          _field(_t('Customer', 'العميل'), _x.customerName, (v) => _x.customerName = v),
-          _field(_t('Plate', 'اللوحة'), _x.plate, (v) => _x.plate = v),
-          _field(_t('Odometer shown (km)', 'العداد المعروض (كم)'), _x.mileageKm, (v) => _x.mileageKm = v, num: true),
+        _note(AppLocalizations.of(context).handEnteredAnythingLeftEmpty),
+        _sec(AppLocalizations.of(context).vehicle, [
+          _field(AppLocalizations.of(context).customer, _x.customerName, (v) => _x.customerName = v),
+          _field(AppLocalizations.of(context).plate, _x.plate, (v) => _x.plate = v),
+          _field(AppLocalizations.of(context).odometerShownKm, _x.mileageKm, (v) => _x.mileageKm = v, num: true),
         ]),
-        _sec(_t('Paint thickness (um), gauge needed', 'سماكة الدهان (ميكرون) بجهاز قياس'), [
+        _sec(AppLocalizations.of(context).paintThicknessUmGaugeNeeded, [
           Wrap(spacing: 8, runSpacing: 8, children: [
             for (final p in InspectionExtra.panels)
               SizedBox(width: 130, child: _field(_short(p), _x.paintMicrons[p]!, (v) => _x.paintMicrons[p] = v, num: true)),
           ]),
-          _field(_t('Body notes (dents, panel gaps, rust, glass)', 'ملاحظات الهيكل (خبطات، فواصل، صدأ، زجاج)'), _x.bodyNote, (v) => _x.bodyNote = v, lines: 2),
+          _field(AppLocalizations.of(context).bodyNotesDentsPanelGaps, _x.bodyNote, (v) => _x.bodyNote = v, lines: 2),
         ]),
-        _sec(_t('Tires: tread depth (mm)', 'الكاوتش: عمق الأخدود (مم)'), [
+        _sec(AppLocalizations.of(context).tiresTreadDepthMm, [
           Wrap(spacing: 8, runSpacing: 8, children: [
             for (final k in _x.tireTreadMm.keys) SizedBox(width: 100, child: _field(k, _x.tireTreadMm[k]!, (v) => _x.tireTreadMm[k] = v, num: true)),
           ]),
-          _field(_t('Tire note (age, uneven wear)', 'ملاحظة الكاوتش'), _x.tireNote, (v) => _x.tireNote = v),
+          _field(AppLocalizations.of(context).tireNoteAgeUnevenWear, _x.tireNote, (v) => _x.tireNote = v),
         ]),
-        _sec(_t('Brakes', 'الفرامل'), [
+        _sec(AppLocalizations.of(context).brakes, [
           Row(children: [
-            Expanded(child: _field(_t('Front pads %', 'تيل أمامي %'), _x.frontPadPercent, (v) => _x.frontPadPercent = v, num: true)),
+            Expanded(child: _field(AppLocalizations.of(context).frontPads, _x.frontPadPercent, (v) => _x.frontPadPercent = v, num: true)),
             const SizedBox(width: 8),
-            Expanded(child: _field(_t('Rear pads %', 'تيل خلفي %'), _x.rearPadPercent, (v) => _x.rearPadPercent = v, num: true)),
+            Expanded(child: _field(AppLocalizations.of(context).rearPads, _x.rearPadPercent, (v) => _x.rearPadPercent = v, num: true)),
           ]),
-          _status(_t('Front discs', 'طنابير/دوائر أمامية'), _x.frontDiscs, (s) => _x.frontDiscs = s),
-          _status(_t('Rear discs', 'طنابير/دوائر خلفية'), _x.rearDiscs, (s) => _x.rearDiscs = s),
+          _status(AppLocalizations.of(context).frontDiscs, _x.frontDiscs, (s) => _x.frontDiscs = s),
+          _status(AppLocalizations.of(context).rearDiscs, _x.rearDiscs, (s) => _x.rearDiscs = s),
         ]),
-        _sec(_t('Fluids', 'السوائل'), [for (final k in _x.fluids.keys) _status(k, _x.fluids[k]!, (s) => _x.fluids[k] = s)]),
-        _sec(_t('Test drive', 'تجربة الطريق'), [for (final k in _x.testDrive.keys) _status(k, _x.testDrive[k]!, (s) => _x.testDrive[k] = s)]),
-        _sec(_t('Mechanical checklist', 'قائمة الفحص الميكانيكي'), [
+        _sec(AppLocalizations.of(context).fluids, [for (final k in _x.fluids.keys) _status(k, _x.fluids[k]!, (s) => _x.fluids[k] = s)]),
+        _sec(AppLocalizations.of(context).testDrive, [for (final k in _x.testDrive.keys) _status(k, _x.testDrive[k]!, (s) => _x.testDrive[k] = s)]),
+        _sec(AppLocalizations.of(context).mechanicalChecklist, [
           for (final cat in _checklist.categories)
             ExpansionTile(
               tilePadding: EdgeInsets.zero,
@@ -384,7 +383,7 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
               ],
             ),
         ]),
-        _sec(_t('Photos', 'صور'), [
+        _sec(AppLocalizations.of(context).photos, [
           Wrap(spacing: 8, runSpacing: 8, children: [
             for (final p in _x.photoPaths)
               Stack(children: [
@@ -396,11 +395,11 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
               ]),
           ]),
           Row(children: [
-            TextButton.icon(onPressed: () => _pick(ImageSource.camera), icon: const Icon(Icons.photo_camera), label: Text(_t('Camera', 'كاميرا'))),
-            TextButton.icon(onPressed: () => _pick(ImageSource.gallery), icon: const Icon(Icons.photo_library), label: Text(_t('Gallery', 'المعرض'))),
+            TextButton.icon(onPressed: () => _pick(ImageSource.camera), icon: const Icon(Icons.photo_camera), label: Text(AppLocalizations.of(context).camera)),
+            TextButton.icon(onPressed: () => _pick(ImageSource.gallery), icon: const Icon(Icons.photo_library), label: Text(AppLocalizations.of(context).gallery)),
           ]),
         ]),
-        _sec(_t('Technician notes', 'ملاحظات الفني'), [_field(_t('Notes', 'ملاحظات'), _x.notes, (v) => _x.notes = v, lines: 3)]),
+        _sec(AppLocalizations.of(context).technicianNotes, [_field(AppLocalizations.of(context).notes, _x.notes, (v) => _x.notes = v, lines: 3)]),
       ],
     );
   }
@@ -423,7 +422,7 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
       final f = await ImagePicker().pickImage(source: src, maxWidth: 1600, imageQuality: 80);
       if (f != null) setState(() => _x.photoPaths.add(f.path));
     } catch (e) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_t('Could not open the camera or gallery', 'تعذر فتح الكاميرا أو المعرض'))));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).couldNotOpenTheCamera)));
     }
   }
 
@@ -452,10 +451,10 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
 
   Widget _status(String label, ManualCheckItemStatus cur, void Function(ManualCheckItemStatus) set) {
     final opts = <ManualCheckItemStatus, String>{
-      ManualCheckItemStatus.pass: _t('OK', 'سليم'),
-      ManualCheckItemStatus.marginal: _t('Marginal', 'متوسط'),
-      ManualCheckItemStatus.fail: _t('Fail', 'تالف'),
-      ManualCheckItemStatus.leaking: _t('Leak', 'تسريب'),
+      ManualCheckItemStatus.pass: AppLocalizations.of(context).ok,
+      ManualCheckItemStatus.marginal: AppLocalizations.of(context).marginal,
+      ManualCheckItemStatus.fail: AppLocalizations.of(context).fail,
+      ManualCheckItemStatus.leaking: AppLocalizations.of(context).leak,
     };
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -486,18 +485,17 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
     return ListView(
       padding: const EdgeInsets.all(12),
       children: [
-        _note(_t('The report prints car readings and hand-entered data in separate sections. The score is a simple formula from the car readings, not a verdict.',
-            'التقرير يطبع قراءات السيارة والبيانات اليدوية في أقسام منفصلة. الدرجة مجرد معادلة بسيطة من قراءات السيارة وليست حكماً.')),
+        _note(AppLocalizations.of(context).theReportPrintsCarReadings),
         const SizedBox(height: 8),
         if (c != null)
-          _result(_t('From the car', 'من السيارة'), 'Score ${c.overallScore}/100 (formula)', c.odometerAudit.isRollbackSuspected || c.codeClearingAudit.isRecentlyCleared)
+          _result(AppLocalizations.of(context).fromTheCar, 'Score ${c.overallScore}/100 (formula)', c.odometerAudit.isRollbackSuspected || c.codeClearingAudit.isRecentlyCleared)
         else if (_hasCar)
-          _result(_t('From the car (saved readings)', 'من السيارة (قراءات محفوظة)'), '${_snapshot.length} readings saved', false)
+          _result(AppLocalizations.of(context).fromTheCarSavedReadings, '${_snapshot.length} readings saved', false)
         else
-          _result(_t('From the car', 'من السيارة'), _t('No car reading, hand inspection only', 'بدون قراءة من السيارة، فحص يدوي فقط'), false),
-        _result(_t('Paint', 'الدهان'), '$paintN / ${InspectionExtra.panels.length} panels measured', paintAudit.hasBondoDetected || paintAudit.hasStructuralDamageSuspected),
-        _result(_t('Checklist', 'القائمة'), '${m.checkedCount} / ${m.totalItems} checked, ${m.failedCount + m.leakingCount} problems', m.failedCount + m.leakingCount > 0),
-        _result(_t('Tires / fluids / test drive', 'كاوتش / سوائل / تجربة'), '$tires/4 tires, $fl/${_x.fluids.length} fluids, $td/${_x.testDrive.length} drive checks, ${_x.photoPaths.length} photos', false),
+          _result(AppLocalizations.of(context).fromTheCar, AppLocalizations.of(context).noCarReadingHandInspection, false),
+        _result(AppLocalizations.of(context).paint, '$paintN / ${InspectionExtra.panels.length} panels measured', paintAudit.hasBondoDetected || paintAudit.hasStructuralDamageSuspected),
+        _result(AppLocalizations.of(context).checklist, '${m.checkedCount} / ${m.totalItems} checked, ${m.failedCount + m.leakingCount} problems', m.failedCount + m.leakingCount > 0),
+        _result(AppLocalizations.of(context).tiresFluidsTestDrive, '$tires/4 tires, $fl/${_x.fluids.length} fluids, $td/${_x.testDrive.length} drive checks, ${_x.photoPaths.length} photos', false),
         const SizedBox(height: 8),
         Row(children: [
           Expanded(
@@ -507,7 +505,7 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
                 await Printing.sharePdf(bytes: b, filename: 'Inspection_${_x.plate.isEmpty ? _id : _x.plate.replaceAll(" ", "")}.pdf');
               },
               icon: const Icon(Icons.share),
-              label: Text(_t('Share PDF', 'مشاركة PDF')),
+              label: Text(AppLocalizations.of(context).sharePdf),
             ),
           ),
           const SizedBox(width: 8),
@@ -518,7 +516,7 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
                 await Printing.layoutPdf(onLayout: (_) async => b, name: 'AutoSpect_Inspection_$_id');
               },
               icon: const Icon(Icons.print),
-              label: Text(_t('Print', 'طباعة')),
+              label: Text(AppLocalizations.of(context).print),
             ),
           ),
         ]),
@@ -526,13 +524,13 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
         ElevatedButton.icon(
           onPressed: _saveVisit,
           icon: const Icon(Icons.save),
-          label: Text(_saved ? _t('Saved. Save again', 'تم الحفظ. حفظ مرة أخرى') : _t('Save visit to car history', 'احفظ الزيارة في سجل السيارة')),
+          label: Text(_saved ? AppLocalizations.of(context).savedSaveAgain : AppLocalizations.of(context).saveVisitToCarHistory),
         ),
         const SizedBox(height: 8),
         OutlinedButton.icon(
           onPressed: () => _saveVisit(toJob: true),
           icon: const Icon(Icons.request_quote),
-          label: Text(_t('Save and create job card / quote', 'حفظ وإنشاء أمر شغل / عرض سعر')),
+          label: Text(AppLocalizations.of(context).saveAndCreateJobCard),
         ),
       ],
     );

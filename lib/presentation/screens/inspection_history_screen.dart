@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import '../../core/utils/search_match.dart';
@@ -23,8 +24,6 @@ class _InspectionHistoryScreenState extends State<InspectionHistoryScreen> {
   final Set<String> _sel = {};
   String _q = '';
 
-  bool get _isAr => Provider.of<ObdState>(context, listen: false).isArabic;
-  String _t(String en, String ar) => _isAr ? ar : en;
 
   @override
   void initState() {
@@ -40,7 +39,7 @@ class _InspectionHistoryScreenState extends State<InspectionHistoryScreen> {
   Future<void> _open(InspectionRecord r) async {
     final p = r.pdfPath;
     if (p == null || !File(p).existsSync()) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_t('PDF file not found', 'ملف PDF غير موجود'))));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).pdfFileNotFound)));
       return;
     }
     final bytes = await File(p).readAsBytes();
@@ -51,11 +50,11 @@ class _InspectionHistoryScreenState extends State<InspectionHistoryScreen> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text(_t('Delete this visit?', 'حذف هذه الزيارة؟')),
-        content: Text(_t('The saved record and its PDF are removed from this phone.', 'سيتم حذف السجل وملف PDF من الهاتف.')),
+        title: Text(AppLocalizations.of(context).deleteThisVisit),
+        content: Text(AppLocalizations.of(context).theSavedRecordAndIts),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(c, false), child: Text(_t('Cancel', 'إلغاء'))),
-          TextButton(onPressed: () => Navigator.pop(c, true), child: Text(_t('Delete', 'حذف'))),
+          TextButton(onPressed: () => Navigator.pop(c, false), child: Text(AppLocalizations.of(context).cancel)),
+          TextButton(onPressed: () => Navigator.pop(c, true), child: Text(AppLocalizations.of(context).delete)),
         ],
       ),
     );
@@ -72,20 +71,20 @@ class _InspectionHistoryScreenState extends State<InspectionHistoryScreen> {
       groups.putIfAbsent(r.carKey, () => []).add(r);
     }
     return Scaffold(
-      appBar: AppBar(title: Text(_t('Car History', 'سجل السيارات'))),
+      appBar: AppBar(title: Text(AppLocalizations.of(context).carHistory)),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _all.isEmpty
-              ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_t('No saved visits yet. Finish an inspection and press "Save visit".', 'لا توجد زيارات محفوظة. أكمل فحصاً واضغط "حفظ الزيارة".'), textAlign: TextAlign.center)))
+              ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(AppLocalizations.of(context).noSavedVisitsYetFinish, textAlign: TextAlign.center)))
               : ListView(
                   padding: const EdgeInsets.all(12),
                   children: [
                     TextField(
-                      decoration: InputDecoration(prefixIcon: const Icon(Icons.search), labelText: _t('Search plate, customer, VIN', 'بحث: لوحة، عميل، شاسيه')),
+                      decoration: InputDecoration(prefixIcon: const Icon(Icons.search), labelText: AppLocalizations.of(context).searchPlateCustomerVin),
                       onChanged: (v) => setState(() => _q = v),
                     ),
                     const SizedBox(height: 10),
-                    if (groups.isEmpty) Padding(padding: const EdgeInsets.all(24), child: Center(child: Text(_t('No match', 'لا توجد نتائج')))),
+                    if (groups.isEmpty) Padding(padding: const EdgeInsets.all(24), child: Center(child: Text(AppLocalizations.of(context).noMatch))),
                     for (final e in groups.entries) _group(e.key, e.value),
                   ],
                 ),
@@ -94,7 +93,7 @@ class _InspectionHistoryScreenState extends State<InspectionHistoryScreen> {
 
   Widget _group(String key, List<InspectionRecord> list) {
     final first = list.first;
-    final title = first.plate.isNotEmpty ? first.plate : (first.vin.isNotEmpty ? first.vin : _t('Unknown car', 'سيارة غير معروفة'));
+    final title = first.plate.isNotEmpty ? first.plate : (first.vin.isNotEmpty ? first.vin : AppLocalizations.of(context).unknownCar);
     final selHere = list.where((r) => _sel.contains(r.id)).toList();
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -105,7 +104,7 @@ class _InspectionHistoryScreenState extends State<InspectionHistoryScreen> {
             dense: true,
             leading: const Icon(Icons.directions_car),
             title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text('${first.vehicleName}  |  ${list.length} ${_t("visits", "زيارات")}'),
+            subtitle: Text('${first.vehicleName}  |  ${list.length} ${AppLocalizations.of(context).visits}'),
           ),
           for (final r in list)
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -117,7 +116,7 @@ class _InspectionHistoryScreenState extends State<InspectionHistoryScreen> {
                 title: Text(r.createdAt.toIso8601String().substring(0, 16).replaceFirst('T', ' ')),
                 subtitle: Text([
                   r.customer.isEmpty ? null : r.customer,
-                  r.carRead ? _t('car read', 'قراءة من السيارة') : _t('hand inspection only', 'فحص يدوي فقط'),
+                  r.carRead ? AppLocalizations.of(context).carRead : AppLocalizations.of(context).handInspectionOnly,
                   if ((r.extra['mileageKm'] ?? '').toString().isNotEmpty) '${r.extra['mileageKm']} km',
                 ].whereType<String>().join('  |  ')),
               ),
@@ -137,7 +136,7 @@ class _InspectionHistoryScreenState extends State<InspectionHistoryScreen> {
                   ? () => Navigator.push(context, MaterialPageRoute(builder: (_) => VisitCompareScreen(a: selHere[1], b: selHere[0])))
                   : null,
               icon: const Icon(Icons.compare_arrows),
-              label: Text(_t('Compare 2 selected visits', 'قارن زيارتين محددتين')),
+              label: Text(AppLocalizations.of(context).compare2SelectedVisits),
             ),
           ),
         ]),

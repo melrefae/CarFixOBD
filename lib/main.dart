@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'core/theme/workshop_theme.dart';
 import 'presentation/providers/obd_state.dart';
+import 'l10n/gen/app_localizations.dart';
 import 'presentation/screens/home_dashboard_screen.dart';
 
 void main() async {
@@ -24,12 +25,10 @@ class AutomotiveScannerApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: state.isSunlightMode ? WorkshopTheme.sunlightTheme : WorkshopTheme.darkTheme,
             // English default locale
-            locale: const Locale('en', 'US'),
-            supportedLocales: const [
-              Locale('en', 'US'),
-              Locale('ar', 'EG'),
-            ],
+            locale: state.isArabic ? const Locale('ar') : const Locale('en'),
+            supportedLocales: AppLocalizations.supportedLocales,
             localizationsDelegates: const [
+              AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,

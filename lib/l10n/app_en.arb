@@ -1,0 +1,159 @@
+{
+  "@@locale": "en",
+  "pdfFileNotFound": "PDF file not found",
+  "deleteThisVisit": "Delete this visit?",
+  "theSavedRecordAndIts": "The saved record and its PDF are removed from this phone.",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "carHistory": "Car History",
+  "noSavedVisitsYetFinish": "No saved visits yet. Finish an inspection and press \"Save visit\".",
+  "searchPlateCustomerVin": "Search plate, customer, VIN",
+  "noMatch": "No match",
+  "unknownCar": "Unknown car",
+  "visits": "visits",
+  "carRead": "car read",
+  "handInspectionOnly": "hand inspection only",
+  "compare2SelectedVisits": "Compare 2 selected visits",
+  "jobCardsQuotes": "Job Cards & Quotes",
+  "newJobCard": "New job card",
+  "noJobCardsYet": "No job cards yet.",
+  "searchPlateCustomerPhone": "Search plate, customer, phone",
+  "saved": "Saved",
+  "enterTheCustomerPhoneFirst": "Enter the customer phone first",
+  "couldNotOpenWhatsapp": "Could not open WhatsApp",
+  "jobCard": "Job card",
+  "customer": "Customer",
+  "phoneWhatsapp": "Phone (WhatsApp)",
+  "plate": "Plate",
+  "odometerKm": "Odometer km",
+  "vehicle": "Vehicle",
+  "complaint": "Complaint",
+  "findingsWorkDone": "Findings / work done",
+  "status": "Status",
+  "partsAndLabourEgp": "Parts and labour (EGP)",
+  "part": "Part",
+  "labour": "Labour",
+  "discountEgp": "Discount EGP",
+  "vatIfAny": "VAT % (if any)",
+  "parts": "Parts",
+  "discount": "Discount",
+  "total": "TOTAL",
+  "quotePdf": "Quote PDF",
+  "invoicePdf": "Invoice PDF",
+  "whatsappQuote": "WhatsApp quote",
+  "whatsappInvoice": "WhatsApp invoice",
+  "labourDescription": "Labour description",
+  "partName": "Part name",
+  "qty": "Qty",
+  "unitPrice": "Unit price",
+  "continueSavedDraft": "Continue saved draft?",
+  "anUnfinishedInspectionWasSaved": "An unfinished inspection was saved on this phone.",
+  "unfinishedInspectionFor": "Unfinished inspection for {p0}.",
+  "@unfinishedInspectionFor": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "startNew": "Start new",
+  "continueAction": "Continue",
+  "visitSaved": "Visit saved",
+  "connectTheAdapterToThe": "Connect the adapter to the car first.",
+  "s1ReadFromCar": "1. Read from car",
+  "s2InspectionForm": "2. Inspection form",
+  "s3Report": "3. Report",
+  "usedCarInspection": "Used-car inspection",
+  "back": "Back",
+  "next": "Next",
+  "thisStepReadsOnlyWhat": "This step reads only what the car reports: odometer in the ECUs, stored codes and clearing history, VIN, battery voltage, misfires. Everything else is entered by hand in step 2.",
+  "adapterConnected": "Adapter connected",
+  "notConnected": "Not connected",
+  "connect": "Connect",
+  "reading": "Reading...",
+  "readFromCar": "Read from car",
+  "readAgain": "Read again",
+  "carReadingsRestoredFromThe": "Car readings restored from the saved draft. Read again to refresh them.",
+  "skipNoCarHandInspection": "Skip, no car (hand inspection only)",
+  "odometerEcmTcmAbsCluster": "Odometer (ECM / TCM / ABS / cluster)",
+  "codeClearingHistory": "Code clearing history",
+  "vin": "VIN",
+  "battery": "Battery",
+  "misfires": "Misfires",
+  "valuesTheCarDidNot": "Values the car did not answer are shown as not read. Not a final verdict: finish step 2.",
+  "handEnteredAnythingLeftEmpty": "Hand-entered. Anything left empty or \"not checked\" is printed as not checked, never as OK.",
+  "odometerShownKm": "Odometer shown (km)",
+  "paintThicknessUmGaugeNeeded": "Paint thickness (um), gauge needed",
+  "bodyNotesDentsPanelGaps": "Body notes (dents, panel gaps, rust, glass)",
+  "tiresTreadDepthMm": "Tires: tread depth (mm)",
+  "tireNoteAgeUnevenWear": "Tire note (age, uneven wear)",
+  "brakes": "Brakes",
+  "frontPads": "Front pads %",
+  "rearPads": "Rear pads %",
+  "frontDiscs": "Front discs",
+  "rearDiscs": "Rear discs",
+  "fluids": "Fluids",
+  "testDrive": "Test drive",
+  "mechanicalChecklist": "Mechanical checklist",
+  "photos": "Photos",
+  "camera": "Camera",
+  "gallery": "Gallery",
+  "technicianNotes": "Technician notes",
+  "notes": "Notes",
+  "couldNotOpenTheCamera": "Could not open the camera or gallery",
+  "ok": "OK",
+  "marginal": "Marginal",
+  "fail": "Fail",
+  "leak": "Leak",
+  "theReportPrintsCarReadings": "The report prints car readings and hand-entered data in separate sections. The score is a simple formula from the car readings, not a verdict.",
+  "fromTheCar": "From the car",
+  "fromTheCarSavedReadings": "From the car (saved readings)",
+  "noCarReadingHandInspection": "No car reading, hand inspection only",
+  "paint": "Paint",
+  "checklist": "Checklist",
+  "tiresFluidsTestDrive": "Tires / fluids / test drive",
+  "sharePdf": "Share PDF",
+  "print": "Print",
+  "savedSaveAgain": "Saved. Save again",
+  "saveVisitToCarHistory": "Save visit to car history",
+  "saveAndCreateJobCard": "Save and create job card / quote",
+  "logoSavedItPrintsOn": "Logo saved. It prints on the next PDF.",
+  "backupFailed": "Backup failed: {p0}",
+  "@backupFailed": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "couldNotReadTheFile": "Could not read the file",
+  "importedVisitsAndJobCards": "Imported {p0} visits and {p1} job cards. Skipped {p2} already on this phone.",
+  "@importedVisitsAndJobCards": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      },
+      "p2": {
+        "type": "Object"
+      }
+    }
+  },
+  "importFailed": "Import failed: {p0}",
+  "@importFailed": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "logoOnPdfsOptional": "Logo on PDFs (optional)",
+  "choose": "Choose",
+  "remove": "Remove",
+  "backupOfSavedVisitsAnd": "Backup of saved visits and job cards",
+  "savedDataLivesOnlyOn": "Saved data lives only on this phone. Export a file and keep it somewhere safe (WhatsApp to yourself, Drive, email). Import adds records from a backup and never overwrites what is already here.",
+  "exportBackup": "Export backup",
+  "importBackup": "Import backup"
+}

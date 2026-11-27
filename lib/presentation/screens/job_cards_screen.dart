@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/utils/search_match.dart';
@@ -22,7 +23,6 @@ class _JobCardsScreenState extends State<JobCardsScreen> {
   bool _loading = true;
   String _q = '';
   bool get _isAr => Provider.of<ObdState>(context, listen: false).isArabic;
-  String _t(String en, String ar) => _isAr ? ar : en;
 
   @override
   void initState() {
@@ -38,24 +38,24 @@ class _JobCardsScreenState extends State<JobCardsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(_t('Job Cards & Quotes', 'أوامر الشغل وعروض الأسعار'))),
+      appBar: AppBar(title: Text(AppLocalizations.of(context).jobCardsQuotes)),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           await Navigator.push(context, MaterialPageRoute(builder: (_) => const JobCardEditScreen()));
           _load();
         },
         icon: const Icon(Icons.add),
-        label: Text(_t('New job card', 'أمر شغل جديد')),
+        label: Text(AppLocalizations.of(context).newJobCard),
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _jobs.isEmpty
-              ? Center(child: Text(_t('No job cards yet.', 'لا توجد أوامر شغل.')))
+              ? Center(child: Text(AppLocalizations.of(context).noJobCardsYet))
               : ListView(
                   padding: const EdgeInsets.fromLTRB(12, 12, 12, 90),
                   children: [
                     TextField(
-                      decoration: InputDecoration(prefixIcon: const Icon(Icons.search), labelText: _t('Search plate, customer, phone', 'بحث: لوحة، عميل، هاتف')),
+                      decoration: InputDecoration(prefixIcon: const Icon(Icons.search), labelText: AppLocalizations.of(context).searchPlateCustomerPhone),
                       onChanged: (v) => setState(() => _q = v),
                     ),
                     const SizedBox(height: 10),
@@ -89,7 +89,6 @@ class JobCardEditScreen extends StatefulWidget {
 class _JobCardEditScreenState extends State<JobCardEditScreen> {
   late JobCard _j;
   bool get _isAr => Provider.of<ObdState>(context, listen: false).isArabic;
-  String _t(String en, String ar) => _isAr ? ar : en;
 
   @override
   void initState() {
@@ -108,7 +107,7 @@ class _JobCardEditScreenState extends State<JobCardEditScreen> {
 
   Future<void> _save() async {
     await WorkshopStore.saveJob(_j);
-    if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_t('Saved', 'تم الحفظ'))));
+    if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).saved)));
   }
 
   /// Digits only; Egyptian local numbers (01xxxxxxxxx) become 20 + number without the leading 0.
@@ -132,14 +131,14 @@ class _JobCardEditScreenState extends State<JobCardEditScreen> {
     await _save();
     final num = waNumber(_j.phone);
     if (num.length < 10) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_t('Enter the customer phone first', 'أدخل رقم العميل أولاً'))));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).enterTheCustomerPhoneFirst)));
       return;
     }
     // WhatsApp links cannot attach files, so open the chat with the text, then the share sheet carries the PDF.
     final uri = Uri.parse('https://wa.me/$num?text=${Uri.encodeComponent(waText(_j, invoice))}');
     final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
     if (!ok && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_t('Could not open WhatsApp', 'تعذر فتح واتساب'))));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).couldNotOpenWhatsapp)));
       return;
     }
     await Future<void>.delayed(const Duration(seconds: 1));
@@ -162,7 +161,7 @@ class _JobCardEditScreenState extends State<JobCardEditScreen> {
     final names = _isAr ? _statusAr : _statusEn;
     return Scaffold(
       appBar: AppBar(
-        title: Text(_t('Job card', 'أمر شغل')),
+        title: Text(AppLocalizations.of(context).jobCard),
         actions: [
           if (widget.job != null)
             IconButton(
@@ -178,56 +177,56 @@ class _JobCardEditScreenState extends State<JobCardEditScreen> {
       body: ListView(
         padding: const EdgeInsets.all(12),
         children: [
-          _f(_t('Customer', 'العميل'), _j.customer, (v) => _j.customer = v),
-          _f(_t('Phone (WhatsApp)', 'الهاتف (واتساب)'), _j.phone, (v) => _j.phone = v, type: TextInputType.phone),
+          _f(AppLocalizations.of(context).customer, _j.customer, (v) => _j.customer = v),
+          _f(AppLocalizations.of(context).phoneWhatsapp, _j.phone, (v) => _j.phone = v, type: TextInputType.phone),
           Row(children: [
-            Expanded(child: _f(_t('Plate', 'اللوحة'), _j.plate, (v) => _j.plate = v)),
+            Expanded(child: _f(AppLocalizations.of(context).plate, _j.plate, (v) => _j.plate = v)),
             const SizedBox(width: 8),
-            Expanded(child: _f(_t('Odometer km', 'العداد كم'), _j.odometerKm, (v) => _j.odometerKm = v, num: true)),
+            Expanded(child: _f(AppLocalizations.of(context).odometerKm, _j.odometerKm, (v) => _j.odometerKm = v, num: true)),
           ]),
-          _f(_t('Vehicle', 'السيارة'), _j.vehicle, (v) => _j.vehicle = v),
-          _f(_t('Complaint', 'شكوى العميل'), _j.complaint, (v) => _j.complaint = v, lines: 2),
-          _f(_t('Findings / work done', 'النتائج / الشغل'), _j.findings, (v) => _j.findings = v, lines: 2),
+          _f(AppLocalizations.of(context).vehicle, _j.vehicle, (v) => _j.vehicle = v),
+          _f(AppLocalizations.of(context).complaint, _j.complaint, (v) => _j.complaint = v, lines: 2),
+          _f(AppLocalizations.of(context).findingsWorkDone, _j.findings, (v) => _j.findings = v, lines: 2),
           DropdownButtonFormField<JobStatus>(
             value: _j.status,
-            decoration: InputDecoration(labelText: _t('Status', 'الحالة'), isDense: true),
+            decoration: InputDecoration(labelText: AppLocalizations.of(context).status, isDense: true),
             items: [for (final s in JobStatus.values) DropdownMenuItem(value: s, child: Text(names[s.index]))],
             onChanged: (v) => setState(() => _j.status = v ?? _j.status),
           ),
           const SizedBox(height: 12),
-          Text(_t('Parts and labour (EGP)', 'قطع وأجرة (جنيه)'), style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(AppLocalizations.of(context).partsAndLabourEgp, style: const TextStyle(fontWeight: FontWeight.bold)),
           for (int i = 0; i < _j.items.length; i++) _line(i),
           Row(children: [
-            TextButton.icon(onPressed: () => setState(() => _j.items.add(JobLineItem())), icon: const Icon(Icons.add), label: Text(_t('Part', 'قطعة'))),
-            TextButton.icon(onPressed: () => setState(() => _j.items.add(JobLineItem(isLabour: true))), icon: const Icon(Icons.build), label: Text(_t('Labour', 'أجرة'))),
+            TextButton.icon(onPressed: () => setState(() => _j.items.add(JobLineItem())), icon: const Icon(Icons.add), label: Text(AppLocalizations.of(context).part)),
+            TextButton.icon(onPressed: () => setState(() => _j.items.add(JobLineItem(isLabour: true))), icon: const Icon(Icons.build), label: Text(AppLocalizations.of(context).labour)),
           ]),
           Row(children: [
-            Expanded(child: _f(_t('Discount EGP', 'خصم'), _j.discount == 0 ? '' : _j.discount.toString(), (v) => _j.discount = double.tryParse(v) ?? 0, num: true)),
+            Expanded(child: _f(AppLocalizations.of(context).discountEgp, _j.discount == 0 ? '' : _j.discount.toString(), (v) => _j.discount = double.tryParse(v) ?? 0, num: true)),
             const SizedBox(width: 8),
-            Expanded(child: _f(_t('VAT % (if any)', 'ضريبة % (إن وجدت)'), _j.vatPercent == 0 ? '' : _j.vatPercent.toString(), (v) => _j.vatPercent = double.tryParse(v) ?? 0, num: true)),
+            Expanded(child: _f(AppLocalizations.of(context).vatIfAny, _j.vatPercent == 0 ? '' : _j.vatPercent.toString(), (v) => _j.vatPercent = double.tryParse(v) ?? 0, num: true)),
           ]),
           Card(
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text('${_t("Parts", "قطع")}: ${JobCardPdfService.money(_j.partsTotal)}'),
-                Text('${_t("Labour", "أجرة")}: ${JobCardPdfService.money(_j.labourTotal)}'),
-                if (_j.discount > 0) Text('${_t("Discount", "خصم")}: -${JobCardPdfService.money(_j.discount)}'),
+                Text('${AppLocalizations.of(context).parts}: ${JobCardPdfService.money(_j.partsTotal)}'),
+                Text('${AppLocalizations.of(context).labour}: ${JobCardPdfService.money(_j.labourTotal)}'),
+                if (_j.discount > 0) Text('${AppLocalizations.of(context).discount}: -${JobCardPdfService.money(_j.discount)}'),
                 if (_j.vatPercent > 0) Text('VAT: ${JobCardPdfService.money(_j.vat)}'),
-                Text('${_t("TOTAL", "الإجمالي")}: ${JobCardPdfService.money(_j.total)}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                Text('${AppLocalizations.of(context).total}: ${JobCardPdfService.money(_j.total)}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               ]),
             ),
           ),
           const SizedBox(height: 8),
           Row(children: [
-            Expanded(child: ElevatedButton.icon(onPressed: () async { await _save(); await JobCardPdfService.share(_j, invoice: false); }, icon: const Icon(Icons.description), label: Text(_t('Quote PDF', 'عرض سعر PDF')))),
+            Expanded(child: ElevatedButton.icon(onPressed: () async { await _save(); await JobCardPdfService.share(_j, invoice: false); }, icon: const Icon(Icons.description), label: Text(AppLocalizations.of(context).quotePdf))),
             const SizedBox(width: 8),
-            Expanded(child: ElevatedButton.icon(onPressed: () async { await _save(); await JobCardPdfService.share(_j, invoice: true); }, icon: const Icon(Icons.receipt_long), label: Text(_t('Invoice PDF', 'فاتورة PDF')))),
+            Expanded(child: ElevatedButton.icon(onPressed: () async { await _save(); await JobCardPdfService.share(_j, invoice: true); }, icon: const Icon(Icons.receipt_long), label: Text(AppLocalizations.of(context).invoicePdf))),
           ]),
           Row(children: [
-            Expanded(child: OutlinedButton.icon(onPressed: () => _whatsapp(false), icon: const Icon(Icons.chat), label: Text(_t('WhatsApp quote', 'واتساب عرض سعر')))),
+            Expanded(child: OutlinedButton.icon(onPressed: () => _whatsapp(false), icon: const Icon(Icons.chat), label: Text(AppLocalizations.of(context).whatsappQuote))),
             const SizedBox(width: 8),
-            Expanded(child: OutlinedButton.icon(onPressed: () => _whatsapp(true), icon: const Icon(Icons.chat), label: Text(_t('WhatsApp invoice', 'واتساب فاتورة')))),
+            Expanded(child: OutlinedButton.icon(onPressed: () => _whatsapp(true), icon: const Icon(Icons.chat), label: Text(AppLocalizations.of(context).whatsappInvoice))),
           ]),
           const SizedBox(height: 40),
         ],
@@ -244,13 +243,13 @@ class _JobCardEditScreenState extends State<JobCardEditScreen> {
           Row(children: [
             Icon(it.isLabour ? Icons.build : Icons.settings, size: 18),
             const SizedBox(width: 6),
-            Expanded(child: TextFormField(initialValue: it.description, decoration: InputDecoration(hintText: it.isLabour ? _t('Labour description', 'وصف الأجرة') : _t('Part name', 'اسم القطعة'), isDense: true), onChanged: (v) => setState(() => it.description = v))),
+            Expanded(child: TextFormField(initialValue: it.description, decoration: InputDecoration(hintText: it.isLabour ? AppLocalizations.of(context).labourDescription : AppLocalizations.of(context).partName, isDense: true), onChanged: (v) => setState(() => it.description = v))),
             IconButton(icon: const Icon(Icons.close), onPressed: () => setState(() => _j.items.removeAt(i))),
           ]),
           Row(children: [
-            Expanded(child: TextFormField(initialValue: it.qty.toString(), keyboardType: const TextInputType.numberWithOptions(decimal: true), decoration: InputDecoration(labelText: _t('Qty', 'الكمية'), isDense: true), onChanged: (v) => setState(() => it.qty = double.tryParse(v) ?? 0))),
+            Expanded(child: TextFormField(initialValue: it.qty.toString(), keyboardType: const TextInputType.numberWithOptions(decimal: true), decoration: InputDecoration(labelText: AppLocalizations.of(context).qty, isDense: true), onChanged: (v) => setState(() => it.qty = double.tryParse(v) ?? 0))),
             const SizedBox(width: 8),
-            Expanded(child: TextFormField(initialValue: it.unitPrice == 0 ? '' : it.unitPrice.toString(), keyboardType: const TextInputType.numberWithOptions(decimal: true), decoration: InputDecoration(labelText: _t('Unit price', 'سعر الوحدة'), isDense: true), onChanged: (v) => setState(() => it.unitPrice = double.tryParse(v) ?? 0))),
+            Expanded(child: TextFormField(initialValue: it.unitPrice == 0 ? '' : it.unitPrice.toString(), keyboardType: const TextInputType.numberWithOptions(decimal: true), decoration: InputDecoration(labelText: AppLocalizations.of(context).unitPrice, isDense: true), onChanged: (v) => setState(() => it.unitPrice = double.tryParse(v) ?? 0))),
             const SizedBox(width: 8),
             Text(it.total.toStringAsFixed(2)),
           ]),
