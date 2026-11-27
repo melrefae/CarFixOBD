@@ -24,3 +24,9 @@ const List<FeatureRecord> kFeatureRegistry = [
   FeatureRecord('actuator_tests', FeatureStatus.unverified),
   FeatureRecord('ev_battery', FeatureStatus.unverified, 'no real data source yet'),
 ];
+
+/// Several reads use data identifiers (for example TCM 22 11 05, ABS 22 2B 01, SRS 22 3C 01,
+/// HVAC 22 4D 01) that are NOT confirmed for any car. A positive reply to such a request would
+/// be decoded as the wrong quantity. They stay disabled (raw reply is still logged and shown)
+/// until a verified-commands record exists for the car. Do not turn on without verification.
+const bool kTrustUnverifiedDids = false;

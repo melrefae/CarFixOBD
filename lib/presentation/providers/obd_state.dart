@@ -1,3 +1,4 @@
+import '../../core/constants/feature_status.dart';
 import '../../core/utils/uds_response.dart';
 import 'dart:async';
 import 'dart:io';
@@ -777,12 +778,12 @@ class ObdState extends ChangeNotifier {
       try {
         final tcmTempRaw = await _driver!.sendToModule("7E1", "221105", timeout: const Duration(milliseconds: 900));
         final tcmBytes = HexParser.extractBytes(tcmTempRaw);
-        if (tcmBytes.length >= 4 && tcmBytes[0] == 0x62 && tcmBytes[1] == 0x11 && tcmBytes[2] == 0x05) {
+        if (kTrustUnverifiedDids && tcmBytes.length >= 4 && tcmBytes[0] == 0x62 && tcmBytes[1] == 0x11 && tcmBytes[2] == 0x05) {
           atfTemp = tcmBytes[3].toDouble();
         } else {
           final raw21 = await _driver!.sendToModule("7E1", "2101", timeout: const Duration(milliseconds: 900));
           final p21 = HexParser.extractPayload(HexParser.extractBytes(raw21), 0x21, 0x01);
-          if (p21.isNotEmpty) atfTemp = (p21[0] - 40).toDouble();
+          if (kTrustUnverifiedDids && p21.isNotEmpty) atfTemp = (p21[0] - 40).toDouble();
         }
 
         final tcmVinRaw = await _driver!.sendToModule("7E1", "22F190", timeout: const Duration(milliseconds: 800));
@@ -2491,17 +2492,17 @@ class ObdState extends ChangeNotifier {
       String tcmRaw = await _driver!.sendToModule("7E1", "221105", timeout: const Duration(milliseconds: 900));
       List<int> tcmB = HexParser.extractBytes(tcmRaw);
       double? atfTempC;
-      if (tcmB.length >= 4 && tcmB[0] == 0x62 && tcmB[1] == 0x11 && tcmB[2] == 0x05) {
+      if (kTrustUnverifiedDids && tcmB.length >= 4 && tcmB[0] == 0x62 && tcmB[1] == 0x11 && tcmB[2] == 0x05) {
         atfTempC = tcmB[3].toDouble();
       } else {
         tcmRaw = await _driver!.sendToModule("7E1", "2101", timeout: const Duration(milliseconds: 900));
         final p21 = HexParser.extractPayload(HexParser.extractBytes(tcmRaw), 0x21, 0x01);
-        if (p21.isNotEmpty) atfTempC = (p21[0] - 40).toDouble();
+        if (kTrustUnverifiedDids && p21.isNotEmpty) atfTempC = (p21[0] - 40).toDouble();
       }
       final slipRaw = await _driver!.sendToModule("7E1", "221106", timeout: const Duration(milliseconds: 800));
       final slipB = HexParser.extractBytes(slipRaw);
       int? tccSlipRpm;
-      if (slipB.length >= 5 && slipB[0] == 0x62 && slipB[1] == 0x11 && slipB[2] == 0x06) {
+      if (kTrustUnverifiedDids && slipB.length >= 5 && slipB[0] == 0x62 && slipB[1] == 0x11 && slipB[2] == 0x06) {
         tccSlipRpm = (slipB[3] << 8) | slipB[4];
       }
       final tcmNode = ecuTopology.where((m) => m.header == "7E1").firstOrNull;
@@ -2556,8 +2557,8 @@ class ObdState extends ChangeNotifier {
       final sasResp = await _driver!.sendToModule("7E2", "222B02", timeout: const Duration(milliseconds: 800));
       final absBytes = HexParser.extractBytes(absResp);
       final sasBytes = HexParser.extractBytes(sasResp);
-      final bool hasWheelSpeeds = absBytes.length >= 7 && absBytes[0] == 0x62 && absBytes[1] == 0x2B;
-      final bool hasSas = sasBytes.length >= 5 && sasBytes[0] == 0x62 && sasBytes[1] == 0x2B;
+      final bool hasWheelSpeeds = kTrustUnverifiedDids && absBytes.length >= 7 && absBytes[0] == 0x62 && absBytes[1] == 0x2B;
+      final bool hasSas = kTrustUnverifiedDids && sasBytes.length >= 5 && sasBytes[0] == 0x62 && sasBytes[1] == 0x2B;
       final absNode = ecuTopology.where((m) => m.header == "7E2").firstOrNull;
       final bool absOnline = (absNode?.isOnline ?? false) || hasWheelSpeeds || hasSas;
       double? sasDeg;
@@ -2616,7 +2617,7 @@ class ObdState extends ChangeNotifier {
       // Stage 14: SRS Supplemental Restraint & Airbag Squibs (Genuine 7E3 UDS)
       final srsResp = await _driver!.sendToModule("7E3", "223C01", timeout: const Duration(milliseconds: 900));
       final srsB = HexParser.extractBytes(srsResp);
-      final bool hasSquibs = srsB.length >= 6 && srsB[0] == 0x62 && srsB[1] == 0x3C && srsB[2] == 0x01;
+      final bool hasSquibs = kTrustUnverifiedDids && srsB.length >= 6 && srsB[0] == 0x62 && srsB[1] == 0x3C && srsB[2] == 0x01;
       final srsNode = ecuTopology.where((m) => m.header == "7E3").firstOrNull;
       final bool srsOnline = (srsNode?.isOnline ?? false) || hasSquibs;
       updateStage(
@@ -2661,7 +2662,7 @@ class ObdState extends ChangeNotifier {
       // Stage 15: HVAC Climate Control & Refrigerant Pressure (Genuine 7E8 / Gateway)
       final hvacResp = await _driver!.sendToModule("7E8", "224D01", timeout: const Duration(milliseconds: 900));
       final hvacB = HexParser.extractBytes(hvacResp);
-      final bool hasHvac = hvacB.length >= 5 && hvacB[0] == 0x62 && hvacB[1] == 0x4D && hvacB[2] == 0x01;
+      final bool hasHvac = kTrustUnverifiedDids && hvacB.length >= 5 && hvacB[0] == 0x62 && hvacB[1] == 0x4D && hvacB[2] == 0x01;
       double? acPressureBar;
       if (hasHvac) {
         acPressureBar = ((hvacB[3] << 8) | hvacB[4]) / 100.0;
