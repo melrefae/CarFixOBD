@@ -23,3 +23,6 @@ Every command that passes goes into a table: brand, model, year range, ECU addre
 - DPF screen shows only Mode 01 PIDs 78, 7C, 7A read on demand ("not supported" if no reply). Soot mass, ash, AdBlue, NOx conversion removed (not readable over standard OBD).
 - Used-car audit: battery cranking/alternator/ripple are "not measured" (NaN), not invented. A notice lists the sections that are manual / not measured (paint, flood, title, checklist, estimates, sub-scores).
 - New raw command log screen (dashboard card "Raw command log") with export, for test evidence.
+
+## Milestone 5 (UX)
+Dashboard rebuilt: Daily / Inspection & Customers / Analysis & Tools, then Lab (PIN) and collapsed "More tools". Compact 3-column tiles with short titles, shield = not yet tested on a real car. Duplicate network cards merged into "Network Map" (chooser). Lab PIN: lab_pin.dart (staff guard, reset from the Lab screen). Screenshots in docs/screenshots (rendered by a widget test, not a phone).

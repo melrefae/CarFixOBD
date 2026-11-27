@@ -21,17 +21,14 @@ import 'workshop_lan_sync_screen.dart';
 import 'dtc_encyclopedia_screen.dart';
 import 'adapter_benchmark_screen.dart';
 import 'workshop_settings_screen.dart';
-import 'multi_ecu_topology_screen.dart';
 import 'o2_cat_analyzer_screen.dart';
 import 'flight_recorder_screen.dart';
-import 'performance_dyno_screen.dart';
 import 'fuel_cost_calculator_screen.dart';
 import 'hud_display_screen.dart';
 import 'ai_copilot_screen.dart';
 import 'full_vehicle_test_screen.dart';
 import 'interactive_can_topology_screen.dart';
 import 'used_car_audit_screen.dart';
-import 'lab_scope_waveform_screen.dart';
 import 'wiring_schematics_screen.dart';
 import 'voice_inspection_assistant_screen.dart';
 import 'ar_engine_bay_hud_screen.dart';
@@ -40,6 +37,8 @@ import 'offline_vault_protocol_sniffer_screen.dart';
 import 'mode06_monitor_screen.dart';
 import 'lab_hub_screen.dart';
 import 'traffic_log_screen.dart';
+import 'lab_pin.dart';
+import 'multi_ecu_topology_screen.dart';
 
 /// Main Workshop Dashboard Screen for Automotive Diagnostic Center
 class HomeDashboardScreen extends StatelessWidget {
@@ -50,7 +49,6 @@ class HomeDashboardScreen extends StatelessWidget {
     final state = Provider.of<ObdState>(context);
     final isAr = state.isArabic;
     final isTablet = MediaQuery.of(context).size.width > 600;
-    final gridCount = isTablet ? 3 : 2;
 
     return Scaffold(
       appBar: AppBar(
@@ -103,38 +101,10 @@ class HomeDashboardScreen extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.mic, color: AppColors.primaryYellow),
-            tooltip: isAr ? "المساعد الصوتي الناطق" : "Hands-Free Voice Assistant",
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const VoiceInspectionAssistantScreen()));
-            },
-          ),
-          IconButton(
             icon: Icon(state.isSunlightMode ? Icons.dark_mode : Icons.wb_sunny_outlined),
             tooltip: state.isSunlightMode ? "Dark Workshop Mode" : "Bright Daylight Sunlight Mode",
             onPressed: () {
               state.toggleSunlightMode();
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.wifi_tethering),
-            tooltip: "Workshop LAN Hub Server",
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const WorkshopLanSyncScreen()));
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.directions_car),
-            tooltip: isAr ? AppStringsAr.vehicleProfiles : AppStrings.vehicleProfiles,
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const VehicleProfilesScreen()));
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.terminal),
-            tooltip: AppStrings.terminal,
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const TerminalScreen()));
             },
           ),
           IconButton(
@@ -171,438 +141,220 @@ class HomeDashboardScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // SECTION 1: Diagzone Special Resets, Coding & SGW Core
-            _buildSectionHeader(
-              isAr ? "وظائف دياجزون، التكويد وحماية البوابة" : "Diagzone Resets, ECU Coding & SGW",
-              Icons.construction,
-              AppColors.primaryYellow,
-            ),
+            _buildLegend(isAr),
             const SizedBox(height: 8),
-            GridView.count(
-              crossAxisCount: gridCount,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.15,
-              children: [
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? "سجل الأوامر الخام" : "Raw command log",
-                  subtitle: isAr ? "كل أمر ورد من المحول، للتصدير كدليل" : "Every adapter request/response, export as test evidence",
-                  icon: Icons.receipt_long,
-                  accentColor: AppColors.warningOrange,
-                  badgeText: "LOG",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const TrafficLogScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? "المختبر (تجريبي)" : "Lab (experimental)",
-                  subtitle: isAr ? "ميزات قيد التطوير وغير مثبتة على سيارة حقيقية" : "Features under development, not verified on a real car",
-                  icon: Icons.science,
-                  accentColor: AppColors.warningOrange,
-                  badgeText: "LAB",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const LabHubScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? AppStringsAr.multiEcuTopology : AppStrings.multiEcuTopology,
-                  subtitle: isAr ? AppStringsAr.multiEcuSubtitle : "CAN Gateway Bus Tree (ECM, TCM, ABS, BCM)",
-                  icon: Icons.account_tree,
-                  accentColor: AppColors.successGreen,
-                  badgeText: "CAN Tree",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const MultiEcuTopologyScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? AppStringsAr.readDtcs : AppStrings.readDtcs,
-                  subtitle: state.storedDtcs.isEmpty
-                      ? (isAr ? "فحص كمبيوتر المحرك" : "Check Engine Diagnostics")
-                      : (isAr ? "${state.storedDtcs.length} أعطال نشطة" : "${state.storedDtcs.length} Active DTCs"),
-                  icon: Icons.error_outline,
-                  accentColor: state.storedDtcs.isNotEmpty ? AppColors.dangerRed : AppColors.primaryAmber,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const DtcScannerScreen()));
-                  },
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // SECTION 1.5: Diagzone Pro Heavyweight Diagnostics (CAN Graph, IMMO, EV Lab)
-            _buildSectionHeader(
-              isAr ? "وظائف دياجزون الاحترافية (CAN، المفاتيح، والهايبرد)" : "Diagzone Pro Heavyweight Suite",
-              Icons.stars,
-              AppColors.primaryYellow,
-            ),
-            const SizedBox(height: 8),
-            GridView.count(
-              crossAxisCount: gridCount,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.15,
-              children: [
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? "خريطة شبكات CAN/LIN" : "CAN Topology Graph",
-                  subtitle: isAr ? "رسم بياني تفاعلي لشجرة الشبكات وسرعة الاستجابة" : "Interactive Multi-Trunk Bus Map & Node Inspection",
-                  icon: Icons.hub,
-                  accentColor: AppColors.primaryYellow,
-                  badgeText: "CAN 500k",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const InteractiveCanTopologyScreen()));
-                  },
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // SECTION 1.6: Workshop Power Modules & Calibration Suite
-            _buildSectionHeader(
-              isAr ? "أدوات الورشة الاحترافية والتدقيق الشامل" : "Workshop Power Tools & Inspection Suite",
-              Icons.precision_manufacturing,
-              AppColors.electricBlue,
-            ),
-            const SizedBox(height: 8),
-            GridView.count(
-              crossAxisCount: gridCount,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.15,
-              children: [
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? AppStringsAr.usedCarAudit : AppStrings.usedCarAudit,
-                  subtitle: isAr ? AppStringsAr.usedCarAuditSubtitle : AppStrings.usedCarAuditSubtitle,
-                  icon: Icons.fact_check,
-                  accentColor: AppColors.primaryYellow,
-                  badgeText: "AUDIT",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const UsedCarAuditScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? AppStringsAr.wiringSchematics : AppStrings.wiringSchematics,
-                  subtitle: isAr ? AppStringsAr.wiringSchematicsSubtitle : AppStrings.wiringSchematicsSubtitle,
-                  icon: Icons.account_tree,
-                  accentColor: AppColors.successGreen,
-                  badgeText: "PINOUT",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const WiringSchematicsScreen()));
-                  },
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // SECTION 1.7: Smart Workshop Experience & Field Ops
-            _buildSectionHeader(
-              isAr ? "تجربة الورشة الذكية والميدانية" : "Smart Workshop Experience & Field Ops",
-              Icons.smart_toy,
-              AppColors.primaryYellow,
-            ),
-            const SizedBox(height: 8),
-            GridView.count(
-              crossAxisCount: gridCount,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.15,
-              children: [
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? AppStringsAr.voiceAssistant : AppStrings.voiceAssistant,
-                  subtitle: isAr ? AppStringsAr.voiceAssistantSubtitle : AppStrings.voiceAssistantSubtitle,
-                  icon: Icons.mic,
-                  accentColor: AppColors.primaryYellow,
-                  badgeText: "VOICE",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const VoiceInspectionAssistantScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? AppStringsAr.arEngineBay : AppStrings.arEngineBay,
-                  subtitle: isAr ? AppStringsAr.arEngineBaySubtitle : AppStrings.arEngineBaySubtitle,
-                  icon: Icons.view_in_ar,
-                  accentColor: AppColors.accentCyan,
-                  badgeText: "AR HUD",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const ArEngineBayHudScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? AppStringsAr.customerDispatch : AppStrings.customerDispatch,
-                  subtitle: isAr ? AppStringsAr.customerDispatchSubtitle : AppStrings.customerDispatchSubtitle,
-                  icon: Icons.chat,
-                  accentColor: AppColors.successGreen,
-                  badgeText: "DISPATCH",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const CustomerDispatchHubScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: isAr ? AppStringsAr.offlineVault : AppStrings.offlineVault,
-                  subtitle: isAr ? AppStringsAr.offlineVaultSubtitle : AppStrings.offlineVaultSubtitle,
-                  icon: Icons.inventory_2,
-                  accentColor: AppColors.electricBlue,
-                  badgeText: "CAN/OFFLINE",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const OfflineVaultProtocolSnifferScreen()));
-                  },
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // SECTION 2: Component Analyzers & AI Copilot
-            _buildSectionHeader(
-              isAr ? "المحللات الذكية ومساعد الذكاء الاصطناعي" : "Intelligent Analyzers & AI Copilot",
-              Icons.psychology,
-              AppColors.accentCyan,
-            ),
-            const SizedBox(height: 8),
-            GridView.count(
-              crossAxisCount: gridCount,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.15,
-              children: [
-                _buildActionCard(
-                  context: context,
-                  title: AppStrings.aiCopilot,
-                  subtitle: "Rule-Based AI Diagnosis & Egyptian Bulletins",
-                  icon: Icons.auto_awesome,
-                  accentColor: AppColors.primaryYellow,
-                  badgeText: "AI",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const AiCopilotScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: AppStrings.catalyticAnalyzer,
-                  subtitle: "Dual O2 Waveforms (B1S1/B1S2) & Efficiency",
-                  icon: Icons.show_chart,
-                  accentColor: AppColors.successGreen,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const O2CatAnalyzerScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: "Fuel Trim & Battery",
-                  subtitle: "Vacuum Leak Matrix & Alternator Checker",
-                  icon: Icons.psychology_outlined,
-                  accentColor: AppColors.warningOrange,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const DiagnosticAssistantScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: "Mode \$06 Misfires",
-                  subtitle: "On-Board Monitors & Misfire Counters",
-                  icon: Icons.monitor_heart_outlined,
-                  accentColor: AppColors.accentCyan,
-                  badgeText: "\$06",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const Mode06MonitorScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: AppStrings.liveSensors,
-                  subtitle: "Real-Time Sensor Monitoring Gauges",
-                  icon: Icons.speed,
-                  accentColor: AppColors.electricBlue,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const LiveDataScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: AppStrings.liveGraphs,
-                  subtitle: "Multi-Channel Live Oscilloscope",
-                  icon: Icons.stacked_line_chart,
-                  accentColor: AppColors.accentCyan,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const LiveGraphScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: AppStrings.freezeFrame,
-                  subtitle: "ECU Snapshot at Fault Event",
-                  icon: Icons.camera_alt_outlined,
-                  accentColor: AppColors.dangerRed,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const FreezeFrameScreen()));
-                  },
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // SECTION 3: Road Test, Track & HUD Suite
-            _buildSectionHeader("Road Test, Track & Night HUD", Icons.speed, AppColors.electricBlue),
-            const SizedBox(height: 8),
-            GridView.count(
-              crossAxisCount: gridCount,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.15,
-              children: [
-                _buildActionCard(
-                  context: context,
-                  title: AppStrings.flightRecorder,
-                  subtitle: state.isFlightRecording
-                      ? "Recording (${state.flightTelemetryFrames.length} frames)..."
-                      : "Black Box Telemetry & Timeline Scrubber",
-                  icon: Icons.fiber_manual_record,
-                  accentColor: state.isFlightRecording ? AppColors.dangerRed : AppColors.primaryYellow,
-                  badgeText: state.isFlightRecording ? "REC" : null,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const FlightRecorderScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: AppStrings.fuelCostCalculator,
-                  subtitle: "L/100km & 80/92/95 Octane EGP Tariffs",
-                  icon: Icons.local_gas_station,
-                  accentColor: AppColors.successGreen,
-                  badgeText: "EGP",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const FuelCostCalculatorScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: AppStrings.hudDisplayMode,
-                  subtitle: "Mirrored Windshield Projection Display",
-                  icon: Icons.nightlight_round,
-                  accentColor: AppColors.accentCyan,
-                  badgeText: "HUD",
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const HudDisplayScreen()));
-                  },
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // SECTION 4: Workshop Management & Diagnostics Library
-            _buildSectionHeader("Workshop Tools & Reference Library", Icons.library_books, AppColors.textMuted),
-            const SizedBox(height: 8),
-            GridView.count(
-              crossAxisCount: gridCount,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.15,
-              children: [
-                _buildActionCard(
-                  context: context,
-                  title: AppStrings.vehicleProfiles,
-                  subtitle: state.selectedVehicle != null
-                      ? "${state.selectedVehicle!.make} ${state.selectedVehicle!.model}"
-                      : "70+ Egyptian Models",
-                  icon: Icons.directions_car_filled,
-                  accentColor: AppColors.primaryAmber,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const VehicleProfilesScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: AppStrings.dtcEncyclopedia,
-                  subtitle: "Instant Lookups & Multimeter Guide",
-                  icon: Icons.menu_book,
-                  accentColor: AppColors.primaryYellow,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const DtcEncyclopediaScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: "Readiness Monitors",
-                  subtitle: "Emissions Drive Cycle (I/M)",
-                  icon: Icons.fact_check_outlined,
-                  accentColor: AppColors.electricBlue,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const ReadinessMonitorsScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: "ECU Information",
-                  subtitle: "VIN, CALID & CVN Firmware",
-                  icon: Icons.memory,
-                  accentColor: AppColors.accentCyan,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const EcuInfoScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: AppStrings.adapterBenchmark,
-                  subtitle: "Verify PIC18F25K80 Chip",
-                  icon: Icons.speed_outlined,
-                  accentColor: AppColors.warningOrange,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const AdapterBenchmarkScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: AppStrings.inspectionReports,
-                  subtitle: "${state.savedReports.length} Saved Records",
-                  icon: Icons.receipt_long,
-                  accentColor: AppColors.successGreen,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportsScreen()));
-                  },
-                ),
-                _buildActionCard(
-                  context: context,
-                  title: "Workshop LAN Hub",
-                  subtitle: "Local Wi-Fi Report Sync",
-                  icon: Icons.router,
-                  accentColor: AppColors.electricBlue,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const WorkshopLanSyncScreen()));
-                  },
-                ),
-              ],
-            ),
+            ..._buildSections(context, state, isAr, isTablet),
 
             const SizedBox(height: 24),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  Widget _buildLegend(bool isAr) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 2),
+      child: Row(
+        children: [
+          const Icon(Icons.shield_outlined, size: 13, color: AppColors.warningOrange),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              isAr ? "الأيقونة = لم تُختبر بعد على سيارة حقيقية" : "Shield = not yet tested on a real car",
+              style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _go(BuildContext context, Widget screen) =>
+      Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
+
+  Future<void> _openNetworkMap(BuildContext context, bool isAr) async {
+    final pick = await showModalBottomSheet<int>(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.account_tree),
+              title: Text(isAr ? "مسح الوحدات (شجرة)" : "ECU scan tree"),
+              subtitle: Text(isAr ? "اكتشاف الوحدات على البوابة" : "Find modules on the gateway"),
+              onTap: () => Navigator.pop(ctx, 0),
+            ),
+            ListTile(
+              leading: const Icon(Icons.hub),
+              title: Text(isAr ? "خريطة الشبكات التفاعلية" : "Interactive bus map"),
+              subtitle: Text(isAr ? "رسم بياني لشبكات CAN/LIN" : "CAN/LIN graph and node inspection"),
+              onTap: () => Navigator.pop(ctx, 1),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (!context.mounted || pick == null) return;
+    _go(context, pick == 0 ? const MultiEcuTopologyScreen() : const InteractiveCanTopologyScreen());
+  }
+
+  List<Widget> _buildSections(BuildContext context, ObdState state, bool isAr, bool isTablet) {
+    final cols = isTablet ? 4 : 3;
+    // t(en, ar, icon, color, onTap, {unverified, badge})
+    Widget t(String en, String ar, IconData icon, Color color, VoidCallback onTap, {bool unv = true, String? badge}) =>
+        _buildTile(isAr ? ar : en, icon, color, onTap, unverified: unv, badge: badge);
+
+    final dtcCount = state.storedDtcs.length;
+    final sections = <List<dynamic>>[
+      [
+        isAr ? "يومي" : "Daily", Icons.bolt, AppColors.primaryYellow,
+        <Widget>[
+          _buildTile(isAr ? "قراءة/مسح الأعطال" : "Read / Clear DTC", Icons.error_outline,
+              dtcCount > 0 ? AppColors.dangerRed : AppColors.primaryAmber, () => _go(context, const DtcScannerScreen()),
+              badge: dtcCount > 0 ? "$dtcCount" : null),
+          t("Live Data", "بيانات حية", Icons.speed, AppColors.accentCyan, () => _go(context, const LiveDataScreen())),
+          t("Live Graphs", "رسوم حية", Icons.show_chart, AppColors.successGreen, () => _go(context, const LiveGraphScreen())),
+          t("Freeze Frame", "لقطة العطل", Icons.ac_unit, AppColors.electricBlue, () => _go(context, const FreezeFrameScreen())),
+          t("Readiness", "جاهزية الفحص", Icons.fact_check, AppColors.primaryAmber, () => _go(context, const ReadinessMonitorsScreen())),
+          t("ECU Info", "بيانات الكمبيوتر", Icons.memory, AppColors.accentCyan, () => _go(context, const EcuInfoScreen())),
+          t("Mode 06", "مونيتورات 06", Icons.rule, AppColors.primaryAmber, () => _go(context, const Mode06MonitorScreen())),
+          t("Vehicle Profile", "ملف السيارة", Icons.directions_car_filled, AppColors.primaryAmber, () => _go(context, const VehicleProfilesScreen()), unv: false),
+        ],
+      ],
+      [
+        isAr ? "فحص وعملاء" : "Inspection & Customers", Icons.assignment, AppColors.accentCyan,
+        <Widget>[
+          t("Used-Car Audit", "فحص شراء", Icons.fact_check_outlined, AppColors.warningOrange, () => _go(context, const UsedCarAuditScreen())),
+          t("Saved Reports", "التقارير (${state.savedReports.length})", Icons.folder_open, AppColors.electricBlue, () => _go(context, const ReportsScreen()), unv: false),
+          t("WhatsApp Dispatch", "واتساب العميل", Icons.chat, AppColors.successGreen, () => _go(context, const CustomerDispatchHubScreen()), unv: false),
+          t("LAN Hub", "مزامنة الورشة", Icons.router, AppColors.electricBlue, () => _go(context, const WorkshopLanSyncScreen()), unv: false),
+        ],
+      ],
+      [
+        isAr ? "تحليل وأدوات" : "Analysis & Tools", Icons.analytics, AppColors.electricBlue,
+        <Widget>[
+          _buildTile(isAr ? "خريطة الشبكة" : "Network Map", Icons.account_tree, AppColors.successGreen, () => _openNetworkMap(context, isAr)),
+          t("O2 & Catalyst", "حساسات الشكمان", Icons.air, AppColors.accentCyan, () => _go(context, const O2CatAnalyzerScreen())),
+          t("Fuel Trim & Battery", "الوقود والبطارية", Icons.battery_charging_full, AppColors.primaryAmber, () => _go(context, const DiagnosticAssistantScreen())),
+          t("DTC Encyclopedia", "موسوعة الأعطال", Icons.menu_book, AppColors.primaryAmber, () => _go(context, const DtcEncyclopediaScreen()), unv: false),
+          t("Wiring", "الدوائر", Icons.cable, AppColors.successGreen, () => _go(context, const WiringSchematicsScreen()), unv: false),
+          t("CAN Sniffer", "مراقب CAN", Icons.sensors, AppColors.accentCyan, () => _go(context, const OfflineVaultProtocolSnifferScreen())),
+          t("Adapter Test", "اختبار الأداة", Icons.usb, AppColors.electricBlue, () => _go(context, const AdapterBenchmarkScreen())),
+          t("Terminal", "تيرمنال", Icons.terminal, AppColors.textMuted, () => _go(context, const TerminalScreen())),
+          t("Raw Log", "سجل الأوامر", Icons.receipt_long, AppColors.warningOrange, () => _go(context, const TrafficLogScreen()), unv: false),
+        ],
+      ],
+    ];
+
+    final out = <Widget>[];
+    for (final sec in sections) {
+      out.add(const SizedBox(height: 12));
+      out.add(_buildSectionHeader(sec[0] as String, sec[1] as IconData, sec[2] as Color));
+      out.add(const SizedBox(height: 6));
+      out.add(GridView.count(
+        crossAxisCount: cols,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+        childAspectRatio: 1.0,
+        children: sec[3] as List<Widget>,
+      ));
+    }
+
+    // Lab (PIN) and collapsed "More tools"
+    out.add(const SizedBox(height: 12));
+    out.add(Card(
+      color: AppColors.warningOrange.withOpacity(0.12),
+      child: ListTile(
+        leading: const Icon(Icons.science, color: AppColors.warningOrange),
+        title: Text(isAr ? "المختبر (تجريبي، برقم سري)" : "Lab (experimental, PIN)"),
+        subtitle: Text(isAr
+            ? "تصفير وتكويد وإيموبلايزر وأكتيويتور وADAS وDPF وغيرها. غير مثبتة على سيارة."
+            : "Resets, coding, immobilizer, actuators, ADAS, DPF, EV, scope, dyno. Not verified on a car."),
+        trailing: const Icon(Icons.lock_outline),
+        onTap: () async {
+          if (await LabPin.check(context, isAr) && context.mounted) _go(context, const LabHubScreen());
+        },
+      ),
+    ));
+    out.add(Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        tilePadding: EdgeInsets.zero,
+        leading: const Icon(Icons.more_horiz, color: AppColors.textMuted),
+        title: Text(isAr ? "أدوات إضافية" : "More tools", style: const TextStyle(fontSize: 14, color: AppColors.textMuted)),
+        children: [
+          GridView.count(
+            crossAxisCount: cols,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            childAspectRatio: 1.0,
+            children: [
+              t("Voice Assistant", "المساعد الصوتي", Icons.mic, AppColors.primaryYellow, () => _go(context, const VoiceInspectionAssistantScreen())),
+              t("AR HUD", "AR HUD", Icons.view_in_ar, AppColors.accentCyan, () => _go(context, const ArEngineBayHudScreen())),
+              t("AI Copilot", "المساعد الذكي", Icons.auto_awesome, AppColors.primaryYellow, () => _go(context, const AiCopilotScreen()), unv: false),
+              t("Flight Recorder", "الصندوق الأسود", Icons.fiber_manual_record, state.isFlightRecording ? AppColors.dangerRed : AppColors.primaryYellow, () => _go(context, const FlightRecorderScreen()), badge: state.isFlightRecording ? "REC" : null),
+              t("Fuel Cost", "تكلفة البنزين", Icons.local_gas_station, AppColors.successGreen, () => _go(context, const FuelCostCalculatorScreen())),
+              t("HUD Display", "شاشة HUD", Icons.nights_stay, AppColors.accentCyan, () => _go(context, const HudDisplayScreen())),
+            ],
+          ),
+        ],
+      ),
+    ));
+    return out;
+  }
+
+  Widget _buildTile(String title, IconData icon, Color color, VoidCallback onTap, {bool unverified = true, String? badge}) {
+    return Card(
+      elevation: 1,
+      margin: EdgeInsets.zero,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(9),
+                    decoration: BoxDecoration(color: color.withOpacity(0.15), borderRadius: BorderRadius.circular(10)),
+                    child: Icon(icon, color: color, size: 26),
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textWhite),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (unverified)
+              const Positioned(top: 6, right: 6, child: Icon(Icons.shield_outlined, size: 13, color: AppColors.warningOrange)),
+            if (badge != null)
+              Positioned(
+                top: 4,
+                left: 6,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                  decoration: BoxDecoration(color: AppColors.dangerRed, borderRadius: BorderRadius.circular(8)),
+                  child: Text(badge, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white)),
+                ),
+              ),
           ],
         ),
       ),
@@ -782,7 +534,9 @@ class HomeDashboardScreen extends StatelessWidget {
     final isAr = state.isArabic;
     final vehicle = state.selectedVehicle;
     final vehicleTitle = vehicle != null
-        ? vehicle.getDisplayName(isAr)
+        ? (state.isConnected
+            ? vehicle.getDisplayName(isAr)
+            : (isAr ? "الملف المختار (غير متصل): ${vehicle.getDisplayName(isAr)}" : "Selected profile (not connected): ${vehicle.getDisplayName(isAr)}"))
         : (isAr ? "اضغط لاختيار سيارة وبدء الفحص" : "Tap to select vehicle & start full test");
 
     return Container(

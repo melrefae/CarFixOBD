@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'lab_pin.dart';
 import 'package:provider/provider.dart';
 import '../providers/obd_state.dart';
 import 'lab_gate.dart';
@@ -43,7 +44,21 @@ class LabHubScreen extends StatelessWidget {
     return Directionality(
       textDirection: isAr ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
-        appBar: AppBar(title: Text(isAr ? 'المختبر (تجريبي)' : 'Lab (experimental)')),
+        appBar: AppBar(
+          title: Text(isAr ? 'المختبر (تجريبي)' : 'Lab (experimental)'),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                await LabPin.reset();
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(isAr ? 'تم مسح الرقم. سيُطلب إنشاء رقم جديد عند الدخول القادم.' : 'PIN cleared. You will create a new one next time.')));
+                }
+              },
+              child: Text(isAr ? 'تغيير الرقم' : 'Reset PIN'),
+            ),
+          ],
+        ),
         body: ListView(
           padding: const EdgeInsets.all(12),
           children: [
