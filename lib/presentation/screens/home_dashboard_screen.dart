@@ -39,6 +39,8 @@ import 'lab_hub_screen.dart';
 import 'traffic_log_screen.dart';
 import 'lab_pin.dart';
 import 'used_car_wizard_screen.dart';
+import 'inspection_history_screen.dart';
+import 'job_cards_screen.dart';
 import 'multi_ecu_topology_screen.dart';
 
 /// Main Workshop Dashboard Screen for Automotive Diagnostic Center
@@ -229,6 +231,8 @@ class HomeDashboardScreen extends StatelessWidget {
         isAr ? "فحص وعملاء" : "Inspection & Customers", Icons.assignment, AppColors.accentCyan,
         <Widget>[
           t("Used-Car Audit", "فحص شراء", Icons.fact_check_outlined, AppColors.warningOrange, () => _go(context, const UsedCarWizardScreen())),
+          t("Car History", "سجل السيارات", Icons.history, AppColors.accentCyan, () => _go(context, const InspectionHistoryScreen()), unv: false),
+          t("Job Cards & Quotes", "أوامر الشغل", Icons.request_quote, AppColors.successGreen, () => _go(context, const JobCardsScreen()), unv: false),
           t("Saved Reports", "التقارير (${state.savedReports.length})", Icons.folder_open, AppColors.electricBlue, () => _go(context, const ReportsScreen()), unv: false),
           t("WhatsApp Dispatch", "واتساب العميل", Icons.chat, AppColors.successGreen, () => _go(context, const CustomerDispatchHubScreen()), unv: false),
           t("LAN Hub", "مزامنة الورشة", Icons.router, AppColors.electricBlue, () => _go(context, const WorkshopLanSyncScreen()), unv: false),

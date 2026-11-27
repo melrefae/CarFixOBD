@@ -76,3 +76,55 @@ class InspectionExtra {
     );
   }
 }
+
+extension InspectionExtraJson on InspectionExtra {
+  Map<String, dynamic> toJson() => {
+        'customerName': customerName,
+        'plate': plate,
+        'mileageKm': mileageKm,
+        'notes': notes,
+        'tireTreadMm': tireTreadMm,
+        'tireNote': tireNote,
+        'frontPadPercent': frontPadPercent,
+        'rearPadPercent': rearPadPercent,
+        'frontDiscs': frontDiscs.index,
+        'rearDiscs': rearDiscs.index,
+        'fluids': fluids.map((k, v) => MapEntry(k, v.index)),
+        'testDrive': testDrive.map((k, v) => MapEntry(k, v.index)),
+        'photoPaths': photoPaths,
+        'paintMicrons': paintMicrons,
+        'bodyNote': bodyNote,
+      };
+
+  void loadJson(Map<String, dynamic> j) {
+    customerName = (j['customerName'] ?? '') as String;
+    plate = (j['plate'] ?? '') as String;
+    mileageKm = (j['mileageKm'] ?? '') as String;
+    notes = (j['notes'] ?? '') as String;
+    tireNote = (j['tireNote'] ?? '') as String;
+    frontPadPercent = (j['frontPadPercent'] ?? '') as String;
+    rearPadPercent = (j['rearPadPercent'] ?? '') as String;
+    bodyNote = (j['bodyNote'] ?? '') as String;
+    ManualCheckItemStatus st(dynamic i) {
+      final n = i is int ? i : 0;
+      return n >= 0 && n < ManualCheckItemStatus.values.length ? ManualCheckItemStatus.values[n] : ManualCheckItemStatus.notChecked;
+    }
+    frontDiscs = st(j['frontDiscs']);
+    rearDiscs = st(j['rearDiscs']);
+    void strMap(String key, Map<String, String> target) {
+      final m = j[key];
+      if (m is Map) m.forEach((k, v) { if (target.containsKey(k)) target[k as String] = v.toString(); });
+    }
+    void stMap(String key, Map<String, ManualCheckItemStatus> target) {
+      final m = j[key];
+      if (m is Map) m.forEach((k, v) { if (target.containsKey(k)) target[k as String] = st(v); });
+    }
+    strMap('tireTreadMm', tireTreadMm);
+    strMap('paintMicrons', paintMicrons);
+    stMap('fluids', fluids);
+    stMap('testDrive', testDrive);
+    photoPaths
+      ..clear()
+      ..addAll(((j['photoPaths'] ?? const []) as List).map((e) => e.toString()));
+  }
+}

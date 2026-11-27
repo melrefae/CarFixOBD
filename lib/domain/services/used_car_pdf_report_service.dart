@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'job_card_pdf_service.dart';
 import '../../data/models/used_car_audit_models.dart';
 import '../../data/models/inspection_extra.dart';
 
@@ -370,6 +371,56 @@ class UsedCarPdfReportService {
 
     if (extra != null) _addExtraPages(pdf, extra, vehicleName);
 
+    return pdf.save();
+  }
+
+  /// PDF for inspections without a full car scorecard: no adapter used, or restored from a saved
+  /// visit. Car facts come from a saved snapshot (strings) and are labeled as such.
+  static Future<Uint8List> generateManualOnlyPdf({
+    required InspectionExtra extra,
+    required String vehicleName,
+    required bool carRead,
+    required Map<String, String> carSnapshot,
+    required ManualInspectionReport checklist,
+    DateTime? when,
+    bool arabicFont = false,
+  }) async {
+    final pdf = pw.Document(theme: arabicFont ? await JobCardPdfService.arabicTheme() : null);
+    final d = (when ?? DateTime.now()).toIso8601String().substring(0, 16).replaceFirst('T', ' ');
+    pdf.addPage(pw.MultiPage(
+      pageFormat: PdfPageFormat.a4,
+      margin: const pw.EdgeInsets.all(28),
+      build: (ctx) => [
+        pw.Text('AutoSpect Vehicle Inspection', style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 18)),
+        pw.Text('$vehicleName   |   $d', style: const pw.TextStyle(fontSize: 10)),
+        pw.SizedBox(height: 8),
+        pw.Text(carRead ? 'Readings from the car (saved snapshot)' : 'No car reading: adapter was not used for this inspection',
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12, color: PdfColors.blueGrey800)),
+        if (carRead)
+          pw.TableHelper.fromTextArray(
+            headers: ['Item', 'Value'],
+            data: [for (final e in carSnapshot.entries) [e.key, e.value]],
+            cellStyle: const pw.TextStyle(fontSize: 9),
+            headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9),
+          ),
+        pw.SizedBox(height: 8),
+        pw.Text(
+          checklist.checkedCount == 0
+              ? 'Mechanical checklist: not performed'
+              : 'Mechanical checklist: ${checklist.checkedCount} of ${checklist.totalItems} checked. OK ${checklist.passedCount}, marginal ${checklist.marginalCount}, fail ${checklist.failedCount}, leak ${checklist.leakingCount}.',
+          style: const pw.TextStyle(fontSize: 10),
+        ),
+        for (final cat in checklist.categories)
+          if (cat.items.any((i) => i.status != ManualCheckItemStatus.notChecked))
+            pw.TableHelper.fromTextArray(
+              headers: [cat.titleEn, 'Result'],
+              data: [for (final i in cat.items.where((i) => i.status != ManualCheckItemStatus.notChecked)) [i.titleEn, _st(i.status)]],
+              cellStyle: const pw.TextStyle(fontSize: 8),
+              headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9),
+            ),
+      ],
+    ));
+    _addExtraPages(pdf, extra, vehicleName);
     return pdf.save();
   }
 

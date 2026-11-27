@@ -31,3 +31,9 @@ Dashboard rebuilt: Daily / Inspection & Customers / Analysis & Tools, then Lab (
 - App renamed AutoSpect (app title, Android label, PDF/report headers). Package id (automotive_scanner / applicationId) unchanged on purpose.
 - Used-car inspection wizard (read from car, hand-entered form, PDF). Checklist items start as "not checked" (was: pre-marked OK). Paint, tires, brakes, fluids, test drive, photos are hand-entered and print as "not measured / not checked" when empty.
 - The wizard screenshots use demo data for layout only.
+
+## Milestone 7: car history, draft saving, job cards
+- Wizard autosaves a draft every 5 s and on exit; offers to continue it. "Skip, no car" allows a hand-only inspection.
+- "Save visit" stores the record (JSON in app storage) and the PDF file; history groups visits per car (plate, else VIN) and compares two visits. Only saved values are compared; empty = "not measured".
+- Job cards: parts and labour with prices typed by the user (EGP), discount, optional VAT %, quote/invoice PDF, WhatsApp via wa.me text plus the system share sheet for the PDF.
+- Verified here: unit tests (JSON round trips, compare, totals, PDF build) and widget renders. NOT verified: on-phone storage, share sheet, WhatsApp opening, Arabic font download for PDFs (needs internet once; offline falls back to default font and Arabic letters may not print).

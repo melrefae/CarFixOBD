@@ -1,11 +1,18 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../data/models/inspection_extra.dart';
 import '../../data/models/used_car_audit_models.dart';
+import '../../data/models/workshop_records.dart';
+import '../../data/repositories/workshop_store.dart';
 import '../../domain/services/used_car_pdf_report_service.dart';
+import 'job_cards_screen.dart';
 import '../providers/obd_state.dart';
 import 'connection_screen.dart';
 
@@ -28,11 +35,158 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
   final InspectionExtra _x = InspectionExtra();
   late ManualInspectionReport _checklist = ManualInspectionReport.defaultWorkshopChecklist();
 
+  bool _noCar = false;
+  Map<String, String> _snapshot = {}; // facts from the car as strings (saved with the visit)
+  bool _snapshotOnly = false; // car read earlier (restored draft), no live scorecard now
+  String _id = WorkshopStore.newId();
+  Timer? _draftTimer;
+  bool _saved = false;
+
+  bool get _hasCar => _card != null || _snapshotOnly;
+  bool get _canProceed => _hasCar || _noCar;
+
   @override
   void initState() {
     super.initState();
     _card = widget.initialCard;
+    if (_card != null) _snapshot = _snapFromCard(_card!);
     _step = widget.initialStep;
+    if (widget.initialCard == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _offerDraft());
+      _draftTimer = Timer.periodic(const Duration(seconds: 5), (_) => _saveDraft());
+    }
+  }
+
+  @override
+  void dispose() {
+    _draftTimer?.cancel();
+    _saveDraft();
+    super.dispose();
+  }
+
+  Map<String, String> _snapFromCard(PrePurchaseAuditScorecard c) {
+    String km(int v) => v > 0 ? '$v km' : 'not read';
+    return {
+      'ECM odometer': km(c.odometerAudit.ecmMileageKm),
+      'TCM odometer': km(c.odometerAudit.tcmMileageKm),
+      'ABS odometer (equivalent)': km(c.odometerAudit.absRevolutionsEquivalentKm),
+      'Cluster odometer': km(c.odometerAudit.clusterMileageKm),
+      'Odometer cross-check': c.odometerAudit.isRollbackSuspected ? 'MISMATCH: rollback suspected' : 'no mismatch found',
+      'Codes cleared recently': c.codeClearingAudit.isRecentlyCleared ? 'YES' : 'no',
+      'Distance since codes cleared': '${c.codeClearingAudit.distanceSinceDtcClearedKm} km',
+      'VIN': c.vinAudit.registeredVin,
+      'VIN match across modules': c.vinAudit.isVinMatched ? 'yes' : 'NO',
+      'Battery resting voltage': c.batteryCrankingAudit.restVoltage.isNaN ? 'not read' : '${c.batteryCrankingAudit.restVoltage.toStringAsFixed(2)} V',
+      'Misfires': c.drivetrainHealth.hasMisfireDetected ? '${c.drivetrainHealth.totalMisfireCount} detected' : 'none detected',
+      'Score (formula)': '${c.overallScore}/100',
+    };
+  }
+
+  Map<String, int> _checklistMap() => {
+        for (final c in _checklist.categories) for (final i in c.items) i.id: i.status.index,
+      };
+
+  Map<String, dynamic> _draftJson() => {
+        'id': _id,
+        'noCar': _noCar,
+        'hasCar': _hasCar,
+        'snapshot': _snapshot,
+        'extra': _x.toJson(),
+        'checklist': _checklistMap(),
+      };
+
+  bool get _hasContent =>
+      _hasCar || _noCar || _x.plate.isNotEmpty || _x.customerName.isNotEmpty || _x.notes.isNotEmpty ||
+      _x.paintMicrons.values.any((v) => v.isNotEmpty) || _checklist.checkedCount > 0 || _x.photoPaths.isNotEmpty;
+
+  Future<void> _saveDraft() async {
+    if (_saved || !_hasContent) return;
+    await WorkshopStore.saveDraft(_draftJson());
+  }
+
+  ManualInspectionReport _applyChecklist(ManualInspectionReport base, Map<String, int> m) {
+    return ManualInspectionReport(
+      categories: base.categories
+          .map((c) => c.copyWith(
+              items: c.items.map((i) {
+                final n = m[i.id];
+                if (n == null || n < 0 || n >= ManualCheckItemStatus.values.length) return i;
+                return i.copyWith(status: ManualCheckItemStatus.values[n]);
+              }).toList()))
+          .toList(),
+    );
+  }
+
+  Future<void> _offerDraft() async {
+    final d = await WorkshopStore.loadDraft();
+    if (d == null || !mounted) return;
+    final plate = ((d['extra'] as Map?)?['plate'] ?? '').toString();
+    final go = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(_t('Continue saved draft?', 'متابعة المسودة المحفوظة؟')),
+        content: Text(plate.isEmpty ? _t('An unfinished inspection was saved on this phone.', 'يوجد فحص غير مكتمل محفوظ على الهاتف.') : _t('Unfinished inspection for $plate.', 'فحص غير مكتمل للوحة $plate.')),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(_t('Start new', 'ابدأ جديد'))),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text(_t('Continue', 'متابعة'))),
+        ],
+      ),
+    );
+    if (go == true) {
+      setState(() {
+        _id = (d['id'] ?? _id).toString();
+        _x.loadJson(Map<String, dynamic>.from(d['extra'] as Map));
+        _checklist = _applyChecklist(ManualInspectionReport.defaultWorkshopChecklist(), Map<String, int>.from((d['checklist'] ?? {}) as Map));
+        _snapshot = Map<String, String>.from((d['snapshot'] ?? {}) as Map);
+        _noCar = (d['noCar'] ?? false) as bool;
+        _snapshotOnly = ((d['hasCar'] ?? false) as bool) && _snapshot.isNotEmpty;
+      });
+    } else {
+      await WorkshopStore.clearDraft();
+    }
+  }
+
+  Future<Uint8List> _pdfBytes() async {
+    if (_card != null) {
+      return UsedCarPdfReportService.generatePdfReport(scorecard: _finalCard, vehicleName: _vehicleName, isArabic: _isAr, extra: _x);
+    }
+    return UsedCarPdfReportService.generateManualOnlyPdf(
+      extra: _x,
+      vehicleName: _vehicleName,
+      carRead: _hasCar,
+      carSnapshot: _snapshot,
+      checklist: _checklist,
+      arabicFont: true,
+      // paint is hand-entered: included in the extra pages
+    );
+  }
+
+  Future<void> _saveVisit({bool toJob = false}) async {
+    final bytes = await _pdfBytes();
+    final path = await WorkshopStore.savePdf(_id, bytes);
+    final rec = InspectionRecord(
+      id: _id,
+      createdAt: DateTime.now(),
+      plate: _x.plate.trim(),
+      customer: _x.customerName.trim(),
+      vehicleName: _vehicleName,
+      vin: _snapshot['VIN'] ?? '',
+      carRead: _hasCar,
+      carSnapshot: _snapshot,
+      extra: jsonDecode(jsonEncode(_x.toJson())) as Map<String, dynamic>,
+      checklist: _checklistMap(),
+      pdfPath: path,
+    );
+    await WorkshopStore.saveInspection(rec);
+    await WorkshopStore.clearDraft();
+    _saved = true;
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_t('Visit saved', 'تم حفظ الزيارة'))));
+    if (toJob) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => JobCardEditScreen(prefill: rec)));
+    } else {
+      setState(() {});
+    }
   }
 
   bool get _isAr => Provider.of<ObdState>(context, listen: false).isArabic;
@@ -47,7 +201,7 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
     setState(() { _busy = true; _error = null; });
     try {
       final c = await st.runLiveUsedCarAudit();
-      if (mounted) setState(() => _card = c);
+      if (mounted) setState(() { _card = c; _snapshot = _snapFromCard(c); _snapshotOnly = false; _noCar = false; });
     } catch (e) {
       if (mounted) setState(() => _error = e.toString());
     } finally {
@@ -83,7 +237,7 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          if (i > 0 && _card == null) return;
+                          if (i > 0 && !_canProceed) return;
                           setState(() => _step = i);
                         },
                         child: Container(
@@ -114,7 +268,7 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
                     const Spacer(),
                     if (_step < 2)
                       ElevatedButton(
-                        onPressed: _card == null ? null : () => setState(() => _step++),
+                        onPressed: !_canProceed ? null : () => setState(() => _step++),
                         child: Text(_t('Next', 'التالي')),
                       ),
                   ],
@@ -149,6 +303,13 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
           onPressed: _busy ? null : _readFromCar,
           icon: _busy ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)) : const Icon(Icons.download),
           label: Text(_busy ? _t('Reading...', 'جارٍ القراءة...') : (c == null ? _t('Read from car', 'اقرأ من السيارة') : _t('Read again', 'اقرأ مرة أخرى'))),
+        ),
+        if (_snapshotOnly)
+          Padding(padding: const EdgeInsets.only(top: 8), child: _note(_t('Car readings restored from the saved draft. Read again to refresh them.', 'قراءات السيارة مستعادة من المسودة. اقرأ مرة أخرى لتحديثها.'))),
+        TextButton.icon(
+          onPressed: () => setState(() { _noCar = true; _step = 1; }),
+          icon: const Icon(Icons.skip_next),
+          label: Text(_t('Skip, no car (hand inspection only)', 'تخطي، بدون سيارة (فحص يدوي فقط)')),
         ),
         if (_error != null) Padding(padding: const EdgeInsets.only(top: 8), child: Text(_error!, style: const TextStyle(color: AppColors.dangerRed))),
         if (c != null) ...[
@@ -316,9 +477,10 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
 
   // ---------- Step 3 ----------
   Widget _stepReport() {
-    final c = _finalCard;
-    final m = c.manualChecklist;
-    final paintN = c.paintAudit.panelMicrons.length;
+    final c = _card != null ? _finalCard : null;
+    final m = _checklist;
+    final paintAudit = _x.buildPaintAudit();
+    final paintN = paintAudit.panelMicrons.length;
     final tires = _x.tireTreadMm.values.where((v) => v.trim().isNotEmpty).length;
     final fl = _x.fluids.values.where((v) => v != ManualCheckItemStatus.notChecked).length;
     final td = _x.testDrive.values.where((v) => v != ManualCheckItemStatus.notChecked).length;
@@ -328,15 +490,23 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
         _note(_t('The report prints car readings and hand-entered data in separate sections. The score is a simple formula from the car readings, not a verdict.',
             'التقرير يطبع قراءات السيارة والبيانات اليدوية في أقسام منفصلة. الدرجة مجرد معادلة بسيطة من قراءات السيارة وليست حكماً.')),
         const SizedBox(height: 8),
-        _result(_t('From the car', 'من السيارة'), 'Score ${c.overallScore}/100 (formula)', c.odometerAudit.isRollbackSuspected || c.codeClearingAudit.isRecentlyCleared),
-        _result(_t('Paint', 'الدهان'), '$paintN / ${InspectionExtra.panels.length} panels measured', c.paintAudit.hasBondoDetected || c.paintAudit.hasStructuralDamageSuspected),
+        if (c != null)
+          _result(_t('From the car', 'من السيارة'), 'Score ${c.overallScore}/100 (formula)', c.odometerAudit.isRollbackSuspected || c.codeClearingAudit.isRecentlyCleared)
+        else if (_hasCar)
+          _result(_t('From the car (saved readings)', 'من السيارة (قراءات محفوظة)'), '${_snapshot.length} readings saved', false)
+        else
+          _result(_t('From the car', 'من السيارة'), _t('No car reading, hand inspection only', 'بدون قراءة من السيارة، فحص يدوي فقط'), false),
+        _result(_t('Paint', 'الدهان'), '$paintN / ${InspectionExtra.panels.length} panels measured', paintAudit.hasBondoDetected || paintAudit.hasStructuralDamageSuspected),
         _result(_t('Checklist', 'القائمة'), '${m.checkedCount} / ${m.totalItems} checked, ${m.failedCount + m.leakingCount} problems', m.failedCount + m.leakingCount > 0),
         _result(_t('Tires / fluids / test drive', 'كاوتش / سوائل / تجربة'), '$tires/4 tires, $fl/${_x.fluids.length} fluids, $td/${_x.testDrive.length} drive checks, ${_x.photoPaths.length} photos', false),
         const SizedBox(height: 8),
         Row(children: [
           Expanded(
             child: ElevatedButton.icon(
-              onPressed: () => UsedCarPdfReportService.sharePdfReport(scorecard: c, vehicleName: _vehicleName, isArabic: _isAr, extra: _x),
+              onPressed: () async {
+                final b = await _pdfBytes();
+                await Printing.sharePdf(bytes: b, filename: 'Inspection_${_x.plate.isEmpty ? _id : _x.plate.replaceAll(" ", "")}.pdf');
+              },
               icon: const Icon(Icons.share),
               label: Text(_t('Share PDF', 'مشاركة PDF')),
             ),
@@ -344,12 +514,27 @@ class _UsedCarWizardScreenState extends State<UsedCarWizardScreen> {
           const SizedBox(width: 8),
           Expanded(
             child: OutlinedButton.icon(
-              onPressed: () => UsedCarPdfReportService.printReport(scorecard: c, vehicleName: _vehicleName, isArabic: _isAr, extra: _x),
+              onPressed: () async {
+                final b = await _pdfBytes();
+                await Printing.layoutPdf(onLayout: (_) async => b, name: 'AutoSpect_Inspection_$_id');
+              },
               icon: const Icon(Icons.print),
               label: Text(_t('Print', 'طباعة')),
             ),
           ),
         ]),
+        const SizedBox(height: 8),
+        ElevatedButton.icon(
+          onPressed: _saveVisit,
+          icon: const Icon(Icons.save),
+          label: Text(_saved ? _t('Saved. Save again', 'تم الحفظ. حفظ مرة أخرى') : _t('Save visit to car history', 'احفظ الزيارة في سجل السيارة')),
+        ),
+        const SizedBox(height: 8),
+        OutlinedButton.icon(
+          onPressed: () => _saveVisit(toJob: true),
+          icon: const Icon(Icons.request_quote),
+          label: Text(_t('Save and create job card / quote', 'حفظ وإنشاء أمر شغل / عرض سعر')),
+        ),
       ],
     );
   }
