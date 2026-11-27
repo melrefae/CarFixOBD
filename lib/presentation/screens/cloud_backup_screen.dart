@@ -58,7 +58,7 @@ class _CloudBackupScreenState extends State<CloudBackupScreen> {
       final jsonBundle = await _backupService.exportFullBackupBundle();
       await Share.share(
         jsonBundle,
-        subject: "Aspect_AutoCare_Workshop_Backup_${DateTime.now().millisecondsSinceEpoch}.json",
+        subject: "AutoSpect_Workshop_Backup_${DateTime.now().millisecondsSinceEpoch}.json",
       );
       await _loadBackupSummary();
       if (mounted) {

@@ -30,7 +30,7 @@ class _VoiceInspectionAssistantScreenState extends State<VoiceInspectionAssistan
       recognizedText: "System Initialized",
       intent: VoiceCommandIntent.help,
       confidence: 1.0,
-      feedbackEn: "Aspect Diagnostic Voice Assistant ready. Tap the microphone or say 'Scan trouble codes'.",
+      feedbackEn: "AutoSpect voice assistant ready. Tap the microphone or say 'Scan trouble codes'.",
       feedbackAr: "المساعد الصوتي للفحص جاهز. اضغط على الميكروفون أو انطق 'اقرأ الأعطال'.",
       timestamp: DateTime.now(),
       executed: true,

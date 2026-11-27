@@ -216,7 +216,7 @@ class AiDiagnosticCopilot {
         DiagnosticRoadmapStep(
           stepNumber: 2,
           title: "Battery & Alternator Health Verification",
-          toolRequired: "Aspect Auto Scan Battery Test",
+          toolRequired: "AutoSpect Battery Test",
           action: "Run cranking voltage test to ensure battery maintains > 9.6V during starter engagement.",
           expectedGoodValue: "Cranking voltage > 10.0V, charging voltage 13.8V to 14.5V.",
         ),

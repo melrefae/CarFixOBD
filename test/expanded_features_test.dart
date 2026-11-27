@@ -1516,11 +1516,12 @@ void main() {
       final checklist = ManualInspectionReport.defaultWorkshopChecklist();
       expect(checklist.categories.length, 6);
       expect(checklist.totalItems, 26);
-      expect(checklist.passedCount, 26);
+      expect(checklist.passedCount, 0); // nothing is pre-marked OK
+      expect(checklist.checkedCount, 0);
       expect(checklist.failedCount, 0);
       expect(checklist.leakingCount, 0);
       expect(checklist.marginalCount, 0);
-      expect(checklist.manualScore, 100);
+      expect(checklist.manualScore, 0); // nothing checked: no score
 
       final catIds = checklist.categories.map((c) => c.id).toList();
       expect(catIds, containsAll(['suspension', 'steering', 'oil_leaks', 'tires_brakes', 'exterior_body', 'interior_cabin']));
@@ -1528,7 +1529,7 @@ void main() {
 
     test('ManualInspectionReport dynamic scoring correctly weights failures, leaks, and marginal items', () {
       final original = ManualInspectionReport.defaultWorkshopChecklist();
-      expect(original.manualScore, 100);
+      expect(original.manualScore, 0);
 
       // Mutate 1 item to fail (drops 6 pts), 1 item to leaking (drops 7 pts), 1 item to marginal (drops 2 pts)
       final modifiedCategories = original.categories.map((cat) {
@@ -1558,7 +1559,8 @@ void main() {
       expect(mutatedReport.failedCount, 1);
       expect(mutatedReport.leakingCount, 1);
       expect(mutatedReport.marginalCount, 1);
-      expect(mutatedReport.passedCount, 23);
+      expect(mutatedReport.passedCount, 0);
+      expect(mutatedReport.checkedCount, 3);
       // 100 - (1*6) - (1*7) - (1*2) = 85
       expect(mutatedReport.manualScore, 85);
     });

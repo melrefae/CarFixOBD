@@ -98,7 +98,7 @@ class CustomerWorkOrder {
   String generateWhatsappMessage(
     DispatchStage stage,
     bool isArabic, {
-    String workshopName = "Aspect Auto Diagnostic Center",
+    String workshopName = "AutoSpect Diagnostic Center",
   }) {
     if (isArabic) {
       switch (stage) {
@@ -167,7 +167,7 @@ class CustomerWorkOrder {
   Uri getWhatsappUrl(
     DispatchStage stage,
     bool isArabic, {
-    String workshopName = "Aspect Auto Diagnostic Center",
+    String workshopName = "AutoSpect Diagnostic Center",
   }) {
     // Sanitize phone number (e.g. 01012345678 -> 201012345678)
     var cleanPhone = phoneNumber.replaceAll(RegExp(r'[^0-9]'), '');

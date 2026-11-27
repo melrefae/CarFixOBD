@@ -103,7 +103,7 @@ class _OfflineVaultProtocolSnifferScreenState
     for (final f in _canFrames) {
       buffer.writeln("${f.timestampMs}, ${f.hexId}, ${f.ecuName}, ${f.dlc}, ${f.hexPayload}, ${f.decodedInterpretation}");
     }
-    Share.share(buffer.toString(), subject: "Aspect_CAN_Bus_Sniffer_Log.csv");
+    Share.share(buffer.toString(), subject: "AutoSpect_CAN_Bus_Sniffer_Log.csv");
   }
 
   @override

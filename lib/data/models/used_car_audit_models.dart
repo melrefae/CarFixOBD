@@ -474,6 +474,7 @@ class BatteryCrankingHealthAudit {
 
 /// Manual Physical Inspection Item Status
 enum ManualCheckItemStatus {
+  notChecked, // لم يُفحص بعد: never counted as pass
   pass, // سليم / فابريكا
   marginal, // استهلاك خفيف / ملاحظة
   fail, // تالف / يحتاج تغيير
@@ -495,7 +496,7 @@ class ManualCheckItem {
     required this.titleEn,
     required this.titleAr,
     required this.categoryId,
-    this.status = ManualCheckItemStatus.pass,
+    this.status = ManualCheckItemStatus.notChecked,
     this.technicianNote,
     this.severity = "MECHANICAL",
   });
@@ -560,8 +561,12 @@ class ManualInspectionReport {
   int get leakingCount => categories.fold(
       0, (sum, cat) => sum + cat.items.where((i) => i.status == ManualCheckItemStatus.leaking).length);
 
+  int get checkedCount => categories.fold(
+      0, (sum, cat) => sum + cat.items.where((i) => i.status != ManualCheckItemStatus.notChecked).length);
+
   int get manualScore {
-    if (totalItems == 0) return 100;
+    if (checkedCount == 0) return 0; // nothing checked: no score
+
     int score = 100;
     score -= failedCount * 6;
     score -= leakingCount * 7;

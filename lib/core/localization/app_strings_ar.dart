@@ -1,4 +1,4 @@
-/// Egyptian Workshop Arabic localization for Aspect Auto Scan OBD2 diagnostic application
+/// Egyptian Workshop Arabic localization for AutoSpect OBD2 diagnostic application
 class AppStringsAr {
   // Application branding
   static const String appName = "أسبكت أوتو سكان";

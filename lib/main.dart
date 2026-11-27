@@ -20,7 +20,7 @@ class AutomotiveScannerApp extends StatelessWidget {
       child: Consumer<ObdState>(
         builder: (context, state, _) {
           return MaterialApp(
-            title: 'Aspect Auto Scan | OBD2 Diagnostic System',
+            title: 'AutoSpect | OBD2 Diagnostic System',
             debugShowCheckedModeBanner: false,
             theme: state.isSunlightMode ? WorkshopTheme.sunlightTheme : WorkshopTheme.darkTheme,
             // English default locale

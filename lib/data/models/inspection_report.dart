@@ -29,7 +29,7 @@ class InspectionReport {
     required this.dtcsFound,
     required this.liveSensorsSnapshot,
     required this.mechanicNotes,
-    this.workshopName = "Aspect Auto Care Diagnostic Center",
+    this.workshopName = "AutoSpect Diagnostic Center",
   });
 
   String get vehicleModel => vehicleMakeModel;
@@ -75,7 +75,7 @@ class InspectionReport {
           [],
       liveSensorsSnapshot: Map<String, String>.from(json['live_sensors_snapshot'] ?? {}),
       mechanicNotes: json['mechanic_notes'] ?? '',
-      workshopName: json['workshop_name'] ?? "Aspect Auto Care Diagnostic Center",
+      workshopName: json['workshop_name'] ?? "AutoSpect Diagnostic Center",
     );
   }
 }

@@ -26,3 +26,8 @@ Every command that passes goes into a table: brand, model, year range, ECU addre
 
 ## Milestone 5 (UX)
 Dashboard rebuilt: Daily / Inspection & Customers / Analysis & Tools, then Lab (PIN) and collapsed "More tools". Compact 3-column tiles with short titles, shield = not yet tested on a real car. Duplicate network cards merged into "Network Map" (chooser). Lab PIN: lab_pin.dart (staff guard, reset from the Lab screen). Screenshots in docs/screenshots (rendered by a widget test, not a phone).
+
+## Milestone 6
+- App renamed AutoSpect (app title, Android label, PDF/report headers). Package id (automotive_scanner / applicationId) unchanged on purpose.
+- Used-car inspection wizard (read from car, hand-entered form, PDF). Checklist items start as "not checked" (was: pre-marked OK). Paint, tires, brakes, fluids, test drive, photos are hand-entered and print as "not measured / not checked" when empty.
+- The wizard screenshots use demo data for layout only.

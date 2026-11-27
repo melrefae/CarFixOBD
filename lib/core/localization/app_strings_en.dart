@@ -1,10 +1,10 @@
-/// Comprehensive English localization for Aspect Auto Scan OBD2 diagnostic application
+/// Comprehensive English localization for AutoSpect OBD2 diagnostic application
 class AppStrings {
   // Application branding
-  static const String appName = "Aspect Auto Scan";
+  static const String appName = "AutoSpect";
   static const String appSubtitle = "Professional OBD2 Diagnostic System";
   static const String appTagline = "Professional Vehicle Diagnostics & ECU Analysis";
-  static const String defaultWorkshopName = "Aspect Auto Diagnostic Center";
+  static const String defaultWorkshopName = "AutoSpect Diagnostic Center";
   static const String defaultWorkshopPhone = "+201553666635";
   static const String defaultWorkshopAddress = "Cairo, Egypt";
 

@@ -34,7 +34,7 @@ class PdfReportGenerator {
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
                           pw.Text(
-                            "Aspect Auto Scan",
+                            "AutoSpect",
                             style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold, color: PdfColors.amber800),
                           ),
                           pw.Text(
@@ -191,7 +191,7 @@ class PdfReportGenerator {
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text("Inspector / Technician Signature: _______________________", style: const pw.TextStyle(fontSize: 9)),
-                    pw.Text("Aspect Auto Scan | OBD-II Diagnostics", style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey700)),
+                    pw.Text("AutoSpect | OBD-II Diagnostics", style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey700)),
                   ],
                 ),
               ],

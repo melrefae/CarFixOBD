@@ -38,6 +38,7 @@ import 'mode06_monitor_screen.dart';
 import 'lab_hub_screen.dart';
 import 'traffic_log_screen.dart';
 import 'lab_pin.dart';
+import 'used_car_wizard_screen.dart';
 import 'multi_ecu_topology_screen.dart';
 
 /// Main Workshop Dashboard Screen for Automotive Diagnostic Center
@@ -227,7 +228,7 @@ class HomeDashboardScreen extends StatelessWidget {
       [
         isAr ? "فحص وعملاء" : "Inspection & Customers", Icons.assignment, AppColors.accentCyan,
         <Widget>[
-          t("Used-Car Audit", "فحص شراء", Icons.fact_check_outlined, AppColors.warningOrange, () => _go(context, const UsedCarAuditScreen())),
+          t("Used-Car Audit", "فحص شراء", Icons.fact_check_outlined, AppColors.warningOrange, () => _go(context, const UsedCarWizardScreen())),
           t("Saved Reports", "التقارير (${state.savedReports.length})", Icons.folder_open, AppColors.electricBlue, () => _go(context, const ReportsScreen()), unv: false),
           t("WhatsApp Dispatch", "واتساب العميل", Icons.chat, AppColors.successGreen, () => _go(context, const CustomerDispatchHubScreen()), unv: false),
           t("LAN Hub", "مزامنة الورشة", Icons.router, AppColors.electricBlue, () => _go(context, const WorkshopLanSyncScreen()), unv: false),
@@ -296,6 +297,7 @@ class HomeDashboardScreen extends StatelessWidget {
             crossAxisSpacing: 8,
             childAspectRatio: 1.0,
             children: [
+              t("Classic Audit (9 tabs)", "الفحص القديم", Icons.fact_check_outlined, AppColors.textMuted, () => _go(context, const UsedCarAuditScreen())),
               t("Voice Assistant", "المساعد الصوتي", Icons.mic, AppColors.primaryYellow, () => _go(context, const VoiceInspectionAssistantScreen())),
               t("AR HUD", "AR HUD", Icons.view_in_ar, AppColors.accentCyan, () => _go(context, const ArEngineBayHudScreen())),
               t("AI Copilot", "المساعد الذكي", Icons.auto_awesome, AppColors.primaryYellow, () => _go(context, const AiCopilotScreen()), unv: false),

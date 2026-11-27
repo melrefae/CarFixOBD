@@ -116,7 +116,7 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Aspect Auto Scan Brand Banner
+            // AutoSpect Brand Banner
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -136,7 +136,7 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
                       Icon(Icons.shield_outlined, color: AppColors.primaryYellow, size: 28),
                       SizedBox(width: 8),
                       Text(
-                        "Aspect Auto Scan",
+                        "AutoSpect",
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,

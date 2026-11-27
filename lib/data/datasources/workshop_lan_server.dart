@@ -144,7 +144,7 @@ class WorkshopLanServer {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="refresh" content="6">
-  <title>Aspect Auto Scan | Workshop LAN Hub</title>
+  <title>AutoSpect | Workshop LAN Hub</title>
   <style>
     :root {
       --bg: #12151B;
@@ -253,7 +253,7 @@ class WorkshopLanServer {
 <body>
   <div class="header">
     <div>
-      <h1>🚗 Aspect Auto Scan | Offline LAN Hub Dashboard</h1>
+      <h1>🚗 AutoSpect | Offline LAN Hub Dashboard</h1>
       <p style="color: var(--muted); margin: 5px 0 0 0; font-size: 14px;">Automotive Diagnostics Center | Phone & WhatsApp: +20 155 366 6635</p>
     </div>
     <div class="badge-lan">LAN Connected: $serverUrl</div>
@@ -364,7 +364,7 @@ class WorkshopLanServer {
 <body>
   <button class="print-btn" onclick="window.print()">Print Job Card (Print)</button>
   <div class="header">
-    <h1>Aspect Auto Scan | Diagnostic Inspection Job Card</h1>
+    <h1>AutoSpect | Diagnostic Inspection Job Card</h1>
     <p>Inspection Date: $dateStr | Vehicle Identification Number (VIN): $vinStr</p>
   </div>
 

@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import '../../data/models/used_car_audit_models.dart';
+import '../../data/models/inspection_extra.dart';
 
 /// Professional PDF Generation Service for Used Car Pre-Purchase Inspection Reports
 class UsedCarPdfReportService {
@@ -11,6 +13,7 @@ class UsedCarPdfReportService {
     required PrePurchaseAuditScorecard scorecard,
     required String vehicleName,
     required bool isArabic,
+    InspectionExtra? extra,
   }) async {
     final pdf = pw.Document();
 
@@ -293,7 +296,7 @@ class UsedCarPdfReportService {
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
-                pw.Text("Mechanical Physical Score: ${manual.manualScore}/100", style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold, color: PdfColors.blue900)),
+                pw.Text(manual.checkedCount == 0 ? "Mechanical checklist: not performed" : "Mechanical Physical Score: ${manual.manualScore}/100 (${manual.checkedCount} of ${manual.totalItems} items checked)", style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold, color: PdfColors.blue900)),
                 pw.Text("Passed: ${manual.passedCount}  |  Marginal: ${manual.marginalCount}  |  Failed: ${manual.failedCount}  |  Leaking: ${manual.leakingCount}", style: const pw.TextStyle(fontSize: 8, color: PdfColors.grey800)),
               ],
             ),
@@ -354,7 +357,7 @@ class UsedCarPdfReportService {
                       pw.Text("Official Workshop Stamp & Seal:", style: const pw.TextStyle(fontSize: 8, color: PdfColors.grey700)),
                       pw.SizedBox(height: 20),
                       pw.Divider(color: PdfColors.grey400),
-                      pw.Text("Aspect Auto Vehicle Inspection Center", style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
+                      pw.Text("AutoSpect Vehicle Inspection Center", style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
                     ],
                   ),
                 ),
@@ -365,7 +368,65 @@ class UsedCarPdfReportService {
       ),
     );
 
+    if (extra != null) _addExtraPages(pdf, extra, vehicleName);
+
     return pdf.save();
+  }
+
+  static String _st(ManualCheckItemStatus s) {
+    switch (s) {
+      case ManualCheckItemStatus.notChecked: return 'not checked';
+      case ManualCheckItemStatus.pass: return 'OK';
+      case ManualCheckItemStatus.marginal: return 'marginal';
+      case ManualCheckItemStatus.fail: return 'FAIL';
+      case ManualCheckItemStatus.leaking: return 'LEAK';
+    }
+  }
+
+  static String _v(String v, [String unit = '']) => v.trim().isEmpty ? 'not measured' : '${v.trim()}$unit';
+
+  static void _addExtraPages(pw.Document pdf, InspectionExtra x, String vehicleName) {
+    pw.Widget h(String t) => pw.Padding(
+          padding: const pw.EdgeInsets.only(top: 10, bottom: 4),
+          child: pw.Text(t, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12, color: PdfColors.blueGrey800)),
+        );
+    pw.Widget table(List<String> head, List<List<String>> rows) =>
+        pw.TableHelper.fromTextArray(headers: head, data: rows, cellStyle: const pw.TextStyle(fontSize: 9), headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9));
+    final images = <pw.MemoryImage>[];
+    for (final path in x.photoPaths) {
+      try {
+        images.add(pw.MemoryImage(File(path).readAsBytesSync()));
+      } catch (_) {}
+    }
+    pdf.addPage(pw.MultiPage(
+      pageFormat: PdfPageFormat.a4,
+      margin: const pw.EdgeInsets.all(28),
+      build: (ctx) => [
+        pw.Text('Hand-entered inspection (not measured by the car)', style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 14)),
+        pw.Text('Vehicle: $vehicleName', style: const pw.TextStyle(fontSize: 10)),
+        pw.Text('Customer: ${_v(x.customerName)}   Plate: ${_v(x.plate)}   Odometer (entered): ${_v(x.mileageKm, " km")}', style: const pw.TextStyle(fontSize: 10)),
+        h('Tires, tread depth'),
+        table(['Tire', 'Tread'], [for (final e in x.tireTreadMm.entries) [e.key, _v(e.value, ' mm')]]),
+        if (x.tireNote.trim().isNotEmpty) pw.Text('Note: ${x.tireNote}', style: const pw.TextStyle(fontSize: 9)),
+        h('Brakes'),
+        table(['Item', 'Result'], [
+          ['Front pads', _v(x.frontPadPercent, ' %')],
+          ['Rear pads', _v(x.rearPadPercent, ' %')],
+          ['Front discs', _st(x.frontDiscs)],
+          ['Rear discs', _st(x.rearDiscs)],
+        ]),
+        h('Fluids'),
+        table(['Fluid', 'Result'], [for (final e in x.fluids.entries) [e.key, _st(e.value)]]),
+        h('Test drive'),
+        table(['Check', 'Result'], [for (final e in x.testDrive.entries) [e.key, _st(e.value)]]),
+        if (x.bodyNote.trim().isNotEmpty) ...[h('Body notes'), pw.Text(x.bodyNote, style: const pw.TextStyle(fontSize: 9))],
+        if (x.notes.trim().isNotEmpty) ...[h('Technician notes'), pw.Text(x.notes, style: const pw.TextStyle(fontSize: 9))],
+        if (images.isNotEmpty) ...[
+          h('Photos (${images.length})'),
+          pw.Wrap(spacing: 8, runSpacing: 8, children: [for (final im in images) pw.Container(width: 160, height: 120, child: pw.Image(im, fit: pw.BoxFit.cover))]),
+        ],
+      ],
+    ));
   }
 
   /// 1-Click Share PDF via WhatsApp / System Share Sheet
@@ -373,11 +434,13 @@ class UsedCarPdfReportService {
     required PrePurchaseAuditScorecard scorecard,
     required String vehicleName,
     required bool isArabic,
+    InspectionExtra? extra,
   }) async {
     final pdfBytes = await generatePdfReport(
       scorecard: scorecard,
       vehicleName: vehicleName,
       isArabic: isArabic,
+      extra: extra,
     );
 
     final cleanName = vehicleName.replaceAll(' ', '_');
@@ -394,16 +457,18 @@ class UsedCarPdfReportService {
     required PrePurchaseAuditScorecard scorecard,
     required String vehicleName,
     required bool isArabic,
+    InspectionExtra? extra,
   }) async {
     final pdfBytes = await generatePdfReport(
       scorecard: scorecard,
       vehicleName: vehicleName,
       isArabic: isArabic,
+      extra: extra,
     );
 
     await Printing.layoutPdf(
       onLayout: (PdfPageFormat format) async => pdfBytes,
-      name: "AspectAuto_Audit_${scorecard.verificationHash}",
+      name: "AutoSpect_Audit_${scorecard.verificationHash}",
     );
   }
 }

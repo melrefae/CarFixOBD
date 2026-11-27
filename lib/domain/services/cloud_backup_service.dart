@@ -81,7 +81,7 @@ class CloudBackupService {
   /// Static helper to export a JSON bundle from a list of reports
   static String exportBundle(
     List<InspectionReport> reports, {
-    String workshopName = "Aspect Auto Care",
+    String workshopName = "AutoSpect",
     Map<String, dynamic>? settings,
   }) {
     final now = DateTime.now();
@@ -123,7 +123,7 @@ class CloudBackupService {
     final reports = await reportRepo.getReports();
     final prefs = await SharedPreferences.getInstance();
 
-    final workshopName = prefs.getString('workshop_name') ?? "Aspect Auto Care";
+    final workshopName = prefs.getString('workshop_name') ?? "AutoSpect";
     final settings = {
       'workshop_name': workshopName,
       'workshop_phone': prefs.getString('workshop_phone') ?? "",
@@ -192,7 +192,7 @@ class CloudBackupService {
 
     final reports = await reportRepo.getReports();
     final prefs = await SharedPreferences.getInstance();
-    final workshopName = prefs.getString('workshop_name') ?? "Aspect Auto Care";
+    final workshopName = prefs.getString('workshop_name') ?? "AutoSpect";
 
     final payload = {
       'timestamp': DateTime.now().toIso8601String(),

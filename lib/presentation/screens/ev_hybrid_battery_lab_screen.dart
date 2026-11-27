@@ -151,7 +151,7 @@ class _EvHybridBatteryLabScreenState extends State<EvHybridBatteryLabScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    "Vehicle VIN: ${state.currentVin}\nCertified by Aspect Auto Diagnostic Lab",
+                    "Vehicle VIN: ${state.currentVin}\nCertified by AutoSpect Diagnostic Lab",
                     style: const TextStyle(fontFamily: 'monospace', fontSize: 10, color: AppColors.textMuted),
                   ),
                 ),

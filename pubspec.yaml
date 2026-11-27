@@ -1,5 +1,5 @@
 name: automotive_scanner
-description: Professional OBD2 ELM327 Automotive Diagnostic App for Egyptian Workshops.
+description: AutoSpect - OBD2 diagnostic and vehicle inspection app for workshops.
 publish_to: "none"
 version: 1.0.0+1
 
@@ -40,6 +40,7 @@ dependencies:
   google_fonts: ^6.1.0
   flutter_animate: ^4.5.0
   cupertino_icons: ^1.0.6
+  image_picker: ^1.2.4
 
 dev_dependencies:
   flutter_test:

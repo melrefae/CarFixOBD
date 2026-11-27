@@ -84,7 +84,7 @@ class _CustomerDispatchHubScreenState extends State<CustomerDispatchHubScreen> {
     // Share message text directly via system share sheet / WhatsApp target
     Share.share(
       text,
-      subject: "Aspect Auto Scan: ${_selectedOrder!.vehicleModel} (${_selectedOrder!.plateNumber})",
+      subject: "AutoSpect: ${_selectedOrder!.vehicleModel} (${_selectedOrder!.plateNumber})",
     );
 
     ScaffoldMessenger.of(context).showSnackBar(
