@@ -4,6 +4,9 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:printing/printing.dart';
 import '../../data/models/workshop_records.dart';
+import '../../data/repositories/workshop_profile.dart';
+import 'pdf_header.dart';
+import 'pdf_arabic.dart';
 
 /// Quote / invoice PDF for a job card. Prices are exactly what the user typed.
 class JobCardPdfService {
@@ -21,7 +24,11 @@ class JobCardPdfService {
 
   static String money(double v) => '${v.toStringAsFixed(2)} EGP';
 
-  static Future<Uint8List> build(JobCard j, {required bool invoice, String workshop = 'AutoSpect'}) async {
+  static Future<Uint8List> build(JobCard j, {required bool invoice, WorkshopProfile? profile}) =>
+      PA.run(() => _build(j, invoice: invoice, profile: profile));
+
+  static Future<Uint8List> _build(JobCard j, {required bool invoice, WorkshopProfile? profile}) async {
+    final prof = profile ?? await WorkshopProfile.load();
     final pdf = pw.Document(theme: await arabicTheme());
     final title = invoice ? 'INVOICE' : 'QUOTE';
     final d = j.createdAt.toIso8601String().substring(0, 10);
@@ -30,21 +37,21 @@ class JobCardPdfService {
       margin: const pw.EdgeInsets.all(32),
       build: (ctx) => [
         pw.Row(mainAxisAlignment: pw.MainAxisAlignment.spaceBetween, children: [
-          pw.Text(workshop, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 20)),
+          PdfHeader.build(prof),
           pw.Text(title, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 20, color: PdfColors.blueGrey800)),
         ]),
         pw.Text('Job card #${j.id.toUpperCase()}   Date: $d', style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey700)),
         pw.SizedBox(height: 10),
-        pw.Text('Customer: ${j.customer.isEmpty ? "-" : j.customer}    Phone: ${j.phone.isEmpty ? "-" : j.phone}', style: const pw.TextStyle(fontSize: 10)),
-        pw.Text('Vehicle: ${j.vehicle.isEmpty ? "-" : j.vehicle}    Plate: ${j.plate.isEmpty ? "-" : j.plate}    Odometer: ${j.odometerKm.isEmpty ? "-" : "${j.odometerKm} km"}', style: const pw.TextStyle(fontSize: 10)),
-        if (j.complaint.trim().isNotEmpty) pw.Padding(padding: const pw.EdgeInsets.only(top: 6), child: pw.Text('Complaint: ${j.complaint}', style: const pw.TextStyle(fontSize: 10))),
-        if (j.findings.trim().isNotEmpty) pw.Padding(padding: const pw.EdgeInsets.only(top: 4), child: pw.Text('Findings: ${j.findings}', style: const pw.TextStyle(fontSize: 10))),
+        PA.t('Customer: ${j.customer.isEmpty ? "-" : j.customer}    Phone: ${j.phone.isEmpty ? "-" : j.phone}'),
+        PA.t('Vehicle: ${j.vehicle.isEmpty ? "-" : j.vehicle}    Plate: ${j.plate.isEmpty ? "-" : j.plate}    Odometer: ${j.odometerKm.isEmpty ? "-" : "${j.odometerKm} km"}'),
+        if (j.complaint.trim().isNotEmpty) pw.Padding(padding: const pw.EdgeInsets.only(top: 6), child: PA.t('Complaint: ${j.complaint}')),
+        if (j.findings.trim().isNotEmpty) pw.Padding(padding: const pw.EdgeInsets.only(top: 4), child: PA.t('Findings: ${j.findings}')),
         pw.SizedBox(height: 10),
         pw.TableHelper.fromTextArray(
           headers: ['Description', 'Type', 'Qty', 'Unit (EGP)', 'Total (EGP)'],
           data: [
             for (final i in j.items)
-              [i.description, i.isLabour ? 'Labour' : 'Part', _n(i.qty), i.unitPrice.toStringAsFixed(2), i.total.toStringAsFixed(2)],
+              [PA.t(i.description, size: 9, maxW: 190), i.isLabour ? 'Labour' : 'Part', _n(i.qty), i.unitPrice.toStringAsFixed(2), i.total.toStringAsFixed(2)],
           ],
           cellStyle: const pw.TextStyle(fontSize: 9),
           headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9, color: PdfColors.white),
@@ -64,7 +71,7 @@ class JobCardPdfService {
           ]),
         ),
         pw.SizedBox(height: 24),
-        pw.Text(invoice ? 'Thank you for choosing $workshop.' : 'This quote is an estimate. Final price is confirmed after approval of the work.',
+        pw.Text(invoice ? 'Thank you for choosing ${prof.name}.' : 'This quote is an estimate. Final price is confirmed after approval of the work.',
             style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey700)),
       ],
     ));

@@ -4,6 +4,9 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'job_card_pdf_service.dart';
+import 'pdf_header.dart';
+import 'pdf_arabic.dart';
+import '../../data/repositories/workshop_profile.dart';
 import '../../data/models/used_car_audit_models.dart';
 import '../../data/models/inspection_extra.dart';
 
@@ -15,7 +18,18 @@ class UsedCarPdfReportService {
     required String vehicleName,
     required bool isArabic,
     InspectionExtra? extra,
+    WorkshopProfile? profile,
+  }) =>
+      PA.run(() => _generatePdfReport(scorecard: scorecard, vehicleName: vehicleName, isArabic: isArabic, extra: extra, profile: profile));
+
+  static Future<Uint8List> _generatePdfReport({
+    required PrePurchaseAuditScorecard scorecard,
+    required String vehicleName,
+    required bool isArabic,
+    InspectionExtra? extra,
+    WorkshopProfile? profile,
   }) async {
+    final prof = profile ?? await WorkshopProfile.load();
     final pdf = pw.Document(theme: await JobCardPdfService.arabicTheme());
 
     final odo = scorecard.odometerAudit;
@@ -49,17 +63,10 @@ class UsedCarPdfReportService {
                   pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text(
-                        "ASPECT AUTO DIAGNOSTIC CENTER",
-                        style: pw.TextStyle(
-                          color: PdfColors.amber,
-                          fontWeight: pw.FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
+                      PdfHeader.build(prof, color: PdfColors.amber, sub: PdfColors.grey300),
                       pw.SizedBox(height: 4),
                       pw.Text(
-                        "OFFICIAL USED CAR PRE-PURCHASE INSPECTION CERTIFICATE",
+                        "USED CAR PRE-PURCHASE INSPECTION REPORT",
                         style: const pw.TextStyle(
                           color: PdfColors.white,
                           fontSize: 10,
@@ -101,7 +108,7 @@ class UsedCarPdfReportService {
                   pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text("Vehicle: $vehicleName", style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 11)),
+                      PA.t("Vehicle: $vehicleName", size: 11, bold: true, maxW: 250),
                       pw.Text("Chassis VIN: ${vin.registeredVin}", style: const pw.TextStyle(fontSize: 10)),
                       pw.Text("Rating: ${scorecard.gradeClassificationEn}", style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10, color: PdfColors.blue900)),
                     ],
@@ -358,7 +365,7 @@ class UsedCarPdfReportService {
                       pw.Text("Official Workshop Stamp & Seal:", style: const pw.TextStyle(fontSize: 8, color: PdfColors.grey700)),
                       pw.SizedBox(height: 20),
                       pw.Divider(color: PdfColors.grey400),
-                      pw.Text("AutoSpect Vehicle Inspection Center", style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
+                      pw.Text(prof.name, style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
                     ],
                   ),
                 ),
@@ -383,15 +390,30 @@ class UsedCarPdfReportService {
     required Map<String, String> carSnapshot,
     required ManualInspectionReport checklist,
     DateTime? when,
+    WorkshopProfile? profile,
+  }) =>
+      PA.run(() => _generateManualOnlyPdf(extra: extra, vehicleName: vehicleName, carRead: carRead, carSnapshot: carSnapshot, checklist: checklist, when: when, profile: profile));
+
+  static Future<Uint8List> _generateManualOnlyPdf({
+    required InspectionExtra extra,
+    required String vehicleName,
+    required bool carRead,
+    required Map<String, String> carSnapshot,
+    required ManualInspectionReport checklist,
+    DateTime? when,
+    WorkshopProfile? profile,
   }) async {
+    final prof = profile ?? await WorkshopProfile.load();
     final pdf = pw.Document(theme: await JobCardPdfService.arabicTheme());
     final d = (when ?? DateTime.now()).toIso8601String().substring(0, 16).replaceFirst('T', ' ');
     pdf.addPage(pw.MultiPage(
       pageFormat: PdfPageFormat.a4,
       margin: const pw.EdgeInsets.all(28),
       build: (ctx) => [
-        pw.Text('AutoSpect Vehicle Inspection', style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 18)),
-        pw.Text('$vehicleName   |   $d', style: const pw.TextStyle(fontSize: 10)),
+        PdfHeader.build(prof),
+        pw.SizedBox(height: 6),
+        pw.Text('Vehicle Inspection', style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 14)),
+        PA.t('$vehicleName   |   $d'),
         pw.SizedBox(height: 8),
         pw.Text(carRead ? 'Readings from the car (saved snapshot)' : 'No car reading: adapter was not used for this inspection',
             style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12, color: PdfColors.blueGrey800)),
@@ -453,11 +475,11 @@ class UsedCarPdfReportService {
       margin: const pw.EdgeInsets.all(28),
       build: (ctx) => [
         pw.Text('Hand-entered inspection (not measured by the car)', style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 14)),
-        pw.Text('Vehicle: $vehicleName', style: const pw.TextStyle(fontSize: 10)),
-        pw.Text('Customer: ${_v(x.customerName)}   Plate: ${_v(x.plate)}   Odometer (entered): ${_v(x.mileageKm, " km")}', style: const pw.TextStyle(fontSize: 10)),
+        PA.t('Vehicle: $vehicleName'),
+        PA.t('Customer: ${_v(x.customerName)}   Plate: ${_v(x.plate)}   Odometer (entered): ${_v(x.mileageKm, " km")}'),
         h('Tires, tread depth'),
         table(['Tire', 'Tread'], [for (final e in x.tireTreadMm.entries) [e.key, _v(e.value, ' mm')]]),
-        if (x.tireNote.trim().isNotEmpty) pw.Text('Note: ${x.tireNote}', style: const pw.TextStyle(fontSize: 9)),
+        if (x.tireNote.trim().isNotEmpty) PA.t('Note: ${x.tireNote}', size: 9),
         h('Brakes'),
         table(['Item', 'Result'], [
           ['Front pads', _v(x.frontPadPercent, ' %')],
@@ -469,8 +491,8 @@ class UsedCarPdfReportService {
         table(['Fluid', 'Result'], [for (final e in x.fluids.entries) [e.key, _st(e.value)]]),
         h('Test drive'),
         table(['Check', 'Result'], [for (final e in x.testDrive.entries) [e.key, _st(e.value)]]),
-        if (x.bodyNote.trim().isNotEmpty) ...[h('Body notes'), pw.Text(x.bodyNote, style: const pw.TextStyle(fontSize: 9))],
-        if (x.notes.trim().isNotEmpty) ...[h('Technician notes'), pw.Text(x.notes, style: const pw.TextStyle(fontSize: 9))],
+        if (x.bodyNote.trim().isNotEmpty) ...[h('Body notes'), PA.t(x.bodyNote, size: 9)],
+        if (x.notes.trim().isNotEmpty) ...[h('Technician notes'), PA.t(x.notes, size: 9)],
         if (images.isNotEmpty) ...[
           h('Photos (${images.length})'),
           pw.Wrap(spacing: 8, runSpacing: 8, children: [for (final im in images) pw.Container(width: 160, height: 120, child: pw.Image(im, fit: pw.BoxFit.cover))]),

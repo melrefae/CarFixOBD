@@ -6,7 +6,7 @@ class AppStrings {
   static const String appTagline = "Professional Vehicle Diagnostics & ECU Analysis";
   static const String defaultWorkshopName = "AutoSpect Diagnostic Center";
   static const String defaultWorkshopPhone = "+201553666635";
-  static const String defaultWorkshopAddress = "Cairo, Egypt";
+  static const String defaultWorkshopAddress = "";
 
   // Navigation & Primary Actions
   static const String quickScan = "Quick Scan (30s)";

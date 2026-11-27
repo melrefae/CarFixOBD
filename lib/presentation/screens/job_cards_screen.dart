@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../core/utils/search_match.dart';
 import '../../data/models/workshop_records.dart';
 import '../../data/repositories/workshop_store.dart';
 import '../../domain/services/job_card_pdf_service.dart';
@@ -19,6 +20,7 @@ class JobCardsScreen extends StatefulWidget {
 class _JobCardsScreenState extends State<JobCardsScreen> {
   List<JobCard> _jobs = [];
   bool _loading = true;
+  String _q = '';
   bool get _isAr => Provider.of<ObdState>(context, listen: false).isArabic;
   String _t(String en, String ar) => _isAr ? ar : en;
 
@@ -52,7 +54,12 @@ class _JobCardsScreenState extends State<JobCardsScreen> {
               : ListView(
                   padding: const EdgeInsets.fromLTRB(12, 12, 12, 90),
                   children: [
-                    for (final j in _jobs)
+                    TextField(
+                      decoration: InputDecoration(prefixIcon: const Icon(Icons.search), labelText: _t('Search plate, customer, phone', 'بحث: لوحة، عميل، هاتف')),
+                      onChanged: (v) => setState(() => _q = v),
+                    ),
+                    const SizedBox(height: 10),
+                    for (final j in _jobs.where((j) => SearchMatch.matches(_q, [j.plate, j.customer, j.phone, j.vehicle])))
                       Card(
                         child: ListTile(
                           title: Text('${j.plate.isEmpty ? "-" : j.plate}  ${j.customer}'),

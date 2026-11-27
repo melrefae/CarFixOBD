@@ -3,11 +3,14 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:intl/intl.dart';
 import '../services/job_card_pdf_service.dart';
+import '../services/pdf_arabic.dart';
 import '../../data/models/inspection_report.dart';
 
 /// PDF inspection report generator for printing and customer sharing
 class PdfReportGenerator {
-  static Future<Uint8List> generatePdf(InspectionReport report) async {
+  static Future<Uint8List> generatePdf(InspectionReport report) => PA.run(() => _generatePdf(report));
+
+  static Future<Uint8List> _generatePdf(InspectionReport report) async {
     final pdf = pw.Document(theme: await JobCardPdfService.arabicTheme());
 
     final dateFormatted = DateFormat('yyyy-MM-dd HH:mm').format(report.timestamp);
@@ -38,10 +41,7 @@ class PdfReportGenerator {
                             "AutoSpect",
                             style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold, color: PdfColors.amber800),
                           ),
-                          pw.Text(
-                            report.workshopName.isNotEmpty ? report.workshopName : "Automotive Diagnostic Center",
-                            style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold, color: PdfColors.blueGrey900),
-                          ),
+                          PA.t(report.workshopName.isNotEmpty ? report.workshopName : "Automotive Diagnostic Center", size: 14, bold: true, color: PdfColors.blueGrey900, maxW: 300),
                           pw.Text("OBD-II Computer Diagnostic & Inspection Report", style: const pw.TextStyle(fontSize: 10, color: PdfColors.blueGrey700)),
                           pw.Text("Contact: +20 155 366 6635", style: const pw.TextStyle(fontSize: 9, color: PdfColors.blueGrey600)),
                         ],
@@ -70,8 +70,8 @@ class PdfReportGenerator {
                       pw.Row(
                         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                         children: [
-                          pw.Text("Vehicle: ${report.vehicleMakeModel}", style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 11)),
-                          pw.Text("Plate: ${report.plateNumber}", style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 11)),
+                          PA.t("Vehicle: ${report.vehicleMakeModel}", size: 11, bold: true, maxW: 250),
+                          PA.t("Plate: ${report.plateNumber}", size: 11, bold: true, maxW: 250),
                         ],
                       ),
                       pw.SizedBox(height: 6),
@@ -79,7 +79,7 @@ class PdfReportGenerator {
                         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                         children: [
                           pw.Text("VIN: ${report.vin}", style: const pw.TextStyle(fontSize: 10)),
-                          pw.Text("Customer: ${report.customerName}", style: const pw.TextStyle(fontSize: 10)),
+                          PA.t("Customer: ${report.customerName}", maxW: 250),
                         ],
                       ),
                       pw.SizedBox(height: 6),

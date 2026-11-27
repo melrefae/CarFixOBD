@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
+import '../../core/utils/search_match.dart';
 import '../../data/models/workshop_records.dart';
 import '../../data/repositories/workshop_store.dart';
 import '../../domain/services/visit_compare.dart';
@@ -20,6 +21,7 @@ class _InspectionHistoryScreenState extends State<InspectionHistoryScreen> {
   List<InspectionRecord> _all = [];
   bool _loading = true;
   final Set<String> _sel = {};
+  String _q = '';
 
   bool get _isAr => Provider.of<ObdState>(context, listen: false).isArabic;
   String _t(String en, String ar) => _isAr ? ar : en;
@@ -66,7 +68,7 @@ class _InspectionHistoryScreenState extends State<InspectionHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final groups = <String, List<InspectionRecord>>{};
-    for (final r in _all) {
+    for (final r in _all.where((r) => SearchMatch.matches(_q, [r.plate, r.customer, r.vehicleName, r.vin]))) {
       groups.putIfAbsent(r.carKey, () => []).add(r);
     }
     return Scaffold(
@@ -78,6 +80,12 @@ class _InspectionHistoryScreenState extends State<InspectionHistoryScreen> {
               : ListView(
                   padding: const EdgeInsets.all(12),
                   children: [
+                    TextField(
+                      decoration: InputDecoration(prefixIcon: const Icon(Icons.search), labelText: _t('Search plate, customer, VIN', 'بحث: لوحة، عميل، شاسيه')),
+                      onChanged: (v) => setState(() => _q = v),
+                    ),
+                    const SizedBox(height: 10),
+                    if (groups.isEmpty) Padding(padding: const EdgeInsets.all(24), child: Center(child: Text(_t('No match', 'لا توجد نتائج')))),
                     for (final e in groups.entries) _group(e.key, e.value),
                   ],
                 ),

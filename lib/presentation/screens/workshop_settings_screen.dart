@@ -7,6 +7,7 @@ import '../../core/localization/app_strings_en.dart';
 import '../../domain/services/safety_alarm_service.dart';
 import '../providers/obd_state.dart';
 import 'cloud_backup_screen.dart';
+import '../widgets/identity_backup_card.dart';
 
 /// Workshop profile, branding, and safety alarm thresholds screen
 class WorkshopSettingsScreen extends StatefulWidget {
@@ -211,6 +212,8 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
             _buildTextField("Default Inspection Engineer", _engineerController, Icons.badge_outlined),
             const SizedBox(height: 10),
             _buildTextField("Standard Inspection Fee", _feeController, Icons.payments_outlined),
+            const SizedBox(height: 10),
+            const IdentityBackupCard(),
 
             const SizedBox(height: 24),
 

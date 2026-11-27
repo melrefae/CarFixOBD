@@ -41,3 +41,10 @@ Dashboard rebuilt: Daily / Inspection & Customers / Analysis & Tools, then Lab (
 ## Milestone 8: bundled Arabic font and shared input theme
 - Noto Sans Arabic is bundled in assets/fonts and used by every PDF (scorecard, hand-only inspection, quote/invoice, report) and as the UI fallback font. No download.
 - All text fields share AppInputTheme (lib/core/theme/input_theme.dart). Per-screen border/fill overrides were removed. Verified: analyze, tests, widget renders (dark and light) and a rendered Arabic PDF page. NOT verified on a phone.
+
+## Milestone 9: workshop identity, backup, search, Arabic PDF fix
+- PDFs print the workshop name, phone, address and optional logo from Workshop Settings (empty fields are not printed). The fake default address "Cairo, Egypt" was removed. "OFFICIAL ... CERTIFICATE" in the scorecard title was changed to "REPORT" (nothing certifies it).
+- Backup: Settings > Export backup shares one JSON file (visits with their PDFs, job cards, workshop identity and logo). Import merges and never overwrites existing records or identity.
+- Search on Car History and Job Cards (plate, customer, phone, VIN; ignores case, spaces, Arabic digits and alef forms).
+- Arabic in PDFs: the `pdf` package orders and shapes Arabic wrongly (measured). Arabic lines are now laid out by Flutter's text engine with the bundled Noto Sans Arabic and placed in the PDF as images. Checked against an independent HarfBuzz render: pixel difference about 4 for correct layout versus about 50 for mirrored or word-swapped text. Regression tests: test/arabic_pdf_test.dart with golden images. Trade-off: Arabic lines in a PDF are not selectable or searchable.
+- NOT verified on a phone: file picker and share sheet, logo picker, and the fonts as they look on the device.

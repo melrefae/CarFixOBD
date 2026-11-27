@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:automotive_scanner/data/models/inspection_extra.dart';
 import 'package:automotive_scanner/data/models/used_car_audit_models.dart';
@@ -8,6 +9,7 @@ import 'package:automotive_scanner/domain/services/visit_compare.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.setMockInitialValues({});
   test('InspectionExtra JSON round trip', () {
     final x = InspectionExtra()
       ..plate = 'ABC 123'

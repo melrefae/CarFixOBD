@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:automotive_scanner/core/constants/app_colors.dart';
@@ -39,6 +40,8 @@ import 'package:automotive_scanner/data/models/raw_can_frame_models.dart';
 import 'package:automotive_scanner/domain/services/offline_vault_service.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.setMockInitialValues({});
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('Pillar 1: Diagzone 37+ Special Functions Parity', () {
