@@ -8,6 +8,23 @@ import '../../core/constants/obd_commands.dart';
 import '../../core/utils/hex_parser.dart';
 import 'dtc_repository.dart';
 
+/// Result of a Mode 04 clear, verified by reading the codes back.
+class ClearOutcome {
+  /// The ECU answered Mode 04 with a positive response (0x44).
+  final bool accepted;
+  /// Codes read back (Mode 03) after the clear. Null when the read-back itself failed.
+  final List<String>? remainingCodes;
+  /// MIL state read back from Mode 01 PID 01. Null when it could not be read.
+  final bool? milOn;
+  final String rawResponse;
+  const ClearOutcome({required this.accepted, required this.remainingCodes, required this.milOn, required this.rawResponse});
+
+  /// True only when the ECU accepted the command and the read-back shows no stored codes.
+  bool get verifiedCleared => accepted && remainingCodes != null && remainingCodes!.isEmpty;
+  /// True when the ECU accepted the command but a fault is still (or again) stored.
+  bool get codesRemain => accepted && remainingCodes != null && remainingCodes!.isNotEmpty;
+}
+
 /// Genuine odometer and distance telemetry result
 class GenuineOdometerReading {
   final int totalOdometerKm;
@@ -124,39 +141,61 @@ class ObdRepository {
       // 1. Confirmed Stored DTCs (Mode 03)
       final storedRaw = await driver.executeCommand(ObdCommands.modeStoredDtcs);
       final storedBytes = HexParser.extractBytes(storedRaw);
-      final storedCodes = HexParser.parseDtcs(storedBytes, 0x03);
+      final storedCodes = HexParser.parseDtcsRaw(storedRaw, 0x03);
       results['stored'] = await dtcRepo.resolveDtcs(storedCodes, dtcType: "Stored");
 
       // 2. Pending DTCs (Mode 07)
       final pendingRaw = await driver.executeCommand(ObdCommands.modePendingDtcs);
       final pendingBytes = HexParser.extractBytes(pendingRaw);
-      final pendingCodes = HexParser.parseDtcs(pendingBytes, 0x07);
+      final pendingCodes = HexParser.parseDtcsRaw(pendingRaw, 0x07);
       results['pending'] = await dtcRepo.resolveDtcs(pendingCodes, dtcType: "Pending");
 
       // 3. Permanent DTCs (Mode 0A)
       final permRaw = await driver.executeCommand(ObdCommands.modePermanentDtcs);
       final permBytes = HexParser.extractBytes(permRaw);
-      final permCodes = HexParser.parseDtcs(permBytes, 0x0A);
+      final permCodes = HexParser.parseDtcsRaw(permRaw, 0x0A);
       results['permanent'] = await dtcRepo.resolveDtcs(permCodes, dtcType: "Permanent");
     } catch (_) {}
 
     return results;
   }
 
-  /// Clear diagnostic trouble codes and reset Check Engine light (Mode 04)
-  Future<bool> clearDiagnosticCodes() async {
+  /// Clear diagnostic trouble codes (Mode 04), then read the codes and MIL back to verify.
+  Future<ClearOutcome> clearDiagnosticCodesVerified() async {
+    String resp = '';
+    bool accepted = false;
     try {
-      final resp = await driver.executeCommand(ObdCommands.modeClearDtcs, timeout: const Duration(seconds: 5));
+      resp = await driver.executeCommand(ObdCommands.modeClearDtcs, timeout: const Duration(seconds: 6));
       final bytes = HexParser.extractBytes(resp);
-
-      if (resp.contains("44") || resp.contains("OK") || (bytes.isNotEmpty && bytes[0] == 0x44)) {
-        return true;
-      }
-      return false;
-    } catch (_) {
-      return false;
+      // positive response is 0x44; a negative response is 0x7F 0x04 NRC
+      accepted = bytes.isNotEmpty && bytes.contains(0x44) && !bytes.contains(0x7F);
+    } catch (_) {}
+    if (!accepted) {
+      return ClearOutcome(accepted: false, remainingCodes: null, milOn: null, rawResponse: resp);
     }
+    // give the ECU a moment to finish the erase before reading back
+    await Future.delayed(const Duration(milliseconds: 1200));
+    List<String>? remaining;
+    bool? mil;
+    try {
+      final raw = await driver.executeCommand(ObdCommands.modeStoredDtcs, timeout: const Duration(seconds: 5));
+      final upper = raw.toUpperCase();
+      if (upper.contains('NO DATA')) {
+        remaining = [];
+      } else if (upper != 'TIMEOUT' && !HexParser.isErrorResponse(raw)) {
+        remaining = HexParser.parseDtcsRaw(raw, 0x03);
+      }
+    } catch (_) {}
+    try {
+      final r = await readReadinessMonitors();
+      // readReadinessMonitors returns an all-false object when it cannot read
+      mil = r.monitors.isEmpty ? null : r.milOn;
+    } catch (_) {}
+    return ClearOutcome(accepted: true, remainingCodes: remaining, milOn: mil, rawResponse: resp);
   }
+
+  /// Backwards-compatible: true only when the clear was verified by read-back.
+  Future<bool> clearDiagnosticCodes() async => (await clearDiagnosticCodesVerified()).verifiedCleared;
 
   /// Read core vehicle data (VIN, MIL status, DTC count, battery voltage)
   Future<Map<String, dynamic>> readQuickScanData() async {

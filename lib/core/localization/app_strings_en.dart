@@ -63,7 +63,7 @@ class AppStrings {
   static const String noDtcsFound = "No trouble codes found. ECU reports healthy status!";
   static const String clearDtcsButton = "Clear Trouble Codes & Reset MIL (Mode 04)";
   static const String clearWarningTitle = "Important Safety Confirmation";
-  static const String clearWarningBody = "Ensure the engine is completely stopped with ignition key ON (Key ON, Engine OFF).\n\nClearing codes will turn off the Check Engine light, reset fuel trim adaptation learned values, and reset readiness monitors. Proceed?";
+  static const String clearWarningBody = "Ensure the engine is completely stopped with ignition key ON (Key ON, Engine OFF).\n\nClearing codes will turn off the Check Engine light, reset fuel trim adaptation learned values, and reset readiness monitors. The freeze frame is also erased. A snapshot of the codes, freeze frame and readiness is saved on this phone first. Proceed?";
   static const String confirmClear = "Yes, Key is ON and Engine is OFF";
   static const String cancel = "Cancel";
   static const String dtcsClearedSuccess = "Diagnostic trouble codes cleared and MIL light reset successfully!";

@@ -231,84 +231,114 @@ class Elm327Driver {
     }
   }
 
-  /// Negotiate ECU protocol (Auto protocol or prioritized fast fallback cycle)
-  Future<bool> connectToEcu({String? specificProtocolCmd}) async {
-    // If vehicle profile has a specific protocol (e.g. Nissan/Elantra AT SP 6 or Verna AT SP 3/5)
-    if (specificProtocolCmd != null && specificProtocolCmd.isNotEmpty && specificProtocolCmd != "AT SP 0") {
-      await _sendAtCommandSafe(specificProtocolCmd, timeout: const Duration(milliseconds: 800));
-      await Future.delayed(const Duration(milliseconds: 60));
-      final resp = await executeCommand("0100", timeout: const Duration(seconds: 2));
-      if (_isEcuResponseValid(resp)) {
-        await _resolveActiveProtocol();
-        _isEcuConnected = true;
-        _state = ElmDriverState.ready;
-        return true;
+  /// One line per protocol tried during the last connection attempt (for the user and the log).
+  final List<String> protocolAttempts = [];
+
+  /// Slow-init buses (ISO 9141-2 / KWP 5-baud) need several seconds for the ECU handshake.
+  /// KWP fast-init needs about 3 s. CAN answers or fails within about 1.5 s.
+  /// The adapter returns to the prompt as soon as it has an answer or an error,
+  /// so a long timeout costs nothing when the car answers quickly.
+  static const Map<String, Duration> _protocolTimeouts = {
+    "AT SP 0": Duration(seconds: 20), // adapter's own search can try every protocol in turn
+    "AT SP 1": Duration(seconds: 4),
+    "AT SP 2": Duration(seconds: 4),
+    "AT SP 3": Duration(seconds: 10),
+    "AT SP 4": Duration(seconds: 10),
+    "AT SP 5": Duration(seconds: 6),
+    "AT SP 6": Duration(seconds: 3),
+    "AT SP 7": Duration(seconds: 3),
+    "AT SP 8": Duration(seconds: 3),
+    "AT SP 9": Duration(seconds: 3),
+  };
+
+  static String _normalizeSp(String cmd) {
+    final c = cmd.toUpperCase().replaceAll(RegExp(r'\s+'), '');
+    if (c.startsWith('ATSP') && c.length >= 5) return 'AT SP ${c.substring(4, 5)}';
+    return cmd;
+  }
+
+  static bool _isKLine(String sp) => const ["AT SP 3", "AT SP 4", "AT SP 5"].contains(sp);
+
+  Future<bool> _tryProtocol(String sp) async {
+    sp = _normalizeSp(sp);
+    final timeout = _protocolTimeouts[sp] ?? const Duration(seconds: 5);
+    final sw = Stopwatch()..start();
+    // Wake the adapter if the previous attempt left it busy, then select the protocol.
+    await _sendAtCommandSafe("AT SP ${sp.substring(sp.length - 1)}", timeout: const Duration(milliseconds: 900));
+    await Future.delayed(const Duration(milliseconds: 60));
+    final resp = await executeCommand("0100", timeout: timeout);
+    final ok = _isEcuResponseValid(resp);
+    protocolAttempts.add("$sp: ${ok ? 'ECU answered' : resp.replaceAll(RegExp(r'\s+'), ' ')} (${(sw.elapsedMilliseconds / 1000).toStringAsFixed(1)} s)");
+    if (ok) {
+      await _resolveActiveProtocol();
+      if (_isKLine(sp)) {
+        // slow ECUs: allow a longer answer window per request
+        await _sendAtCommandSafe("AT ST 96", timeout: const Duration(milliseconds: 800));
       }
+      _isEcuConnected = true;
+      _state = ElmDriverState.ready;
+    }
+    return ok;
+  }
+
+  /// Negotiate ECU protocol. A chosen protocol is tried first, then the adapter's own
+  /// automatic search, then every protocol one by one with a protocol-appropriate wait
+  /// (old cars first: slow-init K-line and J1850 before CAN).
+  Future<bool> connectToEcu({String? specificProtocolCmd}) async {
+    protocolAttempts.clear();
+    if (specificProtocolCmd != null && specificProtocolCmd.isNotEmpty && _normalizeSp(specificProtocolCmd) != "AT SP 0") {
+      if (await _tryProtocol(specificProtocolCmd)) return true;
     }
 
-    // Try Auto Protocol (AT SP 0)
-    await _sendAtCommandSafe(ObdCommands.autoProtocol, timeout: const Duration(milliseconds: 800));
+    // Adapter's own automatic search (AT SP 0). It prints SEARCHING... and may take 10+ s on old cars.
+    final swAuto = Stopwatch()..start();
+    await _sendAtCommandSafe(ObdCommands.autoProtocol, timeout: const Duration(milliseconds: 900));
     await Future.delayed(const Duration(milliseconds: 60));
-
-    // First attempt on 0100 (triggers ELM327 protocol search)
-    var ecuCheck = await executeCommand("0100", timeout: const Duration(seconds: 3));
-    if (_isEcuResponseValid(ecuCheck)) {
+    final auto = await executeCommand("0100", timeout: _protocolTimeouts["AT SP 0"]!);
+    final autoOk = _isEcuResponseValid(auto);
+    protocolAttempts.add("AT SP 0 (auto): ${autoOk ? 'ECU answered' : auto.replaceAll(RegExp(r'\s+'), ' ')} (${(swAuto.elapsedMilliseconds / 1000).toStringAsFixed(1)} s)");
+    if (autoOk) {
       await _resolveActiveProtocol();
+      if (_isKLine("AT SP ${_activeProtocolNumber()}")) {
+        await _sendAtCommandSafe("AT ST 96", timeout: const Duration(milliseconds: 800));
+      }
       _isEcuConnected = true;
       _state = ElmDriverState.ready;
       return true;
     }
 
-    // Second fast attempt if searching was actively reported
-    if (ecuCheck.contains("SEARCHING")) {
-      await Future.delayed(const Duration(milliseconds: 150));
-      ecuCheck = await executeCommand("0100", timeout: const Duration(seconds: 2));
-      if (_isEcuResponseValid(ecuCheck)) {
-        await _resolveActiveProtocol();
-        _isEcuConnected = true;
-        _state = ElmDriverState.ready;
-        return true;
-      }
-    }
-
-    // Prioritized fast fallback cycle: CAN 11/500, CAN 29/500, KWP Fast, ISO 9141
-    final fallbackProtocols = [
-      ("AT SP 6", const Duration(milliseconds: 1200)), // ISO 15765-4 CAN 11/500 (>85% of modern vehicles)
-      ("AT SP 7", const Duration(milliseconds: 1200)), // ISO 15765-4 CAN 29/500 (Euro & heavy CAN)
-      ("AT SP 5", const Duration(milliseconds: 1500)), // ISO 14230-4 KWP Fast Init (Hyundai Verna, Lanos, Aveo)
-      ("AT SP 3", const Duration(milliseconds: 1500)), // ISO 9141-2 (Japanese/Asian imports)
-      ("AT SP 8", const Duration(milliseconds: 1000)), // ISO 15765-4 CAN 11/250
-      ("AT SP 9", const Duration(milliseconds: 1000)), // ISO 15765-4 CAN 29/250
-      ("AT SP 4", const Duration(milliseconds: 1500)), // ISO 14230-4 KWP 5-Baud Init
-      ("AT SP 1", const Duration(milliseconds: 1000)), // SAE J1850 PWM (Ford)
-      ("AT SP 2", const Duration(milliseconds: 1000)), // SAE J1850 VPW (GM)
+    const order = [
+      "AT SP 5", // ISO 14230-4 KWP fast init (many Hyundai/Kia/Daewoo/Suzuki)
+      "AT SP 3", // ISO 9141-2 (Toyota, Mitsubishi, older Hyundai/Kia, Renault, Peugeot)
+      "AT SP 4", // ISO 14230-4 KWP 5-baud init
+      "AT SP 2", // SAE J1850 VPW (older GM)
+      "AT SP 1", // SAE J1850 PWM (older Ford)
+      "AT SP 6", // CAN 11-bit 500k
+      "AT SP 7", // CAN 29-bit 500k
+      "AT SP 8", // CAN 11-bit 250k
+      "AT SP 9", // CAN 29-bit 250k
     ];
-
-    for (final entry in fallbackProtocols) {
-      final proto = entry.$1;
-      final protoTimeout = entry.$2;
-      await _sendAtCommandSafe(proto, timeout: const Duration(milliseconds: 600));
-      await Future.delayed(const Duration(milliseconds: 40));
-      final testResp = await executeCommand("0100", timeout: protoTimeout);
-      if (_isEcuResponseValid(testResp)) {
-        await _resolveActiveProtocol();
-        _isEcuConnected = true;
-        _state = ElmDriverState.ready;
-        return true;
-      }
+    for (final sp in order) {
+      if (specificProtocolCmd != null && _normalizeSp(specificProtocolCmd) == sp) continue;
+      if (await _tryProtocol(sp)) return true;
     }
-
     return false;
   }
 
-  /// Check if 0100 response indicates a valid ECU response
+  String _activeProtocolNumber() {
+    final u = _activeProtocol.toUpperCase();
+    if (u.contains('14230') && u.contains('FAST')) return '5';
+    if (u.contains('14230')) return '4';
+    if (u.contains('9141')) return '3';
+    if (u.contains('VPW')) return '2';
+    if (u.contains('PWM')) return '1';
+    return '0';
+  }
+
+  /// Check that a 0100 reply is a real positive answer: "41 00" followed by 4 data bytes.
   bool _isEcuResponseValid(String response) {
-    if (response == "TIMEOUT" || HexParser.isErrorResponse(response)) {
-      return false;
-    }
-    // Mode 01 response starts with 41
-    final clean = response.toUpperCase();
-    return clean.contains("41") || clean.contains("4100") || clean.contains("41 00");
+    if (response == "TIMEOUT" || HexParser.isErrorResponse(response)) return false;
+    return RegExp(r'(?<![0-9A-F])41\s?00(\s?[0-9A-F]{2}){4}', caseSensitive: false).hasMatch(response);
   }
 
   /// Resolve current active OBD protocol name from ELM327

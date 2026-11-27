@@ -181,6 +181,30 @@ class HexParser {
 
   /// فك تشفير مصفوفة البايتات إلى قائمة أكواد أعطال قياسية (Standard DTCs)
   /// مثال: [0x43, 0x01, 0x33, 0x03, 0x00] -> ["P0133", "P0300"]
+  /// Parse DTCs from an adapter reply. On legacy buses (ISO 9141-2, KWP2000, J1850) every ECU
+  /// line is "43" plus 6 data bytes (3 code slots, padded with 00), and the driver joins the
+  /// lines into one string. Reading that as one block would take the next line's "43" for
+  /// code data, so a reply made of whole 7-byte groups that each start with the response byte
+  /// is parsed group by group. A CAN reply has an even length here (response byte, count,
+  /// then pairs) or lines with "0:" / "1:", so it still goes through [parseDtcs].
+  static List<String> parseDtcsRaw(String raw, int mode) {
+    final expected = mode + 0x40;
+    final bytes = extractBytes(raw);
+    if (!raw.contains(':') && bytes.length >= 7 && bytes.length % 7 == 0 &&
+        [for (var i = 0; i < bytes.length; i += 7) bytes[i]].every((b) => b == expected)) {
+      final out = <String>[];
+      for (var g = 0; g < bytes.length; g += 7) {
+        for (var i = g + 1; i + 1 < g + 7; i += 2) {
+          if (bytes[i] == 0 && bytes[i + 1] == 0) continue;
+          final d = decodeSingleDtc(bytes[i], bytes[i + 1]);
+          if (d.isNotEmpty && !out.contains(d)) out.add(d);
+        }
+      }
+      return out;
+    }
+    return parseDtcs(bytes, mode);
+  }
+
   static List<String> parseDtcs(List<int> bytes, int mode) {
     final expectedResponseMode = mode + 0x40; // 0x03 -> 0x43, 0x07 -> 0x47, 0x0A -> 0x4A
     final List<String> dtcs = [];

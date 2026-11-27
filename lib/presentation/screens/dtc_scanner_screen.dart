@@ -130,7 +130,11 @@ class _DtcScannerScreenState extends State<DtcScannerScreen> with SingleTickerPr
                                     content: Text(
                                       success
                                           ? AppStrings.dtcsClearedSuccess
-                                          : AppStrings.dtcsClearedFail,
+                                          : (state.lastClearOutcome?.codesRemain ?? false)
+                                              ? 'The ECU accepted the clear but ${state.lastClearOutcome!.remainingCodes!.length} code(s) are still stored: ${state.lastClearOutcome!.remainingCodes!.join(", ")}. The fault is probably still present. / الكمبيوتر قبل المسح لكن الأعطال لسه مسجلة، العطل غالباً لسه موجود.'
+                                              : (state.lastClearOutcome != null && state.lastClearOutcome!.accepted)
+                                                  ? 'The ECU accepted the clear but the read-back could not confirm it. Read the codes again. / تم قبول المسح لكن مقدرتش أتأكد، اقرا الأعطال تاني.'
+                                                  : AppStrings.dtcsClearedFail,
                                     ),
                                     backgroundColor: success ? AppColors.successGreen : AppColors.dangerRed,
                                   ),

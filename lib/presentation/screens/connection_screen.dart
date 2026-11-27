@@ -152,6 +152,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
         children: [
           // Connection status banner
           _buildStatusBanner(state),
+          _buildProtocolPicker(state),
 
           Expanded(
             child: TabBarView(
@@ -164,6 +165,44 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  static const _protocolNames = <int, String>{
+    0: 'Auto (adapter searches all protocols)',
+    1: 'SAE J1850 PWM (old Ford)',
+    2: 'SAE J1850 VPW (old GM)',
+    3: 'ISO 9141-2 (slow init, old Asian/European)',
+    4: 'ISO 14230-4 KWP 5-baud (slow init)',
+    5: 'ISO 14230-4 KWP fast init (many 2000-2008 cars)',
+    6: 'CAN 11-bit 500k (most 2008+)',
+    7: 'CAN 29-bit 500k',
+    8: 'CAN 11-bit 250k',
+    9: 'CAN 29-bit 250k',
+  };
+
+  Widget _buildProtocolPicker(ObdState state) {
+    final attempts = state.protocolAttempts;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
+            const Text('Protocol: ', style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
+            Expanded(
+              child: DropdownButton<int>(
+                isExpanded: true,
+                value: state.protocolOverride,
+                items: [for (final e in _protocolNames.entries) DropdownMenuItem(value: e.key, child: Text(e.value, style: const TextStyle(fontSize: 12), overflow: TextOverflow.ellipsis))],
+                onChanged: state.isConnecting ? null : (v) { if (v != null) state.setProtocolOverride(v); },
+              ),
+            ),
+          ]),
+          if (attempts.isNotEmpty && !state.isEcuReady)
+            Text('Last attempt:\n${attempts.join("\n")}', style: const TextStyle(fontSize: 10.5, color: AppColors.textMuted)),
         ],
       ),
     );

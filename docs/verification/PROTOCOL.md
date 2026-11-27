@@ -54,3 +54,12 @@ ARB/gen-l10n added: lib/l10n/app_en.arb, app_ar.arb, l10n.yaml, generated code i
 Regenerate: temporarily add `generate: true` under `flutter:` in pubspec.yaml, run `flutter gen-l10n`, remove it.
 Converted so far: history, job cards, used-car wizard, identity/backup card. App locale now follows the language switch.
 Other screens still use ObdState.isArabic / AppStrings* and are not yet migrated.
+
+## Milestone 11 (legacy protocols, verified clear)
+Tested only with a scripted adapter double (test/legacy_protocol_test.dart), NOT a real car or adapter.
+- Per-protocol wait: auto search 20 s, ISO 9141 / KWP 5-baud 10 s, KWP fast 6 s, CAN 3 s, J1850 4 s. Old buses tried before CAN.
+- 0100 answer must be "41 00" + 4 bytes (was: any text containing "41").
+- Manual protocol choice (Connection screen, saved). Per-protocol attempt list shown when no ECU answers.
+- Legacy Mode 03/07/0A replies (7-byte groups per ECU) parsed per group.
+- Clear DTC: snapshot saved first (last 20, in app preferences), success only if the read-back shows no codes.
+Needs a real-car test: Hyundai Matrix 2007 and an old-protocol adapter.

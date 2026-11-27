@@ -1,3 +1,4 @@
+import 'dart:convert';
 import '../../core/constants/feature_status.dart';
 import '../../core/utils/uds_response.dart';
 import 'dart:async';
@@ -298,9 +299,25 @@ class ObdState extends ChangeNotifier {
     }
   }
 
+  /// Chosen protocol number (0 = auto, 1..9 = ELM327 AT SP n). Saved on the phone.
+  int _protocolOverride = 0;
+  int get protocolOverride => _protocolOverride;
+  List<String> get protocolAttempts => _driver?.protocolAttempts ?? const [];
+  String? get _protocolOverrideCmd => _protocolOverride == 0 ? null : 'AT SP $_protocolOverride';
+
+  Future<void> setProtocolOverride(int n) async {
+    _protocolOverride = n.clamp(0, 9);
+    notifyListeners();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('protocol_override', _protocolOverride);
+    } catch (_) {}
+  }
+
   Future<void> _loadSavedAdapterPreferences() async {
     try {
       final prefs = await SharedPreferences.getInstance();
+      _protocolOverride = prefs.getInt('protocol_override') ?? 0;
       _isAutoConnectEnabled = prefs.getBool(_prefAutoConnectKey) ?? true;
       _lastSavedAdapterType = prefs.getString(_prefAdapterTypeKey);
       _lastSavedAdapterTarget = prefs.getString(_prefAdapterTargetKey);
@@ -1156,13 +1173,13 @@ class ObdState extends ChangeNotifier {
   /// Initialize ELM327 protocol driver
   Future<bool> _initializeDriver() async {
     _connectionState = ElmDriverState.initializing;
-    _statusMessage = "Initializing adapter & detecting vehicle protocol...";
+    _statusMessage = "Initializing adapter & detecting vehicle protocol... Older cars (K-line) can take up to 40 seconds. Keep the key ON.";
     _isVehicleAutoDetected = false;
     _detectedVehicleInfo = null;
     notifyListeners();
 
     _driver = Elm327Driver(connection: _activeConnection!);
-    final cmd = selectedVehicle?.atProtocolCmd;
+    final cmd = _protocolOverrideCmd ?? selectedVehicle?.atProtocolCmd;
     final success = await _driver!.initialize(specificProtocolCmd: cmd);
 
     if (success) {
@@ -1201,7 +1218,7 @@ class ObdState extends ChangeNotifier {
     _statusMessage = "Retrying vehicle ECU handshake (Turn Key to ON)...";
     notifyListeners();
 
-    final ok = await _driver!.connectToEcu(specificProtocolCmd: selectedVehicle?.atProtocolCmd);
+    final ok = await _driver!.connectToEcu(specificProtocolCmd: _protocolOverrideCmd ?? selectedVehicle?.atProtocolCmd);
     if (ok) {
       _connectionState = ElmDriverState.ready;
       _activeProtocol = _driver!.activeProtocol;
@@ -1265,21 +1282,55 @@ class ObdState extends ChangeNotifier {
     }
   }
 
-  /// Clear trouble codes and reset Check Engine light (Mode 04)
+  ClearOutcome? _lastClearOutcome;
+  ClearOutcome? get lastClearOutcome => _lastClearOutcome;
+
+  /// Saves codes, freeze frame and readiness as they are BEFORE a clear (kept: last 20).
+  Future<void> _savePreClearSnapshot() async {
+    try {
+      final codes = await _obdRepo!.scanAllDtcs(dtcRepo);
+      FreezeFrameModel? ff;
+      try { ff = await _obdRepo!.readFreezeFrame(); } catch (_) {}
+      final rd = await _obdRepo!.readReadinessMonitors();
+      final snap = {
+        'time': DateTime.now().toIso8601String(),
+        'protocol': _driver?.activeProtocol ?? '',
+        'stored': codes['stored']!.map((d) => d.code).toList(),
+        'pending': codes['pending']!.map((d) => d.code).toList(),
+        'permanent': codes['permanent']!.map((d) => d.code).toList(),
+        'mil': rd.milOn,
+        'freeze_frame': ff == null ? null : {
+          'dtc': ff.dtcCode, 'rpm': ff.engineRpm, 'speed': ff.vehicleSpeed, 'coolant': ff.coolantTemp,
+          'load': ff.engineLoad, 'throttle': ff.throttlePosition, 'iat': ff.intakeAirTemp,
+          'map': ff.manifoldPressure, 'stft': ff.shortTermFuelTrim, 'ltft': ff.longTermFuelTrim,
+        },
+        'readiness': rd.monitors.map((m) => {'name': m.nameEn, 'available': m.isAvailable, 'complete': m.isComplete}).toList(),
+      };
+      final prefs = await SharedPreferences.getInstance();
+      final list = prefs.getStringList('pre_clear_snapshots') ?? <String>[];
+      list.add(jsonEncode(snap));
+      while (list.length > 20) { list.removeAt(0); }
+      await prefs.setStringList('pre_clear_snapshots', list);
+    } catch (_) {}
+  }
+
+  /// Clear trouble codes (Mode 04). A snapshot is saved first and the result is verified by reading back.
   Future<bool> clearAllTroubleCodes() async {
     if (!isConnected || _obdRepo == null) return false;
     _isScanning = true;
     notifyListeners();
 
     try {
-      final success = await _obdRepo!.clearDiagnosticCodes();
-      if (success) {
+      await _savePreClearSnapshot();
+      final out = await _obdRepo!.clearDiagnosticCodesVerified();
+      _lastClearOutcome = out;
+      if (out.verifiedCleared) {
         _storedDtcs.clear();
         _pendingDtcs.clear();
-        _isMilOn = false;
+        if (out.milOn != null) _isMilOn = out.milOn!;
         _dtcCount = 0;
       }
-      return success;
+      return out.verifiedCleared;
     } finally {
       _isScanning = false;
       notifyListeners();

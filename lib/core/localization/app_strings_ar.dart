@@ -74,7 +74,7 @@ class AppStringsAr {
   static const String noDtcsFound = "لا توجد أعطال مسجلة. كنترول المحرك يعمل بحالة ممتازة!";
   static const String clearDtcsButton = "مسح جميع الأعطال وإطفاء لمبة المحرك (Mode 04)";
   static const String clearWarningTitle = "تأكيد أمان الفحص الهام";
-  static const String clearWarningBody = "تأكد من إيقاف تشغيل المحرك تماماً مع فتح الكونتاك (Key ON, Engine OFF).\n\nمسح الأعطال سيقوم بإطفاء لمبة التشك، وإعادة ضبط قيم تصحيح الوقود المتعلمة، وتصفير جاهزية الانبعاثات. هل تريد المتابعة؟";
+  static const String clearWarningBody = "تأكد من إيقاف تشغيل المحرك تماماً مع فتح الكونتاك (Key ON, Engine OFF).\n\nمسح الأعطال سيقوم بإطفاء لمبة التشك، وإعادة ضبط قيم تصحيح الوقود المتعلمة، وتصفير جاهزية الانبعاثات. كمان بيتمسح الفريم فريم. هيتحفظ نسخة من الأعطال والفريم والجاهزية على الموبايل قبل المسح. هل تريد المتابعة؟";
   static const String confirmClear = "نعم، المحرك مطفأ والكونتاك مفتوح";
   static const String cancel = "إلغاء";
   static const String dtcsClearedSuccess = "تم مسح جميع الأعطال وإطفاء لمبة المحرك بنجاح!";
