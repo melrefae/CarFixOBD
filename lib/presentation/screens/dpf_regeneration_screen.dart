@@ -6,6 +6,7 @@ import '../../core/constants/app_colors.dart';
 import '../../core/localization/app_strings_en.dart';
 import '../../core/localization/app_strings_ar.dart';
 import '../../data/models/dpf_aftertreatment_models.dart';
+import '../../core/utils/hex_parser.dart';
 import '../providers/obd_state.dart';
 import 'connection_screen.dart';
 
@@ -35,6 +36,7 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
   @override
   void initState() {
     super.initState();
+    // Neutral placeholder: soot mass / ash / SCR values are NOT available over standard OBD and are not shown.
     _bundle = ExhaustAftertreatmentBundle.fromLiveTelemetry(coolantTempC: 25.0, rpm: 0.0);
   }
 
@@ -259,18 +261,6 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
     final state = Provider.of<ObdState>(context);
     final isAr = state.isArabic;
 
-    if (state.isConnected && !_isRegenRunning) {
-      _bundle = ExhaustAftertreatmentBundle.fromLiveTelemetry(
-        coolantTempC: state.currentCoolantTemp,
-        rpm: state.currentRpm,
-        differentialPressureMbar: state.sensorValues['7A']?.value,
-        preCatEgtC: state.sensorValues['78']?.value,
-      );
-    }
-
-    final dpf = _bundle.dpfStatus;
-    final egt = _bundle.egtSensors;
-    final scr = _bundle.scrStatus;
     final phases = ForcedRegenerationPhase.getStandardPhases();
 
     return Scaffold(
@@ -284,28 +274,13 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
           children: [
             _buildConnectionBanner(context, state, isAr),
 
-            // Top Overview Banner
-            _buildOverviewHeader(isAr, dpf),
-
-            const SizedBox(height: 16),
-
-            // DPF Soot & Ash Particulate Filter Saturation Card
-            _buildDpfSootSection(isAr, dpf),
-
-            const SizedBox(height: 16),
-
-            // Exhaust Gas Temperature (EGT) Sensor Bank
-            _buildEgtBankSection(isAr, egt),
+            _MeasuredAftertreatmentCard(isAr: isAr),
 
             const SizedBox(height: 16),
 
             // Stationary Forced Regeneration Wizard
-            _buildForcedRegenWizard(isAr, phases, dpf),
+            _buildForcedRegenWizard(isAr, phases, const DpfSootAshStatus(sootMassGrams: 0, maxSootRegenLimitGrams: 45, oilAshMassGrams: 0, differentialPressureMbar: 0, isRegenerationRequired: false, isRegenBlocked: false, dpfHealthStatusEn: '', dpfHealthStatusAr: '')),
 
-            const SizedBox(height: 16),
-
-            // SCR Selective Catalytic Reduction & AdBlue Diagnostics
-            _buildScrAdBlueSection(isAr, scr),
           ],
         ),
       ),
@@ -832,6 +807,106 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
           const SizedBox(height: 2),
           Text(sub, style: const TextStyle(fontSize: 9, color: AppColors.textMuted), overflow: TextOverflow.ellipsis),
         ],
+      ),
+    );
+  }
+}
+
+/// Reads ONLY standard SAE J1979 Mode 01 PIDs for the aftertreatment system.
+/// Soot mass, ash mass, AdBlue level and NOx conversion are not standard readable values,
+/// so they are not shown. Anything the ECU does not answer is shown as "not supported".
+class _MeasuredAftertreatmentCard extends StatefulWidget {
+  final bool isAr;
+  const _MeasuredAftertreatmentCard({required this.isAr});
+  @override
+  State<_MeasuredAftertreatmentCard> createState() => _MeasuredAftertreatmentCardState();
+}
+
+class _MeasuredAftertreatmentCardState extends State<_MeasuredAftertreatmentCard> {
+  final Map<String, String> _rows = {};
+  bool _busy = false;
+  bool _done = false;
+
+  Future<String?> _query(ObdState st, String pid, String Function(List<int>) fmt) async {
+    final raw = await st.sendCommand('01$pid');
+    final bytes = HexParser.extractBytes(raw);
+    final p = HexParser.extractPayload(bytes, 0x01, int.parse(pid, radix: 16));
+    if (p.isEmpty) return null;
+    try {
+      return fmt(p);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  double _temp(List<int> p, int i) => ((p[i] << 8 | p[i + 1]) / 10.0) - 40.0;
+
+  Future<void> _read() async {
+    final st = Provider.of<ObdState>(context, listen: false);
+    setState(() { _busy = true; _rows.clear(); });
+    // PID 78: EGT bank 1 (A = supported-sensor bits, then 2 bytes per sensor)
+    final egt = await _query(st, '78', (p) {
+      final out = <String>[];
+      for (int n = 0; n < 4; n++) {
+        if ((p[0] >> n) & 1 == 1) {
+          out.add('S${n + 1}: ${_temp(p, 1 + n * 2).toStringAsFixed(1)} C');
+        }
+      }
+      return out.join('  ');
+    });
+    // PID 7C: DPF inlet / outlet temperature
+    final dpfT = await _query(st, '7C', (p) =>
+        'in ${_temp(p, 1).toStringAsFixed(1)} C / out ${_temp(p, 3).toStringAsFixed(1)} C');
+    // PID 7A: DPF delta pressure (bytes A-B, signed, 0.01 kPa)
+    final dp = await _query(st, '7A', (p) {
+      int v = (p[0] << 8) | p[1];
+      if (v > 32767) v -= 65536;
+      return '${(v * 0.01).toStringAsFixed(2)} kPa';
+    });
+    final nr = widget.isAr ? 'غير مدعوم أو لا رد' : 'not supported / no reply';
+    if (!mounted) return;
+    setState(() {
+      _rows['EGT bank 1 (01 78)'] = egt ?? nr;
+      _rows['DPF temp (01 7C)'] = dpfT ?? nr;
+      _rows['DPF differential pressure (01 7A)'] = dp ?? nr;
+      _busy = false;
+      _done = true;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final st = Provider.of<ObdState>(context);
+    final isAr = widget.isAr;
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(isAr ? 'قراءات حقيقية من السيارة (PID قياسي)' : 'Measured from the car (standard PIDs)',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+            const SizedBox(height: 6),
+            Text(
+              isAr
+                  ? 'كتلة الهباب والرماد ومستوى الأدبلو وكفاءة NOx غير متاحة عبر OBD القياسي ولذلك لا تُعرض.'
+                  : 'Soot mass, ash mass, AdBlue level and NOx conversion are not readable over standard OBD, so they are not shown.',
+              style: const TextStyle(fontSize: 11),
+            ),
+            const SizedBox(height: 10),
+            for (final e in _rows.entries)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: Text('${e.key}: ${e.value}', style: const TextStyle(fontSize: 12)),
+              ),
+            const SizedBox(height: 8),
+            ElevatedButton.icon(
+              onPressed: (!st.isConnected || _busy) ? null : _read,
+              icon: const Icon(Icons.sensors),
+              label: Text(_busy ? '...' : (_done ? (isAr ? 'قراءة مرة أخرى' : 'Read again') : (isAr ? 'قراءة الآن' : 'Read now'))),
+            ),
+          ],
+        ),
       ),
     );
   }

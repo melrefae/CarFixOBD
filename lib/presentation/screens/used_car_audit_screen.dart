@@ -797,6 +797,17 @@ class _UsedCarAuditScreenState extends State<UsedCarAuditScreen> with SingleTick
       ),
       body: Column(
         children: [
+          Container(
+            width: double.infinity,
+            color: const Color(0xFF5A3A00),
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              isAr
+                  ? "تنبيه: الأقسام التالية ليست قياسات من السيارة: الدهان، الغرق، الملكية، فحص الهيكل اليدوي، تقدير التكاليف، ودرجات الأقسام. أدخلها يدوياً بعد الفحص الفعلي. المقروء فعلياً: العداد من الوحدات، مسح الأعطال، VIN، جهد البطارية فقط."
+                  : "Notice: paint, flood, title, manual checklist, repair estimates and sub-scores are NOT measured by the car. Fill them from a real inspection. Actually read from the car: odometer from ECUs, DTC scan, VIN, battery voltage only.",
+              style: const TextStyle(color: Colors.white, fontSize: 11),
+            ),
+          ),
           // Score Hero Header Card
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -1910,25 +1921,25 @@ class _UsedCarAuditScreenState extends State<UsedCarAuditScreen> with SingleTick
               children: [
                 _buildAuditRow(
                   isAr ? "جهد البطارية أثناء السكون (Resting)" : "Battery Open-Circuit Resting Voltage",
-                  "${battery.restVoltage.toStringAsFixed(2)} V",
+                  (battery.restVoltage.isNaN ? "not measured" : "${battery.restVoltage.toStringAsFixed(2)} V"),
                   battery.restVoltage >= 12.4 ? okColor : warnColor,
                   isLight: isLight,
                 ),
                 _buildAuditRow(
                   isAr ? "هبوط الجهد لحظة تدوير المارش (Cranking Dip)" : "Starter Cranking Dip Voltage (> 9.6V)",
-                  "${battery.crankingDipVoltage.toStringAsFixed(2)} V",
+                  (battery.crankingDipVoltage.isNaN ? "not measured" : "${battery.crankingDipVoltage.toStringAsFixed(2)} V"),
                   battery.crankingDipVoltage >= 9.6 ? okColor : errColor,
                   isLight: isLight,
                 ),
                 _buildAuditRow(
                   isAr ? "جهد شحن الدينامو عند الدوران (Alternator)" : "Alternator Regulated Output (13.8-14.5V)",
-                  "${battery.chargingAlternatorVoltage.toStringAsFixed(2)} V",
+                  (battery.chargingAlternatorVoltage.isNaN ? "not measured" : "${battery.chargingAlternatorVoltage.toStringAsFixed(2)} V"),
                   (battery.chargingAlternatorVoltage >= 13.5 && battery.chargingAlternatorVoltage <= 14.8) ? okColor : warnColor,
                   isLight: isLight,
                 ),
                 _buildAuditRow(
                   isAr ? "تموج تيار الدينامو المتناوب (Diode AC Ripple)" : "Alternator Diode Ripple (< 400 mV)",
-                  "${battery.rippleMilliVolts} mV",
+                  (battery.rippleMilliVolts < 0 ? "not measured" : "${battery.rippleMilliVolts} mV"),
                   battery.rippleMilliVolts < 400 ? okColor : warnColor,
                   isLight: isLight,
                 ),

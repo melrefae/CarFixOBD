@@ -275,8 +275,8 @@ class UsedCarPdfReportService {
               data: [
                 ["Flood Immersion Risk", "Water Immersion Score", "${flood.floodRiskPercent}%", flood.floodRiskPercent > 30 ? "HIGH RISK" : "CLEAN (Passed)"],
                 ["CAN Bus Termination", "Network Bus Resistance", "${flood.canBusTerminationOhms.toStringAsFixed(1)} Ohms", (flood.canBusTerminationOhms >= 55 && flood.canBusTerminationOhms <= 65) ? "NOMINAL (60 Ohms)" : "ABNORMAL"],
-                ["12V Battery Cranking", "Starter Voltage Dip", "${battery.crankingDipVoltage.toStringAsFixed(1)} V", battery.crankingDipVoltage >= 9.6 ? "HEALTHY (>9.6V)" : "WEAK BATTERY"],
-                ["Alternator Charging", "Regulated Output Voltage", "${battery.chargingAlternatorVoltage.toStringAsFixed(1)} V", "OPTIMAL CHARGING"],
+                ["12V Battery Cranking", "Starter Voltage Dip", battery.crankingDipVoltage.isNaN ? "not measured" : "${battery.crankingDipVoltage.toStringAsFixed(1)} V", battery.crankingDipVoltage.isNaN ? "NOT MEASURED" : (battery.crankingDipVoltage >= 9.6 ? "HEALTHY (>9.6V)" : "WEAK BATTERY")],
+                ["Alternator Charging", "Regulated Output Voltage", battery.chargingAlternatorVoltage.isNaN ? "not measured" : "${battery.chargingAlternatorVoltage.toStringAsFixed(1)} V", battery.chargingAlternatorVoltage.isNaN ? "NOT MEASURED" : "OPTIMAL CHARGING"],
                 ["Official Title & Liens", "Title Brand & Bank Mortgages", title.isCleanTitle && !title.isBankLienActive ? "CLEAN TITLE" : "MORTGAGE / LIEN FOUND", title.isBankLienActive ? "ACTIVE LIEN ALERT" : "NO LIENS"],
               ],
               headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9, color: PdfColors.white),

@@ -436,22 +436,24 @@ class BatteryCrankingHealthAudit {
         verdictEn = "EXCELLENT: Starter cranking voltage dip held at 10.4V (>9.6V). Alternator charging optimal at 14.2V.",
         verdictAr = "ممتاز: كفاءة البطارية ممتازة مع هبوط 10.4 فولت عند المارش وشحن دينامو مثالي 14.2 فولت.";
 
+  /// Only the resting voltage is a real reading here. Cranking dip, alternator output and ripple
+  /// need a live capture during cranking / running and are NOT measured: they are NaN
+  /// ("not measured") instead of invented numbers.
   static BatteryCrankingHealthAudit fromLiveTelemetry(double voltage) {
-    final v = voltage > 0 ? voltage : 12.6;
-    final dip = (v - 2.2).clamp(8.5, 11.5);
-    final isWeak = dip < 9.6;
+    final has = voltage > 0;
+    final weakRest = has && voltage < 12.0;
     return BatteryCrankingHealthAudit(
-      restVoltage: v,
-      crankingDipVoltage: dip,
-      chargingAlternatorVoltage: 14.1,
-      rippleMilliVolts: 160,
-      isWeakBattery: isWeak,
-      verdictEn: isWeak
-          ? "WEAK 12V BATTERY: Cranking voltage dip fell to ${dip.toStringAsFixed(1)}V (< 9.6V threshold). Replacement recommended."
-          : "VERIFIED BATTERY & CHARGING: Cranking dip ${dip.toStringAsFixed(1)}V (> 9.6V). Alternator output healthy.",
-      verdictAr: isWeak
-          ? "بطارية ضعيفة: هبوط الجهد عند تشغيل المارش إلى ${dip.toStringAsFixed(1)} فولت (أقل من الحد الآمن 9.6 فولت). يُوصى بتغييرها."
-          : "البطارية والدينامو بحالة ممتازة: هبوط الجهد عند المارش ${dip.toStringAsFixed(1)} فولت (فوق 9.6 فولت) وشحن الدينامو سليم.",
+      restVoltage: has ? voltage : double.nan,
+      crankingDipVoltage: double.nan,
+      chargingAlternatorVoltage: double.nan,
+      rippleMilliVolts: -1,
+      isWeakBattery: weakRest,
+      verdictEn: !has
+          ? "Battery voltage not read. Cranking dip, alternator output and ripple are not measured by this app."
+          : "Measured adapter/battery voltage ${voltage.toStringAsFixed(2)} V. Cranking dip, alternator output and ripple are NOT measured.",
+      verdictAr: !has
+          ? "لم تتم قراءة جهد البطارية. هبوط الجهد عند المارش وشحن الدينامو والتموج غير مقاسة في التطبيق."
+          : "الجهد المقروس ${voltage.toStringAsFixed(2)} فولت. هبوط المارش وشحن الدينامو والتموج غير مقاسة.",
     );
   }
 }

@@ -1468,8 +1468,9 @@ void main() {
 
       final weakBattery = BatteryCrankingHealthAudit.fromLiveTelemetry(11.2);
       expect(weakBattery.isWeakBattery, true);
-      expect(weakBattery.crankingDipVoltage, lessThan(9.6));
-      expect(weakBattery.verdictEn.contains("WEAK 12V BATTERY"), true);
+      expect(weakBattery.crankingDipVoltage.isNaN, true); // not measured, never invented
+      expect(weakBattery.chargingAlternatorVoltage.isNaN, true);
+      expect(weakBattery.restVoltage, 11.2);
     });
 
     test('WorkshopTheme.sunlightTheme and AppColors provide ergonomic light theme tokens', () {
