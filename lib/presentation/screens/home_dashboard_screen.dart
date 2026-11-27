@@ -39,6 +39,7 @@ import 'customer_dispatch_hub_screen.dart';
 import 'offline_vault_protocol_sniffer_screen.dart';
 import 'mode06_monitor_screen.dart';
 import 'lab_hub_screen.dart';
+import 'traffic_log_screen.dart';
 
 /// Main Workshop Dashboard Screen for Automotive Diagnostic Center
 class HomeDashboardScreen extends StatelessWidget {
@@ -185,6 +186,17 @@ class HomeDashboardScreen extends StatelessWidget {
               crossAxisSpacing: 12,
               childAspectRatio: 1.15,
               children: [
+                _buildActionCard(
+                  context: context,
+                  title: isAr ? "سجل الأوامر الخام" : "Raw command log",
+                  subtitle: isAr ? "كل أمر ورد من المحول، للتصدير كدليل" : "Every adapter request/response, export as test evidence",
+                  icon: Icons.receipt_long,
+                  accentColor: AppColors.warningOrange,
+                  badgeText: "LOG",
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const TrafficLogScreen()));
+                  },
+                ),
                 _buildActionCard(
                   context: context,
                   title: isAr ? "المختبر (تجريبي)" : "Lab (experimental)",
