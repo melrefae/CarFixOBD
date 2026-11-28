@@ -66,3 +66,10 @@ Needs a real-car test: Hyundai Matrix 2007 and an old-protocol adapter.
 
 ## Milestone 12 (adapter check)
 Scripted-adapter tests only. Connection screen: "Check adapter" (AT I, AT @1, ST I, AT RV, AT DP/DPN, 10x 0100, VIN long reply). Slow adapters (median > 500 ms) get double timeouts for the session. A device that never answers ELM327 commands is reported as possibly proprietary (e.g. some Launch/DiagZone dongles).
+
+## Milestone 13 (Mode 06 / Mode 05)
+Unit tests with scripted replies only, NOT a real car. Tables (UASID, MID, TID, Mode 05 scaling) come from SAE J1979 (2006). The older tables were wrong and were replaced.
+- CAN: reads only the MIDs the ECU lists (support chain 0600, 0620, ...). Mode 06 as defined here exists only on CAN.
+- Older buses (e.g. Matrix 2007, probably KWP/ISO 9141): Mode 05 O2 sensor tests are read if the car answers (optional); otherwise a note explains why there are no results.
+- All-zero record = "no result yet" (not PASS). Unknown UASID = raw value, flagged. Constants shown as INFO.
+Needs a real-car log.

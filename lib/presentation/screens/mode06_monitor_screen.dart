@@ -33,7 +33,7 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
       case 'O2 & Catalyst':
         return raw.where((r) => (r.mid >= 0x01 && r.mid <= 0x08) || r.mid == 0x21 || r.mid == 0x22).toList();
       case 'Failed Only':
-        return raw.where((r) => !r.isPassed).toList();
+        return raw.where((r) => !r.isPassed && !r.noResult && r.hasLimits).toList();
       default:
         return raw;
     }
@@ -45,7 +45,7 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
     final isAr = state.isArabic;
     final results = _applyFilter(state.mode06Results);
     final total = state.mode06Results.length;
-    final failedCount = state.mode06Results.where((r) => !r.isPassed).length;
+    final failedCount = state.mode06Results.where((r) => !r.isPassed && !r.noResult && r.hasLimits).length;
 
     return Scaffold(
       appBar: AppBar(
@@ -68,6 +68,11 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
       ),
       body: Column(
         children: [
+          if (state.mode06Note.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+              child: Text(state.mode06Note, style: const TextStyle(fontSize: 12, color: AppColors.warningOrange)),
+            ),
           // Summary Banner
           Container(
             margin: const EdgeInsets.all(12),
@@ -206,7 +211,9 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
   }
 
   Widget _buildTestCard(Mode06TestResult r) {
-    final color = r.isPassed ? AppColors.successGreen : AppColors.dangerRed;
+    final String status = r.noResult ? 'NO RESULT YET' : (!r.hasLimits ? 'INFO' : (r.isPassed ? 'PASS' : 'FAIL'));
+    final color = r.noResult || !r.hasLimits ? AppColors.textMuted : (r.isPassed ? AppColors.successGreen : AppColors.dangerRed);
+    String fmt(double v) => v == v.roundToDouble() ? v.toStringAsFixed(0) : (v.abs() < 1 ? v.toStringAsFixed(4) : v.toStringAsFixed(2));
     final span = (r.maxLimit - r.minLimit).abs();
     final ratio = span > 0 ? ((r.measuredValue - r.minLimit) / span).clamp(0.0, 1.0) : (r.isPassed ? 0.1 : 1.0);
 
@@ -224,7 +231,7 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
           children: [
             Row(
               children: [
-                Icon(r.isPassed ? Icons.check_circle : Icons.error, color: color, size: 20),
+                Icon(r.noResult || !r.hasLimits ? Icons.info_outline : (r.isPassed ? Icons.check_circle : Icons.error), color: color, size: 20),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -239,7 +246,7 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    r.isPassed ? "PASS" : "FAIL",
+                    status,
                     style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 11),
                   ),
                 ),
@@ -250,11 +257,11 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "MID ${r.midHex} • TID ${r.tidHex}",
+                  "${r.source} • ${r.source == 'Mode 05' ? 'sensor' : 'MID'} ${r.midHex} • TID ${r.tidHex}",
                   style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                 ),
                 Text(
-                  "${r.measuredValue.toStringAsFixed(r.measuredValue == r.measuredValue.roundToDouble() ? 0 : 2)} ${r.unit}",
+                  "${fmt(r.measuredValue)} ${r.scalingKnown ? r.unit : '(raw)'}",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -278,9 +285,9 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Min: ${r.minLimit.toStringAsFixed(1)} ${r.unit}",
+                Text(r.hasLimits ? "Min: ${fmt(r.minLimit)} ${r.unit}" : (r.noResult ? "Never completed since codes were erased" : "Constant (no limits)"),
                     style: const TextStyle(fontSize: 10, color: AppColors.textDisabled)),
-                Text("Max: ${r.maxLimit.toStringAsFixed(1)} ${r.unit}",
+                Text(r.hasLimits ? "Max: ${fmt(r.maxLimit)} ${r.unit}" : "",
                     style: const TextStyle(fontSize: 10, color: AppColors.textDisabled)),
               ],
             ),

@@ -1,3 +1,4 @@
+import 'mode06_tables.dart';
 import 'dart:convert';
 
 /// Decoded ISO 14229 UDS DTC record (3-byte DTC + Status Availability Mask)
@@ -28,6 +29,15 @@ class Mode06TestResult {
   final bool isPassed;
   final String monitorName;
   final String unit;
+  /// "Mode 06" (CAN) or "Mode 05" (older buses).
+  final String source;
+  /// False when the UASID is not in the standard table: the numbers are raw, not converted.
+  final bool scalingKnown;
+  /// False when the standard says the ECU sent no limits (constant tests in Mode 05).
+  final bool hasLimits;
+  /// True when value and both limits are all 0. The standard uses this for "supported but never
+  /// completed since the codes were erased", so it is not a pass.
+  final bool noResult;
 
   const Mode06TestResult({
     required this.mid,
@@ -39,6 +49,10 @@ class Mode06TestResult {
     required this.isPassed,
     required this.monitorName,
     required this.unit,
+    this.source = 'Mode 06',
+    this.scalingKnown = true,
+    this.hasLimits = true,
+    this.noResult = false,
   });
 
   String get midHex => '0x${mid.toRadixString(16).toUpperCase().padLeft(2, '0')}';
@@ -409,113 +423,92 @@ class HexParser {
     return vin;
   }
 
-  /// Parse SAE J1979 Mode $06 (CAN 9-byte record format after 0x46 header)
+  /// Parse SAE J1979 Mode $06 results (CAN, ISO 15765-4). After the 0x46 response byte each test
+  /// record is 9 bytes: MID, TID, UASID, value(2), min(2), max(2). Values are converted with the
+  /// Unit and Scaling table of the standard. An unknown UASID keeps the raw number and says so.
   static List<Mode06TestResult> parseMode06Results(List<int> bytes) {
     final results = <Mode06TestResult>[];
     int i = 0;
     while (i < bytes.length) {
-      if (bytes[i] == 0x46) {
+      // A message is 0x46 plus whole 9-byte records. Skip a 0x46 that starts a message, but not
+      // a MID that is itself 0x46 (heater monitor B2S2): decide by how many bytes are left.
+      final rem = bytes.length - i;
+      if (bytes[i] == 0x46 && (rem % 9 == 1 || rem % 10 == 0)) {
         i++;
-        // Each CAN Mode $06 monitor test record is 9 bytes:
-        // [MID, TID, UASID, ValHi, ValLo, MinHi, MinLo, MaxHi, MaxLo]
-        while (i + 8 < bytes.length) {
-          if (bytes[i] == 0x46) {
-            i++;
-            continue;
-          }
-          final mid = bytes[i];
-          final tid = bytes[i + 1];
-          final uasid = bytes[i + 2];
-          final rawVal = (bytes[i + 3] << 8) | bytes[i + 4];
-          final rawMin = (bytes[i + 5] << 8) | bytes[i + 6];
-          final rawMax = (bytes[i + 7] << 8) | bytes[i + 8];
-          i += 9;
-
-          final (scale, unit, signed) = _uasidScale(uasid);
-          final val = _scaleUasid(rawVal, scale, signed);
-          final minVal = _scaleUasid(rawMin, scale, signed);
-          final maxVal = _scaleUasid(rawMax, scale, signed);
-          final passed = val >= minVal && val <= maxVal;
-
-          results.add(Mode06TestResult(
-            mid: mid,
-            tid: tid,
-            uasid: uasid,
-            measuredValue: val,
-            minLimit: minVal,
-            maxLimit: maxVal,
-            isPassed: passed,
-            monitorName: _mode06MonitorName(mid, tid),
-            unit: unit,
-          ));
-        }
-        break;
+        continue;
       }
-      i++;
+      if (i + 8 >= bytes.length) break;
+      final mid = bytes[i];
+      final tid = bytes[i + 1];
+      final uasid = bytes[i + 2];
+      final rawVal = (bytes[i + 3] << 8) | bytes[i + 4];
+      final rawMin = (bytes[i + 5] << 8) | bytes[i + 6];
+      final rawMax = (bytes[i + 7] << 8) | bytes[i + 8];
+      i += 9;
+
+      final conv = uasConvert(uasid, rawVal);
+      final known = conv != null;
+      final val = conv ?? rawVal.toDouble();
+      final minVal = uasConvert(uasid, rawMin) ?? rawMin.toDouble();
+      final maxVal = uasConvert(uasid, rawMax) ?? rawMax.toDouble();
+      final none = rawVal == 0 && rawMin == 0 && rawMax == 0;
+      final passed = !none && val >= minVal && val <= maxVal;
+
+      results.add(Mode06TestResult(
+        mid: mid,
+        tid: tid,
+        uasid: uasid,
+        measuredValue: val,
+        minLimit: minVal,
+        maxLimit: maxVal,
+        isPassed: passed,
+        monitorName: '${mode06MidName(mid)}: ${standardTidName(tid)}',
+        unit: known ? uasUnit(uasid) : 'raw (scaling 0x${uasid.toRadixString(16).toUpperCase()} not in the standard table)',
+        scalingKnown: known,
+        noResult: none,
+      ));
     }
     return results;
   }
 
-  static double _scaleUasid(int raw16, double scale, bool isSigned) {
-    int val = raw16;
-    if (isSigned && (raw16 & 0x8000) != 0) {
-      val = raw16 - 0x10000;
+  /// Parse Mode $05 replies (older buses): 45, TID, sensor, value [, min, max], one byte each.
+  /// Constant tests (TID 01-04) carry no limits.
+  static List<Mode06TestResult> parseMode05Results(List<int> bytes) {
+    final results = <Mode06TestResult>[];
+    var i = bytes.indexOf(0x45);
+    while (i >= 0 && i + 3 < bytes.length) {
+      final tid = bytes[i + 1];
+      final sensor = bytes[i + 2];
+      final sc = mode05Scale(tid);
+      final constant = tid >= 0x01 && tid <= 0x04;
+      final need = constant ? 4 : 6;
+      if (i + need > bytes.length) break;
+      final scale = sc?.$1 ?? 1.0;
+      final unit = sc?.$2 ?? 'raw (manufacturer test)';
+      final v = bytes[i + 3] * scale;
+      final mn = constant ? v : bytes[i + 4] * scale;
+      final mx = constant ? v : bytes[i + 5] * scale;
+      results.add(Mode06TestResult(
+        mid: sensor,
+        tid: tid,
+        uasid: 0,
+        measuredValue: v,
+        minLimit: mn,
+        maxLimit: mx,
+        isPassed: constant ? true : (v >= mn && v <= mx),
+        monitorName: 'O2 sensor ${o2SensorName(sensor)}: ${standardTidName(tid)}',
+        unit: unit,
+        source: 'Mode 05',
+        scalingKnown: sc != null,
+        hasLimits: !constant,
+      ));
+      i += need;
+      if (i < bytes.length && bytes[i] != 0x45) {
+        final j = bytes.indexOf(0x45, i);
+        i = j;
+      }
     }
-    return val * scale;
-  }
-
-  static (double, String, bool) _uasidScale(int uasid) {
-    switch (uasid) {
-      case 0x01:
-      case 0x24:
-        return (1.0, 'counts', false);
-      case 0x81:
-        return (1.0, 'counts', true);
-      case 0x02:
-      case 0x10:
-        return (1.0, 'ms', false);
-      case 0x0A:
-        return (0.122, 'mV', false);
-      case 0x0B:
-        return (0.001, 'V', false);
-      case 0x8B:
-        return (0.001, 'V', true);
-      case 0x15:
-      case 0x16:
-        return (0.1, 'kPa', false);
-      case 0x96:
-        return (0.1, '°C', true);
-      case 0x9C:
-        return (0.01, '°', true);
-      case 0x20:
-        return (0.001, 'ratio', false);
-      case 0x25:
-        return (0.01, 'mA', false);
-      default:
-        return (1.0, 'raw', uasid >= 0x80);
-    }
-  }
-
-  static String _mode06MonitorName(int mid, int tid) {
-    if (mid >= 0x01 && mid <= 0x08) {
-      return "O2 Sensor Bank ${(mid + 1) ~/ 2} Monitor (TID 0x${tid.toRadixString(16).toUpperCase()})";
-    }
-    if (mid == 0x21 || mid == 0x22) {
-      return "Catalyst Efficiency Bank ${mid - 0x20} (TID 0x${tid.toRadixString(16).toUpperCase()})";
-    }
-    if (mid >= 0x31 && mid <= 0x34) {
-      return "EGR / VVT Monitor Bank ${mid - 0x30} (TID 0x${tid.toRadixString(16).toUpperCase()})";
-    }
-    if (mid >= 0x3A && mid <= 0x3D) {
-      return "EVAP Leak Monitor (MID 0x${mid.toRadixString(16).toUpperCase()})";
-    }
-    if (mid == 0xA1) {
-      return "Misfire General Cylinder Data (TID 0x${tid.toRadixString(16).toUpperCase()})";
-    }
-    if (mid >= 0xA2 && mid <= 0xA9) {
-      return "Cylinder ${mid - 0xA1} Misfire Counter (TID 0x${tid.toRadixString(16).toUpperCase()})";
-    }
-    return "Monitor MID 0x${mid.toRadixString(16).toUpperCase().padLeft(2, '0')} / TID 0x${tid.toRadixString(16).toUpperCase().padLeft(2, '0')}";
+    return results;
   }
 
   /// استخراج فولت البطارية من رد أمر AT RV (مثال "12.6V" -> 12.6)

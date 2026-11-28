@@ -77,6 +77,8 @@ class ObdState extends ChangeNotifier {
   ReadinessMonitors? _readinessMonitors;
   Map<String, String> _ecuDetails = {};
   List<Mode06TestResult> _mode06Results = [];
+  String _mode06Note = '';
+  String get mode06Note => _mode06Note;
   bool _isScanningMode06 = false;
 
   // Live hardware discovery state (BLE & USB/Serial)
@@ -784,7 +786,7 @@ class ObdState extends ChangeNotifier {
     try {
       final m06 = await _obdRepo!.readMode06Monitors();
       for (final item in m06) {
-        if (item.mid >= 0xA1 && item.mid <= 0xA9) {
+        if (item.mid >= 0xA2 && item.mid <= 0xAD && item.tid == 0x0C) {
           totalMisfires += item.measuredValue.round();
         }
       }
@@ -1679,6 +1681,7 @@ class ObdState extends ChangeNotifier {
     notifyListeners();
     try {
       _mode06Results = await _obdRepo!.readMode06Monitors();
+      _mode06Note = _obdRepo!.mode06Note;
     } finally {
       _isScanningMode06 = false;
       notifyListeners();
@@ -2437,7 +2440,7 @@ class ObdState extends ChangeNotifier {
 
       // Stage 10: Mode $06 On-Board Component & Misfire Monitoring
       await fetchMode06Monitors();
-      final m06Failed = _mode06Results.where((r) => !r.isPassed).toList();
+      final m06Failed = _mode06Results.where((r) => !r.isPassed && !r.noResult && r.hasLimits).toList();
       final bool hasM06 = _mode06Results.isNotEmpty;
       updateStage(
         9,

@@ -713,57 +713,103 @@ class ObdRepository {
     return details;
   }
 
-  /// Scan SAE J1979 Mode $06 Non-Continuous Component Monitors (Misfires, O2, Catalyst, EVAP, EGR)
+  /// Why the last Mode 05/06 read returned what it did (shown to the user). Empty when results were found.
+  String mode06Note = '';
+
+  bool get _busIsCan {
+    final p = driver.activeProtocol.toUpperCase();
+    return p.contains('CAN') || p.contains('15765');
+  }
+
+  /// Read on-board monitor test results.
+  /// CAN cars: Mode 06 (SAE J1979 / ISO 15031-5), only for the monitors the ECU lists as supported.
+  /// Older buses (ISO 9141, KWP2000, J1850): Mode 06 in this form does not exist, so Mode 05
+  /// (oxygen sensor test results) is read instead, when the car answers it (it is optional).
   Future<List<Mode06TestResult>> readMode06Monitors() async {
+    mode06Note = '';
+    final proto = driver.activeProtocol.toUpperCase();
+    final knownProto = ['ISO', 'SAE', 'KWP', 'J1850', 'CAN', 'PWM', 'VPW'].any(proto.contains);
+    if (knownProto && !_busIsCan) return _readMode05();
+    return _readMode06Can();
+  }
+
+  Future<List<Mode06TestResult>> _readMode06Can() async {
     final results = <Mode06TestResult>[];
     final seen = <String>{};
+    final mids = <int>[];
 
-    // Standard high-value MIDs: 01..04 (O2), 21 (Catalyst), 31 (EGR/VVT), 3A..3C (EVAP), A1..A9 (Misfires)
-    final midsToProbe = <int>[0x01, 0x02, 0x21, 0x31, 0x3A, 0x3B, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6];
-
-    // Discover supported MIDs via 06 00 if supported by ECU
-    try {
-      final raw00 = await driver.executeCommand("0600", timeout: const Duration(milliseconds: 1400));
-      if (!HexParser.isErrorResponse(raw00) && raw00.contains("46")) {
-        final bytes00 = HexParser.extractBytes(raw00);
-        // Also parse in case clone returns a test record directly
-        for (final r in HexParser.parseMode06Results(bytes00)) {
-          final k = '${r.mid}_${r.tid}';
-          if (seen.add(k)) results.add(r);
-        }
-        final payload00 = HexParser.extractPayload(bytes00, 0x06, 0x00);
-        if (payload00.length >= 4 && !payload00.every((b) => b == 0)) {
-          final supported00 = HexParser.parseSupportedPidBitmask(payload00.sublist(0, 4), 0x00);
-          if (supported00.isNotEmpty) {
-            final extraMids = supported00
-                .map((h) => int.tryParse(h, radix: 16) ?? 0)
-                .where((m) => m > 0 && m != 0x20 && m != 0x40 && m != 0x60 && m != 0x80 && m != 0xA0)
-                .take(8);
-            for (final m in extraMids) {
-              if (!midsToProbe.contains(m)) midsToProbe.add(m);
-            }
-          }
+    // Walk the support chain: 06 00, 06 20, 06 40 ... each lists the next 32 MIDs.
+    var base = 0x00;
+    var reachedAny = false;
+    while (base <= 0xE0) {
+      final hex = base.toRadixString(16).toUpperCase().padLeft(2, '0');
+      final raw = await driver.executeCommand('06$hex', timeout: const Duration(milliseconds: 2000));
+      if (raw == 'TIMEOUT' || HexParser.isErrorResponse(raw)) break;
+      final bytes = HexParser.extractBytes(raw);
+      if (_isNegativeResponse(raw, bytes, 0x06)) break;
+      final payload = HexParser.extractPayload(bytes, 0x06, base);
+      if (payload.length < 4) break;
+      reachedAny = true;
+      final sup = HexParser.parseSupportedPidBitmask(payload.sublist(0, 4), base)
+          .map((h) => int.parse(h, radix: 16))
+          .toList()
+        ..sort();
+      var more = false;
+      for (final m in sup) {
+        if (m % 0x20 == 0) {
+          if (m == base + 0x20) more = true;
+        } else {
+          mids.add(m);
         }
       }
-    } catch (_) {}
-
-    for (final mid in midsToProbe) {
+      if (!more) break;
+      base += 0x20;
+    }
+    if (!reachedAny) {
+      mode06Note = 'The ECU did not report any Mode 06 support (no answer to 06 00). Many cars do not offer Mode 06.';
+      return results;
+    }
+    for (final mid in mids.take(90)) {
       final midHex = mid.toRadixString(16).toUpperCase().padLeft(2, '0');
       try {
-        final raw = await driver.executeCommand("06$midHex", timeout: const Duration(milliseconds: 1100));
+        final raw = await driver.executeCommand('06$midHex', timeout: const Duration(milliseconds: 2500));
         final bytes = HexParser.extractBytes(raw);
-        if (raw == "TIMEOUT" || HexParser.isErrorResponse(raw) || _isNegativeResponse(raw, bytes, 0x06)) {
-          continue;
-        }
+        if (raw == 'TIMEOUT' || HexParser.isErrorResponse(raw) || _isNegativeResponse(raw, bytes, 0x06)) continue;
         for (final item in HexParser.parseMode06Results(bytes)) {
-          final key = '${item.mid}_${item.tid}';
-          if (seen.add(key)) {
-            results.add(item);
-          }
+          if (seen.add('${item.mid}_${item.tid}')) results.add(item);
         }
       } catch (_) {}
     }
+    if (results.isEmpty) mode06Note = 'The ECU lists Mode 06 monitors but returned no test records.';
+    return results;
+  }
 
+  Future<List<Mode06TestResult>> _readMode05() async {
+    final results = <Mode06TestResult>[];
+    // which O2 sensors exist: PID 13 (or 1D for the alternative layout)
+    var sensors = <int>[];
+    final raw13 = await driver.executeCommand('0113', timeout: const Duration(milliseconds: 2000));
+    final p13 = HexParser.extractPayload(HexParser.extractBytes(raw13), 0x01, 0x13);
+    if (p13.isNotEmpty) {
+      for (var i = 0; i < 8; i++) {
+        if (p13[0] & (1 << i) != 0) sensors.add(1 << i);
+      }
+    }
+    if (sensors.isEmpty) sensors = [0x01, 0x02]; // B1S1 and B1S2 are the common ones
+    for (final sensor in sensors) {
+      for (var tid = 0x01; tid <= 0x0A; tid++) {
+        final cmd = '05${tid.toRadixString(16).toUpperCase().padLeft(2, '0')}${sensor.toRadixString(16).toUpperCase().padLeft(2, '0')}';
+        try {
+          final raw = await driver.executeCommand(cmd, timeout: const Duration(milliseconds: 2000));
+          final bytes = HexParser.extractBytes(raw);
+          if (raw == 'TIMEOUT' || HexParser.isErrorResponse(raw) || _isNegativeResponse(raw, bytes, 0x05)) continue;
+          results.addAll(HexParser.parseMode05Results(bytes));
+        } catch (_) {}
+      }
+    }
+    mode06Note = results.isEmpty
+        ? 'This car uses ${driver.activeProtocol}. Mode 06 is defined only for CAN. The older Mode 05 (oxygen sensor tests) is optional and this car did not answer it.'
+        : 'This car uses ${driver.activeProtocol}. Mode 06 is CAN only, so the oxygen sensor tests of Mode 05 are shown instead.';
     return results;
   }
 }

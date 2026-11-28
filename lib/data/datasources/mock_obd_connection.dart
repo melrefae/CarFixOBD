@@ -230,7 +230,17 @@ class MockObdConnection implements ObdConnection {
       reply = "48 01 00\r\r>";
     } else if (cmd == "0600" || cmd == "06 00") {
       // Mode 06 Supported MIDs bitmask (MIDs 01, 02, 21, 3A, A1-A5)
-      reply = "46 00 C0 00 00 00\r\r>";
+      reply = "46 00 C0 00 00 01\r\r>";
+    } else if (cmd == "0620" || cmd == "06 20") {
+      reply = "46 20 80 00 00 41\r\r>";
+    } else if (cmd == "0640" || cmd == "06 40") {
+      reply = "46 40 00 00 00 01\r\r>";
+    } else if (cmd == "0660" || cmd == "06 60") {
+      reply = "46 60 00 00 00 01\r\r>";
+    } else if (cmd == "0680" || cmd == "06 80") {
+      reply = "46 80 00 00 00 01\r\r>";
+    } else if (cmd == "06A0" || cmd == "06 A0") {
+      reply = "46 A0 F8 00 00 00\r\r>";
     } else if (cmd == "0601" || cmd == "06 01") {
       // O2 Sensor Bank 1 Sensor 1 Rich-to-Lean Voltage Threshold (MID 01, TID 01, UASID 0A = mV)
       reply = "46 01 01 0A 01 90 00 64 03 E8\r\r>";
