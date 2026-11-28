@@ -2723,7 +2723,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get copEvidence => 'الأدلة والقراءات الحية المرتبطة';
 
   @override
-  String get copRoadmap => 'خارطة الفحص التشخيصي (4 خطوات)';
+  String copRoadmap(int count) {
+    return 'خارطة الفحص التشخيصي ($count خطوات)';
+  }
 
   @override
   String copExpected(String value) {

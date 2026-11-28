@@ -39,6 +39,7 @@ class AiCopilotScreen extends StatelessWidget {
       coolantTemp: coolantTemp,
       batteryVoltage: batteryVolts > 0 ? batteryVolts : null,
       mapKpa: mapKpa,
+      isArabic: state.isArabic,
     );
 
     return Scaffold(
@@ -315,7 +316,7 @@ class AiCopilotScreen extends StatelessWidget {
               const Icon(Icons.timeline, color: AppColors.successGreen, size: 20),
               const SizedBox(width: 8),
               Text(
-                l10n.copRoadmap,
+                l10n.copRoadmap(report.roadmap.length),
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,

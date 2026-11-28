@@ -263,6 +263,31 @@ void main() {
       expect(report.egyptWorkshopBulletin, contains('80 fuel'));
     });
 
+    test('Arabic locale returns fully Arabic report content with Latin tech tokens', () {
+      final report = AiDiagnosticCopilot.generateDiagnosis(
+        vehicleMakeModel: 'Hyundai Verna 1.6L',
+        dtcCodes: ['P0171'],
+        ltft: 18.5,
+        stft: 3.2,
+        coolantTemp: 88.0,
+        batteryVoltage: 13.8,
+        mapKpa: 36.0,
+        isArabic: true,
+      );
+
+      expect(report.primaryHypothesis, contains('فاكيوم'));
+      expect(report.urgencyLevel, contains('متوسط'));
+      expect(report.evidenceList.every((e) => !RegExp(r'[a-z]{4,}\s[a-z]{4,}\s[a-z]{4,}').hasMatch(e.replaceAll(RegExp(r'(ECU|LTFT|STFT|MAP|Bank|Sensor|Long Term Fuel Trim)'), ''))), isTrue);
+      expect(report.roadmap.length, equals(4));
+      expect(report.roadmap.first.title, contains('اختبار'));
+      expect(report.roadmap.every((s) => s.action.isNotEmpty && s.expectedGoodValue.isNotEmpty), isTrue);
+      expect(report.egyptWorkshopBulletin, contains('نصيحة ورشة مصرية'));
+      expect(report.egyptWorkshopBulletin, contains('فيرنا'));
+      // Tech tokens stay Latin
+      expect(report.evidenceList.join(' '), contains('LTFT'));
+      expect(report.evidenceList.join(' '), contains('P0171'));
+    });
+
     test('Provides fallback roadmap for normal operating telemetry', () {
       final report = AiDiagnosticCopilot.generateDiagnosis(
         vehicleMakeModel: 'Toyota Corolla 1.6L',

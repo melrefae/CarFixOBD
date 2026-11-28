@@ -1482,7 +1482,14 @@
     }
   },
   "copEvidence": "Correlated Live Evidence & Telemetry",
-  "copRoadmap": "4-Step Workshop Diagnostic Roadmap",
+  "copRoadmap": "Workshop Diagnostic Roadmap ({count} steps)",
+  "@copRoadmap": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "copExpected": "Expected Good Value: {value}",
   "@copExpected": {
     "placeholders": {

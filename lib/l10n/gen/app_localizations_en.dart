@@ -2732,7 +2732,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get copEvidence => 'Correlated Live Evidence & Telemetry';
 
   @override
-  String get copRoadmap => '4-Step Workshop Diagnostic Roadmap';
+  String copRoadmap(int count) {
+    return 'Workshop Diagnostic Roadmap ($count steps)';
+  }
 
   @override
   String copExpected(String value) {

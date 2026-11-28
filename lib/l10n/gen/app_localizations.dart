@@ -4913,8 +4913,8 @@ abstract class AppLocalizations {
   /// No description provided for @copRoadmap.
   ///
   /// In en, this message translates to:
-  /// **'4-Step Workshop Diagnostic Roadmap'**
-  String get copRoadmap;
+  /// **'Workshop Diagnostic Roadmap ({count} steps)'**
+  String copRoadmap(int count);
 
   /// No description provided for @copExpected.
   ///
