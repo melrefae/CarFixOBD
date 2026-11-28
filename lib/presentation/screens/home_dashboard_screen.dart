@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/localization/app_strings_en.dart';
-import '../../core/localization/app_strings_ar.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../data/datasources/elm327_driver.dart';
 import '../providers/obd_state.dart';
 import 'connection_screen.dart';
@@ -52,6 +51,7 @@ class HomeDashboardScreen extends StatelessWidget {
     final state = Provider.of<ObdState>(context);
     final isAr = state.isArabic;
     final isTablet = MediaQuery.of(context).size.width > 600;
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -70,7 +70,7 @@ class HomeDashboardScreen extends StatelessWidget {
             const SizedBox(width: 8),
             Flexible(
               child: Text(
-                isAr ? AppStringsAr.appName : AppStrings.appName,
+                l10n.appName,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -105,14 +105,14 @@ class HomeDashboardScreen extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(state.isSunlightMode ? Icons.dark_mode : Icons.wb_sunny_outlined),
-            tooltip: state.isSunlightMode ? "Dark Workshop Mode" : "Bright Daylight Sunlight Mode",
+            tooltip: state.isSunlightMode ? l10n.darkWorkshopMode : l10n.brightDaylightMode,
             onPressed: () {
               state.toggleSunlightMode();
             },
           ),
           IconButton(
             icon: const Icon(Icons.settings),
-            tooltip: AppStrings.settings,
+            tooltip: l10n.centerAlarmSettings,
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) => const WorkshopSettingsScreen()));
             },
@@ -144,9 +144,9 @@ class HomeDashboardScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            _buildLegend(isAr),
+            _buildLegend(context),
             const SizedBox(height: 8),
-            ..._buildSections(context, state, isAr, isTablet),
+            ..._buildSections(context, state, isTablet),
 
             const SizedBox(height: 24),
           ],
@@ -156,7 +156,7 @@ class HomeDashboardScreen extends StatelessWidget {
   }
 
 
-  Widget _buildLegend(bool isAr) {
+  Widget _buildLegend(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 2),
       child: Row(
@@ -165,7 +165,7 @@ class HomeDashboardScreen extends StatelessWidget {
           const SizedBox(width: 6),
           Expanded(
             child: Text(
-              isAr ? "الأيقونة = لم تُختبر بعد على سيارة حقيقية" : "Shield = not yet tested on a real car",
+              AppLocalizations.of(context).shieldNotTested,
               style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
             ),
           ),
@@ -177,7 +177,8 @@ class HomeDashboardScreen extends StatelessWidget {
   void _go(BuildContext context, Widget screen) =>
       Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
 
-  Future<void> _openNetworkMap(BuildContext context, bool isAr) async {
+  Future<void> _openNetworkMap(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
     final pick = await showModalBottomSheet<int>(
       context: context,
       builder: (ctx) => SafeArea(
@@ -186,14 +187,14 @@ class HomeDashboardScreen extends StatelessWidget {
           children: [
             ListTile(
               leading: const Icon(Icons.account_tree),
-              title: Text(isAr ? "مسح الوحدات (شجرة)" : "ECU scan tree"),
-              subtitle: Text(isAr ? "اكتشاف الوحدات على البوابة" : "Find modules on the gateway"),
+              title: Text(l10n.ecuScanTree),
+              subtitle: Text(l10n.findModulesGateway),
               onTap: () => Navigator.pop(ctx, 0),
             ),
             ListTile(
               leading: const Icon(Icons.hub),
-              title: Text(isAr ? "خريطة الشبكات التفاعلية" : "Interactive bus map"),
-              subtitle: Text(isAr ? "رسم بياني لشبكات CAN/LIN" : "CAN/LIN graph and node inspection"),
+              title: Text(l10n.interactiveBusMap),
+              subtitle: Text(l10n.canLinGraph),
               onTap: () => Navigator.pop(ctx, 1),
             ),
           ],
@@ -204,52 +205,53 @@ class HomeDashboardScreen extends StatelessWidget {
     _go(context, pick == 0 ? const MultiEcuTopologyScreen() : const InteractiveCanTopologyScreen());
   }
 
-  List<Widget> _buildSections(BuildContext context, ObdState state, bool isAr, bool isTablet) {
+  List<Widget> _buildSections(BuildContext context, ObdState state, bool isTablet) {
     final cols = isTablet ? 4 : 3;
-    // t(en, ar, icon, color, onTap, {unverified, badge})
-    Widget t(String en, String ar, IconData icon, Color color, VoidCallback onTap, {bool unv = true, String? badge}) =>
-        _buildTile(isAr ? ar : en, icon, color, onTap, unverified: unv, badge: badge);
+    final l10n = AppLocalizations.of(context);
+    // t(title, icon, color, onTap, {unverified, badge})
+    Widget t(String title, IconData icon, Color color, VoidCallback onTap, {bool unv = true, String? badge}) =>
+        _buildTile(title, icon, color, onTap, unverified: unv, badge: badge);
 
     final dtcCount = state.storedDtcs.length;
     final sections = <List<dynamic>>[
       [
-        isAr ? "يومي" : "Daily", Icons.bolt, AppColors.primaryYellow,
+        l10n.daily, Icons.bolt, AppColors.primaryYellow,
         <Widget>[
-          _buildTile(isAr ? "قراءة/مسح الأعطال" : "Read / Clear DTC", Icons.error_outline,
+          _buildTile(l10n.readClearDtc, Icons.error_outline,
               dtcCount > 0 ? AppColors.dangerRed : AppColors.primaryAmber, () => _go(context, const DtcScannerScreen()),
               badge: dtcCount > 0 ? "$dtcCount" : null),
-          t("Live Data", "بيانات حية", Icons.speed, AppColors.accentCyan, () => _go(context, const LiveDataScreen())),
-          t("Live Graphs", "رسوم حية", Icons.show_chart, AppColors.successGreen, () => _go(context, const LiveGraphScreen())),
-          t("Freeze Frame", "لقطة العطل", Icons.ac_unit, AppColors.electricBlue, () => _go(context, const FreezeFrameScreen())),
-          t("Readiness", "جاهزية الفحص", Icons.fact_check, AppColors.primaryAmber, () => _go(context, const ReadinessMonitorsScreen())),
-          t("ECU Info", "بيانات الكمبيوتر", Icons.memory, AppColors.accentCyan, () => _go(context, const EcuInfoScreen())),
-          t("Mode 06", "مونيتورات 06", Icons.rule, AppColors.primaryAmber, () => _go(context, const Mode06MonitorScreen())),
-          t("Vehicle Profile", "ملف السيارة", Icons.directions_car_filled, AppColors.primaryAmber, () => _go(context, const VehicleProfilesScreen()), unv: false),
+          t(l10n.liveData, Icons.speed, AppColors.accentCyan, () => _go(context, const LiveDataScreen())),
+          t(l10n.liveGraphs, Icons.show_chart, AppColors.successGreen, () => _go(context, const LiveGraphScreen())),
+          t(l10n.freezeFrame, Icons.ac_unit, AppColors.electricBlue, () => _go(context, const FreezeFrameScreen())),
+          t(l10n.readiness, Icons.fact_check, AppColors.primaryAmber, () => _go(context, const ReadinessMonitorsScreen())),
+          t(l10n.ecuInfo, Icons.memory, AppColors.accentCyan, () => _go(context, const EcuInfoScreen())),
+          t(l10n.mode06Monitors, Icons.rule, AppColors.primaryAmber, () => _go(context, const Mode06MonitorScreen())),
+          t(l10n.vehicleProfile, Icons.directions_car_filled, AppColors.primaryAmber, () => _go(context, const VehicleProfilesScreen()), unv: false),
         ],
       ],
       [
-        isAr ? "فحص وعملاء" : "Inspection & Customers", Icons.assignment, AppColors.accentCyan,
+        l10n.inspectionCustomers, Icons.assignment, AppColors.accentCyan,
         <Widget>[
-          t("Used-Car Audit", "فحص شراء", Icons.fact_check_outlined, AppColors.warningOrange, () => _go(context, const UsedCarWizardScreen())),
-          t("Car History", "سجل السيارات", Icons.history, AppColors.accentCyan, () => _go(context, const InspectionHistoryScreen()), unv: false),
-          t("Job Cards & Quotes", "أوامر الشغل", Icons.request_quote, AppColors.successGreen, () => _go(context, const JobCardsScreen()), unv: false),
-          t("Saved Reports", "التقارير (${state.savedReports.length})", Icons.folder_open, AppColors.electricBlue, () => _go(context, const ReportsScreen()), unv: false),
-          t("WhatsApp Dispatch", "واتساب العميل", Icons.chat, AppColors.successGreen, () => _go(context, const CustomerDispatchHubScreen()), unv: false),
-          t("LAN Hub", "مزامنة الورشة", Icons.router, AppColors.electricBlue, () => _go(context, const WorkshopLanSyncScreen()), unv: false),
+          t(l10n.usedCarAudit, Icons.fact_check_outlined, AppColors.warningOrange, () => _go(context, const UsedCarWizardScreen())),
+          t(l10n.carHistory, Icons.history, AppColors.accentCyan, () => _go(context, const InspectionHistoryScreen()), unv: false),
+          t(l10n.jobCardsQuotes, Icons.request_quote, AppColors.successGreen, () => _go(context, const JobCardsScreen()), unv: false),
+          t(l10n.savedReportsCount(state.savedReports.length), Icons.folder_open, AppColors.electricBlue, () => _go(context, const ReportsScreen()), unv: false),
+          t(l10n.whatsappDispatch, Icons.chat, AppColors.successGreen, () => _go(context, const CustomerDispatchHubScreen()), unv: false),
+          t(l10n.lanHub, Icons.router, AppColors.electricBlue, () => _go(context, const WorkshopLanSyncScreen()), unv: false),
         ],
       ],
       [
-        isAr ? "تحليل وأدوات" : "Analysis & Tools", Icons.analytics, AppColors.electricBlue,
+        l10n.analysisTools, Icons.analytics, AppColors.electricBlue,
         <Widget>[
-          _buildTile(isAr ? "خريطة الشبكة" : "Network Map", Icons.account_tree, AppColors.successGreen, () => _openNetworkMap(context, isAr)),
-          t("O2 & Catalyst", "حساسات الشكمان", Icons.air, AppColors.accentCyan, () => _go(context, const O2CatAnalyzerScreen())),
-          t("Fuel Trim & Battery", "الوقود والبطارية", Icons.battery_charging_full, AppColors.primaryAmber, () => _go(context, const DiagnosticAssistantScreen())),
-          t("DTC Encyclopedia", "موسوعة الأعطال", Icons.menu_book, AppColors.primaryAmber, () => _go(context, const DtcEncyclopediaScreen()), unv: false),
-          t("Wiring", "الدوائر", Icons.cable, AppColors.successGreen, () => _go(context, const WiringSchematicsScreen()), unv: false),
-          t("CAN Sniffer", "مراقب CAN", Icons.sensors, AppColors.accentCyan, () => _go(context, const OfflineVaultProtocolSnifferScreen())),
-          t("Adapter Test", "اختبار الأداة", Icons.usb, AppColors.electricBlue, () => _go(context, const AdapterBenchmarkScreen())),
-          t("Terminal", "تيرمنال", Icons.terminal, AppColors.textMuted, () => _go(context, const TerminalScreen())),
-          t("Raw Log", "سجل الأوامر", Icons.receipt_long, AppColors.warningOrange, () => _go(context, const TrafficLogScreen()), unv: false),
+          _buildTile(l10n.networkMap, Icons.account_tree, AppColors.successGreen, () => _openNetworkMap(context)),
+          t(l10n.o2Catalyst, Icons.air, AppColors.accentCyan, () => _go(context, const O2CatAnalyzerScreen())),
+          t(l10n.fuelTrimBattery, Icons.battery_charging_full, AppColors.primaryAmber, () => _go(context, const DiagnosticAssistantScreen())),
+          t(l10n.dtcEncyclopedia, Icons.menu_book, AppColors.primaryAmber, () => _go(context, const DtcEncyclopediaScreen()), unv: false),
+          t(l10n.wiring, Icons.cable, AppColors.successGreen, () => _go(context, const WiringSchematicsScreen()), unv: false),
+          t(l10n.canSniffer, Icons.sensors, AppColors.accentCyan, () => _go(context, const OfflineVaultProtocolSnifferScreen())),
+          t(l10n.adapterTest, Icons.usb, AppColors.electricBlue, () => _go(context, const AdapterBenchmarkScreen())),
+          t(l10n.terminal, Icons.terminal, AppColors.textMuted, () => _go(context, const TerminalScreen())),
+          t(l10n.rawLog, Icons.receipt_long, AppColors.warningOrange, () => _go(context, const TrafficLogScreen()), unv: false),
         ],
       ],
     ];
@@ -276,13 +278,11 @@ class HomeDashboardScreen extends StatelessWidget {
       color: AppColors.warningOrange.withOpacity(0.12),
       child: ListTile(
         leading: const Icon(Icons.science, color: AppColors.warningOrange),
-        title: Text(isAr ? "المختبر (تجريبي، برقم سري)" : "Lab (experimental, PIN)"),
-        subtitle: Text(isAr
-            ? "تصفير وتكويد وإيموبلايزر وأكتيويتور وADAS وDPF وغيرها. غير مثبتة على سيارة."
-            : "Resets, coding, immobilizer, actuators, ADAS, DPF, EV, scope, dyno. Not verified on a car."),
+        title: Text(l10n.labExperimentalPin),
+        subtitle: Text(l10n.labFeaturesUnverified),
         trailing: const Icon(Icons.lock_outline),
         onTap: () async {
-          if (await LabPin.check(context, isAr) && context.mounted) _go(context, const LabHubScreen());
+          if (await LabPin.check(context, state.isArabic) && context.mounted) _go(context, const LabHubScreen());
         },
       ),
     ));
@@ -291,7 +291,7 @@ class HomeDashboardScreen extends StatelessWidget {
       child: ExpansionTile(
         tilePadding: EdgeInsets.zero,
         leading: const Icon(Icons.more_horiz, color: AppColors.textMuted),
-        title: Text(isAr ? "أدوات إضافية" : "More tools", style: const TextStyle(fontSize: 14, color: AppColors.textMuted)),
+        title: Text(l10n.moreTools, style: const TextStyle(fontSize: 14, color: AppColors.textMuted)),
         children: [
           GridView.count(
             crossAxisCount: cols,
@@ -301,13 +301,13 @@ class HomeDashboardScreen extends StatelessWidget {
             crossAxisSpacing: 8,
             childAspectRatio: 1.0,
             children: [
-              t("Classic Audit (9 tabs)", "الفحص القديم", Icons.fact_check_outlined, AppColors.textMuted, () => _go(context, const UsedCarAuditScreen())),
-              t("Voice Assistant", "المساعد الصوتي", Icons.mic, AppColors.primaryYellow, () => _go(context, const VoiceInspectionAssistantScreen())),
-              t("AR HUD", "AR HUD", Icons.view_in_ar, AppColors.accentCyan, () => _go(context, const ArEngineBayHudScreen())),
-              t("AI Copilot", "المساعد الذكي", Icons.auto_awesome, AppColors.primaryYellow, () => _go(context, const AiCopilotScreen()), unv: false),
-              t("Flight Recorder", "الصندوق الأسود", Icons.fiber_manual_record, state.isFlightRecording ? AppColors.dangerRed : AppColors.primaryYellow, () => _go(context, const FlightRecorderScreen()), badge: state.isFlightRecording ? "REC" : null),
-              t("Fuel Cost", "تكلفة البنزين", Icons.local_gas_station, AppColors.successGreen, () => _go(context, const FuelCostCalculatorScreen())),
-              t("HUD Display", "شاشة HUD", Icons.nights_stay, AppColors.accentCyan, () => _go(context, const HudDisplayScreen())),
+              t(l10n.classicAudit9Tabs, Icons.fact_check_outlined, AppColors.textMuted, () => _go(context, const UsedCarAuditScreen())),
+              t(l10n.voiceAssistant, Icons.mic, AppColors.primaryYellow, () => _go(context, const VoiceInspectionAssistantScreen())),
+              t(l10n.arHud, Icons.view_in_ar, AppColors.accentCyan, () => _go(context, const ArEngineBayHudScreen())),
+              t(l10n.aiCopilot, Icons.auto_awesome, AppColors.primaryYellow, () => _go(context, const AiCopilotScreen()), unv: false),
+              t(l10n.flightRecorder, Icons.fiber_manual_record, state.isFlightRecording ? AppColors.dangerRed : AppColors.primaryYellow, () => _go(context, const FlightRecorderScreen()), badge: state.isFlightRecording ? "REC" : null),
+              t(l10n.fuelCost, Icons.local_gas_station, AppColors.successGreen, () => _go(context, const FuelCostCalculatorScreen())),
+              t(l10n.hudDisplay, Icons.nights_stay, AppColors.accentCyan, () => _go(context, const HudDisplayScreen())),
             ],
           ),
         ],
@@ -440,18 +440,19 @@ class HomeDashboardScreen extends StatelessWidget {
   }
 
   Widget _buildConnectionBanner(BuildContext context, ObdState state) {
+    final l10n = AppLocalizations.of(context);
     Color statusColor = AppColors.statusDisconnected;
-    String statusTitle = AppStrings.disconnected;
+    String statusTitle = l10n.disconnected;
 
     if (state.connectionState == ElmDriverState.ready) {
       statusColor = AppColors.statusConnected;
-      statusTitle = "${AppStrings.connected} (${state.activeProtocol})";
+      statusTitle = "${l10n.connectedToEcu} (${state.activeProtocol})";
     } else if (state.connectionState == ElmDriverState.adapterConnected) {
       statusColor = AppColors.warningOrange;
-      statusTitle = AppStrings.adapterOnlyConnected;
+      statusTitle = l10n.adapterReadyTurnKey;
     } else if (state.isConnecting) {
       statusColor = AppColors.statusConnecting;
-      statusTitle = AppStrings.connecting;
+      statusTitle = l10n.connectingObdAdapter;
     }
 
     return Container(
@@ -510,8 +511,8 @@ class HomeDashboardScreen extends StatelessWidget {
                 Text(
                   state.isConnected
                       ? (state.isVehicleAutoDetected && state.detectedVehicleInfo != null
-                          ? "Battery: ${state.batteryVoltage.toStringAsFixed(1)}V | ${state.detectedVehicleInfo!.displaySummary}"
-                          : "Battery: ${state.batteryVoltage.toStringAsFixed(1)}V | Vehicle: ${state.selectedVehicle?.model ?? 'Generic'}")
+                          ? l10n.batterySummary(state.batteryVoltage.toStringAsFixed(1), state.detectedVehicleInfo!.displaySummary)
+                          : l10n.batteryVehicle(state.batteryVoltage.toStringAsFixed(1), state.selectedVehicle?.model ?? l10n.genericVehicle))
                       : state.statusMessage,
                   style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                   maxLines: 2,
@@ -529,7 +530,7 @@ class HomeDashboardScreen extends StatelessWidget {
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) => const ConnectionScreen()));
             },
-            child: Text(state.isConnected ? AppStrings.switchMode : "Connect", style: const TextStyle(fontSize: 12)),
+            child: Text(state.isConnected ? l10n.switchAdapter : l10n.connect, style: const TextStyle(fontSize: 12)),
           ),
         ],
       ),
@@ -537,13 +538,14 @@ class HomeDashboardScreen extends StatelessWidget {
   }
 
   Widget _buildFullTestHeroCard(BuildContext context, ObdState state) {
+    final l10n = AppLocalizations.of(context);
     final isAr = state.isArabic;
     final vehicle = state.selectedVehicle;
     final vehicleTitle = vehicle != null
         ? (state.isConnected
             ? vehicle.getDisplayName(isAr)
-            : (isAr ? "الملف المختار (غير متصل): ${vehicle.getDisplayName(isAr)}" : "Selected profile (not connected): ${vehicle.getDisplayName(isAr)}"))
-        : (isAr ? "اضغط لاختيار سيارة وبدء الفحص" : "Tap to select vehicle & start full test");
+            : l10n.selectedProfileNotConnected(vehicle.getDisplayName(isAr)))
+        : l10n.tapToSelectVehicle;
 
     return Container(
       decoration: BoxDecoration(
@@ -593,7 +595,7 @@ class HomeDashboardScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              isAr ? AppStringsAr.fullVehicleTest : AppStrings.fullVehicleTest,
+                              l10n.fullVehicleTest,
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -631,9 +633,7 @@ class HomeDashboardScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        isAr
-                            ? "فحص شامل لجميع الكنترولات والأعطال وحفظ تقرير PDF"
-                            : "10-stage full network scan, deep health index & PDF report",
+                        l10n.fullScanSubtitle,
                         style: const TextStyle(fontSize: 11, color: Colors.white70),
                       ),
                     ],
@@ -650,6 +650,7 @@ class HomeDashboardScreen extends StatelessWidget {
   }
 
   Widget _buildQuickScanButton(BuildContext context, ObdState state) {
+    final l10n = AppLocalizations.of(context);
     return Container(
       height: 75,
       decoration: BoxDecoration(
@@ -681,26 +682,26 @@ class HomeDashboardScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
-              children: const [
-                Icon(Icons.bolt, color: Colors.black, size: 36),
-                SizedBox(width: 14),
+              children: [
+                const Icon(Icons.bolt, color: Colors.black, size: 36),
+                const SizedBox(width: 14),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        AppStrings.quickScan,
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                        l10n.quickScan30s,
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
                       ),
                       Text(
-                        "Instant 30s vehicle scan: DTCs, Live Sensors, VIN & Voltage",
-                        style: TextStyle(fontSize: 11, color: Colors.black87),
+                        l10n.quickScanSubtitle,
+                        style: const TextStyle(fontSize: 11, color: Colors.black87),
                       ),
                     ],
                   ),
                 ),
-                Icon(Icons.arrow_forward_ios, color: Colors.black, size: 20),
+                const Icon(Icons.arrow_forward_ios, color: Colors.black, size: 20),
               ],
             ),
           ),
@@ -790,10 +791,10 @@ class HomeDashboardScreen extends StatelessWidget {
   void _showConnectPrompt(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text("Please connect to a real OBD adapter (Bluetooth Classic, BLE, Wi-Fi, or USB OTG) first."),
+        content: Text(AppLocalizations.of(context).connectAdapterFirst),
         backgroundColor: AppColors.warningOrange,
         action: SnackBarAction(
-          label: "Connect",
+          label: AppLocalizations.of(context).connect,
           textColor: Colors.black,
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (_) => const ConnectionScreen()));

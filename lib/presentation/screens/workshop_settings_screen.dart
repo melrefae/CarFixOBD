@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/localization/app_strings_en.dart';
 import '../../domain/services/safety_alarm_service.dart';
@@ -91,8 +92,8 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Workshop branding and alarm settings saved successfully! ✅"),
+        SnackBar(
+          content: Text(AppLocalizations.of(context).workshopBrandingSaved),
           backgroundColor: AppColors.successGreen,
         ),
       );
@@ -107,10 +108,11 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
       );
     }
     final obdState = Provider.of<ObdState>(context);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.workshopSettings),
+        title: Text(l10n.workshopSettings),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -148,9 +150,9 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
                     ],
                   ),
                   const SizedBox(height: 6),
-                  const Text(
-                    "Automotive Diagnostic & Fleet Telemetry Suite",
-                    style: TextStyle(fontSize: 13, color: AppColors.textMuted),
+                  Text(
+                    l10n.suiteTagline,
+                    style: const TextStyle(fontSize: 13, color: AppColors.textMuted),
                   ),
                   const SizedBox(height: 12),
                   Container(
@@ -179,11 +181,11 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
                           icon: const Icon(Icons.copy, color: AppColors.primaryYellow, size: 16),
-                          tooltip: "Copy Number",
+                          tooltip: l10n.copyNumber,
                           onPressed: () {
                             Clipboard.setData(ClipboardData(text: _phoneController.text));
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Phone number copied to clipboard")),
+                              SnackBar(content: Text(l10n.phoneCopied)),
                             );
                           },
                         ),
@@ -197,30 +199,30 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
             const SizedBox(height: 20),
 
             // Workshop details for PDF reports
-            const Text(
-              "Workshop Information (PDF Reports):",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primaryYellow),
+            Text(
+              l10n.workshopInfoPdf,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primaryYellow),
             ),
             const SizedBox(height: 12),
 
-            _buildTextField("Workshop Center Name", _nameController, Icons.storefront),
+            _buildTextField(l10n.workshopCenterName, _nameController, Icons.storefront),
             const SizedBox(height: 10),
-            _buildTextField("Phone & WhatsApp", _phoneController, Icons.phone_android, keyboardType: TextInputType.phone),
+            _buildTextField(l10n.phoneWhatsapp, _phoneController, Icons.phone_android, keyboardType: TextInputType.phone),
             const SizedBox(height: 10),
-            _buildTextField("Workshop Address", _addressController, Icons.location_on_outlined),
+            _buildTextField(l10n.workshopAddress, _addressController, Icons.location_on_outlined),
             const SizedBox(height: 10),
-            _buildTextField("Default Inspection Engineer", _engineerController, Icons.badge_outlined),
+            _buildTextField(l10n.defaultInspectionEngineer, _engineerController, Icons.badge_outlined),
             const SizedBox(height: 10),
-            _buildTextField("Standard Inspection Fee", _feeController, Icons.payments_outlined),
+            _buildTextField(l10n.standardInspectionFee, _feeController, Icons.payments_outlined),
             const SizedBox(height: 10),
             const IdentityBackupCard(),
 
             const SizedBox(height: 24),
 
             // Safety thresholds & Alarm limits
-            const Text(
-              "Safety Thresholds & Real-Time Alarms:",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primaryYellow),
+            Text(
+              l10n.safetyThresholdsAlarms,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primaryYellow),
             ),
             const SizedBox(height: 12),
 
@@ -233,12 +235,15 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
               ),
               child: Column(
                 children: [
-                  SwitchListTile(
-                    title: const Text("Enable Alarm Sounds & Haptic Vibrate", style: TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: const Text("Triggers popup alert and haptic feedback when a sensor exceeds safe limits"),
+                  Material(
+                    type: MaterialType.transparency,
+                    child: SwitchListTile(
+                    title: Text(l10n.enableAlarmSounds, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text(l10n.alarmSoundsSubtitle),
                     value: _audioAlerts,
                     activeColor: AppColors.primaryYellow,
                     onChanged: (val) => setState(() => _audioAlerts = val),
+                  ),
                   ),
                   const Divider(),
 
@@ -246,7 +251,7 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Engine Overheating Alarm Limit:", style: TextStyle(fontSize: 14)),
+                      Text(l10n.engineOverheatLimit, style: const TextStyle(fontSize: 14)),
                       Text("${_maxCoolant.toInt()} °C", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.dangerRed)),
                     ],
                   ),
@@ -265,7 +270,7 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Alternator Low Voltage Limit:", style: TextStyle(fontSize: 14)),
+                      Text(l10n.alternatorLowVoltage, style: const TextStyle(fontSize: 14)),
                       Text("${_minVoltage.toStringAsFixed(1)} V", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.warningOrange)),
                     ],
                   ),
@@ -294,7 +299,7 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 icon: const Icon(Icons.cloud_sync),
-                label: const Text("Cloud Backup & Fleet Webhook Sync", style: TextStyle(fontWeight: FontWeight.bold)),
+                label: Text(l10n.cloudBackupSync, style: const TextStyle(fontWeight: FontWeight.bold)),
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const CloudBackupScreen()),
@@ -320,27 +325,28 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
                       const Icon(Icons.bluetooth_connected, color: AppColors.accentCyan, size: 20),
                       const SizedBox(width: 8),
                       Text(
-                        obdState.isArabic ? "إعدادات الاتصال التلقائي بالمحول" : "OBD Adapter & Auto-Reconnect",
+                        l10n.obdAdapterAutoReconnect,
                         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textWhite),
                       ),
                     ],
                   ),
                   const SizedBox(height: 12),
-                  SwitchListTile(
+                  Material(
+                    type: MaterialType.transparency,
+                    child: SwitchListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(
-                      obdState.isArabic ? "الاتصال التلقائي عند فتح التطبيق" : "Auto-reconnect on app launch",
+                      l10n.autoReconnectLaunch,
                       style: const TextStyle(color: AppColors.textWhite, fontSize: 14),
                     ),
                     subtitle: Text(
-                      obdState.isArabic
-                          ? "إعادة الاتصال تلقائياً بآخر فيشة OBD تم الاقتران بها"
-                          : "Automatically connects to the last paired adapter on startup",
+                      l10n.autoReconnectSubtitle,
                       style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
                     ),
                     activeColor: AppColors.accentCyan,
                     value: obdState.isAutoConnectEnabled,
                     onChanged: (val) => obdState.toggleAutoConnect(val),
+                  ),
                   ),
                   const Divider(color: AppColors.cardBorder),
                   if (obdState.lastSavedAdapterTarget != null) ...[
@@ -352,7 +358,7 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                obdState.lastSavedAdapterName ?? "Paired OBD Adapter",
+                                obdState.lastSavedAdapterName ?? l10n.pairedObdAdapter,
                                 style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.textWhite, fontSize: 13),
                               ),
                               Text(
@@ -365,7 +371,7 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
                         TextButton.icon(
                           icon: const Icon(Icons.delete_outline, size: 16, color: AppColors.dangerRed),
                           label: Text(
-                            obdState.isArabic ? "مسح المحول" : "Forget",
+                            l10n.forget,
                             style: const TextStyle(color: AppColors.dangerRed, fontSize: 12),
                           ),
                           onPressed: () => obdState.clearSavedAdapter(),
@@ -374,9 +380,7 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
                     ),
                   ] else ...[
                     Text(
-                      obdState.isArabic
-                          ? "لم يتم حفظ أي محول حتى الآن. اتصل بمحولك ليتم حفظه تلقائياً."
-                          : "No saved adapter yet. Connect your adapter to save it for auto-reconnect.",
+                      l10n.noSavedAdapterYet,
                       style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
                     ),
                   ],
@@ -396,7 +400,7 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 icon: const Icon(Icons.save),
-                label: const Text("Save Workshop Settings", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                label: Text(l10n.saveWorkshopSettings, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 onPressed: _saveSettings,
               ),
             ),

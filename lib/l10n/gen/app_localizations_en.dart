@@ -393,4 +393,263 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get importBackup => 'Import backup';
+
+  @override
+  String get appName => 'AutoSpect';
+
+  @override
+  String get darkWorkshopMode => 'Dark Workshop Mode';
+
+  @override
+  String get brightDaylightMode => 'Bright Daylight Sunlight Mode';
+
+  @override
+  String get centerAlarmSettings => 'Center & Alarm Settings';
+
+  @override
+  String get shieldNotTested => 'Shield = not yet tested on a real car';
+
+  @override
+  String get ecuScanTree => 'ECU scan tree';
+
+  @override
+  String get findModulesGateway => 'Find modules on the gateway';
+
+  @override
+  String get interactiveBusMap => 'Interactive bus map';
+
+  @override
+  String get canLinGraph => 'CAN/LIN graph and node inspection';
+
+  @override
+  String get daily => 'Daily';
+
+  @override
+  String get readClearDtc => 'Read / Clear DTC';
+
+  @override
+  String get liveData => 'Live Data';
+
+  @override
+  String get liveGraphs => 'Live Graphs';
+
+  @override
+  String get freezeFrame => 'Freeze Frame';
+
+  @override
+  String get readiness => 'Readiness';
+
+  @override
+  String get ecuInfo => 'ECU Info';
+
+  @override
+  String get mode06Monitors => 'Mode 06';
+
+  @override
+  String get vehicleProfile => 'Vehicle Profile';
+
+  @override
+  String get inspectionCustomers => 'Inspection & Customers';
+
+  @override
+  String get usedCarAudit => 'Used-Car Audit';
+
+  @override
+  String savedReportsCount(Object count) {
+    return 'Saved Reports ($count)';
+  }
+
+  @override
+  String get whatsappDispatch => 'WhatsApp Dispatch';
+
+  @override
+  String get lanHub => 'LAN Hub';
+
+  @override
+  String get analysisTools => 'Analysis & Tools';
+
+  @override
+  String get networkMap => 'Network Map';
+
+  @override
+  String get o2Catalyst => 'O2 & Catalyst';
+
+  @override
+  String get fuelTrimBattery => 'Fuel Trim & Battery';
+
+  @override
+  String get dtcEncyclopedia => 'DTC Encyclopedia';
+
+  @override
+  String get wiring => 'Wiring';
+
+  @override
+  String get canSniffer => 'CAN Sniffer';
+
+  @override
+  String get adapterTest => 'Adapter Test';
+
+  @override
+  String get terminal => 'Terminal';
+
+  @override
+  String get rawLog => 'Raw Log';
+
+  @override
+  String get labExperimentalPin => 'Lab (experimental, PIN)';
+
+  @override
+  String get labFeaturesUnverified =>
+      'Resets, coding, immobilizer, actuators, ADAS, DPF, EV, scope, dyno. Not verified on a car.';
+
+  @override
+  String get moreTools => 'More tools';
+
+  @override
+  String get classicAudit9Tabs => 'Classic Audit (9 tabs)';
+
+  @override
+  String get voiceAssistant => 'Voice Assistant';
+
+  @override
+  String get arHud => 'AR HUD';
+
+  @override
+  String get aiCopilot => 'AI Copilot';
+
+  @override
+  String get flightRecorder => 'Flight Recorder';
+
+  @override
+  String get fuelCost => 'Fuel Cost';
+
+  @override
+  String get hudDisplay => 'HUD Display';
+
+  @override
+  String get connectedToEcu => 'Connected to ECU';
+
+  @override
+  String get adapterReadyTurnKey => 'Adapter Ready (Turn Key to ON/RUN)';
+
+  @override
+  String get connectingObdAdapter => 'Connecting to OBD Adapter...';
+
+  @override
+  String get disconnected => 'Disconnected';
+
+  @override
+  String get switchAdapter => 'Switch Adapter';
+
+  @override
+  String batterySummary(Object summary, Object voltage) {
+    return 'Battery: ${voltage}V | $summary';
+  }
+
+  @override
+  String batteryVehicle(Object model, Object voltage) {
+    return 'Battery: ${voltage}V | Vehicle: $model';
+  }
+
+  @override
+  String get genericVehicle => 'Generic';
+
+  @override
+  String get fullVehicleTest => '1-Click Full Vehicle Test';
+
+  @override
+  String selectedProfileNotConnected(Object name) {
+    return 'Selected profile (not connected): $name';
+  }
+
+  @override
+  String get tapToSelectVehicle => 'Tap to select vehicle & start full test';
+
+  @override
+  String get fullScanSubtitle =>
+      '10-stage full network scan, deep health index & PDF report';
+
+  @override
+  String get quickScan30s => 'Quick Scan (30s)';
+
+  @override
+  String get quickScanSubtitle =>
+      'Instant 30s vehicle scan: DTCs, Live Sensors, VIN & Voltage';
+
+  @override
+  String get connectAdapterFirst =>
+      'Please connect to a real OBD adapter (Bluetooth Classic, BLE, Wi-Fi, or USB OTG) first.';
+
+  @override
+  String get workshopSettings => 'Workshop & Center Settings';
+
+  @override
+  String get workshopBrandingSaved =>
+      'Workshop branding and alarm settings saved successfully! ✅';
+
+  @override
+  String get suiteTagline => 'Automotive Diagnostic & Fleet Telemetry Suite';
+
+  @override
+  String get copyNumber => 'Copy Number';
+
+  @override
+  String get phoneCopied => 'Phone number copied to clipboard';
+
+  @override
+  String get workshopInfoPdf => 'Workshop Information (PDF Reports):';
+
+  @override
+  String get workshopCenterName => 'Workshop Center Name';
+
+  @override
+  String get workshopAddress => 'Workshop Address';
+
+  @override
+  String get defaultInspectionEngineer => 'Default Inspection Engineer';
+
+  @override
+  String get standardInspectionFee => 'Standard Inspection Fee';
+
+  @override
+  String get safetyThresholdsAlarms => 'Safety Thresholds & Real-Time Alarms:';
+
+  @override
+  String get enableAlarmSounds => 'Enable Alarm Sounds & Haptic Vibrate';
+
+  @override
+  String get alarmSoundsSubtitle =>
+      'Triggers popup alert and haptic feedback when a sensor exceeds safe limits';
+
+  @override
+  String get engineOverheatLimit => 'Engine Overheating Alarm Limit:';
+
+  @override
+  String get alternatorLowVoltage => 'Alternator Low Voltage Limit:';
+
+  @override
+  String get cloudBackupSync => 'Cloud Backup & Fleet Webhook Sync';
+
+  @override
+  String get obdAdapterAutoReconnect => 'OBD Adapter & Auto-Reconnect';
+
+  @override
+  String get autoReconnectLaunch => 'Auto-reconnect on app launch';
+
+  @override
+  String get autoReconnectSubtitle =>
+      'Automatically connects to the last paired adapter on startup';
+
+  @override
+  String get pairedObdAdapter => 'Paired OBD Adapter';
+
+  @override
+  String get forget => 'Forget';
+
+  @override
+  String get noSavedAdapterYet =>
+      'No saved adapter yet. Connect your adapter to save it for auto-reconnect.';
+
+  @override
+  String get saveWorkshopSettings => 'Save Workshop Settings';
 }

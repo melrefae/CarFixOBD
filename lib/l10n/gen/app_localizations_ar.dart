@@ -391,4 +391,263 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get importBackup => 'استيراد نسخة';
+
+  @override
+  String get appName => 'أسبكت أوتو سكان';
+
+  @override
+  String get darkWorkshopMode => 'الوضع الليلي للورشة';
+
+  @override
+  String get brightDaylightMode => 'وضع النهار الساطع للشمس';
+
+  @override
+  String get centerAlarmSettings => 'إعدادات المركز والتنبيهات الصوتية';
+
+  @override
+  String get shieldNotTested => 'الأيقونة = لم تُختبر بعد على سيارة حقيقية';
+
+  @override
+  String get ecuScanTree => 'مسح الوحدات (شجرة)';
+
+  @override
+  String get findModulesGateway => 'اكتشاف الوحدات على البوابة';
+
+  @override
+  String get interactiveBusMap => 'خريطة الشبكات التفاعلية';
+
+  @override
+  String get canLinGraph => 'رسم بياني لشبكات CAN/LIN';
+
+  @override
+  String get daily => 'يومي';
+
+  @override
+  String get readClearDtc => 'قراءة/مسح الأعطال';
+
+  @override
+  String get liveData => 'بيانات حية';
+
+  @override
+  String get liveGraphs => 'رسوم حية';
+
+  @override
+  String get freezeFrame => 'لقطة العطل';
+
+  @override
+  String get readiness => 'جاهزية الفحص';
+
+  @override
+  String get ecuInfo => 'بيانات الكمبيوتر';
+
+  @override
+  String get mode06Monitors => 'مونيتورات 06';
+
+  @override
+  String get vehicleProfile => 'ملف السيارة';
+
+  @override
+  String get inspectionCustomers => 'فحص وعملاء';
+
+  @override
+  String get usedCarAudit => 'فحص شراء';
+
+  @override
+  String savedReportsCount(Object count) {
+    return 'التقارير ($count)';
+  }
+
+  @override
+  String get whatsappDispatch => 'واتساب العميل';
+
+  @override
+  String get lanHub => 'مزامنة الورشة';
+
+  @override
+  String get analysisTools => 'تحليل وأدوات';
+
+  @override
+  String get networkMap => 'خريطة الشبكة';
+
+  @override
+  String get o2Catalyst => 'حساسات الشكمان';
+
+  @override
+  String get fuelTrimBattery => 'الوقود والبطارية';
+
+  @override
+  String get dtcEncyclopedia => 'موسوعة الأعطال';
+
+  @override
+  String get wiring => 'الدوائر';
+
+  @override
+  String get canSniffer => 'مراقب CAN';
+
+  @override
+  String get adapterTest => 'اختبار الأداة';
+
+  @override
+  String get terminal => 'تيرمنال';
+
+  @override
+  String get rawLog => 'سجل الأوامر';
+
+  @override
+  String get labExperimentalPin => 'المختبر (تجريبي، برقم سري)';
+
+  @override
+  String get labFeaturesUnverified =>
+      'تصفير وتكويد وإيموبلايزر وأكتيويتور وADAS وDPF وغيرها. غير مثبتة على سيارة.';
+
+  @override
+  String get moreTools => 'أدوات إضافية';
+
+  @override
+  String get classicAudit9Tabs => 'الفحص القديم';
+
+  @override
+  String get voiceAssistant => 'المساعد الصوتي';
+
+  @override
+  String get arHud => 'AR HUD';
+
+  @override
+  String get aiCopilot => 'المساعد الذكي';
+
+  @override
+  String get flightRecorder => 'الصندوق الأسود';
+
+  @override
+  String get fuelCost => 'تكلفة البنزين';
+
+  @override
+  String get hudDisplay => 'شاشة HUD';
+
+  @override
+  String get connectedToEcu => 'متصل بكمبيوتر السيارة';
+
+  @override
+  String get adapterReadyTurnKey => 'الفيشة متصلة (افتح كونتاك السيارة ON)';
+
+  @override
+  String get connectingObdAdapter => 'جاري الاتصال بفيشة الفحص...';
+
+  @override
+  String get disconnected => 'غير متصل';
+
+  @override
+  String get switchAdapter => 'تبديل وسيلة الاتصال';
+
+  @override
+  String batterySummary(Object summary, Object voltage) {
+    return 'البطارية: $voltage فولت | $summary';
+  }
+
+  @override
+  String batteryVehicle(Object model, Object voltage) {
+    return 'البطارية: $voltage فولت | السيارة: $model';
+  }
+
+  @override
+  String get genericVehicle => 'سيارة عامة';
+
+  @override
+  String get fullVehicleTest => 'فحص شامل بضغطة زر واحدة';
+
+  @override
+  String selectedProfileNotConnected(Object name) {
+    return 'الملف المختار (غير متصل): $name';
+  }
+
+  @override
+  String get tapToSelectVehicle => 'اضغط لاختيار سيارة وبدء الفحص';
+
+  @override
+  String get fullScanSubtitle =>
+      'فحص شامل لجميع الكنترولات والأعطال وحفظ تقرير PDF';
+
+  @override
+  String get quickScan30s => 'فحص سريع شامل (30 ثانية)';
+
+  @override
+  String get quickScanSubtitle =>
+      'فحص سريع في 30 ثانية: الأعطال والحساسات ورقم الشاسيه والفولت';
+
+  @override
+  String get connectAdapterFirst =>
+      'اتصل بفيشة OBD حقيقية الأول (بلوتوث كلاسيك أو BLE أو واي فاي أو USB OTG).';
+
+  @override
+  String get workshopSettings => 'إعدادات الورشة والمركز';
+
+  @override
+  String get workshopBrandingSaved =>
+      'تم حفظ إعدادات الورشة والتنبيهات بنجاح ✅';
+
+  @override
+  String get suiteTagline => 'منظومة تشخيص السيارات ومتابعة الأسطول';
+
+  @override
+  String get copyNumber => 'نسخ الرقم';
+
+  @override
+  String get phoneCopied => 'تم نسخ رقم الهاتف';
+
+  @override
+  String get workshopInfoPdf => 'بيانات الورشة (تقارير PDF):';
+
+  @override
+  String get workshopCenterName => 'اسم مركز الصيانة';
+
+  @override
+  String get workshopAddress => 'عنوان الورشة';
+
+  @override
+  String get defaultInspectionEngineer => 'مهندس الفحص الافتراضي';
+
+  @override
+  String get standardInspectionFee => 'سعر الفحص الأساسي';
+
+  @override
+  String get safetyThresholdsAlarms => 'حدود الأمان والتنبيهات الفورية:';
+
+  @override
+  String get enableAlarmSounds => 'تفعيل صوت التنبيه والاهتزاز';
+
+  @override
+  String get alarmSoundsSubtitle =>
+      'يعرض تنبيه واهتزاز عندما يتجاوز أي حساس الحدود الآمنة';
+
+  @override
+  String get engineOverheatLimit => 'حد تنبيه سخونة المحرك:';
+
+  @override
+  String get alternatorLowVoltage => 'حد انخفاض فولت الدينامو:';
+
+  @override
+  String get cloudBackupSync => 'النسخ الاحتياطي السحابي ومزامنة الأسطول';
+
+  @override
+  String get obdAdapterAutoReconnect => 'إعدادات الاتصال التلقائي بالمحول';
+
+  @override
+  String get autoReconnectLaunch => 'الاتصال التلقائي عند فتح التطبيق';
+
+  @override
+  String get autoReconnectSubtitle =>
+      'إعادة الاتصال تلقائياً بآخر فيشة OBD تم الاقتران بها';
+
+  @override
+  String get pairedObdAdapter => 'محول OBD المتصل';
+
+  @override
+  String get forget => 'مسح المحول';
+
+  @override
+  String get noSavedAdapterYet =>
+      'لم يتم حفظ أي محول حتى الآن. اتصل بمحولك ليتم حفظه تلقائياً.';
+
+  @override
+  String get saveWorkshopSettings => 'حفظ إعدادات الورشة';
 }

@@ -829,6 +829,492 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Import backup'**
   String get importBackup;
+
+  /// No description provided for @appName.
+  ///
+  /// In en, this message translates to:
+  /// **'AutoSpect'**
+  String get appName;
+
+  /// No description provided for @darkWorkshopMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Workshop Mode'**
+  String get darkWorkshopMode;
+
+  /// No description provided for @brightDaylightMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Bright Daylight Sunlight Mode'**
+  String get brightDaylightMode;
+
+  /// No description provided for @centerAlarmSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Center & Alarm Settings'**
+  String get centerAlarmSettings;
+
+  /// No description provided for @shieldNotTested.
+  ///
+  /// In en, this message translates to:
+  /// **'Shield = not yet tested on a real car'**
+  String get shieldNotTested;
+
+  /// No description provided for @ecuScanTree.
+  ///
+  /// In en, this message translates to:
+  /// **'ECU scan tree'**
+  String get ecuScanTree;
+
+  /// No description provided for @findModulesGateway.
+  ///
+  /// In en, this message translates to:
+  /// **'Find modules on the gateway'**
+  String get findModulesGateway;
+
+  /// No description provided for @interactiveBusMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Interactive bus map'**
+  String get interactiveBusMap;
+
+  /// No description provided for @canLinGraph.
+  ///
+  /// In en, this message translates to:
+  /// **'CAN/LIN graph and node inspection'**
+  String get canLinGraph;
+
+  /// No description provided for @daily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get daily;
+
+  /// No description provided for @readClearDtc.
+  ///
+  /// In en, this message translates to:
+  /// **'Read / Clear DTC'**
+  String get readClearDtc;
+
+  /// No description provided for @liveData.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Data'**
+  String get liveData;
+
+  /// No description provided for @liveGraphs.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Graphs'**
+  String get liveGraphs;
+
+  /// No description provided for @freezeFrame.
+  ///
+  /// In en, this message translates to:
+  /// **'Freeze Frame'**
+  String get freezeFrame;
+
+  /// No description provided for @readiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Readiness'**
+  String get readiness;
+
+  /// No description provided for @ecuInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'ECU Info'**
+  String get ecuInfo;
+
+  /// No description provided for @mode06Monitors.
+  ///
+  /// In en, this message translates to:
+  /// **'Mode 06'**
+  String get mode06Monitors;
+
+  /// No description provided for @vehicleProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle Profile'**
+  String get vehicleProfile;
+
+  /// No description provided for @inspectionCustomers.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspection & Customers'**
+  String get inspectionCustomers;
+
+  /// No description provided for @usedCarAudit.
+  ///
+  /// In en, this message translates to:
+  /// **'Used-Car Audit'**
+  String get usedCarAudit;
+
+  /// No description provided for @savedReportsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved Reports ({count})'**
+  String savedReportsCount(Object count);
+
+  /// No description provided for @whatsappDispatch.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp Dispatch'**
+  String get whatsappDispatch;
+
+  /// No description provided for @lanHub.
+  ///
+  /// In en, this message translates to:
+  /// **'LAN Hub'**
+  String get lanHub;
+
+  /// No description provided for @analysisTools.
+  ///
+  /// In en, this message translates to:
+  /// **'Analysis & Tools'**
+  String get analysisTools;
+
+  /// No description provided for @networkMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Network Map'**
+  String get networkMap;
+
+  /// No description provided for @o2Catalyst.
+  ///
+  /// In en, this message translates to:
+  /// **'O2 & Catalyst'**
+  String get o2Catalyst;
+
+  /// No description provided for @fuelTrimBattery.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel Trim & Battery'**
+  String get fuelTrimBattery;
+
+  /// No description provided for @dtcEncyclopedia.
+  ///
+  /// In en, this message translates to:
+  /// **'DTC Encyclopedia'**
+  String get dtcEncyclopedia;
+
+  /// No description provided for @wiring.
+  ///
+  /// In en, this message translates to:
+  /// **'Wiring'**
+  String get wiring;
+
+  /// No description provided for @canSniffer.
+  ///
+  /// In en, this message translates to:
+  /// **'CAN Sniffer'**
+  String get canSniffer;
+
+  /// No description provided for @adapterTest.
+  ///
+  /// In en, this message translates to:
+  /// **'Adapter Test'**
+  String get adapterTest;
+
+  /// No description provided for @terminal.
+  ///
+  /// In en, this message translates to:
+  /// **'Terminal'**
+  String get terminal;
+
+  /// No description provided for @rawLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Raw Log'**
+  String get rawLog;
+
+  /// No description provided for @labExperimentalPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Lab (experimental, PIN)'**
+  String get labExperimentalPin;
+
+  /// No description provided for @labFeaturesUnverified.
+  ///
+  /// In en, this message translates to:
+  /// **'Resets, coding, immobilizer, actuators, ADAS, DPF, EV, scope, dyno. Not verified on a car.'**
+  String get labFeaturesUnverified;
+
+  /// No description provided for @moreTools.
+  ///
+  /// In en, this message translates to:
+  /// **'More tools'**
+  String get moreTools;
+
+  /// No description provided for @classicAudit9Tabs.
+  ///
+  /// In en, this message translates to:
+  /// **'Classic Audit (9 tabs)'**
+  String get classicAudit9Tabs;
+
+  /// No description provided for @voiceAssistant.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice Assistant'**
+  String get voiceAssistant;
+
+  /// No description provided for @arHud.
+  ///
+  /// In en, this message translates to:
+  /// **'AR HUD'**
+  String get arHud;
+
+  /// No description provided for @aiCopilot.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Copilot'**
+  String get aiCopilot;
+
+  /// No description provided for @flightRecorder.
+  ///
+  /// In en, this message translates to:
+  /// **'Flight Recorder'**
+  String get flightRecorder;
+
+  /// No description provided for @fuelCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel Cost'**
+  String get fuelCost;
+
+  /// No description provided for @hudDisplay.
+  ///
+  /// In en, this message translates to:
+  /// **'HUD Display'**
+  String get hudDisplay;
+
+  /// No description provided for @connectedToEcu.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected to ECU'**
+  String get connectedToEcu;
+
+  /// No description provided for @adapterReadyTurnKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Adapter Ready (Turn Key to ON/RUN)'**
+  String get adapterReadyTurnKey;
+
+  /// No description provided for @connectingObdAdapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to OBD Adapter...'**
+  String get connectingObdAdapter;
+
+  /// No description provided for @disconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected'**
+  String get disconnected;
+
+  /// No description provided for @switchAdapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch Adapter'**
+  String get switchAdapter;
+
+  /// No description provided for @batterySummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery: {voltage}V | {summary}'**
+  String batterySummary(Object summary, Object voltage);
+
+  /// No description provided for @batteryVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery: {voltage}V | Vehicle: {model}'**
+  String batteryVehicle(Object model, Object voltage);
+
+  /// No description provided for @genericVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Generic'**
+  String get genericVehicle;
+
+  /// No description provided for @fullVehicleTest.
+  ///
+  /// In en, this message translates to:
+  /// **'1-Click Full Vehicle Test'**
+  String get fullVehicleTest;
+
+  /// No description provided for @selectedProfileNotConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected profile (not connected): {name}'**
+  String selectedProfileNotConnected(Object name);
+
+  /// No description provided for @tapToSelectVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to select vehicle & start full test'**
+  String get tapToSelectVehicle;
+
+  /// No description provided for @fullScanSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'10-stage full network scan, deep health index & PDF report'**
+  String get fullScanSubtitle;
+
+  /// No description provided for @quickScan30s.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Scan (30s)'**
+  String get quickScan30s;
+
+  /// No description provided for @quickScanSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Instant 30s vehicle scan: DTCs, Live Sensors, VIN & Voltage'**
+  String get quickScanSubtitle;
+
+  /// No description provided for @connectAdapterFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Please connect to a real OBD adapter (Bluetooth Classic, BLE, Wi-Fi, or USB OTG) first.'**
+  String get connectAdapterFirst;
+
+  /// No description provided for @workshopSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Workshop & Center Settings'**
+  String get workshopSettings;
+
+  /// No description provided for @workshopBrandingSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Workshop branding and alarm settings saved successfully! ✅'**
+  String get workshopBrandingSaved;
+
+  /// No description provided for @suiteTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Automotive Diagnostic & Fleet Telemetry Suite'**
+  String get suiteTagline;
+
+  /// No description provided for @copyNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Number'**
+  String get copyNumber;
+
+  /// No description provided for @phoneCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number copied to clipboard'**
+  String get phoneCopied;
+
+  /// No description provided for @workshopInfoPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Workshop Information (PDF Reports):'**
+  String get workshopInfoPdf;
+
+  /// No description provided for @workshopCenterName.
+  ///
+  /// In en, this message translates to:
+  /// **'Workshop Center Name'**
+  String get workshopCenterName;
+
+  /// No description provided for @workshopAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Workshop Address'**
+  String get workshopAddress;
+
+  /// No description provided for @defaultInspectionEngineer.
+  ///
+  /// In en, this message translates to:
+  /// **'Default Inspection Engineer'**
+  String get defaultInspectionEngineer;
+
+  /// No description provided for @standardInspectionFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard Inspection Fee'**
+  String get standardInspectionFee;
+
+  /// No description provided for @safetyThresholdsAlarms.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety Thresholds & Real-Time Alarms:'**
+  String get safetyThresholdsAlarms;
+
+  /// No description provided for @enableAlarmSounds.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Alarm Sounds & Haptic Vibrate'**
+  String get enableAlarmSounds;
+
+  /// No description provided for @alarmSoundsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Triggers popup alert and haptic feedback when a sensor exceeds safe limits'**
+  String get alarmSoundsSubtitle;
+
+  /// No description provided for @engineOverheatLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Engine Overheating Alarm Limit:'**
+  String get engineOverheatLimit;
+
+  /// No description provided for @alternatorLowVoltage.
+  ///
+  /// In en, this message translates to:
+  /// **'Alternator Low Voltage Limit:'**
+  String get alternatorLowVoltage;
+
+  /// No description provided for @cloudBackupSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud Backup & Fleet Webhook Sync'**
+  String get cloudBackupSync;
+
+  /// No description provided for @obdAdapterAutoReconnect.
+  ///
+  /// In en, this message translates to:
+  /// **'OBD Adapter & Auto-Reconnect'**
+  String get obdAdapterAutoReconnect;
+
+  /// No description provided for @autoReconnectLaunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-reconnect on app launch'**
+  String get autoReconnectLaunch;
+
+  /// No description provided for @autoReconnectSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically connects to the last paired adapter on startup'**
+  String get autoReconnectSubtitle;
+
+  /// No description provided for @pairedObdAdapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Paired OBD Adapter'**
+  String get pairedObdAdapter;
+
+  /// No description provided for @forget.
+  ///
+  /// In en, this message translates to:
+  /// **'Forget'**
+  String get forget;
+
+  /// No description provided for @noSavedAdapterYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved adapter yet. Connect your adapter to save it for auto-reconnect.'**
+  String get noSavedAdapterYet;
+
+  /// No description provided for @saveWorkshopSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Workshop Settings'**
+  String get saveWorkshopSettings;
 }
 
 class _AppLocalizationsDelegate

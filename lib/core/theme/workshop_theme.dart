@@ -36,6 +36,8 @@ class WorkshopTheme {
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: AppColors.textWhite,
+          fontFamily: 'Roboto',
+          fontFamilyFallback: ['NotoSansArabic'],
         ),
         iconTheme: IconThemeData(color: AppColors.primaryYellow),
       ),
@@ -48,6 +50,8 @@ class WorkshopTheme {
           textStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
+            fontFamily: 'Roboto',
+            fontFamilyFallback: ['NotoSansArabic'],
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -104,6 +108,8 @@ class WorkshopTheme {
           fontSize: 18,
           fontWeight: FontWeight.bold,
           color: AppColors.lightTextPrimary,
+          fontFamily: 'Roboto',
+          fontFamilyFallback: ['NotoSansArabic'],
         ),
         iconTheme: IconThemeData(color: AppColors.lightTextPrimary),
       ),
@@ -116,6 +122,8 @@ class WorkshopTheme {
           textStyle: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.bold,
+            fontFamily: 'Roboto',
+            fontFamilyFallback: ['NotoSansArabic'],
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
