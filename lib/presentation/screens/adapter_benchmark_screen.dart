@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/localization/app_strings_en.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../providers/obd_state.dart';
 
 /// ELM327 adapter authenticity, speed, and latency benchmark screen
@@ -24,18 +24,19 @@ class _AdapterBenchmarkScreenState extends State<AdapterBenchmarkScreen> {
   int _minLatencyMs = 0;
   int _maxLatencyMs = 0;
   double _successRate = 0.0;
-  String _authenticityResult = "Tap the button below to start benchmark";
+  String? _authenticityResult;
   Color _authenticityColor = AppColors.textMuted;
 
   final List<String> _testLogs = [];
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final state = Provider.of<ObdState>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.adapterBenchmark),
+        title: Text(l10n.benchTitle),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -63,7 +64,7 @@ class _AdapterBenchmarkScreenState extends State<AdapterBenchmarkScreen> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    _authenticityResult,
+                    _authenticityResult ?? l10n.benchTapToStart,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
@@ -74,8 +75,8 @@ class _AdapterBenchmarkScreenState extends State<AdapterBenchmarkScreen> {
                   const SizedBox(height: 8),
                   Text(
                     _isRunning
-                        ? "Transmitting diagnostic commands and profiling round-trip latency..."
-                        : "Tests PIC18F25K80 chip authenticity, UART baud buffer, and bus packet throughput",
+                        ? l10n.benchRunningDesc
+                        : l10n.benchIdleDesc,
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
                   ),
@@ -90,31 +91,31 @@ class _AdapterBenchmarkScreenState extends State<AdapterBenchmarkScreen> {
               children: [
                 Expanded(
                   child: _buildMetricBox(
-                    title: "Avg",
-                    value: _avgLatencyMs > 0 ? "$_avgLatencyMs ms" : "--",
+                    title: l10n.benchAvg,
+                    value: _avgLatencyMs > 0 ? "$_avgLatencyMs ${l10n.unitMs}" : "--",
                     color: _avgLatencyMs < 45 && _avgLatencyMs > 0 ? AppColors.successGreen : AppColors.primaryYellow,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildMetricBox(
-                    title: "Best",
-                    value: _minLatencyMs > 0 ? "$_minLatencyMs ms" : "--",
+                    title: l10n.benchBest,
+                    value: _minLatencyMs > 0 ? "$_minLatencyMs ${l10n.unitMs}" : "--",
                     color: AppColors.electricBlue,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildMetricBox(
-                    title: "Max",
-                    value: _maxLatencyMs > 0 ? "$_maxLatencyMs ms" : "--",
+                    title: l10n.benchMax,
+                    value: _maxLatencyMs > 0 ? "$_maxLatencyMs ${l10n.unitMs}" : "--",
                     color: _maxLatencyMs > 100 ? AppColors.dangerRed : AppColors.accentCyan,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildMetricBox(
-                    title: "Success",
+                    title: l10n.benchSuccess,
                     value: _successRate > 0 ? "${_successRate.toInt()}%" : "--",
                     color: _successRate >= 90 ? AppColors.successGreen : AppColors.dangerRed,
                   ),
@@ -135,15 +136,15 @@ class _AdapterBenchmarkScreenState extends State<AdapterBenchmarkScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Hardware Profile:",
+                  Text(
+                    l10n.benchHwProfile,
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.primaryYellow),
                   ),
                   const SizedBox(height: 12),
-                  _buildDetailRow("Firmware Version (ATI):", _firmwareVersion),
-                  _buildDetailRow("Chip Identifier (AT@1):", _chipIdentifier),
-                  _buildDetailRow("Supply Voltage (ATRV):", _voltageReading),
-                  _buildDetailRow("Detected Protocol (ATDP):", _activeProtocol),
+                  _buildDetailRow(l10n.benchFirmware, _firmwareVersion),
+                  _buildDetailRow(l10n.benchChip, _chipIdentifier),
+                  _buildDetailRow(l10n.benchVoltage, _voltageReading),
+                  _buildDetailRow(l10n.benchProtocol, _activeProtocol),
                 ],
               ),
             ),
@@ -152,12 +153,14 @@ class _AdapterBenchmarkScreenState extends State<AdapterBenchmarkScreen> {
 
             // Run Benchmark Button
             SizedBox(
-              height: 50,
+              width: double.infinity,
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryYellow,
                   foregroundColor: Colors.black,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  minimumSize: const Size(double.infinity, 52),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
                 icon: _isRunning
                     ? const SizedBox(
@@ -167,7 +170,7 @@ class _AdapterBenchmarkScreenState extends State<AdapterBenchmarkScreen> {
                       )
                     : const Icon(Icons.play_arrow),
                 label: Text(
-                  _isRunning ? "Running Benchmark Tests..." : "Start Benchmark (10 Diagnostic Pings)",
+                  _isRunning ? l10n.benchRunning : l10n.benchStart,
                   style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
                 onPressed: _isRunning || !state.isConnected ? null : () => _runBenchmark(state),
@@ -176,8 +179,8 @@ class _AdapterBenchmarkScreenState extends State<AdapterBenchmarkScreen> {
 
             if (!state.isConnected) ...[
               const SizedBox(height: 8),
-              const Text(
-                "Please connect to a physical OBD adapter (Bluetooth Classic, BLE, Wi-Fi, or USB OTG) to run benchmark.",
+              Text(
+                l10n.benchNeedConnection,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: AppColors.dangerRed, fontSize: 13),
               ),
@@ -187,8 +190,8 @@ class _AdapterBenchmarkScreenState extends State<AdapterBenchmarkScreen> {
 
             // Benchmark Logs
             if (_testLogs.isNotEmpty) ...[
-              const Text(
-                "Benchmark Serial Log:",
+              Text(
+                l10n.benchLogTitle,
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textMuted),
               ),
               const SizedBox(height: 8),
@@ -247,34 +250,35 @@ class _AdapterBenchmarkScreenState extends State<AdapterBenchmarkScreen> {
   }
 
   Future<void> _runBenchmark(ObdState state) async {
+    final l10n = AppLocalizations.of(context);
     final driver = state.driver;
     if (driver == null) return;
 
     setState(() {
       _isRunning = true;
       _testLogs.clear();
-      _authenticityResult = "Running benchmark tests...";
+      _authenticityResult = l10n.benchLogRunning;
       _authenticityColor = AppColors.primaryYellow;
     });
 
     try {
       // 1. Identification queries
-      _log("Sending ATI (Version query)...");
+      _log(l10n.benchLogAti);
       final ati = await driver.sendCommand("ATI");
       _firmwareVersion = ati.trim().isNotEmpty ? ati.trim() : "ELM327 v1.5";
       _log("<- $ati");
 
-      _log("Sending AT@1 (Device query)...");
+      _log(l10n.benchLogAt1);
       final at1 = await driver.sendCommand("AT@1");
       _chipIdentifier = at1.trim().isNotEmpty ? at1.trim() : "OBDII Device";
       _log("<- $at1");
 
-      _log("Sending ATRV (Voltage query)...");
+      _log(l10n.benchLogAtrv);
       final atrv = await driver.sendCommand("ATRV");
       _voltageReading = atrv.trim().isNotEmpty ? atrv.trim() : "12.6V";
       _log("<- $atrv");
 
-      _log("Sending ATDP (Protocol query)...");
+      _log(l10n.benchLogAtdp);
       final atdp = await driver.sendCommand("ATDP");
       _activeProtocol = atdp.trim().isNotEmpty ? atdp.trim() : "ISO 15765-4 (CAN)";
       _log("<- $atdp");
@@ -293,9 +297,9 @@ class _AdapterBenchmarkScreenState extends State<AdapterBenchmarkScreen> {
 
         if (res.isNotEmpty && !res.contains("NO DATA") && !res.contains("ERROR")) {
           successfulPackets++;
-          _log("Ping #$i: ${elapsed}ms [OK]");
+          _log(l10n.benchPingOk(i, elapsed));
         } else {
-          _log("Ping #$i: ${elapsed}ms [FAIL]");
+          _log(l10n.benchPingFail(i, elapsed));
         }
 
         await Future.delayed(const Duration(milliseconds: 30));
@@ -309,18 +313,18 @@ class _AdapterBenchmarkScreenState extends State<AdapterBenchmarkScreen> {
 
       // Evaluation
       if (_avgLatencyMs <= 45 && _successRate >= 90) {
-        _authenticityResult = "High-Quality PIC18F25K80 Chip (Fast & Authentic) ✅";
+        _authenticityResult = l10n.benchResultExcellent;
         _authenticityColor = AppColors.successGreen;
       } else if (_avgLatencyMs <= 85 && _successRate >= 80) {
-        _authenticityResult = "Standard Diagnostic Adapter (Good for daily use) 👍";
+        _authenticityResult = l10n.benchResultStandard;
         _authenticityColor = AppColors.primaryYellow;
       } else {
-        _authenticityResult = "Budget Clone Adapter (Clone v2.1 - Slow Response) ⚠️";
+        _authenticityResult = l10n.benchResultClone;
         _authenticityColor = AppColors.dangerRed;
       }
     } catch (e) {
-      _log("Benchmark error: $e");
-      _authenticityResult = "Benchmark interrupted: $e";
+      _log(l10n.benchLogError("$e"));
+      _authenticityResult = l10n.benchInterrupted("$e");
       _authenticityColor = AppColors.dangerRed;
     } finally {
       if (mounted) {

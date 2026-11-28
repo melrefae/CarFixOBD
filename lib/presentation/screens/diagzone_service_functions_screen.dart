@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/localization/app_strings_en.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../data/models/special_function_model.dart';
 import '../providers/obd_state.dart';
 
@@ -20,6 +20,7 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final state = Provider.of<ObdState>(context);
 
     final categories = ["All", ..._allFunctions.map((fn) => fn.category).toSet().toList()..sort()];
@@ -36,7 +37,7 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.diagzoneSpecialFunctions),
+        title: Text(l10n.sfTitle),
       ),
       body: Column(
         children: [
@@ -47,7 +48,7 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
               onChanged: (val) => setState(() => _searchQuery = val),
               style: const TextStyle(color: AppColors.textWhite),
               decoration: InputDecoration(
-                hintText: "Search service reset (e.g. Oil, EPB, SAS, BMS, Throttle)...",
+                hintText: l10n.sfSearchHint,
                 hintStyle: const TextStyle(color: AppColors.textMuted),
                 prefixIcon: const Icon(Icons.search, color: AppColors.primaryYellow),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -65,7 +66,7 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
                 return Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: ChoiceChip(
-                    label: Text(cat),
+                    label: Text(_sfCatLabel(l10n, cat)),
                     selected: isSel,
                     selectedColor: AppColors.primaryYellow,
                     backgroundColor: AppColors.cardSurface,
@@ -152,7 +153,7 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
             ),
             const SizedBox(height: 4),
             Text(
-              fn.category,
+              _sfCatLabel(AppLocalizations.of(context), fn.category),
               style: const TextStyle(fontSize: 10, color: AppColors.textMuted),
             ),
           ],
@@ -162,6 +163,7 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
   }
 
   void _showResetModal(SpecialFunctionModel fn, ObdState state) {
+    final l10n = AppLocalizations.of(context);
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -195,7 +197,7 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(fn.title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textWhite)),
-                                Text("Target ECU: ${fn.targetEcu}", style: const TextStyle(fontSize: 12, color: AppColors.electricBlue)),
+                                Text(l10n.sfTargetEcu(fn.targetEcu), style: const TextStyle(fontSize: 12, color: AppColors.electricBlue)),
                               ],
                             ),
                           ),
@@ -207,7 +209,7 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
                       const Divider(height: 28, color: AppColors.cardBorder),
 
                       // Safety Prerequisites Checklist
-                      const Text("Safety Prerequisites:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primaryYellow)),
+                      Text(l10n.sfSafety, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primaryYellow)),
                       const SizedBox(height: 8),
                       ...fn.prerequisites.map((req) => Padding(
                             padding: const EdgeInsets.only(bottom: 4),
@@ -226,18 +228,19 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
                       // Automated OBD Action Button
                       SizedBox(
                         width: double.infinity,
-                        height: 48,
                         child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primaryYellow,
                             foregroundColor: Colors.black,
                             elevation: 2,
+                            minimumSize: const Size(double.infinity, 52),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
                           ),
                           icon: isExecuting
                               ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black))
                               : const Icon(Icons.bolt),
                           label: Text(
-                            isExecuting ? "Executing OBD Reset..." : "Execute Automated OBD Reset",
+                            isExecuting ? l10n.sfExecuting : l10n.sfExecute,
                             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                           ),
                           onPressed: isExecuting || !state.isConnected
@@ -252,8 +255,8 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
                                       SnackBar(
                                         content: Text(
                                           ok
-                                              ? "${fn.title} completed successfully!"
-                                              : "OBD automated reset command rejected by ECU. Use manual procedure below.",
+                                              ? l10n.sfCompleted(fn.title)
+                                              : l10n.sfRejected,
                                         ),
                                         backgroundColor: ok ? AppColors.successGreen : AppColors.dangerRed,
                                       ),
@@ -313,5 +316,52 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
         );
       },
     );
+  }
+}
+
+String _sfCatLabel(AppLocalizations l10n, String cat) {
+  switch (cat) {
+    case 'All':
+      return l10n.encCatAll;
+    case 'Powertrain':
+      return l10n.encCatPowertrain;
+    case 'Transmission':
+      return l10n.encCatTransmission;
+    case 'Body & BCM':
+      return l10n.sfCatBodyBcm;
+    case 'Body & Electrical':
+      return l10n.sfCatBodyElectrical;
+    case 'Body & Lighting':
+      return l10n.sfCatBodyLighting;
+    case 'Brakes':
+      return l10n.sfCatBrakes;
+    case 'Chassis & Brakes':
+      return l10n.sfCatChassisBrakes;
+    case 'Chassis & Stability':
+      return l10n.sfCatChassisStability;
+    case 'Chassis':
+      return l10n.encCatChassis;
+    case 'Cooling & Engine':
+      return l10n.sfCatCoolingEngine;
+    case 'Dashboard':
+      return l10n.sfCatDashboard;
+    case 'Electrical':
+      return l10n.sfCatElectrical;
+    case 'Electronics':
+      return l10n.sfCatElectronics;
+    case 'Emissions':
+      return l10n.sfCatEmissions;
+    case 'Maintenance':
+      return l10n.sfCatMaintenance;
+    case 'Safety & Airbag':
+      return l10n.sfCatSafetyAirbag;
+    case 'Security':
+      return l10n.sfCatSecurity;
+    case 'Steering & Suspension':
+      return l10n.sfCatSteeringSuspension;
+    case 'Wheels & Tires':
+      return l10n.sfCatWheelsTires;
+    default:
+      return cat;
   }
 }

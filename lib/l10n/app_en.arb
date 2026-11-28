@@ -1164,5 +1164,134 @@
         "type": "int"
       }
     }
-  }
+  },
+  "unitMs": "ms",
+  "benchTitle": "Adapter Benchmark",
+  "benchTapToStart": "Tap the button below to start benchmark",
+  "benchRunningDesc": "Transmitting diagnostic commands and profiling round-trip latency...",
+  "benchIdleDesc": "Tests PIC18F25K80 chip authenticity, UART baud buffer, and bus packet throughput",
+  "benchAvg": "Avg",
+  "benchBest": "Best",
+  "benchMax": "Max",
+  "benchSuccess": "Success",
+  "benchHwProfile": "Hardware Profile:",
+  "benchFirmware": "Firmware Version (ATI):",
+  "benchChip": "Chip Identifier (AT@1):",
+  "benchVoltage": "Supply Voltage (ATRV):",
+  "benchProtocol": "Detected Protocol (ATDP):",
+  "benchRunning": "Running Benchmark Tests...",
+  "benchStart": "Start Benchmark (10 Diagnostic Pings)",
+  "benchNeedConnection": "Please connect to a physical OBD adapter (Bluetooth Classic, BLE, Wi-Fi, or USB OTG) to run benchmark.",
+  "benchLogTitle": "Benchmark Serial Log:",
+  "benchLogRunning": "Running benchmark tests...",
+  "benchLogAti": "Sending ATI (Version query)...",
+  "benchLogAt1": "Sending AT@1 (Device query)...",
+  "benchLogAtrv": "Sending ATRV (Voltage query)...",
+  "benchLogAtdp": "Sending ATDP (Protocol query)...",
+  "benchPingOk": "Ping #{n}: {ms}ms [OK]",
+  "@benchPingOk": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "ms": {
+        "type": "int"
+      }
+    }
+  },
+  "benchPingFail": "Ping #{n}: {ms}ms [FAIL]",
+  "@benchPingFail": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "ms": {
+        "type": "int"
+      }
+    }
+  },
+  "benchResultExcellent": "High-Quality PIC18F25K80 Chip (Fast & Authentic) ✅",
+  "benchResultStandard": "Standard Diagnostic Adapter (Good for daily use) 👍",
+  "benchResultClone": "Budget Clone Adapter (Clone v2.1 - Slow Response) ⚠️",
+  "benchLogError": "Benchmark error: {e}",
+  "@benchLogError": {
+    "placeholders": {
+      "e": {
+        "type": "String"
+      }
+    }
+  },
+  "benchInterrupted": "Benchmark interrupted: {e}",
+  "@benchInterrupted": {
+    "placeholders": {
+      "e": {
+        "type": "String"
+      }
+    }
+  },
+  "encTitle": "DTC Encyclopedia",
+  "encSearchHint": "Search DTC code or keyword (e.g., P0300, Misfire)...",
+  "encCatAll": "All",
+  "encCatPowertrain": "Powertrain",
+  "encCatTransmission": "Transmission",
+  "encCatChassis": "Chassis",
+  "encCatNetwork": "Network",
+  "encCatBody": "Body",
+  "encAvailable": "Available Fault Codes: {count}",
+  "@encAvailable": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "encPresets": "Egyptian Automotive Presets",
+  "encEmpty": "No matching trouble codes found.\nTry searching with a code like 'P0171' or 'misfire'.",
+  "sevNormal": "Normal",
+  "sevCritical": "Critical",
+  "sevHigh": "High",
+  "sevMedium": "Medium",
+  "encTechDesc": "Technical Description:",
+  "encSymptoms": "Common Symptoms:",
+  "encCauses": "Common Workshop Causes:",
+  "encMultimeter": "Multimeter & Pinout Inspection Guide:",
+  "encViewGuide": "View Full Interactive Repair Guide",
+  "sfTitle": "Diagzone Special Functions",
+  "sfSearchHint": "Search service reset (e.g. Oil, EPB, SAS, BMS, Throttle)...",
+  "sfTargetEcu": "Target ECU: {ecu}",
+  "@sfTargetEcu": {
+    "placeholders": {
+      "ecu": {
+        "type": "String"
+      }
+    }
+  },
+  "sfSafety": "Safety Prerequisites:",
+  "sfExecuting": "Executing OBD Reset...",
+  "sfExecute": "Execute Automated OBD Reset",
+  "sfCompleted": "{title} completed successfully!",
+  "@sfCompleted": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "sfRejected": "OBD automated reset command rejected by ECU. Use manual procedure below.",
+  "sfCatBodyBcm": "Body & BCM",
+  "sfCatBodyElectrical": "Body & Electrical",
+  "sfCatBodyLighting": "Body & Lighting",
+  "sfCatBrakes": "Brakes",
+  "sfCatChassisBrakes": "Chassis & Brakes",
+  "sfCatChassisStability": "Chassis & Stability",
+  "sfCatCoolingEngine": "Cooling & Engine",
+  "sfCatDashboard": "Dashboard",
+  "sfCatElectrical": "Electrical",
+  "sfCatElectronics": "Electronics",
+  "sfCatEmissions": "Emissions",
+  "sfCatMaintenance": "Maintenance",
+  "sfCatSafetyAirbag": "Safety & Airbag",
+  "sfCatSecurity": "Security",
+  "sfCatSteeringSuspension": "Steering & Suspension",
+  "sfCatWheelsTires": "Wheels & Tires"
 }

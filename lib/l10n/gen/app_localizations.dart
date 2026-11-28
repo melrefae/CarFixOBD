@@ -4087,6 +4087,450 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sync result: Sent {success} report(s) successfully, {fail} failed.'**
   String lanSyncResultFail(int success, int fail);
+
+  /// No description provided for @unitMs.
+  ///
+  /// In en, this message translates to:
+  /// **'ms'**
+  String get unitMs;
+
+  /// No description provided for @benchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Adapter Benchmark'**
+  String get benchTitle;
+
+  /// No description provided for @benchTapToStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the button below to start benchmark'**
+  String get benchTapToStart;
+
+  /// No description provided for @benchRunningDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Transmitting diagnostic commands and profiling round-trip latency...'**
+  String get benchRunningDesc;
+
+  /// No description provided for @benchIdleDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tests PIC18F25K80 chip authenticity, UART baud buffer, and bus packet throughput'**
+  String get benchIdleDesc;
+
+  /// No description provided for @benchAvg.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg'**
+  String get benchAvg;
+
+  /// No description provided for @benchBest.
+  ///
+  /// In en, this message translates to:
+  /// **'Best'**
+  String get benchBest;
+
+  /// No description provided for @benchMax.
+  ///
+  /// In en, this message translates to:
+  /// **'Max'**
+  String get benchMax;
+
+  /// No description provided for @benchSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get benchSuccess;
+
+  /// No description provided for @benchHwProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Hardware Profile:'**
+  String get benchHwProfile;
+
+  /// No description provided for @benchFirmware.
+  ///
+  /// In en, this message translates to:
+  /// **'Firmware Version (ATI):'**
+  String get benchFirmware;
+
+  /// No description provided for @benchChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Chip Identifier (AT@1):'**
+  String get benchChip;
+
+  /// No description provided for @benchVoltage.
+  ///
+  /// In en, this message translates to:
+  /// **'Supply Voltage (ATRV):'**
+  String get benchVoltage;
+
+  /// No description provided for @benchProtocol.
+  ///
+  /// In en, this message translates to:
+  /// **'Detected Protocol (ATDP):'**
+  String get benchProtocol;
+
+  /// No description provided for @benchRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Running Benchmark Tests...'**
+  String get benchRunning;
+
+  /// No description provided for @benchStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Benchmark (10 Diagnostic Pings)'**
+  String get benchStart;
+
+  /// No description provided for @benchNeedConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Please connect to a physical OBD adapter (Bluetooth Classic, BLE, Wi-Fi, or USB OTG) to run benchmark.'**
+  String get benchNeedConnection;
+
+  /// No description provided for @benchLogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Benchmark Serial Log:'**
+  String get benchLogTitle;
+
+  /// No description provided for @benchLogRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Running benchmark tests...'**
+  String get benchLogRunning;
+
+  /// No description provided for @benchLogAti.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending ATI (Version query)...'**
+  String get benchLogAti;
+
+  /// No description provided for @benchLogAt1.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending AT@1 (Device query)...'**
+  String get benchLogAt1;
+
+  /// No description provided for @benchLogAtrv.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending ATRV (Voltage query)...'**
+  String get benchLogAtrv;
+
+  /// No description provided for @benchLogAtdp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending ATDP (Protocol query)...'**
+  String get benchLogAtdp;
+
+  /// No description provided for @benchPingOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Ping #{n}: {ms}ms [OK]'**
+  String benchPingOk(int n, int ms);
+
+  /// No description provided for @benchPingFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Ping #{n}: {ms}ms [FAIL]'**
+  String benchPingFail(int n, int ms);
+
+  /// No description provided for @benchResultExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'High-Quality PIC18F25K80 Chip (Fast & Authentic) ✅'**
+  String get benchResultExcellent;
+
+  /// No description provided for @benchResultStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard Diagnostic Adapter (Good for daily use) 👍'**
+  String get benchResultStandard;
+
+  /// No description provided for @benchResultClone.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget Clone Adapter (Clone v2.1 - Slow Response) ⚠️'**
+  String get benchResultClone;
+
+  /// No description provided for @benchLogError.
+  ///
+  /// In en, this message translates to:
+  /// **'Benchmark error: {e}'**
+  String benchLogError(String e);
+
+  /// No description provided for @benchInterrupted.
+  ///
+  /// In en, this message translates to:
+  /// **'Benchmark interrupted: {e}'**
+  String benchInterrupted(String e);
+
+  /// No description provided for @encTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'DTC Encyclopedia'**
+  String get encTitle;
+
+  /// No description provided for @encSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search DTC code or keyword (e.g., P0300, Misfire)...'**
+  String get encSearchHint;
+
+  /// No description provided for @encCatAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get encCatAll;
+
+  /// No description provided for @encCatPowertrain.
+  ///
+  /// In en, this message translates to:
+  /// **'Powertrain'**
+  String get encCatPowertrain;
+
+  /// No description provided for @encCatTransmission.
+  ///
+  /// In en, this message translates to:
+  /// **'Transmission'**
+  String get encCatTransmission;
+
+  /// No description provided for @encCatChassis.
+  ///
+  /// In en, this message translates to:
+  /// **'Chassis'**
+  String get encCatChassis;
+
+  /// No description provided for @encCatNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Network'**
+  String get encCatNetwork;
+
+  /// No description provided for @encCatBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Body'**
+  String get encCatBody;
+
+  /// No description provided for @encAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Fault Codes: {count}'**
+  String encAvailable(int count);
+
+  /// No description provided for @encPresets.
+  ///
+  /// In en, this message translates to:
+  /// **'Egyptian Automotive Presets'**
+  String get encPresets;
+
+  /// No description provided for @encEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching trouble codes found.\nTry searching with a code like \'P0171\' or \'misfire\'.'**
+  String get encEmpty;
+
+  /// No description provided for @sevNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get sevNormal;
+
+  /// No description provided for @sevCritical.
+  ///
+  /// In en, this message translates to:
+  /// **'Critical'**
+  String get sevCritical;
+
+  /// No description provided for @sevHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get sevHigh;
+
+  /// No description provided for @sevMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get sevMedium;
+
+  /// No description provided for @encTechDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Technical Description:'**
+  String get encTechDesc;
+
+  /// No description provided for @encSymptoms.
+  ///
+  /// In en, this message translates to:
+  /// **'Common Symptoms:'**
+  String get encSymptoms;
+
+  /// No description provided for @encCauses.
+  ///
+  /// In en, this message translates to:
+  /// **'Common Workshop Causes:'**
+  String get encCauses;
+
+  /// No description provided for @encMultimeter.
+  ///
+  /// In en, this message translates to:
+  /// **'Multimeter & Pinout Inspection Guide:'**
+  String get encMultimeter;
+
+  /// No description provided for @encViewGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'View Full Interactive Repair Guide'**
+  String get encViewGuide;
+
+  /// No description provided for @sfTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagzone Special Functions'**
+  String get sfTitle;
+
+  /// No description provided for @sfSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search service reset (e.g. Oil, EPB, SAS, BMS, Throttle)...'**
+  String get sfSearchHint;
+
+  /// No description provided for @sfTargetEcu.
+  ///
+  /// In en, this message translates to:
+  /// **'Target ECU: {ecu}'**
+  String sfTargetEcu(String ecu);
+
+  /// No description provided for @sfSafety.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety Prerequisites:'**
+  String get sfSafety;
+
+  /// No description provided for @sfExecuting.
+  ///
+  /// In en, this message translates to:
+  /// **'Executing OBD Reset...'**
+  String get sfExecuting;
+
+  /// No description provided for @sfExecute.
+  ///
+  /// In en, this message translates to:
+  /// **'Execute Automated OBD Reset'**
+  String get sfExecute;
+
+  /// No description provided for @sfCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{title} completed successfully!'**
+  String sfCompleted(String title);
+
+  /// No description provided for @sfRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'OBD automated reset command rejected by ECU. Use manual procedure below.'**
+  String get sfRejected;
+
+  /// No description provided for @sfCatBodyBcm.
+  ///
+  /// In en, this message translates to:
+  /// **'Body & BCM'**
+  String get sfCatBodyBcm;
+
+  /// No description provided for @sfCatBodyElectrical.
+  ///
+  /// In en, this message translates to:
+  /// **'Body & Electrical'**
+  String get sfCatBodyElectrical;
+
+  /// No description provided for @sfCatBodyLighting.
+  ///
+  /// In en, this message translates to:
+  /// **'Body & Lighting'**
+  String get sfCatBodyLighting;
+
+  /// No description provided for @sfCatBrakes.
+  ///
+  /// In en, this message translates to:
+  /// **'Brakes'**
+  String get sfCatBrakes;
+
+  /// No description provided for @sfCatChassisBrakes.
+  ///
+  /// In en, this message translates to:
+  /// **'Chassis & Brakes'**
+  String get sfCatChassisBrakes;
+
+  /// No description provided for @sfCatChassisStability.
+  ///
+  /// In en, this message translates to:
+  /// **'Chassis & Stability'**
+  String get sfCatChassisStability;
+
+  /// No description provided for @sfCatCoolingEngine.
+  ///
+  /// In en, this message translates to:
+  /// **'Cooling & Engine'**
+  String get sfCatCoolingEngine;
+
+  /// No description provided for @sfCatDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get sfCatDashboard;
+
+  /// No description provided for @sfCatElectrical.
+  ///
+  /// In en, this message translates to:
+  /// **'Electrical'**
+  String get sfCatElectrical;
+
+  /// No description provided for @sfCatElectronics.
+  ///
+  /// In en, this message translates to:
+  /// **'Electronics'**
+  String get sfCatElectronics;
+
+  /// No description provided for @sfCatEmissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Emissions'**
+  String get sfCatEmissions;
+
+  /// No description provided for @sfCatMaintenance.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintenance'**
+  String get sfCatMaintenance;
+
+  /// No description provided for @sfCatSafetyAirbag.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety & Airbag'**
+  String get sfCatSafetyAirbag;
+
+  /// No description provided for @sfCatSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get sfCatSecurity;
+
+  /// No description provided for @sfCatSteeringSuspension.
+  ///
+  /// In en, this message translates to:
+  /// **'Steering & Suspension'**
+  String get sfCatSteeringSuspension;
+
+  /// No description provided for @sfCatWheelsTires.
+  ///
+  /// In en, this message translates to:
+  /// **'Wheels & Tires'**
+  String get sfCatWheelsTires;
 }
 
 class _AppLocalizationsDelegate

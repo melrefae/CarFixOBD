@@ -2256,4 +2256,250 @@ class AppLocalizationsEn extends AppLocalizations {
   String lanSyncResultFail(int success, int fail) {
     return 'Sync result: Sent $success report(s) successfully, $fail failed.';
   }
+
+  @override
+  String get unitMs => 'ms';
+
+  @override
+  String get benchTitle => 'Adapter Benchmark';
+
+  @override
+  String get benchTapToStart => 'Tap the button below to start benchmark';
+
+  @override
+  String get benchRunningDesc =>
+      'Transmitting diagnostic commands and profiling round-trip latency...';
+
+  @override
+  String get benchIdleDesc =>
+      'Tests PIC18F25K80 chip authenticity, UART baud buffer, and bus packet throughput';
+
+  @override
+  String get benchAvg => 'Avg';
+
+  @override
+  String get benchBest => 'Best';
+
+  @override
+  String get benchMax => 'Max';
+
+  @override
+  String get benchSuccess => 'Success';
+
+  @override
+  String get benchHwProfile => 'Hardware Profile:';
+
+  @override
+  String get benchFirmware => 'Firmware Version (ATI):';
+
+  @override
+  String get benchChip => 'Chip Identifier (AT@1):';
+
+  @override
+  String get benchVoltage => 'Supply Voltage (ATRV):';
+
+  @override
+  String get benchProtocol => 'Detected Protocol (ATDP):';
+
+  @override
+  String get benchRunning => 'Running Benchmark Tests...';
+
+  @override
+  String get benchStart => 'Start Benchmark (10 Diagnostic Pings)';
+
+  @override
+  String get benchNeedConnection =>
+      'Please connect to a physical OBD adapter (Bluetooth Classic, BLE, Wi-Fi, or USB OTG) to run benchmark.';
+
+  @override
+  String get benchLogTitle => 'Benchmark Serial Log:';
+
+  @override
+  String get benchLogRunning => 'Running benchmark tests...';
+
+  @override
+  String get benchLogAti => 'Sending ATI (Version query)...';
+
+  @override
+  String get benchLogAt1 => 'Sending AT@1 (Device query)...';
+
+  @override
+  String get benchLogAtrv => 'Sending ATRV (Voltage query)...';
+
+  @override
+  String get benchLogAtdp => 'Sending ATDP (Protocol query)...';
+
+  @override
+  String benchPingOk(int n, int ms) {
+    return 'Ping #$n: ${ms}ms [OK]';
+  }
+
+  @override
+  String benchPingFail(int n, int ms) {
+    return 'Ping #$n: ${ms}ms [FAIL]';
+  }
+
+  @override
+  String get benchResultExcellent =>
+      'High-Quality PIC18F25K80 Chip (Fast & Authentic) ✅';
+
+  @override
+  String get benchResultStandard =>
+      'Standard Diagnostic Adapter (Good for daily use) 👍';
+
+  @override
+  String get benchResultClone =>
+      'Budget Clone Adapter (Clone v2.1 - Slow Response) ⚠️';
+
+  @override
+  String benchLogError(String e) {
+    return 'Benchmark error: $e';
+  }
+
+  @override
+  String benchInterrupted(String e) {
+    return 'Benchmark interrupted: $e';
+  }
+
+  @override
+  String get encTitle => 'DTC Encyclopedia';
+
+  @override
+  String get encSearchHint =>
+      'Search DTC code or keyword (e.g., P0300, Misfire)...';
+
+  @override
+  String get encCatAll => 'All';
+
+  @override
+  String get encCatPowertrain => 'Powertrain';
+
+  @override
+  String get encCatTransmission => 'Transmission';
+
+  @override
+  String get encCatChassis => 'Chassis';
+
+  @override
+  String get encCatNetwork => 'Network';
+
+  @override
+  String get encCatBody => 'Body';
+
+  @override
+  String encAvailable(int count) {
+    return 'Available Fault Codes: $count';
+  }
+
+  @override
+  String get encPresets => 'Egyptian Automotive Presets';
+
+  @override
+  String get encEmpty =>
+      'No matching trouble codes found.\nTry searching with a code like \'P0171\' or \'misfire\'.';
+
+  @override
+  String get sevNormal => 'Normal';
+
+  @override
+  String get sevCritical => 'Critical';
+
+  @override
+  String get sevHigh => 'High';
+
+  @override
+  String get sevMedium => 'Medium';
+
+  @override
+  String get encTechDesc => 'Technical Description:';
+
+  @override
+  String get encSymptoms => 'Common Symptoms:';
+
+  @override
+  String get encCauses => 'Common Workshop Causes:';
+
+  @override
+  String get encMultimeter => 'Multimeter & Pinout Inspection Guide:';
+
+  @override
+  String get encViewGuide => 'View Full Interactive Repair Guide';
+
+  @override
+  String get sfTitle => 'Diagzone Special Functions';
+
+  @override
+  String get sfSearchHint =>
+      'Search service reset (e.g. Oil, EPB, SAS, BMS, Throttle)...';
+
+  @override
+  String sfTargetEcu(String ecu) {
+    return 'Target ECU: $ecu';
+  }
+
+  @override
+  String get sfSafety => 'Safety Prerequisites:';
+
+  @override
+  String get sfExecuting => 'Executing OBD Reset...';
+
+  @override
+  String get sfExecute => 'Execute Automated OBD Reset';
+
+  @override
+  String sfCompleted(String title) {
+    return '$title completed successfully!';
+  }
+
+  @override
+  String get sfRejected =>
+      'OBD automated reset command rejected by ECU. Use manual procedure below.';
+
+  @override
+  String get sfCatBodyBcm => 'Body & BCM';
+
+  @override
+  String get sfCatBodyElectrical => 'Body & Electrical';
+
+  @override
+  String get sfCatBodyLighting => 'Body & Lighting';
+
+  @override
+  String get sfCatBrakes => 'Brakes';
+
+  @override
+  String get sfCatChassisBrakes => 'Chassis & Brakes';
+
+  @override
+  String get sfCatChassisStability => 'Chassis & Stability';
+
+  @override
+  String get sfCatCoolingEngine => 'Cooling & Engine';
+
+  @override
+  String get sfCatDashboard => 'Dashboard';
+
+  @override
+  String get sfCatElectrical => 'Electrical';
+
+  @override
+  String get sfCatElectronics => 'Electronics';
+
+  @override
+  String get sfCatEmissions => 'Emissions';
+
+  @override
+  String get sfCatMaintenance => 'Maintenance';
+
+  @override
+  String get sfCatSafetyAirbag => 'Safety & Airbag';
+
+  @override
+  String get sfCatSecurity => 'Security';
+
+  @override
+  String get sfCatSteeringSuspension => 'Steering & Suspension';
+
+  @override
+  String get sfCatWheelsTires => 'Wheels & Tires';
 }

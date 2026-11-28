@@ -2247,4 +2247,249 @@ class AppLocalizationsAr extends AppLocalizations {
   String lanSyncResultFail(int success, int fail) {
     return 'نتيجة المزامنة: تم إرسال $success تقرير بنجاح، وفشل $fail.';
   }
+
+  @override
+  String get unitMs => 'م.ث';
+
+  @override
+  String get benchTitle => 'اختبار كفاءة وسرعة فيشة الـ OBD';
+
+  @override
+  String get benchTapToStart => 'اضغط الزر بالأسفل لبدء الاختبار';
+
+  @override
+  String get benchRunningDesc =>
+      'جاري إرسال أوامر التشخيص وقياس زمن الاستجابة...';
+
+  @override
+  String get benchIdleDesc =>
+      'يفحص أصالة شريحة PIC18F25K80 وبافر الـ UART وسرعة نقل الباكتات';
+
+  @override
+  String get benchAvg => 'المتوسط';
+
+  @override
+  String get benchBest => 'الأفضل';
+
+  @override
+  String get benchMax => 'الأقصى';
+
+  @override
+  String get benchSuccess => 'النجاح';
+
+  @override
+  String get benchHwProfile => 'الملف الفني للهاردوير:';
+
+  @override
+  String get benchFirmware => 'إصدار الفيرموير (ATI):';
+
+  @override
+  String get benchChip => 'معرف الشريحة (AT@1):';
+
+  @override
+  String get benchVoltage => 'جهد التغذية (ATRV):';
+
+  @override
+  String get benchProtocol => 'البروتوكول المكتشف (ATDP):';
+
+  @override
+  String get benchRunning => 'جاري تشغيل الاختبار...';
+
+  @override
+  String get benchStart => 'بدء الاختبار (10 أوامر تشخيصية)';
+
+  @override
+  String get benchNeedConnection =>
+      'من فضلك اتصل بفيشة OBD فعلية (بلوتوث كلاسيك، BLE، واي فاي، أو USB OTG) لتشغيل الاختبار.';
+
+  @override
+  String get benchLogTitle => 'سجل الاختبار التسلسلي:';
+
+  @override
+  String get benchLogRunning => 'جاري تشغيل الاختبار...';
+
+  @override
+  String get benchLogAti => 'إرسال ATI (استعلام الإصدار)...';
+
+  @override
+  String get benchLogAt1 => 'إرسال AT@1 (استعلام الجهاز)...';
+
+  @override
+  String get benchLogAtrv => 'إرسال ATRV (استعلام الجهد)...';
+
+  @override
+  String get benchLogAtdp => 'إرسال ATDP (استعلام البروتوكول)...';
+
+  @override
+  String benchPingOk(int n, int ms) {
+    return 'Ping #$n: $ms م.ث [OK]';
+  }
+
+  @override
+  String benchPingFail(int n, int ms) {
+    return 'Ping #$n: $ms م.ث [فشل]';
+  }
+
+  @override
+  String get benchResultExcellent =>
+      'شريحة PIC18F25K80 أصلية عالية الجودة (سريعة) ✅';
+
+  @override
+  String get benchResultStandard =>
+      'فيشة تشخيص قياسية (جيدة للاستخدام اليومي) 👍';
+
+  @override
+  String get benchResultClone =>
+      'فيشة مقلدة رخيصة (Clone v2.1 - استجابة بطيئة) ⚠️';
+
+  @override
+  String benchLogError(String e) {
+    return 'خطأ في الاختبار: $e';
+  }
+
+  @override
+  String benchInterrupted(String e) {
+    return 'توقف الاختبار: $e';
+  }
+
+  @override
+  String get encTitle => 'موسوعة أكواد الأعطال';
+
+  @override
+  String get encSearchHint => 'ابحث بكود العطل أو كلمة (مثل P0300، شر)...';
+
+  @override
+  String get encCatAll => 'الكل';
+
+  @override
+  String get encCatPowertrain => 'المحرك ونقل الحركة';
+
+  @override
+  String get encCatTransmission => 'الفتيس';
+
+  @override
+  String get encCatChassis => 'الشاسيه';
+
+  @override
+  String get encCatNetwork => 'الشبكة';
+
+  @override
+  String get encCatBody => 'الهيكل';
+
+  @override
+  String encAvailable(int count) {
+    return 'أكواد الأعطال المتاحة: $count';
+  }
+
+  @override
+  String get encPresets => 'إعدادات السوق المصري';
+
+  @override
+  String get encEmpty =>
+      'لا توجد أكواد مطابقة.\nجرّب البحث بكود مثل \'P0171\' أو \'شر\'.';
+
+  @override
+  String get sevNormal => 'عادي';
+
+  @override
+  String get sevCritical => 'حرج';
+
+  @override
+  String get sevHigh => 'مرتفع';
+
+  @override
+  String get sevMedium => 'متوسط';
+
+  @override
+  String get encTechDesc => 'الوصف الفني:';
+
+  @override
+  String get encSymptoms => 'الأعراض الشائعة:';
+
+  @override
+  String get encCauses => 'الأسباب الشائعة في الورشة:';
+
+  @override
+  String get encMultimeter => 'دليل الفحص بالمالتيميتر والأطراف:';
+
+  @override
+  String get encViewGuide => 'عرض دليل الإصلاح التفاعلي الكامل';
+
+  @override
+  String get sfTitle => 'وظائف دياجزون الخاصة';
+
+  @override
+  String get sfSearchHint =>
+      'ابحث عن ريست (مثل Oil، EPB، SAS، BMS، Throttle)...';
+
+  @override
+  String sfTargetEcu(String ecu) {
+    return 'الكنترول المستهدف: $ecu';
+  }
+
+  @override
+  String get sfSafety => 'اشتراطات الأمان:';
+
+  @override
+  String get sfExecuting => 'جاري تنفيذ الريست...';
+
+  @override
+  String get sfExecute => 'تنفيذ الريست الأوتوماتيكي عبر OBD';
+
+  @override
+  String sfCompleted(String title) {
+    return 'تم تنفيذ $title بنجاح!';
+  }
+
+  @override
+  String get sfRejected =>
+      'الكنترول رفض أمر الريست الأوتوماتيكي. استخدم الخطوات اليدوية بالأسفل.';
+
+  @override
+  String get sfCatBodyBcm => 'الهيكل و BCM';
+
+  @override
+  String get sfCatBodyElectrical => 'الهيكل والكهرباء';
+
+  @override
+  String get sfCatBodyLighting => 'الهيكل والإضاءة';
+
+  @override
+  String get sfCatBrakes => 'الفرامل';
+
+  @override
+  String get sfCatChassisBrakes => 'الشاسيه والفرامل';
+
+  @override
+  String get sfCatChassisStability => 'الشاسيه والثبات';
+
+  @override
+  String get sfCatCoolingEngine => 'التبريد والمحرك';
+
+  @override
+  String get sfCatDashboard => 'الطبلون';
+
+  @override
+  String get sfCatElectrical => 'الكهرباء';
+
+  @override
+  String get sfCatElectronics => 'الإلكترونيات';
+
+  @override
+  String get sfCatEmissions => 'الانبعاثات';
+
+  @override
+  String get sfCatMaintenance => 'الصيانة';
+
+  @override
+  String get sfCatSafetyAirbag => 'الأمان والإيرباج';
+
+  @override
+  String get sfCatSecurity => 'التأمين';
+
+  @override
+  String get sfCatSteeringSuspension => 'التوجيه والتعليق';
+
+  @override
+  String get sfCatWheelsTires => 'العجلات والإطارات';
 }

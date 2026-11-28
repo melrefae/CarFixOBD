@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/localization/app_strings_en.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../data/models/dtc_model.dart';
 import '../../data/repositories/dtc_repository.dart';
 import '../widgets/dtc_repair_guide_modal.dart';
@@ -83,9 +83,10 @@ class _DtcEncyclopediaScreenState extends State<DtcEncyclopediaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.dtcEncyclopedia),
+        title: Text(l10n.encTitle),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: Padding(
@@ -95,7 +96,7 @@ class _DtcEncyclopediaScreenState extends State<DtcEncyclopediaScreen> {
               onChanged: (_) => _applyFilter(),
               style: const TextStyle(color: AppColors.textWhite),
               decoration: InputDecoration(
-                hintText: AppStrings.searchDtcHint,
+                hintText: l10n.encSearchHint,
                 hintStyle: const TextStyle(color: AppColors.textMuted),
                 prefixIcon: const Icon(Icons.search, color: AppColors.primaryYellow),
                 suffixIcon: _searchController.text.isNotEmpty
@@ -127,11 +128,11 @@ class _DtcEncyclopediaScreenState extends State<DtcEncyclopediaScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Available Fault Codes: ${_filteredCodes.length}",
+                        l10n.encAvailable(_filteredCodes.length),
                         style: const TextStyle(color: AppColors.textMuted, fontSize: 13, fontWeight: FontWeight.bold),
                       ),
-                      const Text(
-                        "Egyptian Automotive Presets",
+                      Text(
+                        l10n.encPresets,
                         style: TextStyle(color: AppColors.primaryYellow, fontSize: 12),
                       ),
                     ],
@@ -141,9 +142,9 @@ class _DtcEncyclopediaScreenState extends State<DtcEncyclopediaScreen> {
                 // DTC Cards List
                 Expanded(
                   child: _filteredCodes.isEmpty
-                      ? const Center(
+                      ? Center(
                           child: Text(
-                            "No matching trouble codes found.\nTry searching with a code like 'P0171' or 'misfire'.",
+                            l10n.encEmpty,
                             textAlign: TextAlign.center,
                             style: TextStyle(color: AppColors.textMuted, fontSize: 15),
                           ),
@@ -162,6 +163,7 @@ class _DtcEncyclopediaScreenState extends State<DtcEncyclopediaScreen> {
   }
 
   Widget _buildCategoryChips() {
+    final l10n = AppLocalizations.of(context);
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -172,7 +174,7 @@ class _DtcEncyclopediaScreenState extends State<DtcEncyclopediaScreen> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: ChoiceChip(
-              label: Text(cat),
+              label: Text(_encCatLabel(l10n, cat)),
               selected: isSelected,
               selectedColor: AppColors.primaryYellow,
               backgroundColor: AppColors.cardSurface,
@@ -197,18 +199,20 @@ class _DtcEncyclopediaScreenState extends State<DtcEncyclopediaScreen> {
   }
 
   Widget _buildDtcCard(DtcModel dtc) {
+    final l10n = AppLocalizations.of(context);
+    final isAr = Localizations.localeOf(context).languageCode == 'ar';
     Color severityColor = AppColors.electricBlue;
-    String severityLabel = "Normal";
+    String severityLabel = l10n.sevNormal;
     final sev = dtc.severity.toLowerCase();
     if (sev == 'critical') {
       severityColor = AppColors.dangerRed;
-      severityLabel = "Critical";
+      severityLabel = l10n.sevCritical;
     } else if (sev == 'high') {
       severityColor = AppColors.warningOrange;
-      severityLabel = "High";
+      severityLabel = l10n.sevHigh;
     } else if (sev == 'medium') {
       severityColor = AppColors.primaryYellow;
-      severityLabel = "Medium";
+      severityLabel = l10n.sevMedium;
     }
 
     return Card(
@@ -237,7 +241,7 @@ class _DtcEncyclopediaScreenState extends State<DtcEncyclopediaScreen> {
           ),
         ),
         title: Text(
-          dtc.title,
+          isAr && dtc.titleAr.isNotEmpty ? dtc.titleAr : dtc.title,
           style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.textWhite),
         ),
         subtitle: Row(
@@ -255,7 +259,7 @@ class _DtcEncyclopediaScreenState extends State<DtcEncyclopediaScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              dtc.category,
+              _encCatLabel(l10n, dtc.category),
               style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
             ),
           ],
@@ -270,17 +274,17 @@ class _DtcEncyclopediaScreenState extends State<DtcEncyclopediaScreen> {
 
                 // Technical Description
                 if (dtc.description.isNotEmpty) ...[
-                  const Text("Technical Description:", style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primaryYellow)),
+                  Text(l10n.encTechDesc, style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primaryYellow)),
                   const SizedBox(height: 4),
-                  Text(dtc.description, style: const TextStyle(fontSize: 13, height: 1.4, color: AppColors.textWhite)),
+                  Text(isAr && dtc.descriptionAr.isNotEmpty ? dtc.descriptionAr : dtc.description, style: const TextStyle(fontSize: 13, height: 1.4, color: AppColors.textWhite)),
                   const SizedBox(height: 10),
                 ],
 
                 // Symptoms
                 if (dtc.symptoms.isNotEmpty) ...[
-                  const Text("Common Symptoms:", style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.electricBlue)),
+                  Text(l10n.encSymptoms, style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.electricBlue)),
                   const SizedBox(height: 4),
-                  ...dtc.symptoms.map((s) => Padding(
+                  ...(isAr && dtc.symptomsAr.isNotEmpty ? dtc.symptomsAr : dtc.symptoms).map((s) => Padding(
                         padding: const EdgeInsets.only(bottom: 2),
                         child: Row(
                           children: [
@@ -295,9 +299,9 @@ class _DtcEncyclopediaScreenState extends State<DtcEncyclopediaScreen> {
 
                 // Causes
                 if (dtc.causes.isNotEmpty) ...[
-                  const Text("Common Workshop Causes:", style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.warningOrange)),
+                  Text(l10n.encCauses, style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.warningOrange)),
                   const SizedBox(height: 4),
-                  ...dtc.causes.map((c) => Padding(
+                  ...(isAr && dtc.causesAr.isNotEmpty ? dtc.causesAr : dtc.causes).map((c) => Padding(
                         padding: const EdgeInsets.only(bottom: 2),
                         child: Row(
                           children: [
@@ -321,12 +325,12 @@ class _DtcEncyclopediaScreenState extends State<DtcEncyclopediaScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Row(
+                        Row(
                           children: [
-                            Icon(Icons.tune, color: AppColors.primaryYellow, size: 18),
-                            SizedBox(width: 6),
+                            const Icon(Icons.tune, color: AppColors.primaryYellow, size: 18),
+                            const SizedBox(width: 6),
                             Text(
-                              "Multimeter & Pinout Inspection Guide:",
+                              l10n.encMultimeter,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.primaryYellow,
@@ -337,7 +341,7 @@ class _DtcEncyclopediaScreenState extends State<DtcEncyclopediaScreen> {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          dtc.workshopCheck,
+                          isAr && dtc.workshopCheckAr.isNotEmpty ? dtc.workshopCheckAr : dtc.workshopCheck,
                           style: const TextStyle(fontSize: 13, height: 1.5, color: Colors.white),
                         ),
                       ],
@@ -355,7 +359,7 @@ class _DtcEncyclopediaScreenState extends State<DtcEncyclopediaScreen> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
                     icon: const Icon(Icons.menu_book, size: 16),
-                    label: const Text("View Full Interactive Repair Guide", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                    label: Text(l10n.encViewGuide, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                     onPressed: () => DtcRepairGuideModal.show(context, dtc.code),
                   ),
                 ),
@@ -365,5 +369,24 @@ class _DtcEncyclopediaScreenState extends State<DtcEncyclopediaScreen> {
         ],
       ),
     );
+  }
+}
+
+String _encCatLabel(AppLocalizations l10n, String cat) {
+  switch (cat) {
+    case 'All':
+      return l10n.encCatAll;
+    case 'Powertrain':
+      return l10n.encCatPowertrain;
+    case 'Transmission':
+      return l10n.encCatTransmission;
+    case 'Chassis':
+      return l10n.encCatChassis;
+    case 'Network':
+      return l10n.encCatNetwork;
+    case 'Body':
+      return l10n.encCatBody;
+    default:
+      return cat;
   }
 }
