@@ -57,4 +57,67 @@ void main() {
     expect(txt, contains('12.4'));
     expect(txt, contains('no VIN'));
   });
+
+  test('verdict: v2.x string means likely clone; Arabic text available', () async {
+    int k = 0;
+    final f = Fake((c) {
+      switch (c) {
+        case 'ATI': return 'ELM327 v2.1';
+        case 'AT@1': return '?';
+        case 'STI': return '?';
+        case 'ATRV': return '12.4V';
+        case 'ATDPN': return 'A5';
+        case 'ATDP': return 'AUTO, ISO 14230-4 (KWP FAST)';
+        case '0100': k++; return k == 4 ? 'NO DATA' : '41 00 BE 3E B8 11';
+        case '0902': return 'NO DATA';
+      }
+      return 'OK';
+    });
+    final d = Elm327Driver(connection: f);
+    await d.connectToEcu();
+    final r = await AdapterCheck.run(d);
+    expect(r.verdict, AdapterVerdict.likelyClone);
+    expect(r.verdictHeadline(false), contains('clone'));
+    expect(r.verdictHeadline(true), contains('مقلدة'));
+    expect(r.verdictBody(true), contains('K-line'));
+    final ar = r.toText(ar: true);
+    expect(ar, contains('اختبار التكرار'));
+    expect(ar, contains('فولت البطارية'));
+  }, timeout: const Timeout(Duration(seconds: 60)));
+
+  test('verdict: STN chip answers means no clone signs', () async {
+    final f = Fake((c) {
+      switch (c) {
+        case 'ATI': return 'OBDLink MX+';
+        case 'AT@1': return '?';
+        case 'STI': return 'STN2120 v4.5.0';
+        case 'ATRV': return '12.6V';
+        case 'ATDPN': return 'A6';
+        case 'ATDP': return 'AUTO, ISO 15765-4 (CAN 11/500)';
+        case '0100': return '41 00 BE 3E B8 11';
+        case '0902': return 'NO DATA';
+      }
+      return 'OK';
+    });
+    final d = Elm327Driver(connection: f);
+    await d.connectToEcu();
+    final r = await AdapterCheck.run(d);
+    expect(r.verdict, AdapterVerdict.likelyGenuine);
+    expect(r.verdictBody(false), contains('not proof'));
+  }, timeout: const Timeout(Duration(seconds: 60)));
+
+  test('verdict: adapter that never identifies itself is unknown', () async {
+    final f = Fake((c) {
+      switch (c) {
+        case '0100': return '41 00 BE 3E B8 11';
+        case '0902': return 'NO DATA';
+      }
+      return '?';
+    });
+    final d = Elm327Driver(connection: f);
+    await d.connectToEcu();
+    final r = await AdapterCheck.run(d);
+    expect(r.verdict, AdapterVerdict.unknown);
+    expect(r.verdictHeadline(true), contains('أحكم'));
+  }, timeout: const Timeout(Duration(seconds: 60)));
 }

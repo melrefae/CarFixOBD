@@ -11,6 +11,7 @@ import '../../data/datasources/wifi_obd_connection.dart';
 import '../providers/obd_state.dart';
 import '../../domain/services/adapter_check.dart';
 import '../../domain/services/uds_read_service.dart';
+import '../widgets/adapter_check_result.dart';
 
 /// Connection manager screen for Bluetooth Classic, BLE 5.0, Wi-Fi, USB-OTG / Serial, and Universal Auto-Detect
 class ConnectionScreen extends StatefulWidget {
@@ -217,9 +218,10 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                   final r = await AdapterCheck.run(d);
                   if (!mounted) return;
                   Navigator.of(context).pop();
+                  final isAr = AppLocalizations.of(context).localeName == 'ar';
                   showDialog(context: context, builder: (_) => AlertDialog(
                     title: Text(AppLocalizations.of(context).adapterCheckTitle),
-                    content: SingleChildScrollView(child: Text(r.toText(), style: const TextStyle(fontSize: 12))),
+                    content: SingleChildScrollView(child: AdapterCheckResultView(report: r, isAr: isAr)),
                     actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK'))],
                   ));
                 },
