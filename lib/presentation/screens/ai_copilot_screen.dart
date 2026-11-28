@@ -49,7 +49,9 @@ class AiCopilotScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.copy),
             tooltip: l10n.copCopyTooltip,
-            onPressed: () {
+            onPressed: !state.isConnected
+                ? null
+                : () {
               final text = StringBuffer();
               text.writeln(l10n.copRepHeader);
               text.writeln(l10n.copRepVehicle(report.vehicleTitle));
@@ -88,32 +90,65 @@ class AiCopilotScreen extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            // Primary Hypothesis Card
-            _buildHypothesisCard(report, l10n),
+            if (!state.isConnected)
+              // Honest no-data state: no hypothesis, no percentage, no fake evidence.
+              _buildNoDataCard(l10n)
+            else ...[
+              // Primary Hypothesis Card
+              _buildHypothesisCard(report, l10n),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            // Key Evidence Card
-            _buildEvidenceCard(report, l10n),
+              // Key Evidence Card
+              _buildEvidenceCard(report, l10n),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            // Step-by-Step Diagnostic Roadmap
-            _buildRoadmapSection(report, l10n),
+              // Step-by-Step Diagnostic Roadmap
+              _buildRoadmapSection(report, l10n),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            // Egyptian Workshop Bulletin Card
-            _buildEgyptianBulletinCard(report, l10n),
+              // Egyptian Workshop Bulletin Card
+              _buildEgyptianBulletinCard(report, l10n),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            // Quick Diagnostic Action Shortcuts
-            _buildDiagnosticShortcuts(context, l10n),
+              // Quick Diagnostic Action Shortcuts
+              _buildDiagnosticShortcuts(context, l10n),
+            ],
 
             const SizedBox(height: 24),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildNoDataCard(AppLocalizations l10n) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceCard,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.borderSubtle),
+      ),
+      child: Column(
+        children: [
+          const Icon(Icons.sensors_off, color: AppColors.textMuted, size: 40),
+          const SizedBox(height: 12),
+          Text(
+            l10n.copNoDataTitle,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textWhite),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            l10n.copNoDataBody,
+            style: const TextStyle(fontSize: 12, color: AppColors.textMuted, height: 1.5),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }

@@ -288,6 +288,31 @@ void main() {
       expect(report.evidenceList.join(' '), contains('P0171'));
     });
 
+    test('No invented values: null sensor data yields honest not-read evidence', () {
+      final report = AiDiagnosticCopilot.generateDiagnosis(
+        vehicleMakeModel: 'Hyundai Verna 1.6L',
+        dtcCodes: [],
+        ltft: null,
+        stft: null,
+        coolantTemp: null,
+        batteryVoltage: null,
+        mapKpa: null,
+      );
+      final joined = report.evidenceList.join(' ');
+      expect(joined.contains('+2.0'), isFalse); // old fabricated default is gone
+      expect(report.evidenceList.any((e) => e.contains('not read from the vehicle')), isTrue);
+
+      final lean = AiDiagnosticCopilot.generateDiagnosis(
+        vehicleMakeModel: 'Hyundai Verna 1.6L',
+        dtcCodes: ['P0171'],
+        ltft: null, stft: null, coolantTemp: null, batteryVoltage: null, mapKpa: null,
+        isArabic: true,
+      );
+      expect(lean.evidenceList.join(' ').contains('+17.5'), isFalse);
+      expect(lean.evidenceList.join(' ').contains('36 kPa'), isFalse);
+      expect(lean.evidenceList.any((e) => e.contains('لم تُقرأ')), isTrue);
+    });
+
     test('Provides fallback roadmap for normal operating telemetry', () {
       final report = AiDiagnosticCopilot.generateDiagnosis(
         vehicleMakeModel: 'Toyota Corolla 1.6L',

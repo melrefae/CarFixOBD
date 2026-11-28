@@ -2732,6 +2732,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get copEvidence => 'Correlated Live Evidence & Telemetry';
 
   @override
+  String get copNoDataTitle => 'No vehicle data yet';
+
+  @override
+  String get copNoDataBody =>
+      'Connect the adapter and read fault codes and live data first. The assistant analyzes real readings only - it will not guess a diagnosis.';
+
+  @override
   String copRoadmap(int count) {
     return 'Workshop Diagnostic Roadmap ($count steps)';
   }

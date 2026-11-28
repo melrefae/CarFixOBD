@@ -4910,6 +4910,18 @@ abstract class AppLocalizations {
   /// **'Correlated Live Evidence & Telemetry'**
   String get copEvidence;
 
+  /// No description provided for @copNoDataTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No vehicle data yet'**
+  String get copNoDataTitle;
+
+  /// No description provided for @copNoDataBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect the adapter and read fault codes and live data first. The assistant analyzes real readings only - it will not guess a diagnosis.'**
+  String get copNoDataBody;
+
   /// No description provided for @copRoadmap.
   ///
   /// In en, this message translates to:

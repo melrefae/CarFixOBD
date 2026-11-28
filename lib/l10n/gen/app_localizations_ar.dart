@@ -2723,6 +2723,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get copEvidence => 'الأدلة والقراءات الحية المرتبطة';
 
   @override
+  String get copNoDataTitle => 'مفيش بيانات من العربية لسه';
+
+  @override
+  String get copNoDataBody =>
+      'وصّل فيشة الفحص واقرا الأعطال والبيانات الحية الأول. المساعد الذكي بيحلل قراءات حقيقية بس - مش هيخمن تشخيص من الهوا.';
+
+  @override
   String copRoadmap(int count) {
     return 'خارطة الفحص التشخيصي ($count خطوات)';
   }

@@ -69,10 +69,14 @@ class AiDiagnosticCopilot {
             ? "متوسط: تآكل أعلى للمحرك وطفطفة في الثبات"
             : "MODERATE: Elevated engine wear & rough idle",
         evidenceList: [
-          if (isArabic)
-            "الـ LTFT موجب بشكل زيادة عن اللزوم (${ltft?.toStringAsFixed(1) ?? '+17.5'}%)، يعني الـ ECU بيضيف بنزين كتير عشان يعوّض هواء داخل مش محسوب."
+          if (ltft != null)
+            isArabic
+                ? "الـ LTFT موجب بشكل زيادة عن اللزوم (${ltft.toStringAsFixed(1)}%)، يعني الـ ECU بيضيف بنزين كتير عشان يعوّض هواء داخل مش محسوب."
+                : "Long Term Fuel Trim is excessively positive (${ltft.toStringAsFixed(1)}%), indicating ECU is adding excessive fuel to compensate for unmetered air."
           else
-            "Long Term Fuel Trim is excessively positive (${ltft?.toStringAsFixed(1) ?? '+17.5'}%), indicating ECU is adding excessive fuel to compensate for unmetered air.",
+            isArabic
+                ? "قراءة الـ LTFT غير متاحة (لم تُقرأ من السيارة بعد - وصّل الفيشة وشغّل البيانات الحية)."
+                : "LTFT reading not available (not read from the vehicle yet - connect and start live data).",
           if (hasP0171)
             isArabic
                 ? "كود عطل مؤكد P0171 (خليط فقير Bank 1) متسجل في ذاكرة الـ ECU."
@@ -81,10 +85,10 @@ class AiDiagnosticCopilot {
             isArabic
                 ? "تقطيع اشتعال عشوائي مصاحب (P0300) بسبب خليط هواء/وقود فقير جداً في السلندرات."
                 : "Associated random misfire (P0300) caused by overly lean air-fuel mixture in cylinders.",
-          if (isArabic)
-            "حساس MAP بيظهر انحراف في ضغط الخلخلة (${mapKpa?.toStringAsFixed(1) ?? '36'} kPa أثناء الثبات)."
-          else
-            "MAP sensor shows manifold vacuum deviation (${mapKpa?.toStringAsFixed(1) ?? '36'} kPa at idle).",
+          if (mapKpa != null)
+            isArabic
+                ? "حساس MAP بيظهر انحراف في ضغط الخلخلة (${mapKpa.toStringAsFixed(1)} kPa أثناء الثبات)."
+                : "MAP sensor shows manifold vacuum deviation (${mapKpa.toStringAsFixed(1)} kPa at idle).",
         ],
         roadmap: isArabic
             ? const [
@@ -255,9 +259,14 @@ class AiDiagnosticCopilot {
             ? "حرج: خطر لي وش السلندر أو شرخ في البلوك!"
             : "CRITICAL: Risk of cylinder head gasket warp or cracked engine block!",
         evidenceList: [
-          isArabic
-              ? "حرارة مياه التبريد وصلت للحد الحرج (${coolantTemp?.toStringAsFixed(1) ?? '108'}°C)."
-              : "Coolant temperature reached critical threshold (${coolantTemp?.toStringAsFixed(1) ?? '108'}°C).",
+          if (coolantTemp != null)
+            isArabic
+                ? "حرارة مياه التبريد وصلت للحد الحرج (${coolantTemp.toStringAsFixed(1)}°C)."
+                : "Coolant temperature reached critical threshold (${coolantTemp.toStringAsFixed(1)}°C)."
+          else
+            isArabic
+                ? "مستوى حرج حسب كود P0115 (القراءة اللحظية للحرارة غير متاحة)."
+                : "Critical per code P0115 (live temperature reading unavailable).",
           isArabic
               ? "خطر غليان المياه ولي وش السلندر وتهالك الزيت."
               : "Risk of coolant boiling, cylinder head warpage, and oil breakdown.",
@@ -343,9 +352,14 @@ class AiDiagnosticCopilot {
         isArabic
             ? "مفيش أكواد أعطال خطيرة مسجلة في ذاكرة الـ ECU."
             : "No severe trouble codes recorded in ECU non-volatile memory.",
-        isArabic
-            ? "تصحيح الوقود المتعلم (${ltft?.toStringAsFixed(1) ?? '+2.0'}%) داخل النطاق الأمثل ±5%."
-            : "Fuel trim learned adaptation (${ltft?.toStringAsFixed(1) ?? '+2.0'}%) is within the optimum ±5% band.",
+        if (ltft != null)
+          isArabic
+              ? "تصحيح الوقود المتعلم (${ltft.toStringAsFixed(1)}%) داخل النطاق الأمثل ±5%."
+              : "Fuel trim learned adaptation (${ltft.toStringAsFixed(1)}%) is within the optimum ±5% band."
+        else
+          isArabic
+              ? "قيمة الـ LTFT لم تُقرأ من السيارة بعد."
+              : "Fuel trim value not read from the vehicle yet.",
         isArabic
             ? "إدارة حرارة المحرك ثابتة عند درجات التشغيل الطبيعية."
             : "Engine thermal management is stable at normal operating temperatures.",

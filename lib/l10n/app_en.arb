@@ -1482,6 +1482,8 @@
     }
   },
   "copEvidence": "Correlated Live Evidence & Telemetry",
+  "copNoDataTitle": "No vehicle data yet",
+  "copNoDataBody": "Connect the adapter and read fault codes and live data first. The assistant analyzes real readings only - it will not guess a diagnosis.",
   "copRoadmap": "Workshop Diagnostic Roadmap ({count} steps)",
   "@copRoadmap": {
     "placeholders": {
