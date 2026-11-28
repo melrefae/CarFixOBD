@@ -31,7 +31,9 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
       final matchesSearch = q.isEmpty ||
           fn.title.toLowerCase().contains(q) ||
           fn.shortCode.toLowerCase().contains(q) ||
-          fn.description.toLowerCase().contains(q);
+          fn.description.toLowerCase().contains(q) ||
+          fn.titleAr.contains(_searchQuery.trim()) ||
+          fn.descriptionAr.contains(_searchQuery.trim());
       return matchesCat && matchesSearch;
     }).toList();
 
@@ -146,7 +148,7 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
             ),
             const Spacer(),
             Text(
-              fn.title,
+              fn.localizedTitle(AppLocalizations.of(context).localeName == 'ar'),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.textWhite),
@@ -164,6 +166,7 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
 
   void _showResetModal(SpecialFunctionModel fn, ObdState state) {
     final l10n = AppLocalizations.of(context);
+    final isAr = l10n.localeName == 'ar';
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -196,7 +199,7 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(fn.title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textWhite)),
+                                Text(fn.localizedTitle(isAr), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textWhite)),
                                 Text(l10n.sfTargetEcu(fn.targetEcu), style: const TextStyle(fontSize: 12, color: AppColors.electricBlue)),
                               ],
                             ),
@@ -204,14 +207,14 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
                         ],
                       ),
                       const SizedBox(height: 12),
-                      Text(fn.description, style: const TextStyle(fontSize: 13, color: AppColors.textMuted)),
+                      Text(fn.localizedDescription(isAr), style: const TextStyle(fontSize: 13, color: AppColors.textMuted)),
 
                       const Divider(height: 28, color: AppColors.cardBorder),
 
                       // Safety Prerequisites Checklist
                       Text(l10n.sfSafety, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primaryYellow)),
                       const SizedBox(height: 8),
-                      ...fn.prerequisites.map((req) => Padding(
+                      ...fn.localizedPrerequisites(isAr).map((req) => Padding(
                             padding: const EdgeInsets.only(bottom: 4),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -285,14 +288,14 @@ class _DiagzoneServiceFunctionsScreenState extends State<DiagzoneServiceFunction
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
-                                    fn.manualProcedureTitle,
+                                    fn.localizedManualTitle(isAr),
                                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.accentCyan),
                                   ),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 10),
-                            ...fn.manualSteps.map((step) => Padding(
+                            ...fn.localizedManualSteps(isAr).map((step) => Padding(
                                   padding: const EdgeInsets.only(bottom: 8),
                                   child: Row(
                                     crossAxisAlignment: CrossAxisAlignment.start,

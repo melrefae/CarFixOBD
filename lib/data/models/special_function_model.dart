@@ -23,6 +23,13 @@ class SpecialFunctionModel {
   final List<String> manualSteps;
   final IconData icon;
 
+  /// Arabic content (empty = fall back to the English field).
+  final String titleAr;
+  final String descriptionAr;
+  final List<String> prerequisitesAr;
+  final String manualProcedureTitleAr;
+  final List<String> manualStepsAr;
+
   const SpecialFunctionModel({
     required this.id,
     required this.title,
@@ -37,7 +44,18 @@ class SpecialFunctionModel {
     required this.manualProcedureTitle,
     required this.manualSteps,
     required this.icon,
+    this.titleAr = "",
+    this.descriptionAr = "",
+    this.prerequisitesAr = const [],
+    this.manualProcedureTitleAr = "",
+    this.manualStepsAr = const [],
   });
+
+  String localizedTitle(bool isAr) => isAr && titleAr.isNotEmpty ? titleAr : title;
+  String localizedDescription(bool isAr) => isAr && descriptionAr.isNotEmpty ? descriptionAr : description;
+  List<String> localizedPrerequisites(bool isAr) => isAr && prerequisitesAr.isNotEmpty ? prerequisitesAr : prerequisites;
+  String localizedManualTitle(bool isAr) => isAr && manualProcedureTitleAr.isNotEmpty ? manualProcedureTitleAr : manualProcedureTitle;
+  List<String> localizedManualSteps(bool isAr) => isAr && manualStepsAr.isNotEmpty ? manualStepsAr : manualSteps;
 
   /// The 16 Core Diagzone Pro Special Reset Functions
   static List<SpecialFunctionModel> getAllFunctions() {
@@ -56,6 +74,21 @@ class SpecialFunctionModel {
           "Battery voltage > 12.0V",
         ],
         automatedObdCommand: "31 01 02 01",
+        titleAr: "ريست لمبة صيانة الزيت",
+        descriptionAr: "بيصفّر عداد عمر زيت المحرك ومنبه فترة الصيانة وعلامة المفك في العدادات.",
+        prerequisitesAr: [
+          "المحرك مطفي تماماً (الكونتاك مفتوح والمحرك OFF)",
+          "زيت وفلتر جداد مركبين بالفعل",
+          "فولت البطارية أكتر من 12.0V",
+        ],
+        manualProcedureTitleAr: "طرق الريست اليدوية للسوق المصري:",
+        manualStepsAr: [
+          "نيسان صني N16/N17: افتح الكونتاك -> دوس زرار التريب في العدادات 10 ثواني لحد ما علامة المفك ترمش -> سيب ودوس مرة واحدة لضبط 10,000 كم.",
+          "فيات تيبو / بونتو: حوّل الكونتاك لوضع MAR -> دوس دعسة البنزين للآخر 3 مرات خلال 10 ثواني -> اقفل الكونتاك -> استنى 30 ثانية قبل التشغيل.",
+          "رينو لوجان / سانديرو / ميجان: افتح الكونتاك -> بأزرار عصا المساحات روح لفترة الصيانة -> دوس مطولاً على الزرار العلوي 10 ثواني لحد ما الشاشة ترمش.",
+          "هيونداي فيرنا / إلنترا HD/MD/AD: من قائمة إعدادات المستخدم في العدادات اختار فترة الصيانة -> دوس OK/Reset لمدة 5 ثواني.",
+          "تويوتا كورولا E120/E140/E170: خلي العداد على TRIP A -> اقفل الكونتاك -> دوس زرار التريب Reset وانت بتفتح الكونتاك -> فضل داسس لحد ما الشرطات تمسح.",
+        ],
         manualProcedureTitle: "Egyptian Market Manual Reset Procedures:",
         manualSteps: [
           "Nissan Sunny N16/N17: Turn ignition ON -> Hold instrument cluster trip button for 10s until spanner flashes -> Release and press once to set to 10,000 km.",
@@ -80,6 +113,19 @@ class SpecialFunctionModel {
           "Key ON, Engine OFF (Battery charger recommended > 12.5V)",
         ],
         automatedObdCommand: "31 01 02 02",
+        titleAr: "خدمة فرامل اليد الإلكترونية (EPB)",
+        descriptionAr: "بيرجّع مواتير فرامل اليد الإلكترونية لوضع الصيانة عشان تغيير التيل، وبعاير قوة الضغط من جديد.",
+        prerequisitesAr: [
+          "العربية واقفة على أرض مستوية مع سندات عجلات",
+          "فرامل اليد مفكوكة قبل وضع الصيانة",
+          "كونتاك مفتوح ومحرك OFF (يُفضل شاحن بطارية أكتر من 12.5V)",
+        ],
+        manualProcedureTitleAr: "وضع الصيانة والرجوع اليدوي للـ EPB:",
+        manualStepsAr: [
+          "مجموعة VAG (سكودا أوكتافيا A7/A8): افتح الكونتاك -> فك فرامل اليد -> نفّذ أمر فتح الكاليبر -> غيّر التيل -> نفّذ أمر قفل الكاليبر.",
+          "رينو ميجان IV / كاجار: دوس Start والكارت داخل (المحرك OFF) -> اسحب زرار الـ EPB 5 ثواني وانت داسس على الفرامل -> الكاليبرات هترجع.",
+          "طريقة ميكانيكية بديلة: لو مفيش جهاز، فك فيشة المشغل الخلفي، فك الموتور بمفتاح Torx T30، ولف عمود الضغط بالتجاه عقارب الساعة بمفتاح T45 لحد ما البستم يقعد في مكانه.",
+        ],
         manualProcedureTitle: "EPB Service Mode & Manual Retraction:",
         manualSteps: [
           "VAG (Skoda Octavia A7/A8): Turn ignition ON -> Release handbrake -> Trigger Caliper Open command -> Replace pads -> Trigger Caliper Close command.",
@@ -102,6 +148,20 @@ class SpecialFunctionModel {
           "Key ON, Engine OFF",
         ],
         automatedObdCommand: "31 01 02 03",
+        titleAr: "ريست نظام إدارة البطارية (BMS)",
+        descriptionAr: "بيسجّل بطارية AGM/EFB أو عادية جديدة في الـ ECU عشان يصفّر منحنيات شحن الدينامو ويمنع الشحن الزائد.",
+        prerequisitesAr: [
+          "البطارية الجديدة متوصلة صح بأقطاب نضيفة ومربوطة كويس",
+          "اتأكد إن سعة الأمبير (Ah) متطابقة في ملف العربية",
+          "كونتاك مفتوح ومحرك OFF",
+        ],
+        manualProcedureTitleAr: "طريقة تعليم الـ BMS (BMW / فورد / VAG):",
+        manualStepsAr: [
+          "افتح الكونتاك (كونتاك ON والمحرك OFF).",
+          "ومّض النور العالي 5 مرات.",
+          "دوس وسيب دواسة الفرامل 3 مرات.",
+          "استنى 10 ثواني: لمبة البطارية في العدادات هترمش 3 مرات تأكيد إن تعويض الـ BMS خلص.",
+        ],
         manualProcedureTitle: "BMS Relearn Procedure (BMW / Ford / VAG):",
         manualSteps: [
           "Turn ignition ON (Key ON, Engine OFF).",
@@ -125,6 +185,21 @@ class SpecialFunctionModel {
           "Engine running at idle speed or Key ON",
         ],
         automatedObdCommand: "31 01 02 04",
+        titleAr: "معايرة حساس زاوية الاستيرينج (SAS)",
+        descriptionAr: "معايرة نقطة الصفر لحساس زاوية الاستيرينج بعد ضبط الزوايا أو تغيير علبة الدركسيون أو إصلاح عمود الاستيرينج.",
+        prerequisitesAr: [
+          "العجل الأمامي مستقيم تماماً على أرض مستوية",
+          "طارة الاستيرينج متوسطة أفقياً",
+          "المحرك شغال على الثبات أو كونتاك مفتوح",
+        ],
+        manualProcedureTitleAr: "توسيط الاستيرينج اليدوي:",
+        manualStepsAr: [
+          "شغّل المحرك واتأكد إن الطارة مستقيمة.",
+          "لف الطارة بسلاسة لأقصى شمال وثبّت ثانيتين.",
+          "لف الطارة بسلاسة لأقصى يمين وثبّت ثانيتين.",
+          "ارجع بالطارة للمنتصف تماماً.",
+          "اقفل الكونتاك، استنى 10 ثواني، وبعدين شغّل المحرك. لمبة ESP/TCS المفروض تطفي.",
+        ],
         manualProcedureTitle: "Manual Steering Centering Sweep:",
         manualSteps: [
           "Start engine and ensure steering wheel is straight.",
@@ -149,6 +224,21 @@ class SpecialFunctionModel {
           "Key ON, Engine OFF",
         ],
         automatedObdCommand: "31 01 02 05",
+        titleAr: "تفريغ هوا طرمبة الـ ABS الأوتوماتيكي",
+        descriptionAr: "بيشغّل بلفات الـ ABS والطرمبة الداخلية عشان يطرد فقاعات الهوا المحبوسة من بلوك الفرامل الهيدروليك.",
+        prerequisitesAr: [
+          "علبة زيت الفرامل مليانة للحد الأقصى MAX بزيت DOT4 جديد",
+          "خرطوم التفريغ متوصل ببلف النزول في الكاليبر مع زجاجة تجميع",
+          "كونتاك مفتوح ومحرك OFF",
+        ],
+        manualProcedureTitleAr: "بروتوكول دورة التفريغ الأوتوماتيكية:",
+        manualStepsAr: [
+          "افتح بلف تفريغ الكاليبر الخلفي اليمين نص لفة.",
+          "شغّل دورة الطرمبة الأوتوماتيكية -> فضل داسس على الفرامل بقوة لحد ما النزول يبقى نضيف.",
+          "اقفل بلف التفريغ قبل ما تسيب دواسة الفرامل.",
+          "كرر نفس الترتيب لـ: خلفي شمال -> أمامي يمين -> أمامي شمال.",
+          "كمّل علبة الفرامل بزيت جديد لعلامة MAX.",
+        ],
         manualProcedureTitle: "Automated Bleeding Cycle Protocol:",
         manualSteps: [
           "Open right rear caliper bleeder screw 1/2 turn.",
@@ -174,6 +264,20 @@ class SpecialFunctionModel {
           "Automatic transmission in P/N (Manual in Neutral)",
         ],
         automatedObdCommand: "31 01 02 06",
+        titleAr: "تعليم البوابة الإلكترونية (ETS)",
+        descriptionAr: "بيهيئ مشغل البوابة الإلكترونية والقيم المتعلمة لهواء الثبات بعد غسيل أو تغيير البوابة.",
+        prerequisitesAr: [
+          "فراشة البوابة متغسولة بمنظف بوابات وناشفة تماماً",
+          "حرارة مياه التبريد بين 70°C و 90°C",
+          "التكييف والنور والديفوجر والمراوح مقفولين",
+          "الفتيس الأوتوماتيك في P/N (العادي على مورس)",
+        ],
+        manualProcedureTitleAr: "طريقة دعسة تعليم البوابة لنيسان / هيونداي:",
+        manualStepsAr: [
+          "نيسان صني N16/N17 (تعليم هواء الثبات): افتح الكونتاك ثانيتين -> اقفل 10 ثواني -> افتح 3 ثواني -> دوس دعسة البنزين 5 مرات خلال 5 ثواني -> استنى 7 ثواني -> فضل داسس 20 ثانية لحد ما لمبة المحرك MIL تبطل رمش وتفضل ثابتة -> سيب الدعسة خلال 3 ثواني وشغّل المحرك -> سيبه يطفطف 20 ثانية.",
+          "هيونداي فيرنا / إلنترا (Siemens/Bosch): افتح الكونتاك (المحرك OFF) 15 ثانية -> اقفل الكونتاك 15 ثانية -> شغّل المحرك من غير ما تلمس الدعسة وسيبه يطفطف لحد ما المروحة تشتغل مرة.",
+          "رينو لوجان / سانديرو: افتح الكونتاك -> دوس البنزين للآخر 5 ثواني -> سيب الدعسة -> شغّل المحرك من غير تسريع.",
+        ],
         manualProcedureTitle: "Nissan / Hyundai Throttle Adaptation Pedal Dance:",
         manualSteps: [
           "Nissan Sunny N16/N17 (Idle Air Volume Learning): Turn ignition ON for 2s -> Turn OFF for 10s -> Turn ON for 3s -> Pump accelerator pedal 5 times within 5s -> Wait 7s -> Hold pedal down for 20s until MIL stops blinking and stays solid -> Release pedal within 3s and start engine -> Let idle for 20s.",
@@ -197,6 +301,21 @@ class SpecialFunctionModel {
           "Transmission in Park / Neutral with handbrake pulled",
         ],
         automatedObdCommand: "31 01 02 07",
+        titleAr: "حرق سخام فلتر الديزل (DPF) إجباري",
+        descriptionAr: "بيأمر بحرق إجباري عالي الحرارة واقف لفلتر جزيئات الديزل عشان يحرق السخام المتراكم.",
+        prerequisitesAr: [
+          "العربية واقفة في مكان مفتوح جيد التهوية (العادم بيسخن جداً أكتر من 600°C)",
+          "مفيش مواد قابلة للاشتعال (حشايش ناشفة، زبالة، ورق) تحت العادم",
+          "المحرك في حرارة التشغيل الكاملة (أكتر من 80°C)، وخزان السولار أكتر من النص",
+          "الفتيس في Park / Neutral وفرامل اليد مرفوعة",
+        ],
+        manualProcedureTitleAr: "دورة الحرق على الطريق السريع:",
+        manualStepsAr: [
+          "لو الحرق الواقف مش بيبدأ بسبب كمية سخام عالية (أكتر من 45 جرام):",
+          "اطلع بالعربية على طريق سريع (زي الطريق الدائري أو الدائري الإقليمي).",
+          "حافظ على RPM المحرك بين 2,200 و 2,800 في الغيار الرابع/الخامس على سرعة ثابتة 80-100 كم/س.",
+          "سوق باستمرار 25-35 دقيقة من غير وقفات مفاجئة عشان الـ ECU يبدأ الحرق السلبي على الطريق.",
+        ],
         manualProcedureTitle: "Highway Regeneration Drive Cycle:",
         manualSteps: [
           "If stationary regen cannot start due to high soot mass (> 45g):",
@@ -219,6 +338,19 @@ class SpecialFunctionModel {
           "Vehicle stationary on flat ground",
         ],
         automatedObdCommand: "31 01 02 08",
+        titleAr: "تعليم حساس ضغط الإطارات (TPMS)",
+        descriptionAr: "بيعاير نسب تفريغ الإطارات لحساسات سرعة العجل غير المباشرة للـ ABS أو بيبدأ تعليم أرقام حساسات 433MHz/315MHz المباشرة.",
+        prerequisitesAr: [
+          "الإطارات الأربعة منفوخة بالضبط على الضغط الموصى بيه (مثلاً 32 PSI وهي ساقعة) حسب استيكر باب السواق",
+          "العربية واقفة على أرض مستوية",
+        ],
+        manualProcedureTitleAr: "طرق التعليم من زرار الطبلون:",
+        manualStepsAr: [
+          "فيات تيبو / هيونداي توسان: افتح الكونتاك -> دوس زرار (SET) بتاع TPMS في الطبلون 5 ثواني لحد ما تسمع صفارة أو لمبة TPMS ترمش 3 مرات.",
+          "تويوتا كورولا / ياريس: دوّر تحت طبلون السواق جنب الركبة على زرار SET -> فضل داسس لحد ما لمبة الإطارات ترمش 3 مرات ببطء.",
+          "بيجو 301 / 3008: افتح الشاشة الوسطى -> وظائف القيادة -> تهيئة نقص ضغط الإطارات -> أكّد.",
+          "سوق العربية فوق 40 كم/س لمدة 10 دقايق عشان التعويض يكمل.",
+        ],
         manualProcedureTitle: "Dashboard Button & Stalk Relearn Procedures:",
         manualSteps: [
           "Fiat Tipo / Hyundai Tucson: Turn ignition ON -> Hold (SET) TPMS dashboard button for 5 seconds until chime sounds or TPMS light blinks 3 times.",
@@ -242,6 +374,20 @@ class SpecialFunctionModel {
           "Key ON, Engine OFF",
         ],
         automatedObdCommand: "31 01 02 09",
+        titleAr: "برمجة كود معايرة الرشاشات",
+        descriptionAr: "بيكتب كود التعويض IMA المكون من 6 لـ 24 حرف ورقم المطبوع على جسم الرشاش في كمبيوتر المحرك عشان دقة قياس الحقن.",
+        prerequisitesAr: [
+          "اقرا الكود المطبوع فوق ملف الرشاش (زي كود Delphi المكون من 16 خانة hex أو كود Bosch المكون من 7 أرقام)",
+          "حدد سلندر رقم 1 من ناحية سير المكنة (أو ناحية الفلانشة في العربيات الفرنساوي)",
+          "كونتاك مفتوح ومحرك OFF",
+        ],
+        manualProcedureTitleAr: "دليل فحص الرشاشات والتحقق:",
+        manualStepsAr: [
+          "حدد كود QR/Hex المحفور بالليزر على جسم ملف الرشاش.",
+          "سجّل الكود المكون من 16 خانة hex لكل سلندر.",
+          "اتأكد من ترتيب الاشتعال (1-3-4-2 القياسي للمحركات 4 سلندر).",
+          "اكتب الأكواد في ذاكرة الـ ECU -> اقفل الكونتاك 30 ثانية -> افتح الكونتاك واتأكد إن القيم اتحفظت.",
+        ],
         manualProcedureTitle: "Injector Inspection & Verification Guide:",
         manualSteps: [
           "Locate laser-engraved QR/Hex code on injector solenoid body.",
@@ -266,6 +412,22 @@ class SpecialFunctionModel {
           "Firmly hold brake pedal during test",
         ],
         automatedObdCommand: "31 01 02 0A",
+        titleAr: "تعليم تباين حساس الكرنك (CKP)",
+        descriptionAr: "بيعاير تفاوتات أسنان قرص الكرنك في ذاكرة الـ ECU عشان كشف تقطيع السلندرات يبقى دقيق.",
+        prerequisitesAr: [
+          "المحرك في حرارة التشغيل الطبيعية (أكتر من 75°C)",
+          "التكييف OFF وكل الأحمال الكهربا مقفولة",
+          "الفتيس في Park / Neutral وفرامل اليد مرفوعة",
+          "دوس على دواسة الفرامل بقوة طول الاختبار",
+        ],
+        manualProcedureTitleAr: "بروتوكول دعسة تعليم الـ CKP:",
+        manualStepsAr: [
+          "شغّل المحرك وسيبه يطفطف بنعومة.",
+          "دوس دواسة الفرامل بقوة وثبّت.",
+          "لما الجهاز يقول READY، دوس البنزين بنعومة للآخر (WOT) لحد ما يحصل قطع بنزين (الـ ECU هيحد السرعة أوتوماتيك عند حوالي 4,000 RPM).",
+          "سيب الدعسة فوراً أول ما السرعة تقطع.",
+          "سيب المحرك يطفطف 15 ثانية -> اقفل الكونتاك عشان تتحفظ القيم المتعلمة.",
+        ],
         manualProcedureTitle: "CKP Relearn Accelerator Protocol:",
         manualSteps: [
           "Start engine and idle smoothly.",
@@ -290,6 +452,20 @@ class SpecialFunctionModel {
           "Brake pedal pressed continuously throughout learning cycle",
         ],
         automatedObdCommand: "31 01 02 0B",
+        titleAr: "تعويض دبرياج ونقلات الفتيس",
+        descriptionAr: "بيعيد تعلم نقط نقلات الضغط الهيدروليكي ونقط التلامس (للفتيس دبل كلتش / Easytronic / Dualogic) ونسب بكرات الـ CVT.",
+        prerequisitesAr: [
+          "زيت الفتيس في حرارة التشغيل (60°C - 80°C)",
+          "العربية واقفة وفرامل اليد مرفوعة",
+          "دواسة الفرامل مدوسة باستمرار طول دورة التعلم",
+        ],
+        manualProcedureTitleAr: "تتابع نقلات تعويض الـ CVT والأوتوماتيك:",
+        manualStepsAr: [
+          "شغّل المحرك وهو سخن.",
+          "دوس الفرامل -> حط على D خمس ثواني -> حط على N خمس ثواني -> حط على R خمس ثواني -> ارجع على P.",
+          "سوق بهدوء بدعسة خفيفة (15-20% TPS) خلال كل نقلات الغيارات الأمامية (1->2->3->4->5->6).",
+          "اهبط بالسرعة لوقوف تام من غير فرملة جامدة -> كرر 3 مرات.",
+        ],
         manualProcedureTitle: "CVT & Automatic Adaptation Shift Sequence:",
         manualSteps: [
           "Start warmed-up engine.",
@@ -313,6 +489,20 @@ class SpecialFunctionModel {
           "Battery charger connected (do not allow voltage drop during matching)",
         ],
         automatedObdCommand: "31 01 02 0C",
+        titleAr: "فحص الإيموبيلايزر ومزامنة مفاتيح الترانسبوندر",
+        descriptionAr: "تحقق تشخيصي من حالة مفتاح الترانسبوندر وإشارة ملف الهوائي ومطابقة كمبيوتر منع السرقة.",
+        prerequisitesAr: [
+          "حضّر كل مفاتيح العربية الأصلية المتاحة",
+          "كود PIN / أمان صحيح 4 أو 8 أرقام للعربية",
+          "شاحن بطارية متوصل (متسيبش الفولت يهبط أثناء المطابقة)",
+        ],
+        manualProcedureTitleAr: "فحص ملف هوائي الترانسبوندر ومزامنة المفتاح:",
+        manualStepsAr: [
+          "حط المفتاح في كونتاك العربية.",
+          "حوّل لوضع ON -> راقب علامة الأمان / المفتاح في العدادات.",
+          "لو اللمبة طفت بعد 3 ثواني: شريحة الترانسبوندر متطابقة ومتعرف عليها.",
+          "لو اللمبة بترمش بسرعة: عطل في ملف هوائي الإيموبيلايزر أو شريحة ID46 / ID48 / 8A غير مبرمجة.",
+        ],
         manualProcedureTitle: "Transponder Antenna Coil & Key Sync Inspection:",
         manualSteps: [
           "Insert key into ignition lock cylinder.",
@@ -336,6 +526,19 @@ class SpecialFunctionModel {
           "All doors and tailgate closed",
         ],
         automatedObdCommand: "31 01 02 0D",
+        titleAr: "معايرة مستوى التعليق الهوائي",
+        descriptionAr: "بيعاير فولتات حساسات ارتفاع الشاسيه المرجعية للتعليق الهوائي الإلكتروني والمساعدين التكيفية.",
+        prerequisitesAr: [
+          "العربية على رف محاذاة مستوي تماماً",
+          "ضغط إطارات صحيح في العجلات الأربعة",
+          "كل الأبواب والشنطة الخلفية مقفولين",
+        ],
+        manualProcedureTitleAr: "بروتوكول قياس معايرة الارتفاع:",
+        manualStepsAr: [
+          "قيس بالمليمتر المسافة من مركز جنط العجلة لحرف قوس الطربوش في الأربع زوايا.",
+          "دخّل القيم المقاسة في أداة المعايرة عشان الـ ECU يحسب تصحيحات الإزاحة.",
+          "الكمبروسر هيشتغل ويسوي الشاسيه أوتوماتيك.",
+        ],
         manualProcedureTitle: "Height Calibration Measurement Protocol:",
         manualSteps: [
           "Measure distance in millimeters from wheel center hub to bottom lip of fender arch for all 4 corners.",
@@ -357,6 +560,18 @@ class SpecialFunctionModel {
           "All window tracks free of debris and dirt",
         ],
         automatedObdCommand: "31 01 02 0E",
+        titleAr: "ريست الفتحة والزجاج الكهربا (مانع الضغط)",
+        descriptionAr: "بيعاير حساسات Hall لنهاية المسار للزجاج الكهربا بلمسة واحدة والفتحة عشان يرجع الصعود الأوتوماتيك وخاصية مانع الضغط.",
+        prerequisitesAr: [
+          "الكونتاك مفتوح، المحرك شغال أو كونتاك ON",
+          "مسارات الزجاج نضيفة من الأوساخ والتراب",
+        ],
+        manualProcedureTitleAr: "تتابع تعلم الزجاج والفتحة العام:",
+        manualStepsAr: [
+          "اسحب زرار الزجاج لفوق لحد ما الزجاج يقفل تماماً -> فضل ماسك الزرار فوق 3 ثواني كاملين.",
+          "دوس زرار الزجاج لتحت لحد ما الزجاج يفتح تماماً -> فضل ماسك الزرار تحت 3 ثواني كاملين.",
+          "جرّب الصعود الأوتوماتيك بلمسة واحدة. كرر لكل زجاجة وللفتحة.",
+        ],
         manualProcedureTitle: "Universal Window & Sunroof Learn Sequence:",
         manualSteps: [
           "Pull window switch up until window glass closes completely -> Continue holding switch up for 3 full seconds.",
@@ -379,6 +594,19 @@ class SpecialFunctionModel {
           "Tires correctly inflated",
         ],
         automatedObdCommand: "31 01 02 0F",
+        titleAr: "معايرة الكشافات التكيفية (AFS)",
+        descriptionAr: "بيعاير موضع الصفر المرجعي لكشافات اللف التكيفية ومواتير التسوية الرأسية الأوتوماتيكية.",
+        prerequisitesAr: [
+          "العربية واقفة على أرض مستوية على بعد 5 متر من حيطة رأسية",
+          "الشنطة فاضية (من غير حمولة)",
+          "الإطارات منفوخة صح",
+        ],
+        manualProcedureTitleAr: "تهيئة تسوية الكشافات:",
+        manualStepsAr: [
+          "شغّل النور الواطي.",
+          "شغّل معايرة الـ AFS -> عدسات الكشافات هتتحرك لأعلى وأسفل وشمال ويمين وترجع للمنتصف.",
+          "اتأكد إن خط قطع النور مطابق لعلامات الحيطة المرجعية.",
+        ],
         manualProcedureTitle: "Headlamp Leveling Initialization:",
         manualSteps: [
           "Turn on low-beam headlights.",
@@ -401,6 +629,19 @@ class SpecialFunctionModel {
           "Battery voltage > 12.2V",
         ],
         automatedObdCommand: "31 01 02 10",
+        titleAr: "معايرة وتعليم موضع بلف الـ EGR",
+        descriptionAr: "بيعيد تعلم مواضع البوتنشيوميتر الدنيا والقصوى لبلف إعادة تدوير غازات العادم EGR بعد الغسيل أو التغيير.",
+        prerequisitesAr: [
+          "بلف الـ EGR متغسل من الكربون وبتحرك بحرية",
+          "كونتاك مفتوح ومحرك OFF",
+          "فولت البطارية أكتر من 12.2V",
+        ],
+        manualProcedureTitleAr: "دليل فحص كربونة الـ EGR ودورته:",
+        manualStepsAr: [
+          "افتح الكونتاك من غير تشغيل المحرك.",
+          "شغّل اختبار موتور الـ EGR الخطوي ولاحظ خروج البِنّة بسلاسة وقعدة رشاشة الرجوع.",
+          "اتأكد إن مفيش تهنيج من تراكم الكربون في مقعد البلف.",
+        ],
         manualProcedureTitle: "EGR Carbon Inspection & Cycle Guide:",
         manualSteps: [
           "Turn ignition ON without starting engine.",
@@ -424,6 +665,21 @@ class SpecialFunctionModel {
           "Ignition ON, Engine completely OFF",
         ],
         automatedObdCommand: "31 01 02 11",
+        titleAr: "تشغيل طرمبة المياه الكهربا وتفريغ هوا التبريد",
+        descriptionAr: "بيأمر طلمبات المياه الكهربا الرئيسية والمساعدة بالدوران بسرعات متغيرة لمدة 12 دقيقة عشان تطرد فقاعات الهوا من بلوك المحرك وخطوط تبريد التربو والسخان.",
+        prerequisitesAr: [
+          "قربة التبريد مليانة لعلامة MAX بسائل تبريد جديد",
+          "غطا القربة مفتوح أثناء التفريغ",
+          "شاحن بطارية خارجي متوصل (أكتر من 12.5V ثابت)",
+          "كونتاك مفتوح والمحرك مطفي تماماً",
+        ],
+        manualProcedureTitleAr: "طريقة التفريغ الكهربا لـ BMW / VAG:",
+        manualStepsAr: [
+          "وصّل شاحن بطارية ورشة 12V.",
+          "افتح الكونتاك (من غير تشغيل المحرك). خلي تكييف التابلوه على 28°C MAX والمروحة على أقل سرعة 1.",
+          "دوس دعسة البنزين للآخر 10 ثواني لحد ما تسمع صوت طرمبة المياه.",
+          "دورة التفريغ بتشتغل أوتوماتيك 12 دقيقة. استنى الطرمبة توقف قبل ما تقفل الغطا.",
+        ],
         manualProcedureTitle: "BMW / VAG Electric Bleed Procedure:",
         manualSteps: [
           "Connect 12V workshop battery tender.",
@@ -447,6 +703,19 @@ class SpecialFunctionModel {
           "Zero active injector dosing faults",
         ],
         automatedObdCommand: "31 01 02 12",
+        titleAr: "ريست نظام AdBlue / DEF و SCR",
+        descriptionAr: "بيصفّر مؤشر مستوى سائل العادم DEF وبيفتح عداد قفل التشغيل وبيعيد ضبط تعويض كفاءة محفز SCR.",
+        prerequisitesAr: [
+          "تانك الـ AdBlue متملي بـ 10 لتر على الأقل من سائل DEF جديد بمعيار ISO 22241",
+          "كونتاك مفتوح ومحرك OFF",
+          "مفيش أعطال رشاشات نشطة",
+        ],
+        manualProcedureTitleAr: "دليل ريست قفل مسافة الـ AdBlue:",
+        manualStepsAr: [
+          "املأ 10 لتر DEF على الأقل في حرارة فوق -5°C.",
+          "افتح الكونتاك وسيبه 60 ثانية من غير تشغيل عشان حساس عوامة المستوى يتقري.",
+          "نفّذ الريست من الجهاز -> اتأكد إن عداد التنازلي في العدادات (زي منع التشغيل بعد 800 كم) اختفى.",
+        ],
         manualProcedureTitle: "AdBlue Distance Lockout Reset Guide:",
         manualSteps: [
           "Refill minimum 10L DEF at temperature above -5°C.",
@@ -469,6 +738,19 @@ class SpecialFunctionModel {
           "Battery voltage > 12.0V",
         ],
         automatedObdCommand: "31 01 02 13",
+        titleAr: "تعويض وريست تقادم حساسات NOx",
+        descriptionAr: "بيعيد تعلم قيمة إزاحة الصفر ومعايرة التقادم لحساسات أكاسيد النيتروجين NOx الأمامية والخلفية بعد التغيير.",
+        prerequisitesAr: [
+          "حساس NOx أصلي جديد مركب",
+          "نظام العادم بارد (أقل من 50°C)",
+          "فولت البطارية أكتر من 12.0V",
+        ],
+        manualProcedureTitleAr: "دورة سير تعلم حساس NOx:",
+        manualStepsAr: [
+          "امسح كل أكواد الانبعاثات المعلقة.",
+          "سوق العربية بسرعة ثابتة 80 كم/س لمدة 20 دقيقة عشان حرارة العادم توصل 250°C.",
+          "سيب العربية تقطع بنزين في الهبوط 5 ثواني عشان معايرة خط الأساس للهوا النضيف للحساس.",
+        ],
         manualProcedureTitle: "NOx Sensor Drive Cycle Relearn:",
         manualSteps: [
           "Clear all pending emissions DTCs.",

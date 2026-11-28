@@ -226,6 +226,37 @@ void main() {
     });
   });
 
+  group('DiagZone special functions Arabic content', () {
+    test('first 19 functions have full Arabic fields; localized getters fall back to English', () {
+      final all = SpecialFunctionModel.getAllFunctions();
+      expect(all.length, greaterThanOrEqualTo(37));
+      const translated = {
+        'oil_reset', 'epb_reset', 'bms_reset', 'sas_reset', 'abs_bleed',
+        'throttle_relearn', 'dpf_regen', 'tpms_reset', 'injector_coding',
+        'gear_learn', 'gearbox_match', 'immo_keys', 'suspension_reset',
+        'sunroof_init', 'afs_reset', 'egr_adaptation', 'coolant_bleed',
+        'adblue_reset', 'nox_reset',
+      };
+      for (final fn in all) {
+        if (translated.contains(fn.id)) {
+          expect(fn.titleAr, isNotEmpty, reason: fn.id);
+          expect(fn.descriptionAr, isNotEmpty, reason: fn.id);
+          expect(fn.prerequisitesAr, isNotEmpty, reason: fn.id);
+          expect(fn.manualProcedureTitleAr, isNotEmpty, reason: fn.id);
+          expect(fn.manualStepsAr, isNotEmpty, reason: fn.id);
+          expect(fn.localizedTitle(true), equals(fn.titleAr));
+          expect(fn.localizedManualSteps(true), equals(fn.manualStepsAr));
+        }
+        // English always the fallback and always present
+        expect(fn.localizedTitle(false), equals(fn.title));
+        expect(fn.localizedDescription(false), equals(fn.description));
+      }
+      // Untranslated remainder falls back to English even in Arabic mode
+      final rest = all.firstWhere((f) => !translated.contains(f.id));
+      expect(rest.localizedTitle(true), equals(rest.title));
+    });
+  });
+
   group('AI Diagnostic Copilot', () {
     test('Generates lean diagnosis roadmap with smoke test for P0171 / high LTFT', () {
       final report = AiDiagnosticCopilot.generateDiagnosis(
