@@ -2863,6 +2863,276 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Commercial'**
   String get regionCommercial;
+
+  /// No description provided for @statusConnectionLost.
+  ///
+  /// In en, this message translates to:
+  /// **'{p0} connection lost'**
+  String statusConnectionLost(String p0);
+
+  /// No description provided for @statusLaunchingSimulator.
+  ///
+  /// In en, this message translates to:
+  /// **'Launching ECU simulator...'**
+  String get statusLaunchingSimulator;
+
+  /// No description provided for @statusSimulatorFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to start simulator'**
+  String get statusSimulatorFailed;
+
+  /// No description provided for @statusConnectingBluetooth.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to Bluetooth adapter ({p0})...'**
+  String statusConnectingBluetooth(String p0);
+
+  /// No description provided for @statusBluetoothFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not connect to adapter. Please check Bluetooth pairing and power.'**
+  String get statusBluetoothFailed;
+
+  /// No description provided for @statusConnectingWifi.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to Wi-Fi adapter ({p0})...'**
+  String statusConnectingWifi(String p0);
+
+  /// No description provided for @statusWifiFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not connect to Wi-Fi adapter. Ensure you are connected to its Wi-Fi network.'**
+  String get statusWifiFailed;
+
+  /// No description provided for @statusConnectingBle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to BLE adapter ({p0})...'**
+  String statusConnectingBle(String p0);
+
+  /// No description provided for @statusBleGattFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not establish GATT connection with BLE adapter. Ensure adapter is powered and nearby.'**
+  String get statusBleGattFailed;
+
+  /// No description provided for @statusOpeningSerial.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening USB/Serial port ({p0})...'**
+  String statusOpeningSerial(String p0);
+
+  /// No description provided for @statusSerialFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open USB/Serial connection. Check cable, Bluetooth power, or permissions.'**
+  String get statusSerialFailed;
+
+  /// No description provided for @statusAutoDetecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-detecting OBD adapter across USB, Bluetooth, BLE & Wi-Fi...'**
+  String get statusAutoDetecting;
+
+  /// No description provided for @statusCheckingRecent.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking recent adapter ({p0})...'**
+  String statusCheckingRecent(String p0);
+
+  /// No description provided for @statusCheckingUsb.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking USB-OTG & system serial ports...'**
+  String get statusCheckingUsb;
+
+  /// No description provided for @statusProbingSerial.
+  ///
+  /// In en, this message translates to:
+  /// **'Probing Serial {p0} @ {p1} bps...'**
+  String statusProbingSerial(String p0, String p1);
+
+  /// No description provided for @statusScanningBle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scanning nearby BLE 4.0/5.0 OBD adapters...'**
+  String get statusScanningBle;
+
+  /// No description provided for @statusConnectingBleNamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to BLE adapter: {p0}...'**
+  String statusConnectingBleNamed(String p0);
+
+  /// No description provided for @statusProbingWifi.
+  ///
+  /// In en, this message translates to:
+  /// **'Probing Wi-Fi ELM327 endpoints...'**
+  String get statusProbingWifi;
+
+  /// No description provided for @statusFoundWifi.
+  ///
+  /// In en, this message translates to:
+  /// **'Found Wi-Fi OBD at {p0}. Connecting...'**
+  String statusFoundWifi(String p0);
+
+  /// No description provided for @statusNoAdapterFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No active OBD adapter found across USB, Bluetooth, BLE, or Wi-Fi. Plug into vehicle OBD-II port and retry.'**
+  String get statusNoAdapterFound;
+
+  /// No description provided for @statusAutoConnectFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-connect failed: {p0}'**
+  String statusAutoConnectFailed(String p0);
+
+  /// No description provided for @statusAuditing.
+  ///
+  /// In en, this message translates to:
+  /// **'Auditing genuine multi-ECU telemetry for pre-purchase evaluation...'**
+  String get statusAuditing;
+
+  /// No description provided for @statusAuditDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle audit completed. Overall score: {p0}/100'**
+  String statusAuditDone(String p0);
+
+  /// No description provided for @statusEvaluating.
+  ///
+  /// In en, this message translates to:
+  /// **'Evaluating available OBD adapters for auto-connection...'**
+  String get statusEvaluating;
+
+  /// No description provided for @statusNoBtDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'No Bluetooth devices available to auto-connect.'**
+  String get statusNoBtDevices;
+
+  /// No description provided for @statusBestMatched.
+  ///
+  /// In en, this message translates to:
+  /// **'Best adapter matched: {p0} ({p1}). Connecting...'**
+  String statusBestMatched(String p0, String p1);
+
+  /// No description provided for @statusHandshakeFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not complete ELM327 handshake with paired Bluetooth devices.'**
+  String get statusHandshakeFailed;
+
+  /// No description provided for @statusRequestingBtPerm.
+  ///
+  /// In en, this message translates to:
+  /// **'Requesting Bluetooth permissions...'**
+  String get statusRequestingBtPerm;
+
+  /// No description provided for @statusScanningPaired.
+  ///
+  /// In en, this message translates to:
+  /// **'Scanning for paired Bluetooth OBD adapters...'**
+  String get statusScanningPaired;
+
+  /// No description provided for @statusFoundAdapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Found OBD adapter: {p0}. Connecting...'**
+  String statusFoundAdapter(String p0);
+
+  /// No description provided for @statusProbingPaired.
+  ///
+  /// In en, this message translates to:
+  /// **'Probing paired device: {p0}...'**
+  String statusProbingPaired(String p0);
+
+  /// No description provided for @statusDiscovering.
+  ///
+  /// In en, this message translates to:
+  /// **'Discovering nearby Bluetooth OBD adapters...'**
+  String get statusDiscovering;
+
+  /// No description provided for @statusFoundNearby.
+  ///
+  /// In en, this message translates to:
+  /// **'Found nearby OBD: {p0}. Connecting...'**
+  String statusFoundNearby(String p0);
+
+  /// No description provided for @statusNoBtAdapter.
+  ///
+  /// In en, this message translates to:
+  /// **'No Bluetooth OBD adapter detected. Check adapter power or try BLE/USB/Wi-Fi.'**
+  String get statusNoBtAdapter;
+
+  /// No description provided for @statusBtError.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth detection error: {p0}'**
+  String statusBtError(String p0);
+
+  /// No description provided for @statusInitProtocol.
+  ///
+  /// In en, this message translates to:
+  /// **'Initializing adapter & detecting vehicle protocol... Older cars (K-line) can take up to 40 seconds. Keep the key ON.'**
+  String get statusInitProtocol;
+
+  /// No description provided for @statusConnectedDetecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected to ECU | Detecting vehicle & supported PIDs...'**
+  String get statusConnectedDetecting;
+
+  /// No description provided for @statusConnectedDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected: {p0} | {p1}'**
+  String statusConnectedDetected(String p0, String p1);
+
+  /// No description provided for @statusConnectedProtocol.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected to ECU | Protocol: {p0}'**
+  String statusConnectedProtocol(String p0);
+
+  /// No description provided for @statusAdapterReadyKeyOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Adapter Ready ({p0}V) - Ignition Key in OFF/ACC. Turn key to ON/RUN.'**
+  String statusAdapterReadyKeyOff(String p0);
+
+  /// No description provided for @statusInitFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to initialize ELM327 adapter. {p0}'**
+  String statusInitFailed(String p0);
+
+  /// No description provided for @statusRetrying.
+  ///
+  /// In en, this message translates to:
+  /// **'Retrying vehicle ECU handshake (Turn Key to ON)...'**
+  String get statusRetrying;
+
+  /// No description provided for @statusEcuNotResponding.
+  ///
+  /// In en, this message translates to:
+  /// **'ECU not responding. Make sure ignition key is switched to ON/RUN.'**
+  String get statusEcuNotResponding;
+
+  /// No description provided for @statusReadingVin.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading VIN, auto-identifying car, and scanning trouble codes...'**
+  String get statusReadingVin;
+
+  /// No description provided for @statusQuickScanDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick scan completed successfully'**
+  String get statusQuickScanDone;
 }
 
 class _AppLocalizationsDelegate

@@ -5,6 +5,7 @@ import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../core/constants/app_colors.dart';
 import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
+import '../../core/localization/status_localizer.dart';
 import '../../data/models/adapter_profile.dart';
 import '../../data/datasources/wifi_obd_connection.dart';
 import '../providers/obd_state.dart';
@@ -292,9 +293,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  state.statusMessage == 'Disconnected from adapter'
-                      ? AppLocalizations.of(context).statusDisconnected
-                      : (state.statusMessage == 'Disconnected' ? AppLocalizations.of(context).statusDisconnectedShort : state.statusMessage),
+                  localizedObdStatus(context, state),
                   style: const TextStyle(fontSize: 12, color: AppColors.textWhite, fontWeight: FontWeight.w500),
                 ),
               ),

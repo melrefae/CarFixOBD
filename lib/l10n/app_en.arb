@@ -630,5 +630,199 @@
   "regionEuropean": "European",
   "regionAmerican": "American",
   "regionChinese": "Chinese",
-  "regionCommercial": "Commercial"
+  "regionCommercial": "Commercial",
+  "statusConnectionLost": "{p0} connection lost",
+  "@statusConnectionLost": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusLaunchingSimulator": "Launching ECU simulator...",
+  "statusSimulatorFailed": "Failed to start simulator",
+  "statusConnectingBluetooth": "Connecting to Bluetooth adapter ({p0})...",
+  "@statusConnectingBluetooth": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusBluetoothFailed": "Could not connect to adapter. Please check Bluetooth pairing and power.",
+  "statusConnectingWifi": "Connecting to Wi-Fi adapter ({p0})...",
+  "@statusConnectingWifi": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusWifiFailed": "Could not connect to Wi-Fi adapter. Ensure you are connected to its Wi-Fi network.",
+  "statusConnectingBle": "Connecting to BLE adapter ({p0})...",
+  "@statusConnectingBle": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusBleGattFailed": "Could not establish GATT connection with BLE adapter. Ensure adapter is powered and nearby.",
+  "statusOpeningSerial": "Opening USB/Serial port ({p0})...",
+  "@statusOpeningSerial": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusSerialFailed": "Could not open USB/Serial connection. Check cable, Bluetooth power, or permissions.",
+  "statusAutoDetecting": "Auto-detecting OBD adapter across USB, Bluetooth, BLE & Wi-Fi...",
+  "statusCheckingRecent": "Checking recent adapter ({p0})...",
+  "@statusCheckingRecent": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusCheckingUsb": "Checking USB-OTG & system serial ports...",
+  "statusProbingSerial": "Probing Serial {p0} @ {p1} bps...",
+  "@statusProbingSerial": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "statusScanningBle": "Scanning nearby BLE 4.0/5.0 OBD adapters...",
+  "statusConnectingBleNamed": "Connecting to BLE adapter: {p0}...",
+  "@statusConnectingBleNamed": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusProbingWifi": "Probing Wi-Fi ELM327 endpoints...",
+  "statusFoundWifi": "Found Wi-Fi OBD at {p0}. Connecting...",
+  "@statusFoundWifi": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusNoAdapterFound": "No active OBD adapter found across USB, Bluetooth, BLE, or Wi-Fi. Plug into vehicle OBD-II port and retry.",
+  "statusAutoConnectFailed": "Auto-connect failed: {p0}",
+  "@statusAutoConnectFailed": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusAuditing": "Auditing genuine multi-ECU telemetry for pre-purchase evaluation...",
+  "statusAuditDone": "Vehicle audit completed. Overall score: {p0}/100",
+  "@statusAuditDone": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusEvaluating": "Evaluating available OBD adapters for auto-connection...",
+  "statusNoBtDevices": "No Bluetooth devices available to auto-connect.",
+  "statusBestMatched": "Best adapter matched: {p0} ({p1}). Connecting...",
+  "@statusBestMatched": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "statusHandshakeFailed": "Could not complete ELM327 handshake with paired Bluetooth devices.",
+  "statusRequestingBtPerm": "Requesting Bluetooth permissions...",
+  "statusScanningPaired": "Scanning for paired Bluetooth OBD adapters...",
+  "statusFoundAdapter": "Found OBD adapter: {p0}. Connecting...",
+  "@statusFoundAdapter": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusProbingPaired": "Probing paired device: {p0}...",
+  "@statusProbingPaired": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusDiscovering": "Discovering nearby Bluetooth OBD adapters...",
+  "statusFoundNearby": "Found nearby OBD: {p0}. Connecting...",
+  "@statusFoundNearby": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusNoBtAdapter": "No Bluetooth OBD adapter detected. Check adapter power or try BLE/USB/Wi-Fi.",
+  "statusBtError": "Bluetooth detection error: {p0}",
+  "@statusBtError": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusInitProtocol": "Initializing adapter & detecting vehicle protocol... Older cars (K-line) can take up to 40 seconds. Keep the key ON.",
+  "statusConnectedDetecting": "Connected to ECU | Detecting vehicle & supported PIDs...",
+  "statusConnectedDetected": "Connected: {p0} | {p1}",
+  "@statusConnectedDetected": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "statusConnectedProtocol": "Connected to ECU | Protocol: {p0}",
+  "@statusConnectedProtocol": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusAdapterReadyKeyOff": "Adapter Ready ({p0}V) - Ignition Key in OFF/ACC. Turn key to ON/RUN.",
+  "@statusAdapterReadyKeyOff": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusInitFailed": "Failed to initialize ELM327 adapter. {p0}",
+  "@statusInitFailed": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "statusRetrying": "Retrying vehicle ECU handshake (Turn Key to ON)...",
+  "statusEcuNotResponding": "ECU not responding. Make sure ignition key is switched to ON/RUN.",
+  "statusReadingVin": "Reading VIN, auto-identifying car, and scanning trouble codes...",
+  "statusQuickScanDone": "Quick scan completed successfully"
 }

@@ -1522,4 +1522,195 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get regionCommercial => 'تجارية';
+
+  @override
+  String statusConnectionLost(String p0) {
+    return 'انقطع الاتصال ($p0)';
+  }
+
+  @override
+  String get statusLaunchingSimulator => 'جاري تشغيل محاكي الكمبيوتر...';
+
+  @override
+  String get statusSimulatorFailed => 'فشل تشغيل المحاكي';
+
+  @override
+  String statusConnectingBluetooth(String p0) {
+    return 'جاري الاتصال بفيشة البلوتوث ($p0)...';
+  }
+
+  @override
+  String get statusBluetoothFailed =>
+      'تعذر الاتصال بالفيشة. تأكد من إقران البلوتوث وتوصيل الطاقة.';
+
+  @override
+  String statusConnectingWifi(String p0) {
+    return 'جاري الاتصال بفيشة الواي فاي ($p0)...';
+  }
+
+  @override
+  String get statusWifiFailed =>
+      'تعذر الاتصال بفيشة الواي فاي. تأكد إنك متصل بشبكتها.';
+
+  @override
+  String statusConnectingBle(String p0) {
+    return 'جاري الاتصال بفيشة BLE ($p0)...';
+  }
+
+  @override
+  String get statusBleGattFailed =>
+      'تعذر الاتصال بفيشة BLE. تأكد إنها شغالة وقريبة.';
+
+  @override
+  String statusOpeningSerial(String p0) {
+    return 'جاري فتح منفذ USB/سيريال ($p0)...';
+  }
+
+  @override
+  String get statusSerialFailed =>
+      'تعذر فتح اتصال USB/سيريال. راجع الكابل أو الصلاحيات.';
+
+  @override
+  String get statusAutoDetecting =>
+      'جاري البحث التلقائي عن فيشة الفحص عبر USB وبلوتوث وBLE وواي فاي...';
+
+  @override
+  String statusCheckingRecent(String p0) {
+    return 'جاري فحص الفيشة الأخيرة ($p0)...';
+  }
+
+  @override
+  String get statusCheckingUsb => 'جاري فحص منافذ USB-OTG والسيريال...';
+
+  @override
+  String statusProbingSerial(String p0, String p1) {
+    return 'جاري فحص سيريال $p0 @ $p1...';
+  }
+
+  @override
+  String get statusScanningBle => 'جاري البحث عن فيشات BLE القريبة...';
+
+  @override
+  String statusConnectingBleNamed(String p0) {
+    return 'جاري الاتصال بفيشة BLE: $p0...';
+  }
+
+  @override
+  String get statusProbingWifi => 'جاري فحص نقاط Wi-Fi ELM327...';
+
+  @override
+  String statusFoundWifi(String p0) {
+    return 'تم العثور على فيشة واي فاي في $p0. جاري الاتصال...';
+  }
+
+  @override
+  String get statusNoAdapterFound =>
+      'لم يتم العثور على فيشة فحص عبر USB أو بلوتوث أو BLE أو واي فاي. ركّب الفيشة في العربية وحاول تاني.';
+
+  @override
+  String statusAutoConnectFailed(String p0) {
+    return 'فشل الاتصال التلقائي: $p0';
+  }
+
+  @override
+  String get statusAuditing =>
+      'جاري فحص بيانات وحدات السيارة لتقييم ما قبل الشراء...';
+
+  @override
+  String statusAuditDone(String p0) {
+    return 'اكتمل فحص السيارة. التقييم العام: $p0/100';
+  }
+
+  @override
+  String get statusEvaluating =>
+      'جاري تقييم الفيشات المتاحة للاتصال التلقائي...';
+
+  @override
+  String get statusNoBtDevices =>
+      'لا توجد أجهزة بلوتوث متاحة للاتصال التلقائي.';
+
+  @override
+  String statusBestMatched(String p0, String p1) {
+    return 'أفضل فيشة: $p0 ($p1). جاري الاتصال...';
+  }
+
+  @override
+  String get statusHandshakeFailed =>
+      'تعذر إتمام الاتصال الأولي مع أجهزة البلوتوث المقترنة.';
+
+  @override
+  String get statusRequestingBtPerm => 'جاري طلب صلاحيات البلوتوث...';
+
+  @override
+  String get statusScanningPaired => 'جاري البحث في أجهزة البلوتوث المقترنة...';
+
+  @override
+  String statusFoundAdapter(String p0) {
+    return 'تم العثور على فيشة: $p0. جاري الاتصال...';
+  }
+
+  @override
+  String statusProbingPaired(String p0) {
+    return 'جاري فحص الجهاز المقترن: $p0...';
+  }
+
+  @override
+  String get statusDiscovering => 'جاري البحث عن فيشات بلوتوث قريبة...';
+
+  @override
+  String statusFoundNearby(String p0) {
+    return 'تم العثور على فيشة قريبة: $p0. جاري الاتصال...';
+  }
+
+  @override
+  String get statusNoBtAdapter =>
+      'لم يتم اكتشاف فيشة بلوتوث. تأكد من الطاقة أو جرّب BLE/USB/واي فاي.';
+
+  @override
+  String statusBtError(String p0) {
+    return 'خطأ في البحث عن البلوتوث: $p0';
+  }
+
+  @override
+  String get statusInitProtocol =>
+      'جاري تهيئة الفيشة واكتشاف بروتوكول السيارة... العربيات القديمة (K-line) ممكن تاخد لحد ٤٠ ثانية. خلّي المفتاح ON.';
+
+  @override
+  String get statusConnectedDetecting =>
+      'تم الاتصال بالكمبيوتر | جاري اكتشاف السيارة والـ PIDs المدعومة...';
+
+  @override
+  String statusConnectedDetected(String p0, String p1) {
+    return 'متصل: $p0 | $p1';
+  }
+
+  @override
+  String statusConnectedProtocol(String p0) {
+    return 'متصل بالكمبيوتر | البروتوكول: $p0';
+  }
+
+  @override
+  String statusAdapterReadyKeyOff(String p0) {
+    return 'الفيشة جاهزة ($p0 فولت) - المفتاح في وضع OFF/ACC. لف المفتاح إلى ON/RUN.';
+  }
+
+  @override
+  String statusInitFailed(String p0) {
+    return 'فشلت تهيئة فيشة ELM327. $p0';
+  }
+
+  @override
+  String get statusRetrying =>
+      'جاري إعادة محاولة الاتصال بالكمبيوتر (لف المفتاح إلى ON)...';
+
+  @override
+  String get statusEcuNotResponding =>
+      'الكمبيوتر لا يستجيب. تأكد إن المفتاح في وضع ON/RUN.';
+
+  @override
+  String get statusReadingVin =>
+      'جاري قراءة الشاسيه والتعرف على السيارة وفحص الأعطال...';
+
+  @override
+  String get statusQuickScanDone => 'اكتمل الفحص السريع بنجاح';
 }

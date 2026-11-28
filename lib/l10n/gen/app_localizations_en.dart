@@ -1525,4 +1525,197 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get regionCommercial => 'Commercial';
+
+  @override
+  String statusConnectionLost(String p0) {
+    return '$p0 connection lost';
+  }
+
+  @override
+  String get statusLaunchingSimulator => 'Launching ECU simulator...';
+
+  @override
+  String get statusSimulatorFailed => 'Failed to start simulator';
+
+  @override
+  String statusConnectingBluetooth(String p0) {
+    return 'Connecting to Bluetooth adapter ($p0)...';
+  }
+
+  @override
+  String get statusBluetoothFailed =>
+      'Could not connect to adapter. Please check Bluetooth pairing and power.';
+
+  @override
+  String statusConnectingWifi(String p0) {
+    return 'Connecting to Wi-Fi adapter ($p0)...';
+  }
+
+  @override
+  String get statusWifiFailed =>
+      'Could not connect to Wi-Fi adapter. Ensure you are connected to its Wi-Fi network.';
+
+  @override
+  String statusConnectingBle(String p0) {
+    return 'Connecting to BLE adapter ($p0)...';
+  }
+
+  @override
+  String get statusBleGattFailed =>
+      'Could not establish GATT connection with BLE adapter. Ensure adapter is powered and nearby.';
+
+  @override
+  String statusOpeningSerial(String p0) {
+    return 'Opening USB/Serial port ($p0)...';
+  }
+
+  @override
+  String get statusSerialFailed =>
+      'Could not open USB/Serial connection. Check cable, Bluetooth power, or permissions.';
+
+  @override
+  String get statusAutoDetecting =>
+      'Auto-detecting OBD adapter across USB, Bluetooth, BLE & Wi-Fi...';
+
+  @override
+  String statusCheckingRecent(String p0) {
+    return 'Checking recent adapter ($p0)...';
+  }
+
+  @override
+  String get statusCheckingUsb => 'Checking USB-OTG & system serial ports...';
+
+  @override
+  String statusProbingSerial(String p0, String p1) {
+    return 'Probing Serial $p0 @ $p1 bps...';
+  }
+
+  @override
+  String get statusScanningBle => 'Scanning nearby BLE 4.0/5.0 OBD adapters...';
+
+  @override
+  String statusConnectingBleNamed(String p0) {
+    return 'Connecting to BLE adapter: $p0...';
+  }
+
+  @override
+  String get statusProbingWifi => 'Probing Wi-Fi ELM327 endpoints...';
+
+  @override
+  String statusFoundWifi(String p0) {
+    return 'Found Wi-Fi OBD at $p0. Connecting...';
+  }
+
+  @override
+  String get statusNoAdapterFound =>
+      'No active OBD adapter found across USB, Bluetooth, BLE, or Wi-Fi. Plug into vehicle OBD-II port and retry.';
+
+  @override
+  String statusAutoConnectFailed(String p0) {
+    return 'Auto-connect failed: $p0';
+  }
+
+  @override
+  String get statusAuditing =>
+      'Auditing genuine multi-ECU telemetry for pre-purchase evaluation...';
+
+  @override
+  String statusAuditDone(String p0) {
+    return 'Vehicle audit completed. Overall score: $p0/100';
+  }
+
+  @override
+  String get statusEvaluating =>
+      'Evaluating available OBD adapters for auto-connection...';
+
+  @override
+  String get statusNoBtDevices =>
+      'No Bluetooth devices available to auto-connect.';
+
+  @override
+  String statusBestMatched(String p0, String p1) {
+    return 'Best adapter matched: $p0 ($p1). Connecting...';
+  }
+
+  @override
+  String get statusHandshakeFailed =>
+      'Could not complete ELM327 handshake with paired Bluetooth devices.';
+
+  @override
+  String get statusRequestingBtPerm => 'Requesting Bluetooth permissions...';
+
+  @override
+  String get statusScanningPaired =>
+      'Scanning for paired Bluetooth OBD adapters...';
+
+  @override
+  String statusFoundAdapter(String p0) {
+    return 'Found OBD adapter: $p0. Connecting...';
+  }
+
+  @override
+  String statusProbingPaired(String p0) {
+    return 'Probing paired device: $p0...';
+  }
+
+  @override
+  String get statusDiscovering =>
+      'Discovering nearby Bluetooth OBD adapters...';
+
+  @override
+  String statusFoundNearby(String p0) {
+    return 'Found nearby OBD: $p0. Connecting...';
+  }
+
+  @override
+  String get statusNoBtAdapter =>
+      'No Bluetooth OBD adapter detected. Check adapter power or try BLE/USB/Wi-Fi.';
+
+  @override
+  String statusBtError(String p0) {
+    return 'Bluetooth detection error: $p0';
+  }
+
+  @override
+  String get statusInitProtocol =>
+      'Initializing adapter & detecting vehicle protocol... Older cars (K-line) can take up to 40 seconds. Keep the key ON.';
+
+  @override
+  String get statusConnectedDetecting =>
+      'Connected to ECU | Detecting vehicle & supported PIDs...';
+
+  @override
+  String statusConnectedDetected(String p0, String p1) {
+    return 'Connected: $p0 | $p1';
+  }
+
+  @override
+  String statusConnectedProtocol(String p0) {
+    return 'Connected to ECU | Protocol: $p0';
+  }
+
+  @override
+  String statusAdapterReadyKeyOff(String p0) {
+    return 'Adapter Ready (${p0}V) - Ignition Key in OFF/ACC. Turn key to ON/RUN.';
+  }
+
+  @override
+  String statusInitFailed(String p0) {
+    return 'Failed to initialize ELM327 adapter. $p0';
+  }
+
+  @override
+  String get statusRetrying =>
+      'Retrying vehicle ECU handshake (Turn Key to ON)...';
+
+  @override
+  String get statusEcuNotResponding =>
+      'ECU not responding. Make sure ignition key is switched to ON/RUN.';
+
+  @override
+  String get statusReadingVin =>
+      'Reading VIN, auto-identifying car, and scanning trouble codes...';
+
+  @override
+  String get statusQuickScanDone => 'Quick scan completed successfully';
 }

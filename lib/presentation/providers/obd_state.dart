@@ -57,6 +57,20 @@ class ObdState extends ChangeNotifier {
 
   ElmDriverState _connectionState = ElmDriverState.disconnected;
   String _statusMessage = "Disconnected from adapter";
+  String _statusKey = 'statusDisconnected';
+  Map<String, String> _statusParams = const {};
+
+  /// Stable localization key for the current status message.
+  String get statusKey => _statusKey;
+
+  /// Parameters referenced by [statusKey] placeholders.
+  Map<String, String> get statusParams => _statusParams;
+
+  void _setStatus(String key, String enMessage, [Map<String, String> params = const {}]) {
+    _statusKey = key;
+    _statusParams = params;
+    _statusMessage = enMessage;
+  }
   double _batteryVoltage = 12.6;
   String _activeProtocol = "Not Detected";
 
@@ -388,7 +402,7 @@ class ObdState extends ChangeNotifier {
   void _handleHardwareDisconnect(String transportLabel) {
     if (_connectionState != ElmDriverState.disconnected) {
       _connectionState = ElmDriverState.disconnected;
-      _statusMessage = "$transportLabel connection lost";
+      _setStatus('statusConnectionLost', "$transportLabel connection lost", {'p0': transportLabel});
       _obdRepo?.stopPolling();
       _pollingRateHz = 0.0;
       notifyListeners();
@@ -397,7 +411,7 @@ class ObdState extends ChangeNotifier {
 
   /// Launch realistic ECU simulator mode
   Future<bool> connectSimulator() async {
-    _statusMessage = "Launching ECU simulator...";
+    _setStatus('statusLaunchingSimulator', "Launching ECU simulator...");
     _connectionState = ElmDriverState.connecting;
     _connectedDeviceName = "ELM327 Simulator";
     _detectedAdapterProfile = AdapterProfile.detect("ELM327 Simulator");
@@ -409,7 +423,7 @@ class ObdState extends ChangeNotifier {
     final ok = await _activeConnection!.connect("simulator");
     if (!ok) {
       _connectionState = ElmDriverState.error;
-      _statusMessage = "Failed to start simulator";
+      _setStatus('statusSimulatorFailed', "Failed to start simulator");
       notifyListeners();
       return false;
     }
@@ -419,7 +433,7 @@ class ObdState extends ChangeNotifier {
 
   /// Connect to physical Bluetooth ELM327 adapter by MAC address
   Future<bool> connectBluetooth(String macAddress, {String? deviceName}) async {
-    _statusMessage = "Connecting to Bluetooth adapter ($macAddress)...";
+    _setStatus('statusConnectingBluetooth', "Connecting to Bluetooth adapter ($macAddress)...", {'p0': macAddress});
     _connectionState = ElmDriverState.connecting;
     _connectedDeviceName = deviceName;
     _detectedAdapterProfile = AdapterProfile.detect(deviceName);
@@ -434,7 +448,7 @@ class ObdState extends ChangeNotifier {
     final ok = await _activeConnection!.connect(macAddress);
     if (!ok) {
       _connectionState = ElmDriverState.error;
-      _statusMessage = "Could not connect to adapter. Please check Bluetooth pairing and power.";
+      _setStatus('statusBluetoothFailed', "Could not connect to adapter. Please check Bluetooth pairing and power.");
       notifyListeners();
       return false;
     }
@@ -448,7 +462,7 @@ class ObdState extends ChangeNotifier {
 
   /// Connect to Wi-Fi ELM327 adapter
   Future<bool> connectWifi(String ipPort) async {
-    _statusMessage = "Connecting to Wi-Fi adapter ($ipPort)...";
+    _setStatus('statusConnectingWifi', "Connecting to Wi-Fi adapter ($ipPort)...", {'p0': ipPort});
     _connectionState = ElmDriverState.connecting;
     _connectedDeviceName = "Wi-Fi OBD ($ipPort)";
     _detectedAdapterProfile = AdapterProfile.detect("Wi-Fi ELM327");
@@ -463,7 +477,7 @@ class ObdState extends ChangeNotifier {
     final ok = await _activeConnection!.connect(ipPort);
     if (!ok) {
       _connectionState = ElmDriverState.error;
-      _statusMessage = "Could not connect to Wi-Fi adapter. Ensure you are connected to its Wi-Fi network.";
+      _setStatus('statusWifiFailed', "Could not connect to Wi-Fi adapter. Ensure you are connected to its Wi-Fi network.");
       notifyListeners();
       return false;
     }
@@ -477,7 +491,7 @@ class ObdState extends ChangeNotifier {
 
   /// Connect to Bluetooth Low Energy (BLE 4.0/5.0) OBD-II adapter
   Future<bool> connectBle(String deviceId, {String? deviceName}) async {
-    _statusMessage = "Connecting to BLE adapter ($deviceId)...";
+    _setStatus('statusConnectingBle', "Connecting to BLE adapter ($deviceId)...", {'p0': deviceId});
     _connectionState = ElmDriverState.connecting;
     _connectedDeviceName = deviceName ?? "BLE OBD-II Adapter";
     _detectedAdapterProfile = AdapterProfile.detect(deviceName);
@@ -492,7 +506,7 @@ class ObdState extends ChangeNotifier {
     final ok = await _activeConnection!.connect(deviceId);
     if (!ok) {
       _connectionState = ElmDriverState.error;
-      _statusMessage = "Could not establish GATT connection with BLE adapter. Ensure adapter is powered and nearby.";
+      _setStatus('statusBleGattFailed', "Could not establish GATT connection with BLE adapter. Ensure adapter is powered and nearby.");
       notifyListeners();
       return false;
     }
@@ -506,7 +520,7 @@ class ObdState extends ChangeNotifier {
 
   /// Connect to USB Serial / OTG Cable or Paired Serial Bridge OBD-II adapter
   Future<bool> connectUsbSerial(String portWithBaud, {String? deviceName}) async {
-    _statusMessage = "Opening USB/Serial port ($portWithBaud)...";
+    _setStatus('statusOpeningSerial', "Opening USB/Serial port ($portWithBaud)...", {'p0': portWithBaud});
     _connectionState = ElmDriverState.connecting;
     _connectedDeviceName = deviceName ?? "USB Serial OBD-II Adapter";
     _detectedAdapterProfile = AdapterProfile.detect(deviceName);
@@ -521,7 +535,7 @@ class ObdState extends ChangeNotifier {
     final ok = await _activeConnection!.connect(portWithBaud);
     if (!ok) {
       _connectionState = ElmDriverState.error;
-      _statusMessage = "Could not open USB/Serial connection. Check cable, Bluetooth power, or permissions.";
+      _setStatus('statusSerialFailed', "Could not open USB/Serial connection. Check cable, Bluetooth power, or permissions.");
       notifyListeners();
       return false;
     }
@@ -581,14 +595,14 @@ class ObdState extends ChangeNotifier {
   /// Universal 1-Tap Auto-Detect across ALL physical transports:
   /// 1) Saved/Recent Adapter, 2) USB-OTG / Paired Desktop Serial, 3) Bluetooth Classic, 4) BLE 5.0, 5) Wi-Fi TCP.
   Future<bool> autoDetectAndConnectAny() async {
-    _statusMessage = "Auto-detecting OBD adapter across USB, Bluetooth, BLE & Wi-Fi...";
+    _setStatus('statusAutoDetecting', "Auto-detecting OBD adapter across USB, Bluetooth, BLE & Wi-Fi...");
     _connectionState = ElmDriverState.connecting;
     notifyListeners();
 
     try {
       // 1. Try last working adapter first if available
       if (_lastSavedAdapterTarget != null && _lastSavedAdapterTarget!.isNotEmpty) {
-        _statusMessage = "Checking recent adapter (${_lastSavedAdapterName ?? _lastSavedAdapterTarget})...";
+        _setStatus('statusCheckingRecent', "Checking recent adapter (${_lastSavedAdapterName ?? _lastSavedAdapterTarget})...", {'p0': _lastSavedAdapterName ?? _lastSavedAdapterTarget ?? ''});
         notifyListeners();
         final type = _lastSavedAdapterType ?? "Bluetooth";
         final target = _lastSavedAdapterTarget!;
@@ -612,7 +626,7 @@ class ObdState extends ChangeNotifier {
       }
 
       // 2. Probe attached USB OTG / POSIX serial ports (excluding macOS Bluetooth-Incoming-Port & debug bridges)
-      _statusMessage = "Checking USB-OTG & system serial ports...";
+      _setStatus('statusCheckingUsb', "Checking USB-OTG & system serial ports...");
       notifyListeners();
       final serialDevices = await scanSerialDevices();
       final obdSerialCandidates = serialDevices.where((d) {
@@ -634,7 +648,7 @@ class ObdState extends ChangeNotifier {
 
       for (final dev in obdSerialCandidates.take(3)) {
         for (final baud in const [115200, 38400]) {
-          _statusMessage = "Probing Serial ${dev.displayName} @ $baud bps...";
+          _setStatus('statusProbingSerial', "Probing Serial ${dev.displayName} @ $baud bps...", {'p0': dev.displayName, 'p1': '$baud'});
           notifyListeners();
           if (await connectUsbSerial("${dev.portId}:$baud", deviceName: dev.displayName)) {
             return true;
@@ -656,12 +670,12 @@ class ObdState extends ChangeNotifier {
       }
 
       // 4. BLE 4.0 / 5.0 GATT peripheral scan (top ranked by OBD service UUID/name & RSSI)
-      _statusMessage = "Scanning nearby BLE 4.0/5.0 OBD adapters...";
+      _setStatus('statusScanningBle', "Scanning nearby BLE 4.0/5.0 OBD adapters...");
       notifyListeners();
       final bleDevices = await scanBleDevices(timeout: const Duration(seconds: 4));
       final obdBleCandidates = bleDevices.where((b) => b.isKnownObd || b.name.isNotEmpty).take(3);
       for (final bleDev in obdBleCandidates) {
-        _statusMessage = "Connecting to BLE adapter: ${bleDev.name.isNotEmpty ? bleDev.name : bleDev.remoteId}...";
+        _setStatus('statusConnectingBleNamed', "Connecting to BLE adapter: ${bleDev.name.isNotEmpty ? bleDev.name : bleDev.remoteId}...", {'p0': bleDev.name.isNotEmpty ? bleDev.name : bleDev.remoteId.toString()});
         notifyListeners();
         if (await connectBle(bleDev.remoteId, deviceName: bleDev.name.isNotEmpty ? bleDev.name : bleDev.remoteId)) {
           return true;
@@ -669,13 +683,13 @@ class ObdState extends ChangeNotifier {
       }
 
       // 5. Wi-Fi TCP Gateway probe (192.168.0.10:35000, etc.)
-      _statusMessage = "Probing Wi-Fi ELM327 endpoints...";
+      _setStatus('statusProbingWifi', "Probing Wi-Fi ELM327 endpoints...");
       notifyListeners();
       final wifiEndpoint = await WifiObdConnection.detectReachableWifiEndpoint(
         probeTimeout: const Duration(milliseconds: 900),
       );
       if (wifiEndpoint != null) {
-        _statusMessage = "Found Wi-Fi OBD at $wifiEndpoint. Connecting...";
+        _setStatus('statusFoundWifi', "Found Wi-Fi OBD at $wifiEndpoint. Connecting...", {'p0': wifiEndpoint});
         notifyListeners();
         if (await connectWifi(wifiEndpoint)) {
           return true;
@@ -683,12 +697,12 @@ class ObdState extends ChangeNotifier {
       }
 
       _connectionState = ElmDriverState.error;
-      _statusMessage = "No active OBD adapter found across USB, Bluetooth, BLE, or Wi-Fi. Plug into vehicle OBD-II port and retry.";
+      _setStatus('statusNoAdapterFound', "No active OBD adapter found across USB, Bluetooth, BLE, or Wi-Fi. Plug into vehicle OBD-II port and retry.");
       notifyListeners();
       return false;
     } catch (e) {
       _connectionState = ElmDriverState.error;
-      _statusMessage = "Universal auto-connect failed: $e";
+      _setStatus('statusAutoConnectFailed', "Universal auto-connect failed: $e", {'p0': '$e'});
       notifyListeners();
       return false;
     }
@@ -700,7 +714,7 @@ class ObdState extends ChangeNotifier {
       throw StateError("OBD Hardware Disconnected: Please connect a real OBD adapter (Bluetooth Classic, BLE, Wi-Fi, or USB OTG) before running vehicle audit.");
     }
 
-    _statusMessage = "Auditing genuine multi-ECU telemetry for pre-purchase evaluation...";
+    _setStatus('statusAuditing', "Auditing genuine multi-ECU telemetry for pre-purchase evaluation...");
     notifyListeners();
 
     // 1. Fetch genuine VIN (Mode 09 02 -> UDS 22 F1 90)
@@ -847,7 +861,7 @@ class ObdState extends ChangeNotifier {
       totalMisfireCount: totalMisfires,
     );
 
-    _statusMessage = "Vehicle audit completed. Overall score: ${scorecard.overallScore}/100";
+    _setStatus('statusAuditDone', "Vehicle audit completed. Overall score: ${scorecard.overallScore}/100", {'p0': '${scorecard.overallScore}'});
     notifyListeners();
     return scorecard;
   }
@@ -946,7 +960,7 @@ class ObdState extends ChangeNotifier {
 
   /// Intelligently ranks and automatically connects to the highest-scoring OBD adapter
   Future<bool> autoConnectBestAdapter({List<BluetoothDevice>? devices}) async {
-    _statusMessage = "Evaluating available OBD adapters for auto-connection...";
+    _setStatus('statusEvaluating', "Evaluating available OBD adapters for auto-connection...");
     _connectionState = ElmDriverState.connecting;
     notifyListeners();
 
@@ -967,7 +981,7 @@ class ObdState extends ChangeNotifier {
       }
 
       if (candidates.isEmpty) {
-        _statusMessage = "No Bluetooth devices available to auto-connect.";
+        _setStatus('statusNoBtDevices', "No Bluetooth devices available to auto-connect.");
         _connectionState = ElmDriverState.error;
         notifyListeners();
         return false;
@@ -992,7 +1006,7 @@ class ObdState extends ChangeNotifier {
 
       for (final bestDevice in candidates.take(4)) {
         final profile = AdapterProfile.detect(bestDevice.name);
-        _statusMessage = "Best adapter matched: ${profile.displayName} (${bestDevice.name ?? bestDevice.address}). Connecting...";
+        _setStatus('statusBestMatched', "Best adapter matched: ${profile.displayName} (${bestDevice.name ?? bestDevice.address}). Connecting...", {'p0': profile.displayName, 'p1': bestDevice.name ?? bestDevice.address});
         notifyListeners();
 
         if (await connectBluetooth(bestDevice.address, deviceName: bestDevice.name)) {
@@ -1001,12 +1015,12 @@ class ObdState extends ChangeNotifier {
       }
 
       _connectionState = ElmDriverState.error;
-      _statusMessage = "Could not complete ELM327 handshake with paired Bluetooth devices.";
+      _setStatus('statusHandshakeFailed', "Could not complete ELM327 handshake with paired Bluetooth devices.");
       notifyListeners();
       return false;
     } catch (e) {
       _connectionState = ElmDriverState.error;
-      _statusMessage = "Auto-connect failed: $e";
+      _setStatus('statusAutoConnectFailed', "Auto-connect failed: $e", {'p0': '$e'});
       notifyListeners();
       return false;
     }
@@ -1014,7 +1028,7 @@ class ObdState extends ChangeNotifier {
 
   /// Automatically detect and connect to any available Bluetooth Classic OBD adapter
   Future<bool> autoDetectAndConnectBluetooth() async {
-    _statusMessage = "Requesting Bluetooth permissions...";
+    _setStatus('statusRequestingBtPerm', "Requesting Bluetooth permissions...");
     _connectionState = ElmDriverState.connecting;
     notifyListeners();
 
@@ -1028,7 +1042,7 @@ class ObdState extends ChangeNotifier {
         ].request();
       } catch (_) {}
 
-      _statusMessage = "Scanning for paired Bluetooth OBD adapters...";
+      _setStatus('statusScanningPaired', "Scanning for paired Bluetooth OBD adapters...");
       notifyListeners();
 
       final paired = await FlutterBluetoothSerial.instance.getBondedDevices();
@@ -1038,7 +1052,7 @@ class ObdState extends ChangeNotifier {
 
       // 1. Try known OBD-named paired devices first
       for (final d in obdNamedPaired) {
-        _statusMessage = "Found OBD adapter: ${d.name ?? d.address}. Connecting...";
+        _setStatus('statusFoundAdapter', "Found OBD adapter: ${d.name ?? d.address}. Connecting...", {'p0': d.name ?? d.address});
         notifyListeners();
         if (await connectBluetooth(d.address, deviceName: d.name)) {
           return true;
@@ -1048,7 +1062,7 @@ class ObdState extends ChangeNotifier {
       // 2. Try other paired SPP devices (e.g., adapters with numeric or custom names like 987696098341)
       final unnamedPaired = paired.where((d) => !obdNamedPaired.contains(d)).toList();
       for (final d in unnamedPaired.take(4)) {
-        _statusMessage = "Probing paired device: ${d.name ?? d.address}...";
+        _setStatus('statusProbingPaired', "Probing paired device: ${d.name ?? d.address}...", {'p0': d.name ?? d.address});
         notifyListeners();
         if (await connectBluetooth(d.address, deviceName: d.name)) {
           return true;
@@ -1056,7 +1070,7 @@ class ObdState extends ChangeNotifier {
       }
 
       // 3. Otherwise, run active discovery to find nearby unbonded OBD devices
-      _statusMessage = "Discovering nearby Bluetooth OBD adapters...";
+      _setStatus('statusDiscovering', "Discovering nearby Bluetooth OBD adapters...");
       notifyListeners();
 
       final discoveredList = <BluetoothDevice>[];
@@ -1086,7 +1100,7 @@ class ObdState extends ChangeNotifier {
       await discoverySub.cancel();
 
       if (discoveredDevice != null) {
-        _statusMessage = "Found nearby OBD: ${discoveredDevice.name}. Connecting...";
+        _setStatus('statusFoundNearby', "Found nearby OBD: ${discoveredDevice.name}. Connecting...", {'p0': discoveredDevice.name ?? discoveredDevice.address});
         notifyListeners();
         if (await connectBluetooth(discoveredDevice.address, deviceName: discoveredDevice.name)) {
           return true;
@@ -1094,12 +1108,12 @@ class ObdState extends ChangeNotifier {
       }
 
       _connectionState = ElmDriverState.error;
-      _statusMessage = "No Bluetooth OBD adapter detected. Check adapter power or try BLE/USB/Wi-Fi.";
+      _setStatus('statusNoBtAdapter', "No Bluetooth OBD adapter detected. Check adapter power or try BLE/USB/Wi-Fi.");
       notifyListeners();
       return false;
     } catch (e) {
       _connectionState = ElmDriverState.error;
-      _statusMessage = "Bluetooth detection error: $e";
+      _setStatus('statusBtError', "Bluetooth detection error: $e", {'p0': '$e'});
       notifyListeners();
       return false;
     }
@@ -1175,7 +1189,7 @@ class ObdState extends ChangeNotifier {
   /// Initialize ELM327 protocol driver
   Future<bool> _initializeDriver() async {
     _connectionState = ElmDriverState.initializing;
-    _statusMessage = "Initializing adapter & detecting vehicle protocol... Older cars (K-line) can take up to 40 seconds. Keep the key ON.";
+    _setStatus('statusInitProtocol', "Initializing adapter & detecting vehicle protocol... Older cars (K-line) can take up to 40 seconds. Keep the key ON.");
     _isVehicleAutoDetected = false;
     _detectedVehicleInfo = null;
     notifyListeners();
@@ -1191,23 +1205,25 @@ class ObdState extends ChangeNotifier {
       if (_driver!.isEcuConnected) {
         _connectionState = ElmDriverState.ready;
         _activeProtocol = _driver!.activeProtocol;
-        _statusMessage = "Connected to ECU | Detecting vehicle & supported PIDs...";
+        _setStatus('statusConnectedDetecting', "Connected to ECU | Detecting vehicle & supported PIDs...");
         notifyListeners();
         await _onEcuReadyWorkflow();
         final detectedSummary = _detectedVehicleInfo?.displaySummary;
-        _statusMessage = (detectedSummary != null && detectedSummary.isNotEmpty)
-            ? "Connected: $detectedSummary | $_activeProtocol"
-            : "Connected to ECU | Protocol: $_activeProtocol";
+        if (detectedSummary != null && detectedSummary.isNotEmpty) {
+          _setStatus('statusConnectedDetected', "Connected: $detectedSummary | $_activeProtocol", {'p0': detectedSummary, 'p1': _activeProtocol});
+        } else {
+          _setStatus('statusConnectedProtocol', "Connected to ECU | Protocol: $_activeProtocol", {'p0': _activeProtocol});
+        }
       } else {
         _connectionState = ElmDriverState.adapterConnected;
-        _statusMessage = "Adapter Ready (${_batteryVoltage.toStringAsFixed(1)}V) - Ignition Key in OFF/ACC. Turn key to ON/RUN.";
+        _setStatus('statusAdapterReadyKeyOff', "Adapter Ready (${_batteryVoltage.toStringAsFixed(1)}V) - Ignition Key in OFF/ACC. Turn key to ON/RUN.", {'p0': _batteryVoltage.toStringAsFixed(1)});
       }
 
       notifyListeners();
       return true;
     } else {
       _connectionState = ElmDriverState.error;
-      _statusMessage = "Failed to initialize ELM327 adapter. ${_driver?.initProblem ?? "Check connection."}";
+      _setStatus('statusInitFailed', "Failed to initialize ELM327 adapter. ${_driver?.initProblem ?? 'Check connection.'}", {'p0': _driver?.initProblem ?? 'Check connection.'});
       notifyListeners();
       return false;
     }
@@ -1217,7 +1233,7 @@ class ObdState extends ChangeNotifier {
   Future<bool> retryEcuHandshake() async {
     if (_driver == null || _activeConnection == null || !_activeConnection!.isConnected) return false;
 
-    _statusMessage = "Retrying vehicle ECU handshake (Turn Key to ON)...";
+    _setStatus('statusRetrying', "Retrying vehicle ECU handshake (Turn Key to ON)...");
     notifyListeners();
 
     final ok = await _driver!.connectToEcu(specificProtocolCmd: _protocolOverrideCmd ?? selectedVehicle?.atProtocolCmd);
@@ -1227,13 +1243,15 @@ class ObdState extends ChangeNotifier {
       _batteryVoltage = _driver!.lastBatteryVoltage;
       await _onEcuReadyWorkflow();
       final detectedSummary = _detectedVehicleInfo?.displaySummary;
-      _statusMessage = (detectedSummary != null && detectedSummary.isNotEmpty)
-          ? "Connected: $detectedSummary | $_activeProtocol"
-          : "Connected to ECU | Protocol: $_activeProtocol";
+      if (detectedSummary != null && detectedSummary.isNotEmpty) {
+        _setStatus('statusConnectedDetected', "Connected: $detectedSummary | $_activeProtocol", {'p0': detectedSummary, 'p1': _activeProtocol});
+      } else {
+        _setStatus('statusConnectedProtocol', "Connected to ECU | Protocol: $_activeProtocol", {'p0': _activeProtocol});
+      }
       notifyListeners();
       return true;
     } else {
-      _statusMessage = "ECU not responding. Make sure ignition key is switched to ON/RUN.";
+      _setStatus('statusEcuNotResponding', "ECU not responding. Make sure ignition key is switched to ON/RUN.");
       notifyListeners();
       return false;
     }
@@ -1243,7 +1261,7 @@ class ObdState extends ChangeNotifier {
   Future<void> runQuickScan() async {
     if (!isConnected || _obdRepo == null) return;
     _isScanning = true;
-    _statusMessage = "Reading VIN, auto-identifying car, and scanning trouble codes...";
+    _setStatus('statusReadingVin', "Reading VIN, auto-identifying car, and scanning trouble codes...");
     notifyListeners();
 
     try {
@@ -1260,7 +1278,7 @@ class ObdState extends ChangeNotifier {
       await scanTroubleCodes();
     } finally {
       _isScanning = false;
-      _statusMessage = "Quick scan completed successfully";
+      _setStatus('statusQuickScanDone', "Quick scan completed successfully");
       notifyListeners();
     }
   }
@@ -2903,7 +2921,7 @@ class ObdState extends ChangeNotifier {
       s.resetReading();
     }
     _connectionState = ElmDriverState.disconnected;
-    _statusMessage = "Disconnected";
+    _setStatus('statusDisconnectedShort', "Disconnected");
     notifyListeners();
   }
 }
