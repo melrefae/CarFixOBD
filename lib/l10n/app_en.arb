@@ -824,5 +824,76 @@
   "statusRetrying": "Retrying vehicle ECU handshake (Turn Key to ON)...",
   "statusEcuNotResponding": "ECU not responding. Make sure ignition key is switched to ON/RUN.",
   "statusReadingVin": "Reading VIN, auto-identifying car, and scanning trouble codes...",
-  "statusQuickScanDone": "Quick scan completed successfully"
+  "statusQuickScanDone": "Quick scan completed successfully",
+  "fuelEconomyEgp": "Fuel Economy & Cost (EGP)",
+  "resetTripOdometer": "Reset Trip Odometer",
+  "fuelGradeTitle": "Egyptian Regulated Fuel Grade & Tariff:",
+  "fuel80": "80 Octane (13.75 EGP)",
+  "fuel92": "92 Octane (15.25 EGP)",
+  "fuel95": "95 Octane (17.00 EGP)",
+  "fuelDiesel": "Diesel Solar (13.50 EGP)",
+  "instantConsumption": "Instantaneous Fuel Consumption",
+  "idleSuffix": "(Idle)",
+  "avgEconomy": "Avg Economy",
+  "efficiencyLabel": "Efficiency",
+  "tripDistance": "Trip Distance",
+  "tripCostTitle": "Trip Cost Breakdown (Egyptian Pounds):",
+  "fuelTariffSelected": "Fuel Tariff Selected:",
+  "egpPerLiter": "{p0} EGP / Liter",
+  "@egpPerLiter": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "totalFuelConsumed": "Total Fuel Consumed:",
+  "litersValue": "{p0} Liters",
+  "@litersValue": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "costPerKm": "Cost Per Kilometer:",
+  "egpPerKm": "{p0} EGP / km",
+  "@egpPerKm": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "totalTripCost": "Total Trip Cost:",
+  "egpValue": "{p0} EGP",
+  "@egpValue": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "windshieldMirrorOn": "Windshield Mirror: ON",
+  "normalMode": "Normal Mode",
+  "hudRpm": "ENGINE RPM",
+  "hudCoolant": "COOLANT",
+  "hudBattery": "BATTERY",
+  "clearWarningTitle": "Warning: Clearing Fault Codes",
+  "clearWarningBody": "You are about to erase all stored Diagnostic Trouble Codes (DTCs), freeze frame data, and reset readiness monitors. This action cannot be undone. The Check Engine Light will turn off, but the mechanical fault may still exist and the light may return after a drive cycle.",
+  "mandatoryPreconditions": "Mandatory Safety Pre-Conditions:",
+  "confirmEngineOff": "I confirm vehicle engine is completely OFF (RPM = 0)",
+  "confirmIgnitionOn": "I confirm ignition is ON with instrument cluster illuminated (Key ON / Ignition RUN)",
+  "confirmClear": "Confirm & Clear All Codes",
+  "customPidTitle": "Add Custom PID",
+  "sensorNameLabel": "Sensor Name (e.g. AT Fluid Temp)",
+  "arabicNameOptional": "Arabic Name (Optional)",
+  "modeHexLabel": "Mode (Hex)",
+  "pidHexLabel": "PID (Hex)",
+  "formulaLabel": "Formula (e.g. A - 40 or ((A*256)+B)/10)",
+  "unitLabel": "Unit (°C / Bar / %)",
+  "minValueLabel": "Min Value",
+  "maxValueLabel": "Max Value",
+  "requiredField": "Required",
+  "savePid": "Save PID"
 }

@@ -3133,6 +3133,264 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Quick scan completed successfully'**
   String get statusQuickScanDone;
+
+  /// No description provided for @fuelEconomyEgp.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel Economy & Cost (EGP)'**
+  String get fuelEconomyEgp;
+
+  /// No description provided for @resetTripOdometer.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Trip Odometer'**
+  String get resetTripOdometer;
+
+  /// No description provided for @fuelGradeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Egyptian Regulated Fuel Grade & Tariff:'**
+  String get fuelGradeTitle;
+
+  /// No description provided for @fuel80.
+  ///
+  /// In en, this message translates to:
+  /// **'80 Octane (13.75 EGP)'**
+  String get fuel80;
+
+  /// No description provided for @fuel92.
+  ///
+  /// In en, this message translates to:
+  /// **'92 Octane (15.25 EGP)'**
+  String get fuel92;
+
+  /// No description provided for @fuel95.
+  ///
+  /// In en, this message translates to:
+  /// **'95 Octane (17.00 EGP)'**
+  String get fuel95;
+
+  /// No description provided for @fuelDiesel.
+  ///
+  /// In en, this message translates to:
+  /// **'Diesel Solar (13.50 EGP)'**
+  String get fuelDiesel;
+
+  /// No description provided for @instantConsumption.
+  ///
+  /// In en, this message translates to:
+  /// **'Instantaneous Fuel Consumption'**
+  String get instantConsumption;
+
+  /// No description provided for @idleSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'(Idle)'**
+  String get idleSuffix;
+
+  /// No description provided for @avgEconomy.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Economy'**
+  String get avgEconomy;
+
+  /// No description provided for @efficiencyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Efficiency'**
+  String get efficiencyLabel;
+
+  /// No description provided for @tripDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip Distance'**
+  String get tripDistance;
+
+  /// No description provided for @tripCostTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip Cost Breakdown (Egyptian Pounds):'**
+  String get tripCostTitle;
+
+  /// No description provided for @fuelTariffSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel Tariff Selected:'**
+  String get fuelTariffSelected;
+
+  /// No description provided for @egpPerLiter.
+  ///
+  /// In en, this message translates to:
+  /// **'{p0} EGP / Liter'**
+  String egpPerLiter(String p0);
+
+  /// No description provided for @totalFuelConsumed.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Fuel Consumed:'**
+  String get totalFuelConsumed;
+
+  /// No description provided for @litersValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{p0} Liters'**
+  String litersValue(String p0);
+
+  /// No description provided for @costPerKm.
+  ///
+  /// In en, this message translates to:
+  /// **'Cost Per Kilometer:'**
+  String get costPerKm;
+
+  /// No description provided for @egpPerKm.
+  ///
+  /// In en, this message translates to:
+  /// **'{p0} EGP / km'**
+  String egpPerKm(String p0);
+
+  /// No description provided for @totalTripCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Trip Cost:'**
+  String get totalTripCost;
+
+  /// No description provided for @egpValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{p0} EGP'**
+  String egpValue(String p0);
+
+  /// No description provided for @windshieldMirrorOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Windshield Mirror: ON'**
+  String get windshieldMirrorOn;
+
+  /// No description provided for @normalMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal Mode'**
+  String get normalMode;
+
+  /// No description provided for @hudRpm.
+  ///
+  /// In en, this message translates to:
+  /// **'ENGINE RPM'**
+  String get hudRpm;
+
+  /// No description provided for @hudCoolant.
+  ///
+  /// In en, this message translates to:
+  /// **'COOLANT'**
+  String get hudCoolant;
+
+  /// No description provided for @hudBattery.
+  ///
+  /// In en, this message translates to:
+  /// **'BATTERY'**
+  String get hudBattery;
+
+  /// No description provided for @clearWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning: Clearing Fault Codes'**
+  String get clearWarningTitle;
+
+  /// No description provided for @clearWarningBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You are about to erase all stored Diagnostic Trouble Codes (DTCs), freeze frame data, and reset readiness monitors. This action cannot be undone. The Check Engine Light will turn off, but the mechanical fault may still exist and the light may return after a drive cycle.'**
+  String get clearWarningBody;
+
+  /// No description provided for @mandatoryPreconditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Mandatory Safety Pre-Conditions:'**
+  String get mandatoryPreconditions;
+
+  /// No description provided for @confirmEngineOff.
+  ///
+  /// In en, this message translates to:
+  /// **'I confirm vehicle engine is completely OFF (RPM = 0)'**
+  String get confirmEngineOff;
+
+  /// No description provided for @confirmIgnitionOn.
+  ///
+  /// In en, this message translates to:
+  /// **'I confirm ignition is ON with instrument cluster illuminated (Key ON / Ignition RUN)'**
+  String get confirmIgnitionOn;
+
+  /// No description provided for @confirmClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm & Clear All Codes'**
+  String get confirmClear;
+
+  /// No description provided for @customPidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Custom PID'**
+  String get customPidTitle;
+
+  /// No description provided for @sensorNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sensor Name (e.g. AT Fluid Temp)'**
+  String get sensorNameLabel;
+
+  /// No description provided for @arabicNameOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabic Name (Optional)'**
+  String get arabicNameOptional;
+
+  /// No description provided for @modeHexLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mode (Hex)'**
+  String get modeHexLabel;
+
+  /// No description provided for @pidHexLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PID (Hex)'**
+  String get pidHexLabel;
+
+  /// No description provided for @formulaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Formula (e.g. A - 40 or ((A*256)+B)/10)'**
+  String get formulaLabel;
+
+  /// No description provided for @unitLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit (°C / Bar / %)'**
+  String get unitLabel;
+
+  /// No description provided for @minValueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Min Value'**
+  String get minValueLabel;
+
+  /// No description provided for @maxValueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Max Value'**
+  String get maxValueLabel;
+
+  /// No description provided for @requiredField.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get requiredField;
+
+  /// No description provided for @savePid.
+  ///
+  /// In en, this message translates to:
+  /// **'Save PID'**
+  String get savePid;
 }
 
 class _AppLocalizationsDelegate

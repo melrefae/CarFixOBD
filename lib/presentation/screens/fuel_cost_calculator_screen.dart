@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/localization/app_strings_en.dart';
 import '../../domain/analyzers/fuel_economy_calculator.dart';
@@ -21,11 +22,11 @@ class _FuelCostCalculatorScreenState extends State<FuelCostCalculatorScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.fuelEconomyEgp),
+        title: Text(AppLocalizations.of(context).fuelEconomyEgp),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            tooltip: "Reset Trip Odometer",
+            tooltip: AppLocalizations.of(context).resetTripOdometer,
             onPressed: () => setState(() => fuel.resetTrip()),
           ),
         ],
@@ -46,8 +47,8 @@ class _FuelCostCalculatorScreenState extends State<FuelCostCalculatorScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Egyptian Regulated Fuel Grade & Tariff:",
+                  Text(
+                    AppLocalizations.of(context).fuelGradeTitle,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primaryYellow),
                   ),
                   const SizedBox(height: 10),
@@ -55,10 +56,10 @@ class _FuelCostCalculatorScreenState extends State<FuelCostCalculatorScreen> {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      _buildFuelGradeChip(fuel, EgyptianFuelGrade.octane80, "80 Octane (13.75 EGP)"),
-                      _buildFuelGradeChip(fuel, EgyptianFuelGrade.octane92, "92 Octane (15.25 EGP)"),
-                      _buildFuelGradeChip(fuel, EgyptianFuelGrade.octane95, "95 Octane (17.00 EGP)"),
-                      _buildFuelGradeChip(fuel, EgyptianFuelGrade.diesel, "Diesel Solar (13.50 EGP)"),
+                      _buildFuelGradeChip(fuel, EgyptianFuelGrade.octane80, AppLocalizations.of(context).fuel80),
+                      _buildFuelGradeChip(fuel, EgyptianFuelGrade.octane92, AppLocalizations.of(context).fuel92),
+                      _buildFuelGradeChip(fuel, EgyptianFuelGrade.octane95, AppLocalizations.of(context).fuel95),
+                      _buildFuelGradeChip(fuel, EgyptianFuelGrade.diesel, AppLocalizations.of(context).fuelDiesel),
                     ],
                   ),
                 ],
@@ -81,12 +82,12 @@ class _FuelCostCalculatorScreenState extends State<FuelCostCalculatorScreen> {
               ),
               child: Column(
                 children: [
-                  const Text("Instantaneous Fuel Consumption", style: TextStyle(fontSize: 13, color: AppColors.textMuted)),
+                  Text(AppLocalizations.of(context).instantConsumption, style: const TextStyle(fontSize: 13, color: AppColors.textMuted)),
                   const SizedBox(height: 8),
                   Text(
                     fuel.instantLitersPer100Km > 0
                         ? "${fuel.instantLitersPer100Km.toStringAsFixed(1)} L/100km"
-                        : "${fuel.instantLitersPerHour.toStringAsFixed(1)} L/h (Idle)",
+                        : '${fuel.instantLitersPerHour.toStringAsFixed(1)} L/h ${AppLocalizations.of(context).idleSuffix}',
                     style: const TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
@@ -98,9 +99,9 @@ class _FuelCostCalculatorScreenState extends State<FuelCostCalculatorScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildStatColumn("Avg Economy", "${fuel.averageLitersPer100Km.toStringAsFixed(1)} L/100km", AppColors.electricBlue),
-                      _buildStatColumn("Efficiency", "${fuel.averageKmPerLiter.toStringAsFixed(1)} km/L", AppColors.accentCyan),
-                      _buildStatColumn("Trip Distance", "${fuel.totalDistanceKm.toStringAsFixed(1)} km", AppColors.textWhite),
+                      _buildStatColumn(AppLocalizations.of(context).avgEconomy, "${fuel.averageLitersPer100Km.toStringAsFixed(1)} L/100km", AppColors.electricBlue),
+                      _buildStatColumn(AppLocalizations.of(context).efficiencyLabel, "${fuel.averageKmPerLiter.toStringAsFixed(1)} km/L", AppColors.accentCyan),
+                      _buildStatColumn(AppLocalizations.of(context).tripDistance, "${fuel.totalDistanceKm.toStringAsFixed(1)} km", AppColors.textWhite),
                     ],
                   ),
                 ],
@@ -120,21 +121,21 @@ class _FuelCostCalculatorScreenState extends State<FuelCostCalculatorScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Trip Cost Breakdown (Egyptian Pounds):",
+                  Text(
+                    AppLocalizations.of(context).tripCostTitle,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primaryYellow),
                   ),
                   const SizedBox(height: 14),
-                  _buildCostRow("Fuel Tariff Selected:", "${fuel.pricePerLiter.toStringAsFixed(2)} EGP / Liter"),
-                  _buildCostRow("Total Fuel Consumed:", "${fuel.totalFuelConsumedLiters.toStringAsFixed(2)} Liters"),
-                  _buildCostRow("Cost Per Kilometer:", "${fuel.costPerKmEgp.toStringAsFixed(2)} EGP / km"),
+                  _buildCostRow(AppLocalizations.of(context).fuelTariffSelected, AppLocalizations.of(context).egpPerLiter(fuel.pricePerLiter.toStringAsFixed(2))),
+                  _buildCostRow(AppLocalizations.of(context).totalFuelConsumed, AppLocalizations.of(context).litersValue(fuel.totalFuelConsumedLiters.toStringAsFixed(2))),
+                  _buildCostRow(AppLocalizations.of(context).costPerKm, AppLocalizations.of(context).egpPerKm(fuel.costPerKmEgp.toStringAsFixed(2))),
                   const Divider(color: AppColors.cardBorder, height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Total Trip Cost:", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textWhite)),
+                      Text(AppLocalizations.of(context).totalTripCost, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textWhite)),
                       Text(
-                        "${fuel.totalTripCostEgp.toStringAsFixed(2)} EGP",
+                        AppLocalizations.of(context).egpValue(fuel.totalTripCostEgp.toStringAsFixed(2)),
                         style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.successGreen),
                       ),
                     ],

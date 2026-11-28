@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../core/constants/app_colors.dart';
 import '../providers/obd_state.dart';
 
@@ -56,7 +57,7 @@ class _HudDisplayScreenState extends State<HudDisplayScreen> {
                       backgroundColor: Colors.black,
                     ),
                     icon: Icon(_isMirrored ? Icons.flip : Icons.smartphone, size: 18),
-                    label: Text(_isMirrored ? "Windshield Mirror: ON" : "Normal Mode"),
+                    label: Text(_isMirrored ? AppLocalizations.of(context).windshieldMirrorOn : AppLocalizations.of(context).normalMode),
                     onPressed: () => setState(() => _isMirrored = !_isMirrored),
                   ),
                 ],
@@ -108,17 +109,17 @@ class _HudDisplayScreenState extends State<HudDisplayScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _buildMetric(
-                        label: "ENGINE RPM",
+                        label: AppLocalizations.of(context).hudRpm,
                         value: rpm.toInt().toString(),
                         color: rpm >= 5500 ? AppColors.dangerRed : AppColors.accentCyan,
                       ),
                       _buildMetric(
-                        label: "COOLANT",
+                        label: AppLocalizations.of(context).hudCoolant,
                         value: "${coolant.toInt()}°C",
                         color: isCoolantCritical ? AppColors.dangerRed : Colors.white,
                       ),
                       _buildMetric(
-                        label: "BATTERY",
+                        label: AppLocalizations.of(context).hudBattery,
                         value: "${voltage.toStringAsFixed(1)}V",
                         color: isVoltageCritical ? AppColors.dangerRed : AppColors.successGreen,
                       ),

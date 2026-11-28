@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/localization/app_strings_en.dart';
 import '../../data/models/vehicle_profile.dart';
@@ -30,11 +31,11 @@ class _CustomPidDialogState extends State<CustomPidDialog> {
       backgroundColor: AppColors.cardSurface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       title: Row(
-        children: const [
-          Icon(Icons.add_chart, color: AppColors.primaryYellow, size: 26),
-          SizedBox(width: 10),
+        children: [
+          const Icon(Icons.add_chart, color: AppColors.primaryYellow, size: 26),
+          const SizedBox(width: 10),
           Text(
-            "Add Custom PID",
+            AppLocalizations.of(context).customPidTitle,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.textWhite),
           ),
         ],
@@ -47,13 +48,13 @@ class _CustomPidDialogState extends State<CustomPidDialog> {
             children: [
               TextFormField(
                 controller: _nameEnController,
-                decoration: const InputDecoration(labelText: "Sensor Name (e.g. AT Fluid Temp)"),
-                validator: (v) => (v == null || v.trim().isEmpty) ? "Required" : null,
+                decoration: InputDecoration(labelText: AppLocalizations.of(context).sensorNameLabel),
+                validator: (v) => (v == null || v.trim().isEmpty) ? AppLocalizations.of(context).requiredField : null,
               ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: _nameArController,
-                decoration: const InputDecoration(labelText: "Arabic Name (Optional)"),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context).arabicNameOptional),
               ),
               const SizedBox(height: 10),
               Row(
@@ -61,16 +62,16 @@ class _CustomPidDialogState extends State<CustomPidDialog> {
                   Expanded(
                     child: TextFormField(
                       controller: _modeController,
-                      decoration: const InputDecoration(labelText: "Mode (Hex)"),
-                      validator: (v) => (v == null || v.trim().isEmpty) ? "Required" : null,
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context).modeHexLabel),
+                      validator: (v) => (v == null || v.trim().isEmpty) ? AppLocalizations.of(context).requiredField : null,
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: TextFormField(
                       controller: _pidController,
-                      decoration: const InputDecoration(labelText: "PID (Hex)"),
-                      validator: (v) => (v == null || v.trim().isEmpty) ? "Required" : null,
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context).pidHexLabel),
+                      validator: (v) => (v == null || v.trim().isEmpty) ? AppLocalizations.of(context).requiredField : null,
                     ),
                   ),
                 ],
@@ -78,10 +79,10 @@ class _CustomPidDialogState extends State<CustomPidDialog> {
               const SizedBox(height: 10),
               TextFormField(
                 controller: _formulaController,
-                decoration: const InputDecoration(
-                  labelText: "Formula (e.g. A - 40 or ((A*256)+B)/10)",
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).formulaLabel,
                 ),
-                validator: (v) => (v == null || v.trim().isEmpty) ? "Required" : null,
+                validator: (v) => (v == null || v.trim().isEmpty) ? AppLocalizations.of(context).requiredField : null,
               ),
               const SizedBox(height: 10),
               Row(
@@ -89,7 +90,7 @@ class _CustomPidDialogState extends State<CustomPidDialog> {
                   Expanded(
                     child: TextFormField(
                       controller: _unitController,
-                      decoration: const InputDecoration(labelText: "Unit (°C / Bar / %)"),
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context).unitLabel),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -97,7 +98,7 @@ class _CustomPidDialogState extends State<CustomPidDialog> {
                     child: TextFormField(
                       controller: _minController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: "Min Value"),
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context).minValueLabel),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -105,7 +106,7 @@ class _CustomPidDialogState extends State<CustomPidDialog> {
                     child: TextFormField(
                       controller: _maxController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: "Max Value"),
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context).maxValueLabel),
                     ),
                   ),
                 ],
@@ -117,7 +118,7 @@ class _CustomPidDialogState extends State<CustomPidDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text(AppStrings.cancel, style: TextStyle(color: AppColors.textMuted)),
+          child: Text(AppLocalizations.of(context).cancel, style: const TextStyle(color: AppColors.textMuted)),
         ),
         ElevatedButton(
           onPressed: () {
@@ -138,7 +139,7 @@ class _CustomPidDialogState extends State<CustomPidDialog> {
               Navigator.pop(context);
             }
           },
-          child: const Text("Save PID"),
+          child: Text(AppLocalizations.of(context).savePid),
         ),
       ],
     );

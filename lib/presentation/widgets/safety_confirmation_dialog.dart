@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/localization/app_strings_en.dart';
 
@@ -27,12 +28,12 @@ class _SafetyConfirmationDialogState extends State<SafetyConfirmationDialog> {
         side: const BorderSide(color: AppColors.dangerRed, width: 2),
       ),
       title: Row(
-        children: const [
-          Icon(Icons.warning_amber_rounded, color: AppColors.dangerRed, size: 32),
-          SizedBox(width: 10),
+        children: [
+          const Icon(Icons.warning_amber_rounded, color: AppColors.dangerRed, size: 32),
+          const SizedBox(width: 10),
           Expanded(
             child: Text(
-              AppStrings.clearWarningTitle,
+              AppLocalizations.of(context).clearWarningTitle,
               style: TextStyle(color: AppColors.dangerRed, fontWeight: FontWeight.bold, fontSize: 18),
             ),
           ),
@@ -43,14 +44,14 @@ class _SafetyConfirmationDialogState extends State<SafetyConfirmationDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              AppStrings.clearWarningBody,
+            Text(
+              AppLocalizations.of(context).clearWarningBody,
               style: TextStyle(color: AppColors.textWhite, fontSize: 13, height: 1.5),
             ),
             const SizedBox(height: 16),
             const Divider(color: Color(0xFF37474F)),
-            const Text(
-              "Mandatory Safety Pre-Conditions:",
+            Text(
+              AppLocalizations.of(context).mandatoryPreconditions,
               style: TextStyle(color: AppColors.primaryYellow, fontWeight: FontWeight.bold, fontSize: 13),
             ),
             const SizedBox(height: 8),
@@ -59,8 +60,8 @@ class _SafetyConfirmationDialogState extends State<SafetyConfirmationDialog> {
             CheckboxListTile(
               contentPadding: EdgeInsets.zero,
               activeColor: AppColors.dangerRed,
-              title: const Text(
-                "I confirm vehicle engine is completely OFF (RPM = 0)",
+              title: Text(
+                AppLocalizations.of(context).confirmEngineOff,
                 style: TextStyle(fontSize: 12, color: AppColors.textWhite),
               ),
               value: _engineStoppedConfirmed,
@@ -75,8 +76,8 @@ class _SafetyConfirmationDialogState extends State<SafetyConfirmationDialog> {
             CheckboxListTile(
               contentPadding: EdgeInsets.zero,
               activeColor: AppColors.dangerRed,
-              title: const Text(
-                "I confirm ignition is ON with instrument cluster illuminated (Key ON / Ignition RUN)",
+              title: Text(
+                AppLocalizations.of(context).confirmIgnitionOn,
                 style: TextStyle(fontSize: 12, color: AppColors.textWhite),
               ),
               value: _ignitionOnConfirmed,
@@ -92,7 +93,7 @@ class _SafetyConfirmationDialogState extends State<SafetyConfirmationDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text(AppStrings.cancel, style: TextStyle(color: AppColors.textMuted)),
+          child: Text(AppLocalizations.of(context).cancel, style: const TextStyle(color: AppColors.textMuted)),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
@@ -105,7 +106,7 @@ class _SafetyConfirmationDialogState extends State<SafetyConfirmationDialog> {
                   widget.onConfirmed();
                 }
               : null,
-          child: const Text(AppStrings.confirmClear),
+          child: Text(AppLocalizations.of(context).confirmClear),
         ),
       ],
     );

@@ -1713,4 +1713,143 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get statusQuickScanDone => 'اكتمل الفحص السريع بنجاح';
+
+  @override
+  String get fuelEconomyEgp => 'استهلاك الوقود والتكلفة (جنيه)';
+
+  @override
+  String get resetTripOdometer => 'تصفير عداد الرحلة';
+
+  @override
+  String get fuelGradeTitle => 'نوع الوقود والتسعيرة المصرية:';
+
+  @override
+  String get fuel80 => 'بنزين 80 (13.75 ج.م)';
+
+  @override
+  String get fuel92 => 'بنزين 92 (15.25 ج.م)';
+
+  @override
+  String get fuel95 => 'بنزين 95 (17.00 ج.م)';
+
+  @override
+  String get fuelDiesel => 'سولار (13.50 ج.م)';
+
+  @override
+  String get instantConsumption => 'استهلاك الوقود اللحظي';
+
+  @override
+  String get idleSuffix => '(واقف)';
+
+  @override
+  String get avgEconomy => 'متوسط الاستهلاك';
+
+  @override
+  String get efficiencyLabel => 'الكفاءة';
+
+  @override
+  String get tripDistance => 'مسافة الرحلة';
+
+  @override
+  String get tripCostTitle => 'تفاصيل تكلفة الرحلة (بالجنيه المصري):';
+
+  @override
+  String get fuelTariffSelected => 'تسعيرة الوقود المختارة:';
+
+  @override
+  String egpPerLiter(String p0) {
+    return '$p0 ج.م / لتر';
+  }
+
+  @override
+  String get totalFuelConsumed => 'إجمالي الوقود المستهلك:';
+
+  @override
+  String litersValue(String p0) {
+    return '$p0 لتر';
+  }
+
+  @override
+  String get costPerKm => 'تكلفة الكيلومتر:';
+
+  @override
+  String egpPerKm(String p0) {
+    return '$p0 ج.م / كم';
+  }
+
+  @override
+  String get totalTripCost => 'إجمالي تكلفة الرحلة:';
+
+  @override
+  String egpValue(String p0) {
+    return '$p0 ج.م';
+  }
+
+  @override
+  String get windshieldMirrorOn => 'وضع الزجاج الأمامي: شغال';
+
+  @override
+  String get normalMode => 'الوضع العادي';
+
+  @override
+  String get hudRpm => 'دوران المحرك';
+
+  @override
+  String get hudCoolant => 'مياه التبريد';
+
+  @override
+  String get hudBattery => 'البطارية';
+
+  @override
+  String get clearWarningTitle => 'تحذير: مسح أكواد الأعطال';
+
+  @override
+  String get clearWarningBody =>
+      'أنت على وشك مسح كل أكواد الأعطال المسجلة وبيانات اللقطة المتجمدة وإعادة ضبط عدادات الجاهزية. لا يمكن التراجع عن هذا الإجراء. لمبة المحرك ستنطفئ، لكن العطل الميكانيكي قد يكون لا يزال موجودًا وقد تعود اللمبة بعد دورة قيادة.';
+
+  @override
+  String get mandatoryPreconditions => 'شروط السلامة الإلزامية:';
+
+  @override
+  String get confirmEngineOff => 'أؤكد أن محرك السيارة مطفأ تمامًا (RPM = 0)';
+
+  @override
+  String get confirmIgnitionOn =>
+      'أؤكد أن الكنتاك مفتوح والطبلون شغال (Key ON / Ignition RUN)';
+
+  @override
+  String get confirmClear => 'تأكيد ومسح كل الأكواد';
+
+  @override
+  String get customPidTitle => 'إضافة PID مخصص';
+
+  @override
+  String get sensorNameLabel => 'اسم الحساس (مثال: حرارة زيت الفتيس)';
+
+  @override
+  String get arabicNameOptional => 'الاسم بالعربي (اختياري)';
+
+  @override
+  String get modeHexLabel => 'الوضع (Hex)';
+
+  @override
+  String get pidHexLabel => 'PID (Hex)';
+
+  @override
+  String get formulaLabel => 'المعادلة (مثال: A - 40 أو ((A*256)+B)/10)';
+
+  @override
+  String get unitLabel => 'الوحدة (°C / Bar / %)';
+
+  @override
+  String get minValueLabel => 'أدنى قيمة';
+
+  @override
+  String get maxValueLabel => 'أقصى قيمة';
+
+  @override
+  String get requiredField => 'مطلوب';
+
+  @override
+  String get savePid => 'حفظ PID';
 }

@@ -1718,4 +1718,144 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statusQuickScanDone => 'Quick scan completed successfully';
+
+  @override
+  String get fuelEconomyEgp => 'Fuel Economy & Cost (EGP)';
+
+  @override
+  String get resetTripOdometer => 'Reset Trip Odometer';
+
+  @override
+  String get fuelGradeTitle => 'Egyptian Regulated Fuel Grade & Tariff:';
+
+  @override
+  String get fuel80 => '80 Octane (13.75 EGP)';
+
+  @override
+  String get fuel92 => '92 Octane (15.25 EGP)';
+
+  @override
+  String get fuel95 => '95 Octane (17.00 EGP)';
+
+  @override
+  String get fuelDiesel => 'Diesel Solar (13.50 EGP)';
+
+  @override
+  String get instantConsumption => 'Instantaneous Fuel Consumption';
+
+  @override
+  String get idleSuffix => '(Idle)';
+
+  @override
+  String get avgEconomy => 'Avg Economy';
+
+  @override
+  String get efficiencyLabel => 'Efficiency';
+
+  @override
+  String get tripDistance => 'Trip Distance';
+
+  @override
+  String get tripCostTitle => 'Trip Cost Breakdown (Egyptian Pounds):';
+
+  @override
+  String get fuelTariffSelected => 'Fuel Tariff Selected:';
+
+  @override
+  String egpPerLiter(String p0) {
+    return '$p0 EGP / Liter';
+  }
+
+  @override
+  String get totalFuelConsumed => 'Total Fuel Consumed:';
+
+  @override
+  String litersValue(String p0) {
+    return '$p0 Liters';
+  }
+
+  @override
+  String get costPerKm => 'Cost Per Kilometer:';
+
+  @override
+  String egpPerKm(String p0) {
+    return '$p0 EGP / km';
+  }
+
+  @override
+  String get totalTripCost => 'Total Trip Cost:';
+
+  @override
+  String egpValue(String p0) {
+    return '$p0 EGP';
+  }
+
+  @override
+  String get windshieldMirrorOn => 'Windshield Mirror: ON';
+
+  @override
+  String get normalMode => 'Normal Mode';
+
+  @override
+  String get hudRpm => 'ENGINE RPM';
+
+  @override
+  String get hudCoolant => 'COOLANT';
+
+  @override
+  String get hudBattery => 'BATTERY';
+
+  @override
+  String get clearWarningTitle => 'Warning: Clearing Fault Codes';
+
+  @override
+  String get clearWarningBody =>
+      'You are about to erase all stored Diagnostic Trouble Codes (DTCs), freeze frame data, and reset readiness monitors. This action cannot be undone. The Check Engine Light will turn off, but the mechanical fault may still exist and the light may return after a drive cycle.';
+
+  @override
+  String get mandatoryPreconditions => 'Mandatory Safety Pre-Conditions:';
+
+  @override
+  String get confirmEngineOff =>
+      'I confirm vehicle engine is completely OFF (RPM = 0)';
+
+  @override
+  String get confirmIgnitionOn =>
+      'I confirm ignition is ON with instrument cluster illuminated (Key ON / Ignition RUN)';
+
+  @override
+  String get confirmClear => 'Confirm & Clear All Codes';
+
+  @override
+  String get customPidTitle => 'Add Custom PID';
+
+  @override
+  String get sensorNameLabel => 'Sensor Name (e.g. AT Fluid Temp)';
+
+  @override
+  String get arabicNameOptional => 'Arabic Name (Optional)';
+
+  @override
+  String get modeHexLabel => 'Mode (Hex)';
+
+  @override
+  String get pidHexLabel => 'PID (Hex)';
+
+  @override
+  String get formulaLabel => 'Formula (e.g. A - 40 or ((A*256)+B)/10)';
+
+  @override
+  String get unitLabel => 'Unit (°C / Bar / %)';
+
+  @override
+  String get minValueLabel => 'Min Value';
+
+  @override
+  String get maxValueLabel => 'Max Value';
+
+  @override
+  String get requiredField => 'Required';
+
+  @override
+  String get savePid => 'Save PID';
 }
