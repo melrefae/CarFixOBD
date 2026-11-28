@@ -170,12 +170,13 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
 
                 SizedBox(
                   width: double.infinity,
-                  height: 48,
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: server.isRunning ? AppColors.dangerRed : AppColors.primaryYellow,
                       foregroundColor: server.isRunning ? Colors.white : Colors.black,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      minimumSize: const Size(double.infinity, 52),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     icon: Icon(server.isRunning ? Icons.stop : Icons.play_arrow),
                     label: Text(
@@ -287,12 +288,13 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
 
                 SizedBox(
                   width: double.infinity,
-                  height: 48,
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.electricBlue,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      minimumSize: const Size(double.infinity, 52),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     icon: _isSyncing
                         ? const SizedBox(

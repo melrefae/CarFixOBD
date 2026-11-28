@@ -84,12 +84,13 @@ class _FlightRecorderScreenState extends State<FlightRecorderScreen> {
                   const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
-                    height: 46,
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: recorder.isRecording ? AppColors.dangerRed : AppColors.primaryYellow,
                         foregroundColor: recorder.isRecording ? Colors.white : Colors.black,
                         elevation: 2,
+                        minimumSize: const Size(double.infinity, 52),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
                       icon: Icon(recorder.isRecording ? Icons.stop : Icons.fiber_manual_record),
                       label: Text(
