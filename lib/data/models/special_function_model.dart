@@ -773,6 +773,18 @@ class SpecialFunctionModel {
           "Key ON, Engine OFF",
         ],
         automatedObdCommand: "31 01 02 14",
+        titleAr: "تعليم أو تعطيل نظام Stop/Start",
+        descriptionAr: "بيعاير عداد مارش المولد، بيعيد تعلم سويتش الوضع الحيادي، أو بيغير إعداد ذاكرة الـ Stop/Start الافتراضي.",
+        prerequisitesAr: [
+          "حالة شحن البطارية (SOC) أكتر من 80%",
+          "الكبوت وكل الأبواب مقفولين كويس",
+          "كونتاك مفتوح ومحرك OFF",
+        ],
+        manualProcedureTitleAr: "إعداد ذاكرة الـ Stop/Start للسوق المصري:",
+        manualStepsAr: [
+          "كتير من السواقين في مصر بيفضلوا الـ Stop/Start مقفول عشان يحافظوا على المارش والبطارية في زحمة القاهرة.",
+          "نفّذ الروتين عشان تتحفظ آخر حالة للزرار في الذاكرة الدائمة للـ BCM.",
+        ],
         manualProcedureTitle: "Egyptian Stop/Start Memory Setup:",
         manualSteps: [
           "Many Egyptian drivers prefer Stop/Start OFF to preserve starter and battery in Cairo traffic.",
@@ -793,6 +805,18 @@ class SpecialFunctionModel {
           "Transit fuse inserted or main battery isolator locked in ON position",
         ],
         automatedObdCommand: "31 01 02 15",
+        titleAr: "إلغاء وضع النقل / التسليم (Transport Mode)",
+        descriptionAr: "بيلغي وضع نقل الشحن في العربيات المستوردة الجديدة، ويفتح الشاشة الترفيهية والريموت والسرعة الكاملة ونور الصالون.",
+        prerequisitesAr: [
+          "فحص ما قبل التسليم (PDI) خلص",
+          "فيوز النقل مركب أو عازل البطارية الرئيسي مقفل في وضع ON",
+        ],
+        manualProcedureTitleAr: "دليل فك وضع النقل:",
+        manualStepsAr: [
+          "شغّل كشافات الخطر (الانتظار).",
+          "دوس على الفرامل وفلّش النور 5 مرات خلال 10 ثواني.",
+          "العدادات هتظهر Transport Mode OFF.",
+        ],
         manualProcedureTitle: "Transport Mode Release Guide:",
         manualSteps: [
           "Turn hazard flashers ON.",
@@ -815,6 +839,20 @@ class SpecialFunctionModel {
           "Foot brake depressed firmly throughout routine",
         ],
         automatedObdCommand: "31 01 02 16",
+        titleAr: "مطابقة دبرياج الدبل كلتش / DSG / Powershift",
+        descriptionAr: "بيعيد تعلم نقطة التلامس ومنحنيات الاشتباك للدبرياج 1 (الفردي) والدبرياج 2 (الزوجي) في فتيس الدبل كلتش الأوتوماتيك.",
+        prerequisitesAr: [
+          "حرارة زيت الفتيس بين 40°C و 70°C",
+          "العربية واقفة على أرض مستوية وفرامل اليد مرفوعة كويس",
+          "دواسة الفرامل مدوسة بقوة طول الروتين",
+        ],
+        manualProcedureTitleAr: "الضبط الأساسي لـ DSG DQ200 / Powershift:",
+        manualStepsAr: [
+          "المحرك شغال على الثبات، والعصاية في وضع PARK.",
+          "دوس على الفرامل بأقصى قوة.",
+          "شغّل الضبط الأساسي -> الفتيس هيعمل تكات ميكانيكية مسموعة للسيلكتور لمدة 60 ثانية.",
+          "سوق العربية على D و R لمدة 15 دقيقة خلال كل الغيارات عشان يكمل التعويض الدقيق.",
+        ],
         manualProcedureTitle: "DSG DQ200 / Powershift Basic Setting:",
         manualSteps: [
           "Engine running at idle, selector in PARK.",
@@ -837,6 +875,17 @@ class SpecialFunctionModel {
           "Key ON, Engine OFF",
         ],
         automatedObdCommand: "31 01 02 17",
+        titleAr: "ريست عداد الشورت في وحدة FRM لسيارات BMW",
+        descriptionAr: "بيمسح عداد الدوائر المقصورة في وحدة الأرضية FRM2/FRM3 في BMW عشان يرجع الكهربا للكشافات أو الزجاج الكهربا بعد إصلاح شورت في لمبة أو سلك.",
+        prerequisitesAr: [
+          "السلوك التالفة أو اللمبة المحروقة اتصلحت واتأكدنا بالمولتيميتر",
+          "كونتاك مفتوح ومحرك OFF",
+        ],
+        manualProcedureTitleAr: "فك قفل الـ FRM في BMW:",
+        manualStepsAr: [
+          "لما BMW تكشف 50 قصور كهربا على أي خرج إضاءة، بتقفل الدائرة دي نهائياً.",
+          "نفّذ ريست عداد الـ FRM عشان ترجع كهربا الـ 12V من غير ما تفك شرائح الميكروكنترولر بالكاوية.",
+        ],
         manualProcedureTitle: "BMW FRM Lockout Clearing:",
         manualSteps: [
           "When a BMW detects 50 short-circuits on any lighting output, it permanently shuts down that circuit.",
@@ -858,6 +907,19 @@ class SpecialFunctionModel {
           "Zero active ignition misfire codes",
         ],
         automatedObdCommand: "31 01 02 18",
+        titleAr: "ريست تعويض نسبة الهوا/الوقود (A/F)",
+        descriptionAr: "بيصفّر خريطة تعلم نسبة الهوا/الوقود في الـ ECU، وبيخلي المعايرة تتعاد فوراً من حساسات اللامبدا الأمامية.",
+        prerequisitesAr: [
+          "حساس O2 أو رشاشات جداد مركبين",
+          "المحرك في حرارة التشغيل الطبيعية (أكتر من 80°C)",
+          "مفيش أكواد تقطيع اشتعال نشطة",
+        ],
+        manualProcedureTitleAr: "إعادة تعلم تعويض الـ A/F:",
+        manualStepsAr: [
+          "صفّر جدول تعويض الوقود المتعلم.",
+          "شغّل المحرك وسيبه يطفطف 10 دقايق من غير ما تلمس الدعسة.",
+          "سوق على 60-90 كم/س بأحمال محرك متغيرة لمدة 15 دقيقة.",
+        ],
         manualProcedureTitle: "A/F Adaptation Relearning:",
         manualSteps: [
           "Reset learned fuel trim adaptation table.",
@@ -880,6 +942,19 @@ class SpecialFunctionModel {
           "Battery voltage > 12.4V",
         ],
         automatedObdCommand: "31 01 02 19",
+        titleAr: "تعويض ويست جيت التربو الإلكتروني / VNT",
+        descriptionAr: "بيعاير حدود الفتح والقفل لمشغل الويست جيت الإلكتروني للتربو أو ريش التوربينة المتغيرة VNT.",
+        prerequisitesAr: [
+          "وصلة المشغل بتحرك بحرية من غير التصاق كربون",
+          "كونتاك مفتوح ومحرك OFF",
+          "فولت البطارية أكتر من 12.4V",
+        ],
+        manualProcedureTitleAr: "دليل تعلم مشغل التربو:",
+        manualStepsAr: [
+          "افتح الكونتاك.",
+          "شغّل التعويض -> راقب عمود الويست جيت بيتحرك للحد الميكانيكي كله ويرجع.",
+          "اتأكد إن فولت الموضع المستهدف مطابق لفولت الحساس الفعلي (عادة من 0.8V لـ 4.2V).",
+        ],
         manualProcedureTitle: "Turbo Actuator Learning Guide:",
         manualSteps: [
           "Turn ignition ON.",
@@ -902,6 +977,18 @@ class SpecialFunctionModel {
           "Key ON, Engine OFF",
         ],
         automatedObdCommand: "31 01 02 1A",
+        titleAr: "معايرة حساس وزن مقعد الراكب",
+        descriptionAr: "معايرة صفر لحصيرة حساس وزن الراكب (OCDS) عشان يرجع فتح الإيرباج متعدد المراحل بشكل صحيح.",
+        prerequisitesAr: [
+          "كرسي الراكب فاضي تماماً (شيل أي شنط أو أغراض تقيلة)",
+          "ضهر الكرسي واقف، وحزام الأمان مش مربوط",
+          "كونتاك مفتوح ومحرك OFF",
+        ],
+        manualProcedureTitleAr: "معايرة نقطة الصفر لحصيرة الكرسي:",
+        manualStepsAr: [
+          "اتأكد إن قاعدة الكرسي ناشفة وفاضية تماماً.",
+          "شغّل معايرة الصفر -> اتأكد إن لمبة إيرباج الراكب في الطبلون طفت.",
+        ],
         manualProcedureTitle: "Seat Mat Zero-Point Calibration:",
         manualSteps: [
           "Ensure seat cushion is completely dry and empty.",
@@ -922,6 +1009,18 @@ class SpecialFunctionModel {
           "Key ON",
         ],
         automatedObdCommand: "31 01 02 1B",
+        titleAr: "تعويض حدود الزجاج الكهربا ومانع الضغط",
+        descriptionAr: "بيعيد تعلم الحدود الميكانيكية العلوية والسفلية وعتبة تيار مانع الضغط لمواتير الزجاج الكهربا.",
+        prerequisitesAr: [
+          "منظم الزجاج والزجاجة بيتحركوا بحرية في المجرى من غير تهنيج",
+          "كونتاك مفتوح",
+        ],
+        manualProcedureTitleAr: "تعليم الزجاج بلمسة واحدة يدوياً:",
+        manualStepsAr: [
+          "فضل ماسك زرار الزجاج لتحت لحد ما الزجاجة توصل للآخر، وكمل ماسك 3 ثواني.",
+          "اسحب زرار الزجاج لفوق لحد ما الزجاجة تقفل تماماً، وكمل ماسك 3 ثواني.",
+          "جرّب الفتح والقفل الأوتوماتيك بلمسة واحدة.",
+        ],
         manualProcedureTitle: "Manual One-Touch Window Relearn:",
         manualSteps: [
           "Hold window switch DOWN until glass reaches bottom, keep holding for 3 seconds.",
@@ -943,6 +1042,17 @@ class SpecialFunctionModel {
           "Key ON, Engine OFF",
         ],
         automatedObdCommand: "11 01",
+        titleAr: "إعادة تشغيل كاملة للكنترول (UDS 11 01)",
+        descriptionAr: "بيبعت أمر UDS ECUReset القياسي (خدمة 0x11 فرع 0x01) عشان يعمل إعادة تشغيل باردة لميكروكنترولر الوحدة.",
+        prerequisitesAr: [
+          "العربية واقفة والفتيس في PARK أو NEUTRAL",
+          "كونتاك مفتوح ومحرك OFF",
+        ],
+        manualProcedureTitleAr: "طريقة إعادة تشغيل الكنترول:",
+        manualStepsAr: [
+          "نفّذ أمر UDS 11 01.",
+          "الكنترول هيعيد الاتصالات خلال 500 ميلي ثانية ويحمل كل إعدادات الفيرم وير من جديد.",
+        ],
         manualProcedureTitle: "ECU Hard Reboot Procedure:",
         manualSteps: [
           "Execute UDS 11 01 command.",
@@ -964,6 +1074,18 @@ class SpecialFunctionModel {
           "Vehicle parked out of direct glare",
         ],
         automatedObdCommand: "31 01 02 1C",
+        titleAr: "تعويض حساس المطر والنور الأوتوماتيك",
+        descriptionAr: "بيعاير معامل الانكسار البصري لجل الحساس على الزجاج الأمامي لحساسات المطر وكشافات الغروب الأوتوماتيكية.",
+        prerequisitesAr: [
+          "الزجاج الأمامي نضيف وناشف في منطقة الحساس",
+          "مفيش فقاعات هوا في جل السيليكون",
+          "العربية واقفة بعيد عن وهج مباشر",
+        ],
+        manualProcedureTitleAr: "ريست بصري لحساس المطر:",
+        manualStepsAr: [
+          "نضّف الزجاج كويس بكحول أيزوبروبيل.",
+          "شغّل المعايرة البصرية -> المساحات هتمسح مرة واحدة تأكيد لخط الأساس.",
+        ],
         manualProcedureTitle: "Rain Sensor Optical Reset:",
         manualSteps: [
           "Clean glass thoroughly with isopropyl alcohol.",
@@ -984,6 +1106,17 @@ class SpecialFunctionModel {
           "Key ON, Engine OFF",
         ],
         automatedObdCommand: "31 01 02 1D",
+        titleAr: "ضبط محدد السرعة القصوى",
+        descriptionAr: "بيظبط حد السرعة القصوى للعربية لأساطيل النقل التجاري وعربيات الإيجار والامتثال.",
+        prerequisitesAr: [
+          "الوصول الأمني Security Access متفتح بالـ seed-key",
+          "كونتاك مفتوح ومحرك OFF",
+        ],
+        manualProcedureTitleAr: "دليل محدد سرعة الأسطول:",
+        manualStepsAr: [
+          "دخّل حد السرعة المطلوب (مثلاً 100 كم/س لأساطيل الطرق السريعة المصرية).",
+          "اكتب القيمة في ذاكرة EEPROM للـ ECU.",
+        ],
         manualProcedureTitle: "Fleet Speed Governor Guide:",
         manualSteps: [
           "Enter desired road speed limit (e.g., 100 km/h for Egyptian highway fleets).",
@@ -1004,6 +1137,17 @@ class SpecialFunctionModel {
           "All 4 tires at correct cold pressure",
         ],
         automatedObdCommand: "31 01 02 1E",
+        titleAr: "معايرة محيط الإطارات وعداد السرعة",
+        descriptionAr: "بيعدّل نبضات محيط العجلة في الـ ABS والعدادات بعد تركيب جنوط غير أصلية أو مقاسات إطارات مختلفة.",
+        prerequisitesAr: [
+          "مقاسات الإطارات متأكد منها على الجنب (مثلاً 205/55R16 مقابل 225/45R17)",
+          "الإطارات الأربعة على الضغط الساقع الصح",
+        ],
+        manualProcedureTitleAr: "تعويض مقاس الإطارات:",
+        manualStepsAr: [
+          "احسب محيط الدوران الخارجي للإطار.",
+          "اكتب عدد النبضات لكل كيلومتر في وحدة الـ ABS.",
+        ],
         manualProcedureTitle: "Tire Size Adaptation:",
         manualSteps: [
           "Calculate tire outer rolling circumference.",
@@ -1024,6 +1168,17 @@ class SpecialFunctionModel {
           "Key ON, Engine OFF",
         ],
         automatedObdCommand: "31 01 02 1F",
+        titleAr: "ريست عداد تهالك زيت الفتيس",
+        descriptionAr: "بيصفّر عداد حساب التهالك الحراري لزيت الفتيس الأوتوماتيك بعد تغيير زيت ATF أو CVT جديد.",
+        prerequisitesAr: [
+          "زيت فتيس جديد بالمستوى والحرارة الصح",
+          "كونتاك مفتوح ومحرك OFF",
+        ],
+        manualProcedureTitleAr: "ريست عداد عمر زيت الـ ATF:",
+        manualStepsAr: [
+          "غيّر زيت وفلتر الفتيس الأوتوماتيك.",
+          "نفّذ ريست تهالك الـ ATF عشان تعاير بلفات ضغط الخط من جديد.",
+        ],
         manualProcedureTitle: "ATF Life Counter Reset:",
         manualSteps: [
           "Change automatic transmission oil and filter.",
@@ -1044,6 +1199,17 @@ class SpecialFunctionModel {
           "Key ON",
         ],
         automatedObdCommand: "31 01 02 20",
+        titleAr: "تغيير لغة العدادات والشاشة",
+        descriptionAr: "بيظبط لغة عرض العدادات والشاشة الترفيهية (إنجليزي، عربي، فرنساوي، ألماني).",
+        prerequisitesAr: [
+          "العدادات بتدعم حزمة فيرم وير متعددة اللغات",
+          "كونتاك مفتوح",
+        ],
+        manualProcedureTitleAr: "دليل لغة العدادات:",
+        manualStepsAr: [
+          "اختار كود اللغة المطلوبة.",
+          "اكتب الإعداد -> العدادات هتعيد التشغيل باللغة المختارة.",
+        ],
         manualProcedureTitle: "Cluster Language Guide:",
         manualSteps: [
           "Select target language code.",
@@ -1065,6 +1231,18 @@ class SpecialFunctionModel {
           "Clean throttle body",
         ],
         automatedObdCommand: "31 01 02 21",
+        titleAr: "ضبط RPM الثبات الأساسي للمحرك",
+        descriptionAr: "ضبط دقيق لسرعة الثبات المستهدفة بخطوات 50 RPM عشان يعوّض أحمال الكماليات أو سحب التكييف أو اهتزاز قواعد المحرك.",
+        prerequisitesAr: [
+          "المحرك سخن (أكتر من 85°C)",
+          "التكييف مقفول والنور مقفول",
+          "البوابة نضيفة",
+        ],
+        manualProcedureTitleAr: "ضبط سرعة الثبات:",
+        manualStepsAr: [
+          "ظبط إزاحة الثبات (+50 / +100 RPM).",
+          "مفيد في مصر عشان يلغي اهتزاز الطبلون في وقفات الإشارات.",
+        ],
         manualProcedureTitle: "Idle Speed Setting:",
         manualSteps: [
           "Adjust idle offset (+50 / +100 RPM).",
@@ -1086,6 +1264,18 @@ class SpecialFunctionModel {
           "Key ON, Engine OFF",
         ],
         automatedObdCommand: "31 01 02 22",
+        titleAr: "تجهيز وتفريغ هوا رامبة السولار عالية الضغط",
+        descriptionAr: "بيشغّل طلمبة السولار منخفضة الضغط عشان تجهّز طلمبة الحقن عالية الضغط للكومن ريل وتطرد الهوا بعد تغيير فلتر السولار.",
+        prerequisitesAr: [
+          "فلتر سولار جديد متملي سولار",
+          "مفيش أي تسريب في رامبة السولار",
+          "كونتاك مفتوح ومحرك OFF",
+        ],
+        manualProcedureTitleAr: "دليل تفريغ الكومن ريل:",
+        manualStepsAr: [
+          "شغّل روتين تجهيز السولار.",
+          "اسمع طرمبة التانك الكهربا شغالة 30 ثانية بتطرد فقاعات الهوا راجعة للتانك.",
+        ],
         manualProcedureTitle: "Common Rail Bleeding Guide:",
         manualSteps: [
           "Trigger fuel primer routine.",
@@ -1107,6 +1297,18 @@ class SpecialFunctionModel {
           "Handbrake released, tires straight",
         ],
         automatedObdCommand: "31 01 02 23",
+        titleAr: "معايرة حساس الانحراف والتسارع الجانبي",
+        descriptionAr: "بيعاير زاوية الصفر المرجعية للجايرو 3 محاور وحساس التسارع الجانبي المستخدمين في ESP ونظام منع الانقلاب.",
+        prerequisitesAr: [
+          "العربية واقفة على أرضية ورشة مستوية تماماً",
+          "مفيش ركاب في العربية والأبواب مقفولة",
+          "فرامل اليد مفكوكة والعجل مستقيم",
+        ],
+        manualProcedureTitleAr: "ريست نقطة الصفر لجايرو الـ ESP:",
+        manualStepsAr: [
+          "اتأكد إن العربية مستوية.",
+          "نفّذ المعايرة -> وحدة الـ ESP هتسجل الميل والانحراف الحالي كصفر مطلق 0.00°.",
+        ],
         manualProcedureTitle: "ESP Gyro Zero-Point Reset:",
         manualSteps: [
           "Verify vehicle is level.",
@@ -1127,6 +1329,17 @@ class SpecialFunctionModel {
           "Brake pedal pumped 5 times to exhaust residual vacuum",
         ],
         automatedObdCommand: "31 01 02 24",
+        titleAr: "اختبار طرمبة الفاكيوم الكهربا للفرامل",
+        descriptionAr: "بيشغّل طلمبة الفاكيوم المساعدة الكهربا في العربيات التربو والهجين عشان يتأكد من بناء ضغط سيرفو الفرامل.",
+        prerequisitesAr: [
+          "المحرك OFF والكونتاك مفتوح",
+          "دواسة الفرامل اتدست 5 مرات عشان تفريغ الفاكيوم المتبقي",
+        ],
+        manualProcedureTitleAr: "اختبار طرمبة سيرفو الفرامل:",
+        manualStepsAr: [
+          "دوس الدواسة كذا مرة لحد ما تبقى جامدة.",
+          "شغّل الروتين -> الطرمبة الكهربا هتشتغل والدواسة هتنزل بنعومة تحت رجلك.",
+        ],
         manualProcedureTitle: "Vacuum Assist Pump Test:",
         manualSteps: [
           "Pump pedal until firm.",
