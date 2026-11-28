@@ -2020,6 +2020,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get topoStoredCodes => 'Stored Trouble Codes:';
 
   @override
+  String topoSupportedPids(int count) {
+    return 'Supported PIDs (read from this module): $count';
+  }
+
+  @override
+  String get topoNoMode01 =>
+      'This module does not report standard Mode 01 PIDs (UDS only or no data).';
+
+  @override
   String get o2Title => 'Dual O2 & Catalytic Health';
 
   @override

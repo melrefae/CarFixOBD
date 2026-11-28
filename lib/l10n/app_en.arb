@@ -1008,6 +1008,15 @@
     }
   },
   "topoStoredCodes": "Stored Trouble Codes:",
+  "topoSupportedPids": "Supported PIDs (read from this module): {count}",
+  "@topoSupportedPids": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "topoNoMode01": "This module does not report standard Mode 01 PIDs (UDS only or no data).",
   "o2Title": "Dual O2 & Catalytic Health",
   "o2Pause": "Pause Live Waveform",
   "o2Start": "Start Live Waveform",

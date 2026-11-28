@@ -2013,6 +2013,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get topoStoredCodes => 'الأعطال المخزنة:';
 
   @override
+  String topoSupportedPids(int count) {
+    return 'الـ PIDs المدعومة فعلاً (مقروءة من الكنترول ده): $count';
+  }
+
+  @override
+  String get topoNoMode01 =>
+      'الكنترول ده مش بيبلّغ عن قراءات Mode 01 القياسية (UDS بس أو مفيش بيانات).';
+
+  @override
   String get o2Title => 'فحص حساس الشكمان وكفاءة علبة البيئة';
 
   @override

@@ -29,6 +29,7 @@ import '../../data/models/readiness_monitors.dart';
 import '../../core/utils/hex_parser.dart';
 import '../../data/models/flight_record_model.dart';
 import '../../domain/services/safety_alarm_service.dart';
+import '../../domain/services/ecu_capability_service.dart';
 import '../../domain/services/vin_decoder_service.dart';
 import '../../data/models/special_function_model.dart';
 import '../../data/models/actuation_test_model.dart';
@@ -1526,6 +1527,18 @@ class ObdState extends ChangeNotifier {
         node.responseLatencyMs = stopwatch.elapsedMilliseconds;
 
         if (alive) {
+          // Real per-module Mode 01 capability map: walk the supported-PID
+          // bitmask chain so the map shows only what this module reported.
+          try {
+            node.supportedPids = await EcuCapabilityService.discoverForModule(
+              _driver!,
+              node.header,
+              firstResponse: obdPing,
+            );
+          } catch (_) {
+            node.supportedPids = <String>{};
+          }
+
           final dtcSet = <String>{};
 
           // Try UDS ReadDTCInformation (19 02 FF) first

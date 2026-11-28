@@ -29,6 +29,10 @@ class EcuModuleNode {
   final String baudRate;
   EcuModuleStatus status;
   List<String> dtcs;
+
+  /// Mode 01 PIDs this module reported as supported during the topology scan
+  /// (real bitmask-chain discovery). Empty = not discovered or not supported.
+  Set<String> supportedPids = <String>{};
   String vin;
   String protocol;
   int responseLatencyMs;

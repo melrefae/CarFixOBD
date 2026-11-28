@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../data/models/ecu_module_node.dart';
+import '../../data/models/sensor_pid.dart';
 import '../providers/obd_state.dart';
 import 'interactive_can_topology_screen.dart';
 
@@ -268,6 +269,22 @@ class MultiEcuTopologyScreen extends StatelessWidget {
                       Text(l10n.topoLatency(node.responseLatencyMs), style: const TextStyle(fontSize: 11, color: AppColors.textDisabled)),
                   ],
                 ),
+                if (node.status == EcuModuleStatus.healthy || node.status == EcuModuleStatus.faultPresent) ...[
+                  const SizedBox(height: 8),
+                  if (node.supportedPids.isNotEmpty) ...[
+                    Text(
+                      l10n.topoSupportedPids(node.supportedPids.length),
+                      style: const TextStyle(fontSize: 11, color: AppColors.accentCyan, fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(height: 6),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: _buildPidChips(node, l10n.localeName == 'ar'),
+                    ),
+                  ] else
+                    Text(l10n.topoNoMode01, style: const TextStyle(fontSize: 11, color: AppColors.textMuted)),
+                ],
                 if (node.dtcs.isNotEmpty) ...[
                   const SizedBox(height: 10),
                   Text(l10n.topoStoredCodes, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.dangerRed)),
@@ -289,5 +306,32 @@ class MultiEcuTopologyScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  static Map<String, SensorPid>? _pidCatalog;
+
+  List<Widget> _buildPidChips(EcuModuleNode node, bool isAr) {
+    _pidCatalog ??= {
+      for (final p in SensorPid.getStandardPids())
+        if (p.mode == "01") p.pid.toUpperCase(): p,
+    };
+    final sorted = node.supportedPids.toList()..sort();
+    return sorted.map((pid) {
+      final meta = _pidCatalog![pid];
+      // LRM keeps the hex PID in left-to-right order inside Arabic text (0C, not C0).
+      final label = meta == null ? "\u200E$pid" : "\u200E$pid ${isAr ? meta.nameAr : meta.name}";
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        decoration: BoxDecoration(
+          color: AppColors.accentCyan.withOpacity(0.08),
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: AppColors.cardBorder),
+        ),
+        child: Text(
+          label,
+          style: const TextStyle(fontSize: 10, color: AppColors.textMuted),
+        ),
+      );
+    }).toList();
   }
 }

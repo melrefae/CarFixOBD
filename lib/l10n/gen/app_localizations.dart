@@ -3680,6 +3680,18 @@ abstract class AppLocalizations {
   /// **'Stored Trouble Codes:'**
   String get topoStoredCodes;
 
+  /// No description provided for @topoSupportedPids.
+  ///
+  /// In en, this message translates to:
+  /// **'Supported PIDs (read from this module): {count}'**
+  String topoSupportedPids(int count);
+
+  /// No description provided for @topoNoMode01.
+  ///
+  /// In en, this message translates to:
+  /// **'This module does not report standard Mode 01 PIDs (UDS only or no data).'**
+  String get topoNoMode01;
+
   /// No description provided for @o2Title.
   ///
   /// In en, this message translates to:
