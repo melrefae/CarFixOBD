@@ -1830,22 +1830,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get arabicNameOptional => 'الاسم بالعربي (اختياري)';
 
   @override
-  String get modeHexLabel => 'الوضع (Hex)';
+  String get modeHexLabel => 'الوضع';
 
   @override
-  String get pidHexLabel => 'PID (Hex)';
+  String get pidHexLabel => 'PID';
 
   @override
   String get formulaLabel => 'المعادلة (مثال: A - 40 أو ((A*256)+B)/10)';
 
   @override
-  String get unitLabel => 'الوحدة (°C / Bar / %)';
+  String get unitLabel => 'الوحدة';
 
   @override
-  String get minValueLabel => 'أدنى قيمة';
+  String get minValueLabel => 'أدنى';
 
   @override
-  String get maxValueLabel => 'أقصى قيمة';
+  String get maxValueLabel => 'أقصى';
 
   @override
   String get requiredField => 'مطلوب';

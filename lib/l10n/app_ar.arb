@@ -541,12 +541,12 @@
   "customPidTitle": "إضافة PID مخصص",
   "sensorNameLabel": "اسم الحساس (مثال: حرارة زيت الفتيس)",
   "arabicNameOptional": "الاسم بالعربي (اختياري)",
-  "modeHexLabel": "الوضع (Hex)",
-  "pidHexLabel": "PID (Hex)",
+  "modeHexLabel": "الوضع",
+  "pidHexLabel": "PID",
   "formulaLabel": "المعادلة (مثال: A - 40 أو ((A*256)+B)/10)",
-  "unitLabel": "الوحدة (°C / Bar / %)",
-  "minValueLabel": "أدنى قيمة",
-  "maxValueLabel": "أقصى قيمة",
+  "unitLabel": "الوحدة",
+  "minValueLabel": "أدنى",
+  "maxValueLabel": "أقصى",
   "requiredField": "مطلوب",
   "savePid": "حفظ PID"
 }
