@@ -274,16 +274,16 @@ class DtcRepairGuideModal extends StatelessWidget {
                   onPressed: () {
                     final clipboardText = """
 [${guide.code}] $title
-Symptoms:
+${isArabic ? 'الأعراض' : 'Symptoms'}:
 ${symptoms.map((s) => "• $s").join("\n")}
 
-Diagnostic Roadmap:
+${isArabic ? 'خارطة الفحص' : 'Diagnostic Roadmap'}:
 ${steps.join("\n")}
 
-Electrical Spec:
+${isArabic ? 'المواصفات الكهربائية' : 'Electrical Spec'}:
 $multi
 
-Recommended Fix:
+${isArabic ? 'الإصلاح الموصى به' : 'Recommended Fix'}:
 $rep
 """;
                     Clipboard.setData(ClipboardData(text: clipboardText));

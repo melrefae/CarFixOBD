@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../data/models/dtc_model.dart';
 import 'dtc_repair_guide_modal.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 
 /// Card component to display Diagnostic Trouble Code details with multimeter workshop guides
 class DtcCardItem extends StatefulWidget {
@@ -31,6 +32,8 @@ class _DtcCardItemState extends State<DtcCardItem> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final isAr = Localizations.localeOf(context).languageCode == 'ar';
     final sevColor = _getSeverityColor(widget.dtc.severity);
     final dtc = widget.dtc;
 
@@ -83,7 +86,7 @@ class _DtcCardItemState extends State<DtcCardItem> {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
-                          "${dtc.dtcType} • ${dtc.category}",
+                          "${_dtcTypeLabel(l10n, dtc.dtcType)} • ${_encCatLabelW(l10n, dtc.category)}",
                           style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                         ),
                       ),
@@ -99,7 +102,7 @@ class _DtcCardItemState extends State<DtcCardItem> {
 
               // Title
               Text(
-                dtc.title,
+                isAr && dtc.titleAr.isNotEmpty ? dtc.titleAr : dtc.title,
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -110,7 +113,7 @@ class _DtcCardItemState extends State<DtcCardItem> {
 
               // Description
               Text(
-                dtc.description,
+                isAr && dtc.descriptionAr.isNotEmpty ? dtc.descriptionAr : dtc.description,
                 style: const TextStyle(fontSize: 13, color: AppColors.textMuted),
               ),
 
@@ -121,12 +124,12 @@ class _DtcCardItemState extends State<DtcCardItem> {
 
                 // Common causes
                 if (dtc.causes.isNotEmpty) ...[
-                  const Text(
-                    "Common Causes:",
+                  Text(
+                    l10n.encCauses,
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.primaryYellow),
                   ),
                   const SizedBox(height: 4),
-                  ...dtc.causes.map(
+                  ...(isAr && dtc.causesAr.isNotEmpty ? dtc.causesAr : dtc.causes).map(
                     (cause) => Padding(
                       padding: const EdgeInsets.only(bottom: 2),
                       child: Row(
@@ -155,11 +158,11 @@ class _DtcCardItemState extends State<DtcCardItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        children: const [
-                          Icon(Icons.build_circle_outlined, color: AppColors.electricBlue, size: 18),
-                          SizedBox(width: 6),
+                        children: [
+                          const Icon(Icons.build_circle_outlined, color: AppColors.electricBlue, size: 18),
+                          const SizedBox(width: 6),
                           Text(
-                            "Workshop Multimeter / Inspection Guide:",
+                            l10n.encMultimeter,
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
@@ -170,7 +173,7 @@ class _DtcCardItemState extends State<DtcCardItem> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        dtc.workshopCheck,
+                        isAr && dtc.workshopCheckAr.isNotEmpty ? dtc.workshopCheckAr : dtc.workshopCheck,
                         style: const TextStyle(fontSize: 12, color: AppColors.textWhite, height: 1.4),
                       ),
                     ],
@@ -187,7 +190,7 @@ class _DtcCardItemState extends State<DtcCardItem> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
                     icon: const Icon(Icons.menu_book_rounded, size: 16),
-                    label: const Text("Full Offline Repair Guide", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                    label: Text(l10n.encViewGuide, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                     onPressed: () => DtcRepairGuideModal.show(context, dtc.code),
                   ),
                 ),
@@ -197,5 +200,33 @@ class _DtcCardItemState extends State<DtcCardItem> {
         ),
       ),
     );
+  }
+}
+
+String _dtcTypeLabel(AppLocalizations l10n, String type) {
+  switch (type.toLowerCase()) {
+    case 'pending':
+      return l10n.dtcTypePending;
+    case 'permanent':
+      return l10n.dtcTypePermanent;
+    default:
+      return l10n.dtcTypeStored;
+  }
+}
+
+String _encCatLabelW(AppLocalizations l10n, String cat) {
+  switch (cat) {
+    case 'Powertrain':
+      return l10n.encCatPowertrain;
+    case 'Transmission':
+      return l10n.encCatTransmission;
+    case 'Chassis':
+      return l10n.encCatChassis;
+    case 'Network':
+      return l10n.encCatNetwork;
+    case 'Body':
+      return l10n.encCatBody;
+    default:
+      return cat;
   }
 }

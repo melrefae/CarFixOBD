@@ -4,6 +4,7 @@ import '../../core/constants/app_colors.dart';
 import '../../data/models/ecu_coding_feature.dart';
 import '../../domain/services/ecu_coding_service.dart';
 import '../providers/obd_state.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 
 /// Screen for ECU Variant Coding and hidden features customization
 class EcuCodingScreen extends StatefulWidget {
@@ -22,7 +23,8 @@ class _EcuCodingScreenState extends State<EcuCodingScreen> {
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<ObdState>(context);
-    final vehicleMake = state.selectedVehicle?.make ?? "Generic";
+    final l10n = AppLocalizations.of(context);
+    final vehicleMake = state.selectedVehicle?.make ?? l10n.codGeneric;
 
     final categories = [
       "All",
@@ -41,23 +43,23 @@ class _EcuCodingScreenState extends State<EcuCodingScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("ECU Variant Coding"),
+        title: Text(l10n.codTitle),
         actions: [
           if (_codingService.hasBackup)
             IconButton(
               icon: const Icon(Icons.restore, color: AppColors.primaryYellow),
-              tooltip: "Restore Original Factory Coding",
-              onPressed: () => _confirmRestore(context, state),
+              tooltip: l10n.codRestoreTip,
+              onPressed: () => _confirmRestore(context, state, l10n),
             ),
         ],
       ),
       body: Column(
         children: [
           // Vehicle Profile Header Banner
-          _buildVehicleHeader(state),
+          _buildVehicleHeader(state, l10n),
 
           // Category Chips & Car Filter
-          _buildFilterBar(categories, vehicleMake),
+          _buildFilterBar(categories, vehicleMake, l10n),
 
           const SizedBox(height: 8),
 
@@ -74,8 +76,8 @@ class _EcuCodingScreenState extends State<EcuCodingScreen> {
                           const SizedBox(height: 12),
                           Text(
                             _filterByCurrentCar
-                                ? "No specific coding options found for $vehicleMake.\nTurn off vehicle filter to view all universal options."
-                                : "No features match selected category.",
+                                ? l10n.codEmptyMake(vehicleMake)
+                                : l10n.codEmptyCat,
                             textAlign: TextAlign.center,
                             style: const TextStyle(color: AppColors.textMuted),
                           ),
@@ -88,7 +90,7 @@ class _EcuCodingScreenState extends State<EcuCodingScreen> {
                     itemCount: filtered.length,
                     itemBuilder: (ctx, index) {
                       final feat = filtered[index];
-                      return _buildCodingTile(feat, state);
+                      return _buildCodingTile(feat, state, l10n);
                     },
                   ),
           ),
@@ -97,10 +99,10 @@ class _EcuCodingScreenState extends State<EcuCodingScreen> {
     );
   }
 
-  Widget _buildVehicleHeader(ObdState state) {
+  Widget _buildVehicleHeader(ObdState state, AppLocalizations l10n) {
     final carName = state.selectedVehicle != null
         ? "${state.selectedVehicle!.make} ${state.selectedVehicle!.model} (${state.selectedVehicle!.years})"
-        : "Generic Vehicle / Standalone ECU";
+        : l10n.codGenericVehicle;
 
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
@@ -125,8 +127,8 @@ class _EcuCodingScreenState extends State<EcuCodingScreen> {
                 const SizedBox(height: 2),
                 Text(
                   state.isConnected
-                      ? "Connected • Ready to read/write variant coding"
-                      : "Offline / Disconnected from ECU",
+                      ? l10n.codConnected
+                      : l10n.codDisconnected,
                   style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                 ),
               ],
@@ -149,7 +151,7 @@ class _EcuCodingScreenState extends State<EcuCodingScreen> {
     );
   }
 
-  Widget _buildFilterBar(List<String> categories, String vehicleMake) {
+  Widget _buildFilterBar(List<String> categories, String vehicleMake, AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -159,7 +161,7 @@ class _EcuCodingScreenState extends State<EcuCodingScreen> {
           child: Row(
             children: [
               FilterChip(
-                label: Text("Only $vehicleMake"),
+                label: Text(l10n.codOnlyMake(vehicleMake)),
                 selected: _filterByCurrentCar,
                 onSelected: (val) => setState(() => _filterByCurrentCar = val),
                 backgroundColor: AppColors.cardSurface,
@@ -177,7 +179,7 @@ class _EcuCodingScreenState extends State<EcuCodingScreen> {
                 return Padding(
                   padding: const EdgeInsets.only(right: 6),
                   child: ChoiceChip(
-                    label: Text(cat),
+                    label: Text(_codCatLabel(l10n, cat)),
                     selected: isSel,
                     onSelected: (selected) {
                       if (selected) setState(() => _selectedCategory = cat);
@@ -199,7 +201,7 @@ class _EcuCodingScreenState extends State<EcuCodingScreen> {
     );
   }
 
-  Widget _buildCodingTile(EcuCodingFeature feature, ObdState state) {
+  Widget _buildCodingTile(EcuCodingFeature feature, ObdState state, AppLocalizations l10n) {
     final isBusy = _busyFeatureId == feature.id;
 
     return Card(
@@ -286,7 +288,7 @@ class _EcuCodingScreenState extends State<EcuCodingScreen> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    "Compatible: ${feature.applicableBrands.join(', ')}",
+                    l10n.codCompatible(feature.applicableBrands.join(', ')),
                     style: const TextStyle(fontSize: 10, color: AppColors.textDisabled),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -300,6 +302,7 @@ class _EcuCodingScreenState extends State<EcuCodingScreen> {
   }
 
   Future<void> _toggleFeature(EcuCodingFeature feature, bool enable, ObdState state) async {
+    final l10n = AppLocalizations.of(context);
     setState(() => _busyFeatureId = feature.id);
 
     try {
@@ -314,8 +317,8 @@ class _EcuCodingScreenState extends State<EcuCodingScreen> {
           SnackBar(
             content: Text(
               success
-                  ? "${feature.title} is now ${enable ? 'ENABLED' : 'DISABLED'}!"
-                  : "Failed to write coding to ECU. Check ignition state.",
+                  ? (enable ? l10n.codEnabled(feature.title) : l10n.codDisabled(feature.title))
+                  : l10n.codWriteFailed,
             ),
             backgroundColor: success ? AppColors.successGreen : AppColors.dangerRed,
             duration: const Duration(seconds: 2),
@@ -329,20 +332,20 @@ class _EcuCodingScreenState extends State<EcuCodingScreen> {
     }
   }
 
-  void _confirmRestore(BuildContext context, ObdState state) {
+  void _confirmRestore(BuildContext context, ObdState state, AppLocalizations l10n) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.cardSurface,
-        title: const Text("Restore Factory Coding?", style: TextStyle(color: Colors.white)),
-        content: const Text(
-          "This will revert all modified features back to the initial backup snapshot recorded when this session started.",
-          style: TextStyle(color: AppColors.textMuted),
+        title: Text(l10n.codRestoreTitle, style: const TextStyle(color: Colors.white)),
+        content: Text(
+          l10n.codRestoreBody,
+          style: const TextStyle(color: AppColors.textMuted),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text("Cancel", style: TextStyle(color: AppColors.textMuted)),
+            child: Text(l10n.codCancel, style: const TextStyle(color: AppColors.textMuted)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryYellow, foregroundColor: Colors.black),
@@ -353,16 +356,31 @@ class _EcuCodingScreenState extends State<EcuCodingScreen> {
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(ok ? "All factory codings restored!" : "Restore failed for some modules."),
+                    content: Text(ok ? l10n.codRestored : l10n.codRestoreFailed),
                     backgroundColor: ok ? AppColors.successGreen : AppColors.warningOrange,
                   ),
                 );
               }
             },
-            child: const Text("Restore Backup"),
+            child: Text(l10n.codRestoreBtn),
           ),
         ],
       ),
     );
+  }
+}
+
+String _codCatLabel(AppLocalizations l10n, String cat) {
+  switch (cat) {
+    case 'Dashboard & Cluster':
+      return l10n.codCatDashboard;
+    case 'Lighting & Vision':
+      return l10n.codCatLighting;
+    case 'Comfort & Convenience':
+      return l10n.codCatComfort;
+    case 'Safety & Chimes':
+      return l10n.codCatSafety;
+    default:
+      return l10n.encCatAll;
   }
 }

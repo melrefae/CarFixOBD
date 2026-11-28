@@ -4531,6 +4531,468 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Wheels & Tires'**
   String get sfCatWheelsTires;
+
+  /// No description provided for @dtcTypeStored.
+  ///
+  /// In en, this message translates to:
+  /// **'Stored'**
+  String get dtcTypeStored;
+
+  /// No description provided for @dtcTypePending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get dtcTypePending;
+
+  /// No description provided for @dtcTypePermanent.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent'**
+  String get dtcTypePermanent;
+
+  /// No description provided for @codTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'ECU Variant Coding'**
+  String get codTitle;
+
+  /// No description provided for @codRestoreTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Original Factory Coding'**
+  String get codRestoreTip;
+
+  /// No description provided for @codGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Generic'**
+  String get codGeneric;
+
+  /// No description provided for @codGenericVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Generic Vehicle / Standalone ECU'**
+  String get codGenericVehicle;
+
+  /// No description provided for @codConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected • Ready to read/write variant coding'**
+  String get codConnected;
+
+  /// No description provided for @codDisconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline / Disconnected from ECU'**
+  String get codDisconnected;
+
+  /// No description provided for @codOnlyMake.
+  ///
+  /// In en, this message translates to:
+  /// **'Only {make}'**
+  String codOnlyMake(String make);
+
+  /// No description provided for @codCatDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard & Cluster'**
+  String get codCatDashboard;
+
+  /// No description provided for @codCatLighting.
+  ///
+  /// In en, this message translates to:
+  /// **'Lighting & Vision'**
+  String get codCatLighting;
+
+  /// No description provided for @codCatComfort.
+  ///
+  /// In en, this message translates to:
+  /// **'Comfort & Convenience'**
+  String get codCatComfort;
+
+  /// No description provided for @codCatSafety.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety & Chimes'**
+  String get codCatSafety;
+
+  /// No description provided for @codEmptyMake.
+  ///
+  /// In en, this message translates to:
+  /// **'No specific coding options found for {make}.\nTurn off vehicle filter to view all universal options.'**
+  String codEmptyMake(String make);
+
+  /// No description provided for @codEmptyCat.
+  ///
+  /// In en, this message translates to:
+  /// **'No features match selected category.'**
+  String get codEmptyCat;
+
+  /// No description provided for @codCompatible.
+  ///
+  /// In en, this message translates to:
+  /// **'Compatible: {brands}'**
+  String codCompatible(String brands);
+
+  /// No description provided for @codEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'{title} is now ENABLED!'**
+  String codEnabled(String title);
+
+  /// No description provided for @codDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'{title} is now DISABLED!'**
+  String codDisabled(String title);
+
+  /// No description provided for @codWriteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to write coding to ECU. Check ignition state.'**
+  String get codWriteFailed;
+
+  /// No description provided for @codRestoreTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Factory Coding?'**
+  String get codRestoreTitle;
+
+  /// No description provided for @codRestoreBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This will revert all modified features back to the initial backup snapshot recorded when this session started.'**
+  String get codRestoreBody;
+
+  /// No description provided for @codCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get codCancel;
+
+  /// No description provided for @codRestoreBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Backup'**
+  String get codRestoreBtn;
+
+  /// No description provided for @codRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'All factory codings restored!'**
+  String get codRestored;
+
+  /// No description provided for @codRestoreFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore failed for some modules.'**
+  String get codRestoreFailed;
+
+  /// No description provided for @daTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostic Assistant'**
+  String get daTitle;
+
+  /// No description provided for @daTabFuel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel Trim & Vacuum'**
+  String get daTabFuel;
+
+  /// No description provided for @daTabBattery.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery & Alternator'**
+  String get daTabBattery;
+
+  /// No description provided for @daMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostic Method: Record Fuel Trims (STFT + LTFT) at idle, then hold engine at 2500 RPM under load. Observe how trim values change to instantly distinguish between vacuum leaks and fuel pump starvation.'**
+  String get daMethod;
+
+  /// No description provided for @daCaptureIdle.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture Idle Live'**
+  String get daCaptureIdle;
+
+  /// No description provided for @daCaptureLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture 2500 RPM'**
+  String get daCaptureLoad;
+
+  /// No description provided for @daReadingIdle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading Idle STFT / LTFT from ECU...'**
+  String get daReadingIdle;
+
+  /// No description provided for @daReadingLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading 2500 RPM STFT / LTFT from ECU...'**
+  String get daReadingLoad;
+
+  /// No description provided for @daCaptured.
+  ///
+  /// In en, this message translates to:
+  /// **'Captured live ({rpm} RPM): STFT {stft}%, LTFT {ltft}%'**
+  String daCaptured(int rpm, String stft, String ltft);
+
+  /// No description provided for @daNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'ECU returned no 0106/0107 Fuel Trim data.'**
+  String get daNoData;
+
+  /// No description provided for @daIdleTrims.
+  ///
+  /// In en, this message translates to:
+  /// **'Idle Trims (STFT + LTFT):'**
+  String get daIdleTrims;
+
+  /// No description provided for @daIdleStft.
+  ///
+  /// In en, this message translates to:
+  /// **'Idle STFT (%)'**
+  String get daIdleStft;
+
+  /// No description provided for @daIdleLtft.
+  ///
+  /// In en, this message translates to:
+  /// **'Idle LTFT (%)'**
+  String get daIdleLtft;
+
+  /// No description provided for @daLoadTrims.
+  ///
+  /// In en, this message translates to:
+  /// **'2500 RPM Trims (Under Load):'**
+  String get daLoadTrims;
+
+  /// No description provided for @daLoadStft.
+  ///
+  /// In en, this message translates to:
+  /// **'Load STFT (%)'**
+  String get daLoadStft;
+
+  /// No description provided for @daLoadLtft.
+  ///
+  /// In en, this message translates to:
+  /// **'Load LTFT (%)'**
+  String get daLoadLtft;
+
+  /// No description provided for @daAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Workshop Recommended Action:'**
+  String get daAction;
+
+  /// No description provided for @daLiveVolts.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Adapter Voltage: {v}V • Start Live Cranking Test with engine off, then crank starter & let engine idle to automatically record sag & charging output.'**
+  String daLiveVolts(String v);
+
+  /// No description provided for @daStopSampling.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop Live Cranking & Alternator Sampling ({v}V)'**
+  String daStopSampling(String v);
+
+  /// No description provided for @daStartSampling.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Live 12V Cranking & Alternator Test'**
+  String get daStartSampling;
+
+  /// No description provided for @daResting.
+  ///
+  /// In en, this message translates to:
+  /// **'Resting Battery Voltage (Engine OFF): {v}V'**
+  String daResting(String v);
+
+  /// No description provided for @daCranking.
+  ///
+  /// In en, this message translates to:
+  /// **'Min Cranking Voltage Drop (Starter Crank): {v}V'**
+  String daCranking(String v);
+
+  /// No description provided for @daRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Alternator Output Voltage (Engine Running): {v}V'**
+  String daRunning(String v);
+
+  /// No description provided for @daBatteryHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery Health: {s}'**
+  String daBatteryHealth(String s);
+
+  /// No description provided for @daAlternatorHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Alternator Health: {s}'**
+  String daAlternatorHealth(String s);
+
+  /// No description provided for @daRecommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommendation: {s}'**
+  String daRecommendation(String s);
+
+  /// No description provided for @copTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Diagnostic Copilot'**
+  String get copTitle;
+
+  /// No description provided for @copCopyTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Report Summary'**
+  String get copCopyTooltip;
+
+  /// No description provided for @copGenericVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Generic OBD-II Vehicle'**
+  String get copGenericVehicle;
+
+  /// No description provided for @copOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Telemetry Connected • {count} Active DTCs'**
+  String copOnline(int count);
+
+  /// No description provided for @copOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline Mode • Connect OBD adapter for live streaming'**
+  String get copOffline;
+
+  /// No description provided for @copChange.
+  ///
+  /// In en, this message translates to:
+  /// **'CHANGE'**
+  String get copChange;
+
+  /// No description provided for @copHypothesis.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary Diagnostic Hypothesis'**
+  String get copHypothesis;
+
+  /// No description provided for @copMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'{pct}% Match'**
+  String copMatch(int pct);
+
+  /// No description provided for @copEvidence.
+  ///
+  /// In en, this message translates to:
+  /// **'Correlated Live Evidence & Telemetry'**
+  String get copEvidence;
+
+  /// No description provided for @copRoadmap.
+  ///
+  /// In en, this message translates to:
+  /// **'4-Step Workshop Diagnostic Roadmap'**
+  String get copRoadmap;
+
+  /// No description provided for @copExpected.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected Good Value: {value}'**
+  String copExpected(String value);
+
+  /// No description provided for @copBulletin.
+  ///
+  /// In en, this message translates to:
+  /// **'Egyptian Workshop Technical Bulletin'**
+  String get copBulletin;
+
+  /// No description provided for @copNextActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Workshop Actions:'**
+  String get copNextActions;
+
+  /// No description provided for @copActuatorTests.
+  ///
+  /// In en, this message translates to:
+  /// **'Actuator Tests'**
+  String get copActuatorTests;
+
+  /// No description provided for @copCatAnalyzer.
+  ///
+  /// In en, this message translates to:
+  /// **'Cat Analyzer'**
+  String get copCatAnalyzer;
+
+  /// No description provided for @copLiveGraphs.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Graphs'**
+  String get copLiveGraphs;
+
+  /// No description provided for @copCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Diagnostic Report copied to clipboard'**
+  String get copCopied;
+
+  /// No description provided for @copRepHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'=== AI DIAGNOSTIC COPILOT REPORT ==='**
+  String get copRepHeader;
+
+  /// No description provided for @copRepVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle: {v}'**
+  String copRepVehicle(String v);
+
+  /// No description provided for @copRepHyp.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary Hypothesis: {h} ({pct}% Confidence)'**
+  String copRepHyp(String h, int pct);
+
+  /// No description provided for @copRepUrgency.
+  ///
+  /// In en, this message translates to:
+  /// **'Urgency: {u}'**
+  String copRepUrgency(String u);
+
+  /// No description provided for @copRepEvidence.
+  ///
+  /// In en, this message translates to:
+  /// **'Key Evidence:'**
+  String get copRepEvidence;
+
+  /// No description provided for @copRepRoadmap.
+  ///
+  /// In en, this message translates to:
+  /// **'Mechanic Roadmap:'**
+  String get copRepRoadmap;
+
+  /// No description provided for @copRepAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Action: {a}'**
+  String copRepAction(String a);
+
+  /// No description provided for @copRepBulletin.
+  ///
+  /// In en, this message translates to:
+  /// **'Egyptian Workshop Bulletin:'**
+  String get copRepBulletin;
 }
 
 class _AppLocalizationsDelegate

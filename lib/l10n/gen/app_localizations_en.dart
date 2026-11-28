@@ -2502,4 +2502,281 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sfCatWheelsTires => 'Wheels & Tires';
+
+  @override
+  String get dtcTypeStored => 'Stored';
+
+  @override
+  String get dtcTypePending => 'Pending';
+
+  @override
+  String get dtcTypePermanent => 'Permanent';
+
+  @override
+  String get codTitle => 'ECU Variant Coding';
+
+  @override
+  String get codRestoreTip => 'Restore Original Factory Coding';
+
+  @override
+  String get codGeneric => 'Generic';
+
+  @override
+  String get codGenericVehicle => 'Generic Vehicle / Standalone ECU';
+
+  @override
+  String get codConnected => 'Connected • Ready to read/write variant coding';
+
+  @override
+  String get codDisconnected => 'Offline / Disconnected from ECU';
+
+  @override
+  String codOnlyMake(String make) {
+    return 'Only $make';
+  }
+
+  @override
+  String get codCatDashboard => 'Dashboard & Cluster';
+
+  @override
+  String get codCatLighting => 'Lighting & Vision';
+
+  @override
+  String get codCatComfort => 'Comfort & Convenience';
+
+  @override
+  String get codCatSafety => 'Safety & Chimes';
+
+  @override
+  String codEmptyMake(String make) {
+    return 'No specific coding options found for $make.\nTurn off vehicle filter to view all universal options.';
+  }
+
+  @override
+  String get codEmptyCat => 'No features match selected category.';
+
+  @override
+  String codCompatible(String brands) {
+    return 'Compatible: $brands';
+  }
+
+  @override
+  String codEnabled(String title) {
+    return '$title is now ENABLED!';
+  }
+
+  @override
+  String codDisabled(String title) {
+    return '$title is now DISABLED!';
+  }
+
+  @override
+  String get codWriteFailed =>
+      'Failed to write coding to ECU. Check ignition state.';
+
+  @override
+  String get codRestoreTitle => 'Restore Factory Coding?';
+
+  @override
+  String get codRestoreBody =>
+      'This will revert all modified features back to the initial backup snapshot recorded when this session started.';
+
+  @override
+  String get codCancel => 'Cancel';
+
+  @override
+  String get codRestoreBtn => 'Restore Backup';
+
+  @override
+  String get codRestored => 'All factory codings restored!';
+
+  @override
+  String get codRestoreFailed => 'Restore failed for some modules.';
+
+  @override
+  String get daTitle => 'Diagnostic Assistant';
+
+  @override
+  String get daTabFuel => 'Fuel Trim & Vacuum';
+
+  @override
+  String get daTabBattery => 'Battery & Alternator';
+
+  @override
+  String get daMethod =>
+      'Diagnostic Method: Record Fuel Trims (STFT + LTFT) at idle, then hold engine at 2500 RPM under load. Observe how trim values change to instantly distinguish between vacuum leaks and fuel pump starvation.';
+
+  @override
+  String get daCaptureIdle => 'Capture Idle Live';
+
+  @override
+  String get daCaptureLoad => 'Capture 2500 RPM';
+
+  @override
+  String get daReadingIdle => 'Reading Idle STFT / LTFT from ECU...';
+
+  @override
+  String get daReadingLoad => 'Reading 2500 RPM STFT / LTFT from ECU...';
+
+  @override
+  String daCaptured(int rpm, String stft, String ltft) {
+    return 'Captured live ($rpm RPM): STFT $stft%, LTFT $ltft%';
+  }
+
+  @override
+  String get daNoData => 'ECU returned no 0106/0107 Fuel Trim data.';
+
+  @override
+  String get daIdleTrims => 'Idle Trims (STFT + LTFT):';
+
+  @override
+  String get daIdleStft => 'Idle STFT (%)';
+
+  @override
+  String get daIdleLtft => 'Idle LTFT (%)';
+
+  @override
+  String get daLoadTrims => '2500 RPM Trims (Under Load):';
+
+  @override
+  String get daLoadStft => 'Load STFT (%)';
+
+  @override
+  String get daLoadLtft => 'Load LTFT (%)';
+
+  @override
+  String get daAction => 'Workshop Recommended Action:';
+
+  @override
+  String daLiveVolts(String v) {
+    return 'Live Adapter Voltage: ${v}V • Start Live Cranking Test with engine off, then crank starter & let engine idle to automatically record sag & charging output.';
+  }
+
+  @override
+  String daStopSampling(String v) {
+    return 'Stop Live Cranking & Alternator Sampling (${v}V)';
+  }
+
+  @override
+  String get daStartSampling => 'Start Live 12V Cranking & Alternator Test';
+
+  @override
+  String daResting(String v) {
+    return 'Resting Battery Voltage (Engine OFF): ${v}V';
+  }
+
+  @override
+  String daCranking(String v) {
+    return 'Min Cranking Voltage Drop (Starter Crank): ${v}V';
+  }
+
+  @override
+  String daRunning(String v) {
+    return 'Alternator Output Voltage (Engine Running): ${v}V';
+  }
+
+  @override
+  String daBatteryHealth(String s) {
+    return 'Battery Health: $s';
+  }
+
+  @override
+  String daAlternatorHealth(String s) {
+    return 'Alternator Health: $s';
+  }
+
+  @override
+  String daRecommendation(String s) {
+    return 'Recommendation: $s';
+  }
+
+  @override
+  String get copTitle => 'AI Diagnostic Copilot';
+
+  @override
+  String get copCopyTooltip => 'Copy Report Summary';
+
+  @override
+  String get copGenericVehicle => 'Generic OBD-II Vehicle';
+
+  @override
+  String copOnline(int count) {
+    return 'Live Telemetry Connected • $count Active DTCs';
+  }
+
+  @override
+  String get copOffline =>
+      'Offline Mode • Connect OBD adapter for live streaming';
+
+  @override
+  String get copChange => 'CHANGE';
+
+  @override
+  String get copHypothesis => 'Primary Diagnostic Hypothesis';
+
+  @override
+  String copMatch(int pct) {
+    return '$pct% Match';
+  }
+
+  @override
+  String get copEvidence => 'Correlated Live Evidence & Telemetry';
+
+  @override
+  String get copRoadmap => '4-Step Workshop Diagnostic Roadmap';
+
+  @override
+  String copExpected(String value) {
+    return 'Expected Good Value: $value';
+  }
+
+  @override
+  String get copBulletin => 'Egyptian Workshop Technical Bulletin';
+
+  @override
+  String get copNextActions => 'Next Workshop Actions:';
+
+  @override
+  String get copActuatorTests => 'Actuator Tests';
+
+  @override
+  String get copCatAnalyzer => 'Cat Analyzer';
+
+  @override
+  String get copLiveGraphs => 'Live Graphs';
+
+  @override
+  String get copCopied => 'AI Diagnostic Report copied to clipboard';
+
+  @override
+  String get copRepHeader => '=== AI DIAGNOSTIC COPILOT REPORT ===';
+
+  @override
+  String copRepVehicle(String v) {
+    return 'Vehicle: $v';
+  }
+
+  @override
+  String copRepHyp(String h, int pct) {
+    return 'Primary Hypothesis: $h ($pct% Confidence)';
+  }
+
+  @override
+  String copRepUrgency(String u) {
+    return 'Urgency: $u';
+  }
+
+  @override
+  String get copRepEvidence => 'Key Evidence:';
+
+  @override
+  String get copRepRoadmap => 'Mechanic Roadmap:';
+
+  @override
+  String copRepAction(String a) {
+    return 'Action: $a';
+  }
+
+  @override
+  String get copRepBulletin => 'Egyptian Workshop Bulletin:';
 }

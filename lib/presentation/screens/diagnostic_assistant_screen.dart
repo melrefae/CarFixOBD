@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/localization/app_strings_en.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../core/utils/hex_parser.dart';
 import '../../domain/analyzers/fuel_trim_analyzer.dart';
 import '../../domain/analyzers/battery_health_checker.dart';
@@ -48,10 +48,11 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
   }
 
   Future<void> _captureLiveTrims(ObdState state, {required bool isLoad}) async {
+    final l10n = AppLocalizations.of(context);
     if (!state.isConnected) return;
     setState(() {
       _isCapturingTrims = true;
-      _trimCaptureNote = isLoad ? "Reading 2500 RPM STFT / LTFT from ECU..." : "Reading Idle STFT / LTFT from ECU...";
+      _trimCaptureNote = isLoad ? l10n.daReadingLoad : l10n.daReadingIdle;
     });
 
     try {
@@ -75,12 +76,15 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
             if (stft != null) _stftIdle = stft.clamp(-25.0, 25.0);
             if (ltft != null) _ltftIdle = ltft.clamp(-25.0, 25.0);
           }
-          _trimCaptureNote =
-              "Captured live (${state.currentRpm.round()} RPM): STFT ${stft?.toStringAsFixed(1) ?? 'N/A'}%, LTFT ${ltft?.toStringAsFixed(1) ?? 'N/A'}%";
+          _trimCaptureNote = l10n.daCaptured(
+            state.currentRpm.round(),
+            stft?.toStringAsFixed(1) ?? 'N/A',
+            ltft?.toStringAsFixed(1) ?? 'N/A',
+          );
         });
       } else {
         setState(() {
-          _trimCaptureNote = "ECU returned no 0106/0107 Fuel Trim data.";
+          _trimCaptureNote = l10n.daNoData;
         });
       }
     } finally {
@@ -137,18 +141,19 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<ObdState>(context);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.diagnosticAssistant),
+        title: Text(l10n.daTitle),
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: AppColors.primaryYellow,
           labelColor: AppColors.primaryYellow,
           unselectedLabelColor: AppColors.textMuted,
-          tabs: const [
-            Tab(icon: Icon(Icons.tune), text: "Fuel Trim & Vacuum"),
-            Tab(icon: Icon(Icons.battery_charging_full), text: "Battery & Alternator"),
+          tabs: [
+            Tab(icon: const Icon(Icons.tune), text: l10n.daTabFuel),
+            Tab(icon: const Icon(Icons.battery_charging_full), text: l10n.daTabBattery),
           ],
         ),
       ),
@@ -156,16 +161,17 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
         controller: _tabController,
         children: [
           // 1. Fuel Trim & Vacuum Diagnostic Matrix
-          _buildFuelTrimTab(state),
+          _buildFuelTrimTab(state, l10n),
 
           // 2. Electrical System Diagnostic Tab
-          _buildBatteryTab(state),
+          _buildBatteryTab(state, l10n),
         ],
       ),
     );
   }
 
-  Widget _buildFuelTrimTab(ObdState state) {
+  Widget _buildFuelTrimTab(ObdState state, AppLocalizations l10n) {
+    final isAr = state.isArabic;
     final result = FuelTrimAnalyzer.analyze(
       stftIdle: _stftIdle,
       ltftIdle: _ltftIdle,
@@ -184,8 +190,8 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
               color: AppColors.cardSurfaceHighlight,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Text(
-              "Diagnostic Method: Record Fuel Trims (STFT + LTFT) at idle, then hold engine at 2500 RPM under load. Observe how trim values change to instantly distinguish between vacuum leaks and fuel pump starvation.",
+            child: Text(
+              l10n.daMethod,
               style: TextStyle(fontSize: 12, color: AppColors.textWhite, height: 1.4),
             ),
           ),
@@ -202,7 +208,7 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
                     padding: const EdgeInsets.symmetric(vertical: 10),
                   ),
                   icon: const Icon(Icons.sensors, size: 18),
-                  label: const Text("Capture Idle Live", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                  label: Text(l10n.daCaptureIdle, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                   onPressed: state.isConnected && !_isCapturingTrims
                       ? () => _captureLiveTrims(state, isLoad: false)
                       : null,
@@ -217,7 +223,7 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
                     padding: const EdgeInsets.symmetric(vertical: 10),
                   ),
                   icon: const Icon(Icons.speed, size: 18),
-                  label: const Text("Capture 2500 RPM", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                  label: Text(l10n.daCaptureLoad, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                   onPressed: state.isConnected && !_isCapturingTrims
                       ? () => _captureLiveTrims(state, isLoad: true)
                       : null,
@@ -235,13 +241,13 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
           const SizedBox(height: 16),
 
           // Idle Trims
-          const Text("Idle Trims (STFT + LTFT):", style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primaryYellow)),
+          Text(l10n.daIdleTrims, style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primaryYellow)),
           const SizedBox(height: 8),
           Row(
             children: [
               Expanded(
                 child: _buildSliderTile(
-                  label: "Idle STFT (%)",
+                  label: l10n.daIdleStft,
                   value: _stftIdle,
                   min: -25,
                   max: 25,
@@ -251,7 +257,7 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
               const SizedBox(width: 10),
               Expanded(
                 child: _buildSliderTile(
-                  label: "Idle LTFT (%)",
+                  label: l10n.daIdleLtft,
                   value: _ltftIdle,
                   min: -25,
                   max: 25,
@@ -263,13 +269,13 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
           const SizedBox(height: 16),
 
           // 2500 RPM Trims
-          const Text("2500 RPM Trims (Under Load):", style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.electricBlue)),
+          Text(l10n.daLoadTrims, style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.electricBlue)),
           const SizedBox(height: 8),
           Row(
             children: [
               Expanded(
                 child: _buildSliderTile(
-                  label: "Load STFT (%)",
+                  label: l10n.daLoadStft,
                   value: _stftLoad,
                   min: -25,
                   max: 25,
@@ -279,7 +285,7 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
               const SizedBox(width: 10),
               Expanded(
                 child: _buildSliderTile(
-                  label: "Load LTFT (%)",
+                  label: l10n.daLoadLtft,
                   value: _ltftLoad,
                   min: -25,
                   max: 25,
@@ -308,7 +314,7 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        result.status,
+                        isAr ? result.statusAr : result.statusEn,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -319,15 +325,15 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
                   ],
                 ),
                 const SizedBox(height: 8),
-                Text(result.diagnosis, style: const TextStyle(fontSize: 13, color: AppColors.textWhite, height: 1.4)),
+                Text(isAr ? result.diagnosisAr : result.diagnosisEn, style: const TextStyle(fontSize: 13, color: AppColors.textWhite, height: 1.4)),
                 const SizedBox(height: 12),
                 const Divider(color: Color(0xFF37474F)),
-                const Text(
-                  "Workshop Recommended Action:",
+                Text(
+                  l10n.daAction,
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primaryYellow),
                 ),
                 const SizedBox(height: 4),
-                Text(result.recommendation, style: const TextStyle(fontSize: 12, color: AppColors.textWhite, height: 1.4)),
+                Text(isAr ? result.recommendationAr : result.recommendationEn, style: const TextStyle(fontSize: 12, color: AppColors.textWhite, height: 1.4)),
               ],
             ),
           ),
@@ -336,7 +342,8 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
     );
   }
 
-  Widget _buildBatteryTab(ObdState state) {
+  Widget _buildBatteryTab(ObdState state, AppLocalizations l10n) {
+    final isAr = state.isArabic;
     final result = BatteryHealthChecker.evaluate(
       restingVoltage: _restingVoltage,
       minCrankingVoltage: _crankingVoltage,
@@ -352,7 +359,7 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(color: AppColors.cardSurfaceHighlight, borderRadius: BorderRadius.circular(10)),
             child: Text(
-              "Live Adapter Voltage: ${state.batteryVoltage.toStringAsFixed(2)}V • Start Live Cranking Test with engine off, then crank starter & let engine idle to automatically record sag & charging output.",
+              l10n.daLiveVolts(state.batteryVoltage.toStringAsFixed(2)),
               style: const TextStyle(fontSize: 12, color: AppColors.textWhite, height: 1.4),
             ),
           ),
@@ -367,8 +374,8 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
             icon: Icon(_isSamplingBattery ? Icons.stop_circle : Icons.bolt),
             label: Text(
               _isSamplingBattery
-                  ? "Stop Live Cranking & Alternator Sampling (${state.batteryVoltage.toStringAsFixed(2)}V)"
-                  : "Start Live 12V Cranking & Alternator Test",
+                  ? l10n.daStopSampling(state.batteryVoltage.toStringAsFixed(2))
+                  : l10n.daStartSampling,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
             onPressed: state.isConnected ? () => _toggleLiveCrankingTest(state) : null,
@@ -376,7 +383,7 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
           const SizedBox(height: 16),
 
           _buildSliderTile(
-            label: "Resting Battery Voltage (Engine OFF): ${_restingVoltage.toStringAsFixed(1)}V",
+            label: l10n.daResting(_restingVoltage.toStringAsFixed(1)),
             value: _restingVoltage,
             min: 10.0,
             max: 13.5,
@@ -385,7 +392,7 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
           const SizedBox(height: 12),
 
           _buildSliderTile(
-            label: "Min Cranking Voltage Drop (Starter Crank): ${_crankingVoltage.toStringAsFixed(1)}V",
+            label: l10n.daCranking(_crankingVoltage.toStringAsFixed(1)),
             value: _crankingVoltage,
             min: 7.0,
             max: 12.0,
@@ -394,7 +401,7 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
           const SizedBox(height: 12),
 
           _buildSliderTile(
-            label: "Alternator Output Voltage (Engine Running): ${_runningVoltage.toStringAsFixed(1)}V",
+            label: l10n.daRunning(_runningVoltage.toStringAsFixed(1)),
             value: _runningVoltage,
             min: 11.5,
             max: 16.0,
@@ -419,18 +426,18 @@ class _DiagnosticAssistantScreenState extends State<DiagnosticAssistantScreen> w
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Battery Health: ${result.batteryStatus}",
+                  l10n.daBatteryHealth(isAr ? result.batteryStatusAr : result.batteryStatusEn),
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  "Alternator Health: ${result.alternatorStatus}",
+                  l10n.daAlternatorHealth(isAr ? result.alternatorStatusAr : result.alternatorStatusEn),
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
                 ),
                 const SizedBox(height: 10),
                 const Divider(color: Color(0xFF37474F)),
                 Text(
-                  "Recommendation: ${result.recommendation}",
+                  l10n.daRecommendation(isAr ? result.recommendationAr : result.recommendationEn),
                   style: const TextStyle(fontSize: 12, color: AppColors.primaryYellow, height: 1.4),
                 ),
               ],

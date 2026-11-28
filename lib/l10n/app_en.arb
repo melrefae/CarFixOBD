@@ -1293,5 +1293,238 @@
   "sfCatSafetyAirbag": "Safety & Airbag",
   "sfCatSecurity": "Security",
   "sfCatSteeringSuspension": "Steering & Suspension",
-  "sfCatWheelsTires": "Wheels & Tires"
+  "sfCatWheelsTires": "Wheels & Tires",
+  "dtcTypeStored": "Stored",
+  "dtcTypePending": "Pending",
+  "dtcTypePermanent": "Permanent",
+  "codTitle": "ECU Variant Coding",
+  "codRestoreTip": "Restore Original Factory Coding",
+  "codGeneric": "Generic",
+  "codGenericVehicle": "Generic Vehicle / Standalone ECU",
+  "codConnected": "Connected • Ready to read/write variant coding",
+  "codDisconnected": "Offline / Disconnected from ECU",
+  "codOnlyMake": "Only {make}",
+  "@codOnlyMake": {
+    "placeholders": {
+      "make": {
+        "type": "String"
+      }
+    }
+  },
+  "codCatDashboard": "Dashboard & Cluster",
+  "codCatLighting": "Lighting & Vision",
+  "codCatComfort": "Comfort & Convenience",
+  "codCatSafety": "Safety & Chimes",
+  "codEmptyMake": "No specific coding options found for {make}.\nTurn off vehicle filter to view all universal options.",
+  "@codEmptyMake": {
+    "placeholders": {
+      "make": {
+        "type": "String"
+      }
+    }
+  },
+  "codEmptyCat": "No features match selected category.",
+  "codCompatible": "Compatible: {brands}",
+  "@codCompatible": {
+    "placeholders": {
+      "brands": {
+        "type": "String"
+      }
+    }
+  },
+  "codEnabled": "{title} is now ENABLED!",
+  "@codEnabled": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "codDisabled": "{title} is now DISABLED!",
+  "@codDisabled": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "codWriteFailed": "Failed to write coding to ECU. Check ignition state.",
+  "codRestoreTitle": "Restore Factory Coding?",
+  "codRestoreBody": "This will revert all modified features back to the initial backup snapshot recorded when this session started.",
+  "codCancel": "Cancel",
+  "codRestoreBtn": "Restore Backup",
+  "codRestored": "All factory codings restored!",
+  "codRestoreFailed": "Restore failed for some modules.",
+  "daTitle": "Diagnostic Assistant",
+  "daTabFuel": "Fuel Trim & Vacuum",
+  "daTabBattery": "Battery & Alternator",
+  "daMethod": "Diagnostic Method: Record Fuel Trims (STFT + LTFT) at idle, then hold engine at 2500 RPM under load. Observe how trim values change to instantly distinguish between vacuum leaks and fuel pump starvation.",
+  "daCaptureIdle": "Capture Idle Live",
+  "daCaptureLoad": "Capture 2500 RPM",
+  "daReadingIdle": "Reading Idle STFT / LTFT from ECU...",
+  "daReadingLoad": "Reading 2500 RPM STFT / LTFT from ECU...",
+  "daCaptured": "Captured live ({rpm} RPM): STFT {stft}%, LTFT {ltft}%",
+  "@daCaptured": {
+    "placeholders": {
+      "rpm": {
+        "type": "int"
+      },
+      "stft": {
+        "type": "String"
+      },
+      "ltft": {
+        "type": "String"
+      }
+    }
+  },
+  "daNoData": "ECU returned no 0106/0107 Fuel Trim data.",
+  "daIdleTrims": "Idle Trims (STFT + LTFT):",
+  "daIdleStft": "Idle STFT (%)",
+  "daIdleLtft": "Idle LTFT (%)",
+  "daLoadTrims": "2500 RPM Trims (Under Load):",
+  "daLoadStft": "Load STFT (%)",
+  "daLoadLtft": "Load LTFT (%)",
+  "daAction": "Workshop Recommended Action:",
+  "daLiveVolts": "Live Adapter Voltage: {v}V • Start Live Cranking Test with engine off, then crank starter & let engine idle to automatically record sag & charging output.",
+  "@daLiveVolts": {
+    "placeholders": {
+      "v": {
+        "type": "String"
+      }
+    }
+  },
+  "daStopSampling": "Stop Live Cranking & Alternator Sampling ({v}V)",
+  "@daStopSampling": {
+    "placeholders": {
+      "v": {
+        "type": "String"
+      }
+    }
+  },
+  "daStartSampling": "Start Live 12V Cranking & Alternator Test",
+  "daResting": "Resting Battery Voltage (Engine OFF): {v}V",
+  "@daResting": {
+    "placeholders": {
+      "v": {
+        "type": "String"
+      }
+    }
+  },
+  "daCranking": "Min Cranking Voltage Drop (Starter Crank): {v}V",
+  "@daCranking": {
+    "placeholders": {
+      "v": {
+        "type": "String"
+      }
+    }
+  },
+  "daRunning": "Alternator Output Voltage (Engine Running): {v}V",
+  "@daRunning": {
+    "placeholders": {
+      "v": {
+        "type": "String"
+      }
+    }
+  },
+  "daBatteryHealth": "Battery Health: {s}",
+  "@daBatteryHealth": {
+    "placeholders": {
+      "s": {
+        "type": "String"
+      }
+    }
+  },
+  "daAlternatorHealth": "Alternator Health: {s}",
+  "@daAlternatorHealth": {
+    "placeholders": {
+      "s": {
+        "type": "String"
+      }
+    }
+  },
+  "daRecommendation": "Recommendation: {s}",
+  "@daRecommendation": {
+    "placeholders": {
+      "s": {
+        "type": "String"
+      }
+    }
+  },
+  "copTitle": "AI Diagnostic Copilot",
+  "copCopyTooltip": "Copy Report Summary",
+  "copGenericVehicle": "Generic OBD-II Vehicle",
+  "copOnline": "Live Telemetry Connected • {count} Active DTCs",
+  "@copOnline": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "copOffline": "Offline Mode • Connect OBD adapter for live streaming",
+  "copChange": "CHANGE",
+  "copHypothesis": "Primary Diagnostic Hypothesis",
+  "copMatch": "{pct}% Match",
+  "@copMatch": {
+    "placeholders": {
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "copEvidence": "Correlated Live Evidence & Telemetry",
+  "copRoadmap": "4-Step Workshop Diagnostic Roadmap",
+  "copExpected": "Expected Good Value: {value}",
+  "@copExpected": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "copBulletin": "Egyptian Workshop Technical Bulletin",
+  "copNextActions": "Next Workshop Actions:",
+  "copActuatorTests": "Actuator Tests",
+  "copCatAnalyzer": "Cat Analyzer",
+  "copLiveGraphs": "Live Graphs",
+  "copCopied": "AI Diagnostic Report copied to clipboard",
+  "copRepHeader": "=== AI DIAGNOSTIC COPILOT REPORT ===",
+  "copRepVehicle": "Vehicle: {v}",
+  "@copRepVehicle": {
+    "placeholders": {
+      "v": {
+        "type": "String"
+      }
+    }
+  },
+  "copRepHyp": "Primary Hypothesis: {h} ({pct}% Confidence)",
+  "@copRepHyp": {
+    "placeholders": {
+      "h": {
+        "type": "String"
+      },
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "copRepUrgency": "Urgency: {u}",
+  "@copRepUrgency": {
+    "placeholders": {
+      "u": {
+        "type": "String"
+      }
+    }
+  },
+  "copRepEvidence": "Key Evidence:",
+  "copRepRoadmap": "Mechanic Roadmap:",
+  "copRepAction": "Action: {a}",
+  "@copRepAction": {
+    "placeholders": {
+      "a": {
+        "type": "String"
+      }
+    }
+  },
+  "copRepBulletin": "Egyptian Workshop Bulletin:"
 }

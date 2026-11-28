@@ -3,7 +3,7 @@ import 'lab_gate.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/localization/app_strings_en.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../domain/analyzers/ai_diagnostic_copilot.dart';
 import '../providers/obd_state.dart';
 import 'actuator_tests_screen.dart';
@@ -18,10 +18,11 @@ class AiCopilotScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<ObdState>(context);
+    final l10n = AppLocalizations.of(context);
 
     final vehicleName = state.selectedVehicle != null
         ? "${state.selectedVehicle!.make} ${state.selectedVehicle!.model} (${state.selectedVehicle!.years})"
-        : "Generic OBD-II Vehicle";
+        : l10n.copGenericVehicle;
 
     final dtcList = state.storedDtcs.map((d) => d.code).toList();
     final ltft = state.getSensor('0107')?.numValue ?? state.getSensor('0106')?.numValue;
@@ -42,33 +43,33 @@ class AiCopilotScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.aiCopilot),
+        title: Text(l10n.copTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.copy),
-            tooltip: "Copy Report Summary",
+            tooltip: l10n.copCopyTooltip,
             onPressed: () {
               final text = StringBuffer();
-              text.writeln("=== AI DIAGNOSTIC COPILOT REPORT ===");
-              text.writeln("Vehicle: ${report.vehicleTitle}");
-              text.writeln("Primary Hypothesis: ${report.primaryHypothesis} (${report.probabilityPercent}% Confidence)");
-              text.writeln("Urgency: ${report.urgencyLevel}");
-              text.writeln("\nKey Evidence:");
+              text.writeln(l10n.copRepHeader);
+              text.writeln(l10n.copRepVehicle(report.vehicleTitle));
+              text.writeln(l10n.copRepHyp(report.primaryHypothesis, report.probabilityPercent));
+              text.writeln(l10n.copRepUrgency(report.urgencyLevel));
+              text.writeln("\n${l10n.copRepEvidence}");
               for (final ev in report.evidenceList) {
                 text.writeln(" - $ev");
               }
-              text.writeln("\nMechanic Roadmap:");
+              text.writeln("\n${l10n.copRepRoadmap}");
               for (final step in report.roadmap) {
                 text.writeln(" Step ${step.stepNumber}: ${step.title} [Tool: ${step.toolRequired}]");
-                text.writeln("   Action: ${step.action}");
-                text.writeln("   Expected Good Value: ${step.expectedGoodValue}");
+                text.writeln("   ${l10n.copRepAction(step.action)}");
+                text.writeln("   ${l10n.copExpected(step.expectedGoodValue)}");
               }
-              text.writeln("\nEgyptian Workshop Bulletin:\n${report.egyptWorkshopBulletin}");
+              text.writeln("\n${l10n.copRepBulletin}\n${report.egyptWorkshopBulletin}");
 
               Clipboard.setData(ClipboardData(text: text.toString()));
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("AI Diagnostic Report copied to clipboard"),
+                SnackBar(
+                  content: Text(l10n.copCopied),
                   backgroundColor: AppColors.successGreen,
                 ),
               );
@@ -82,32 +83,32 @@ class AiCopilotScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Vehicle Context Banner
-            _buildVehicleBanner(context, state, vehicleName),
+            _buildVehicleBanner(context, state, vehicleName, l10n),
 
             const SizedBox(height: 16),
 
             // Primary Hypothesis Card
-            _buildHypothesisCard(report),
+            _buildHypothesisCard(report, l10n),
 
             const SizedBox(height: 16),
 
             // Key Evidence Card
-            _buildEvidenceCard(report),
+            _buildEvidenceCard(report, l10n),
 
             const SizedBox(height: 16),
 
             // Step-by-Step Diagnostic Roadmap
-            _buildRoadmapSection(report),
+            _buildRoadmapSection(report, l10n),
 
             const SizedBox(height: 16),
 
             // Egyptian Workshop Bulletin Card
-            _buildEgyptianBulletinCard(report),
+            _buildEgyptianBulletinCard(report, l10n),
 
             const SizedBox(height: 16),
 
             // Quick Diagnostic Action Shortcuts
-            _buildDiagnosticShortcuts(context),
+            _buildDiagnosticShortcuts(context, l10n),
 
             const SizedBox(height: 24),
           ],
@@ -116,7 +117,7 @@ class AiCopilotScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildVehicleBanner(BuildContext context, ObdState state, String vehicleName) {
+  Widget _buildVehicleBanner(BuildContext context, ObdState state, String vehicleName, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
@@ -139,8 +140,8 @@ class AiCopilotScreen extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   state.isConnected
-                      ? "Live Telemetry Connected • ${state.storedDtcs.length} Active DTCs"
-                      : "Offline Mode • Connect OBD adapter for live streaming",
+                      ? l10n.copOnline(state.storedDtcs.length)
+                      : l10n.copOffline,
                   style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
                 ),
               ],
@@ -153,14 +154,14 @@ class AiCopilotScreen extends StatelessWidget {
                 MaterialPageRoute(builder: (_) => const VehicleProfilesScreen()),
               );
             },
-            child: const Text("CHANGE", style: TextStyle(color: AppColors.primaryYellow, fontSize: 12)),
+            child: Text(l10n.copChange, style: const TextStyle(color: AppColors.primaryYellow, fontSize: 12)),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildHypothesisCard(AiDiagnosticReport report) {
+  Widget _buildHypothesisCard(AiDiagnosticReport report, AppLocalizations l10n) {
     Color probColor = AppColors.successGreen;
     if (report.probabilityPercent < 60) {
       probColor = AppColors.textMuted;
@@ -184,8 +185,8 @@ class AiCopilotScreen extends StatelessWidget {
             children: [
               const Icon(Icons.auto_awesome, color: AppColors.primaryYellow, size: 22),
               const SizedBox(width: 8),
-              const Text(
-                "Primary Diagnostic Hypothesis",
+              Text(
+                l10n.copHypothesis,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -201,7 +202,7 @@ class AiCopilotScreen extends StatelessWidget {
                   border: Border.all(color: probColor),
                 ),
                 child: Text(
-                  "${report.probabilityPercent}% Match",
+                  l10n.copMatch(report.probabilityPercent),
                   style: TextStyle(
                     color: probColor,
                     fontWeight: FontWeight.bold,
@@ -249,7 +250,7 @@ class AiCopilotScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEvidenceCard(AiDiagnosticReport report) {
+  Widget _buildEvidenceCard(AiDiagnosticReport report, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -260,12 +261,12 @@ class AiCopilotScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.checklist, color: AppColors.electricBlue, size: 20),
-              SizedBox(width: 8),
+              const Icon(Icons.checklist, color: AppColors.electricBlue, size: 20),
+              const SizedBox(width: 8),
               Text(
-                "Correlated Live Evidence & Telemetry",
+                l10n.copEvidence,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -298,7 +299,7 @@ class AiCopilotScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRoadmapSection(AiDiagnosticReport report) {
+  Widget _buildRoadmapSection(AiDiagnosticReport report, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -309,12 +310,12 @@ class AiCopilotScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.timeline, color: AppColors.successGreen, size: 20),
-              SizedBox(width: 8),
+              const Icon(Icons.timeline, color: AppColors.successGreen, size: 20),
+              const SizedBox(width: 8),
               Text(
-                "4-Step Workshop Diagnostic Roadmap",
+                l10n.copRoadmap,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -324,13 +325,13 @@ class AiCopilotScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-          ...report.roadmap.map((step) => _buildRoadmapStepTile(step)),
+          ...report.roadmap.map((step) => _buildRoadmapStepTile(step, l10n)),
         ],
       ),
     );
   }
 
-  Widget _buildRoadmapStepTile(DiagnosticRoadmapStep step) {
+  Widget _buildRoadmapStepTile(DiagnosticRoadmapStep step, AppLocalizations l10n) {
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(12),
@@ -415,7 +416,7 @@ class AiCopilotScreen extends StatelessWidget {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    "Expected Good Value: ${step.expectedGoodValue}",
+                    l10n.copExpected(step.expectedGoodValue),
                     style: const TextStyle(
                       fontSize: 12,
                       color: AppColors.successGreen,
@@ -431,7 +432,7 @@ class AiCopilotScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEgyptianBulletinCard(AiDiagnosticReport report) {
+  Widget _buildEgyptianBulletinCard(AiDiagnosticReport report, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -442,12 +443,12 @@ class AiCopilotScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.build_circle, color: AppColors.primaryAmber, size: 20),
-              SizedBox(width: 8),
+              const Icon(Icons.build_circle, color: AppColors.primaryAmber, size: 20),
+              const SizedBox(width: 8),
               Text(
-                "Egyptian Workshop Technical Bulletin",
+                l10n.copBulletin,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -470,12 +471,12 @@ class AiCopilotScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDiagnosticShortcuts(BuildContext context) {
+  Widget _buildDiagnosticShortcuts(BuildContext context, AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Next Workshop Actions:",
+        Text(
+          l10n.copNextActions,
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.bold,
@@ -488,7 +489,7 @@ class AiCopilotScreen extends StatelessWidget {
             Expanded(
               child: ElevatedButton.icon(
                 icon: const Icon(Icons.play_arrow, size: 16),
-                label: const Text("Actuator Tests", style: TextStyle(fontSize: 12)),
+                label: Text(l10n.copActuatorTests, style: TextStyle(fontSize: 12)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.electricBlue,
                   foregroundColor: Colors.white,
@@ -503,7 +504,7 @@ class AiCopilotScreen extends StatelessWidget {
             Expanded(
               child: ElevatedButton.icon(
                 icon: const Icon(Icons.speed, size: 16),
-                label: const Text("Cat Analyzer", style: TextStyle(fontSize: 12)),
+                label: Text(l10n.copCatAnalyzer, style: TextStyle(fontSize: 12)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryYellow,
                   foregroundColor: Colors.black,
@@ -521,7 +522,7 @@ class AiCopilotScreen extends StatelessWidget {
             Expanded(
               child: ElevatedButton.icon(
                 icon: const Icon(Icons.show_chart, size: 16),
-                label: const Text("Live Graphs", style: TextStyle(fontSize: 12)),
+                label: Text(l10n.copLiveGraphs, style: TextStyle(fontSize: 12)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.surfaceDark,
                   foregroundColor: Colors.white,

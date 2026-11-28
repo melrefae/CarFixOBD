@@ -2492,4 +2492,282 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get sfCatWheelsTires => 'العجلات والإطارات';
+
+  @override
+  String get dtcTypeStored => 'مخزن';
+
+  @override
+  String get dtcTypePending => 'معلق';
+
+  @override
+  String get dtcTypePermanent => 'دائم';
+
+  @override
+  String get codTitle => 'برمجة مواصفات الكنترول';
+
+  @override
+  String get codRestoreTip => 'استعادة البرمجة الأصلية للوكالة';
+
+  @override
+  String get codGeneric => 'عام';
+
+  @override
+  String get codGenericVehicle => 'مركبة عامة / كنترول مستقل';
+
+  @override
+  String get codConnected => 'متصل • جاهز لقراءة/كتابة البرمجة';
+
+  @override
+  String get codDisconnected => 'غير متصل بالكنترول';
+
+  @override
+  String codOnlyMake(String make) {
+    return '$make فقط';
+  }
+
+  @override
+  String get codCatDashboard => 'الطبلون والعدادات';
+
+  @override
+  String get codCatLighting => 'الإضاءة والرؤية';
+
+  @override
+  String get codCatComfort => 'الراحة والرفاهية';
+
+  @override
+  String get codCatSafety => 'الأمان والتنبيهات';
+
+  @override
+  String codEmptyMake(String make) {
+    return 'لا توجد خيارات برمجة خاصة بـ $make.\nأطفئ فلتر المركبة لعرض كل الخيارات العامة.';
+  }
+
+  @override
+  String get codEmptyCat => 'لا توجد خصائص مطابقة للتصنيف المختار.';
+
+  @override
+  String codCompatible(String brands) {
+    return 'متوافق مع: $brands';
+  }
+
+  @override
+  String codEnabled(String title) {
+    return 'تم تفعيل $title!';
+  }
+
+  @override
+  String codDisabled(String title) {
+    return 'تم تعطيل $title!';
+  }
+
+  @override
+  String get codWriteFailed =>
+      'فشل كتابة البرمجة في الكنترول. تأكد من وضع الكونتاكت.';
+
+  @override
+  String get codRestoreTitle => 'استعادة برمجة الوكالة؟';
+
+  @override
+  String get codRestoreBody =>
+      'سيتم إرجاع كل الخصائص المعدلة إلى النسخة الاحتياطية الأصلية المسجلة عند بدء هذه الجلسة.';
+
+  @override
+  String get codCancel => 'إلغاء';
+
+  @override
+  String get codRestoreBtn => 'استعادة النسخة';
+
+  @override
+  String get codRestored => 'تم استعادة برمجة الوكالة بالكامل!';
+
+  @override
+  String get codRestoreFailed => 'فشلت الاستعادة لبعض الكنترولات.';
+
+  @override
+  String get daTitle => 'المساعد التشخيصي';
+
+  @override
+  String get daTabFuel => 'نسب الوقود والفاكيوم';
+
+  @override
+  String get daTabBattery => 'البطارية والدينامو';
+
+  @override
+  String get daMethod =>
+      'طريقة الفحص: سجّل نسب الوقود (STFT + LTFT) على السلست، ثم ثبّت المحرك عند 2500 RPM تحت الحمل. راقب تغير القيم للتمييز فورًا بين تسريب الفاكيوم وضعف طلمبة البنزين.';
+
+  @override
+  String get daCaptureIdle => 'التقاط قراءة السلست';
+
+  @override
+  String get daCaptureLoad => 'التقاط قراءة 2500 RPM';
+
+  @override
+  String get daReadingIdle =>
+      'جاري قراءة STFT / LTFT على السلست من الكونترول...';
+
+  @override
+  String get daReadingLoad =>
+      'جاري قراءة STFT / LTFT عند 2500 RPM من الكونترول...';
+
+  @override
+  String daCaptured(int rpm, String stft, String ltft) {
+    return 'تم الالتقاط الحي ($rpm RPM): STFT $stft٪، LTFT $ltft٪';
+  }
+
+  @override
+  String get daNoData => 'الكونترول لم يرجع بيانات 0106/0107 لنسب الوقود.';
+
+  @override
+  String get daIdleTrims => 'نسب السلست (STFT + LTFT):';
+
+  @override
+  String get daIdleStft => 'STFT السلست (٪)';
+
+  @override
+  String get daIdleLtft => 'LTFT السلست (٪)';
+
+  @override
+  String get daLoadTrims => 'نسب 2500 RPM (تحت الحمل):';
+
+  @override
+  String get daLoadStft => 'STFT الحمل (٪)';
+
+  @override
+  String get daLoadLtft => 'LTFT الحمل (٪)';
+
+  @override
+  String get daAction => 'الإجراء الموصى به في الورشة:';
+
+  @override
+  String daLiveVolts(String v) {
+    return 'جهد الفيشة الحالي: $v فولت • ابدأ اختبار التدوير الحي والمحرك مطفأ، ثم دوّر المارش واترك المحرك يعمل لتسجيل هبوط الجهد وخرج الدينامو تلقائيًا.';
+  }
+
+  @override
+  String daStopSampling(String v) {
+    return 'إيقاف قياس التدوير والدينامو الحي ($v فولت)';
+  }
+
+  @override
+  String get daStartSampling => 'بدء اختبار التدوير والدينامو الحي 12 فولت';
+
+  @override
+  String daResting(String v) {
+    return 'جهد البطارية الساكن (المحرك مطفأ): $v فولت';
+  }
+
+  @override
+  String daCranking(String v) {
+    return 'أدنى جهد أثناء التدوير (المارش): $v فولت';
+  }
+
+  @override
+  String daRunning(String v) {
+    return 'جهد شحن الدينامو (المحرك يعمل): $v فولت';
+  }
+
+  @override
+  String daBatteryHealth(String s) {
+    return 'صحة البطارية: $s';
+  }
+
+  @override
+  String daAlternatorHealth(String s) {
+    return 'صحة الدينامو: $s';
+  }
+
+  @override
+  String daRecommendation(String s) {
+    return 'التوصية: $s';
+  }
+
+  @override
+  String get copTitle => 'المساعد الذكي لتشخيص الأعطال';
+
+  @override
+  String get copCopyTooltip => 'نسخ ملخص التقرير';
+
+  @override
+  String get copGenericVehicle => 'مركبة OBD-II عامة';
+
+  @override
+  String copOnline(int count) {
+    return 'البيانات الحية متصلة • $count عطل نشط';
+  }
+
+  @override
+  String get copOffline => 'وضع عدم الاتصال • اربط فيشة OBD للبيانات الحية';
+
+  @override
+  String get copChange => 'تغيير';
+
+  @override
+  String get copHypothesis => 'الفرضية التشخيصية الأساسية';
+
+  @override
+  String copMatch(int pct) {
+    return 'تطابق $pct٪';
+  }
+
+  @override
+  String get copEvidence => 'الأدلة والقراءات الحية المرتبطة';
+
+  @override
+  String get copRoadmap => 'خارطة الفحص التشخيصي (4 خطوات)';
+
+  @override
+  String copExpected(String value) {
+    return 'القيمة السليمة المتوقعة: $value';
+  }
+
+  @override
+  String get copBulletin => 'نشرة الورش المصرية الفنية';
+
+  @override
+  String get copNextActions => 'الإجراءات التالية في الورشة:';
+
+  @override
+  String get copActuatorTests => 'فحص المشغلات';
+
+  @override
+  String get copCatAnalyzer => 'محلل علبة البيئة';
+
+  @override
+  String get copLiveGraphs => 'الرسوم الحية';
+
+  @override
+  String get copCopied => 'تم نسخ تقرير التشخيص الذكي';
+
+  @override
+  String get copRepHeader => '=== تقرير المساعد الذكي للتشخيص ===';
+
+  @override
+  String copRepVehicle(String v) {
+    return 'المركبة: $v';
+  }
+
+  @override
+  String copRepHyp(String h, int pct) {
+    return 'الفرضية الأساسية: $h (ثقة $pct٪)';
+  }
+
+  @override
+  String copRepUrgency(String u) {
+    return 'الأولوية: $u';
+  }
+
+  @override
+  String get copRepEvidence => 'الأدلة الرئيسية:';
+
+  @override
+  String get copRepRoadmap => 'خارطة عمل الفني:';
+
+  @override
+  String copRepAction(String a) {
+    return 'الإجراء: $a';
+  }
+
+  @override
+  String get copRepBulletin => 'نشرة الورشة المصرية:';
 }
