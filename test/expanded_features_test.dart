@@ -658,27 +658,14 @@ void main() {
 
       for (final chip in chips) {
         expect(chip.frequency.contains('MHz'), true);
-        expect(chip.keyIdHex.startsWith('0x'), true);
-        expect(chip.pageData.isNotEmpty, true);
         expect(chip.compatibleVehicles.isNotEmpty, true);
       }
     });
 
-    test('PIN code calculator computes valid security codes across 5 OEM platforms', () {
-      final psaPin = PinCodeCalculation.calculatePin("PSA Peugeot / Citroën (4-Digit PIN)", "VF38E9HP0DM123456");
-      expect(psaPin.length, 4);
-
-      final nissanPin = PinCodeCalculation.calculatePin("Nissan / Infiniti BCM (20-Digit to PIN)", "B987F23E4510AB89CD21");
-      expect(nissanPin.length, 4);
-
-      final hyundaiPin = PinCodeCalculation.calculatePin("Hyundai / Kia (6-Digit VIN-to-PIN)", "KMHCT41CBFU123456");
-      expect(hyundaiPin.length, 6);
-
-      final renaultPin = PinCodeCalculation.calculatePin("Renault ISK / Incode Calculator", "A4B1C2D3");
-      expect(renaultPin.length, 4);
-
-      final vagSkc = PinCodeCalculation.calculatePin("VAG Group 5-Digit Secret Key (SKC)", "VWZ7Z0E1234567");
-      expect(vagSkc.length, 5);
+    test('PIN code calculator removed - no fabricated security codes', () {
+      // Guessing immobilizer PINs is dangerous (wrong attempts lock the immo);
+      // the fake hash-based calculator was removed entirely.
+      expect(PinCodeCalculation.getSupportedSystems().isEmpty, true);
     });
 
     test('Guided key learning wizard defines 5 sequential UDS steps', () {
@@ -1652,7 +1639,7 @@ void main() {
 
     test('ExhaustAftertreatmentBundle.fromLiveTelemetry calculates soot load and exhaust temps', () {
       final coldBundle = ExhaustAftertreatmentBundle.fromLiveTelemetry(coolantTempC: 30.0, rpm: 0.0);
-      expect(coldBundle.sootMassGrams, greaterThan(0.0));
+      expect(coldBundle.sootMassGrams, 0.0); // no sensor data -> no invented soot value
       expect(coldBundle.isRegenRecommended, false);
 
       final hotHighwayBundle = ExhaustAftertreatmentBundle.fromLiveTelemetry(

@@ -110,6 +110,18 @@ class _LabScopeWaveformScreenState extends State<LabScopeWaveformScreen> with Si
       body: Column(
         children: [
           _buildConnectionNotice(context, state, isAr),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            color: AppColors.warningOrange.withOpacity(0.12),
+            child: Text(
+              isAr
+                  ? "رسومات وتحليلات تقديرية محسوبة من معادلات - ليست قياسات حقيقية. قراءة إشارات الكرنك/الكامة الفعلية تحتاج أوسيلوسكوب خارجي."
+                  : "Estimated waveforms computed from formulas - not real measurements. Capturing actual CKP/CMP signals requires an external oscilloscope.",
+              style: const TextStyle(fontSize: 12, color: AppColors.warningOrange, fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center,
+            ),
+          ),
           Expanded(
             child: TabBarView(
               controller: _tabController,
@@ -343,13 +355,13 @@ class _LabScopeWaveformScreenState extends State<LabScopeWaveformScreen> with Si
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  _buildMetricRow("Engine Platform:", _chainAnalysis.enginePlatform, AppColors.textWhite),
+                  _buildMetricRow(Provider.of<ObdState>(context, listen: false).isArabic ? "منصة المحرك:" : "Engine Platform:", _chainAnalysis.enginePlatform, AppColors.textWhite),
                   const Divider(color: AppColors.cardBorder),
-                  _buildMetricRow("Cam/Crank Relative Offset:", "+${_chainAnalysis.measuredPhaseOffsetDeg.toStringAsFixed(1)}°", statusColor),
+                  _buildMetricRow(Provider.of<ObdState>(context, listen: false).isArabic ? "إزاحة الكرنك/الكامة (تقديري):" : "Cam/Crank Relative Offset (estimated):", "+${_chainAnalysis.measuredPhaseOffsetDeg.toStringAsFixed(1)}°", statusColor),
                   const Divider(color: AppColors.cardBorder),
-                  _buildMetricRow("OEM Manufacturer Tolerance:", "±${_chainAnalysis.nominalToleranceDeg.toStringAsFixed(1)}° max", AppColors.textMuted),
+                  _buildMetricRow(Provider.of<ObdState>(context, listen: false).isArabic ? "تفاوت المصنع:" : "OEM Manufacturer Tolerance:", "±${_chainAnalysis.nominalToleranceDeg.toStringAsFixed(1)}° max", AppColors.textMuted),
                   const Divider(color: AppColors.cardBorder),
-                  _buildMetricRow("Timing Chain Elongation Status:", isStretched ? "CRITICAL STRETCH DETECTED" : "NOMINAL FACTORY SYNC", statusColor),
+                  _buildMetricRow(Provider.of<ObdState>(context, listen: false).isArabic ? "حالة استطالة الجنزير:" : "Timing Chain Elongation Status:", Provider.of<ObdState>(context, listen: false).isArabic ? "تقديري - غير قابل للقياس عبر OBD" : "ESTIMATED - not measurable via OBD", statusColor),
                 ],
               ),
             ),

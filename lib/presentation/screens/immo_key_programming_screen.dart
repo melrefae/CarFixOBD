@@ -32,10 +32,7 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
   String _lastRfPacket = "Awaiting key fob transmission...";
 
   // Tab 3: PIN code calculator state
-  final List<PinCodeCalculation> _supportedSystems = PinCodeCalculation.getSupportedSystems();
   int _selectedSystemIndex = 0;
-  final TextEditingController _pinInputController = TextEditingController();
-  String _calculatedPin = "";
 
   // Tab 4: Guided key learning wizard state
   final List<KeyLearningStep> _learningSteps = KeyLearningStep.getDefaultLearningSteps();
@@ -49,17 +46,11 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
   void initState() {
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
-    _pinInputController.text = _supportedSystems[0].exampleInput;
-    _calculatedPin = PinCodeCalculation.calculatePin(
-      _supportedSystems[0].systemName,
-      _pinInputController.text,
-    );
   }
 
   @override
   void dispose() {
     _tabController.dispose();
-    _pinInputController.dispose();
     super.dispose();
   }
 
@@ -172,7 +163,7 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "تم ضبط مستقبل الريموت على $freq. جاهز لالتقاط إشارات الريموت." : "RF Key Receiver tuned to $freq. Ready to detect incoming key fob carrier transmissions."),
+        content: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "غير متاح: قياس تردد الريموت يحتاج جهاز استقبال راديو خارجي - فيشة ELM327 لا تستقبل راديو." : "Unavailable: measuring remote frequency needs an external RF receiver - an ELM327 adapter cannot receive radio."),
         duration: const Duration(milliseconds: 1500),
         backgroundColor: AppColors.electricBlue,
       ),
@@ -346,8 +337,8 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
                       : const Icon(Icons.sensors),
                   label: Text(
                     _isReadingTransponder
-                        ? (isAr ? "جارِ قراءة الشريحة في الملف..." : "Reading Key in Antenna Coil...")
-                        : (isAr ? "قراءة شريحة المفتاح الحالية" : "Read Key Transponder in Coil"),
+                        ? (isAr ? "جارِ التحميل..." : "Loading...")
+                        : (isAr ? "استعراض مرجع الشرائح" : "Browse Transponder Reference"),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   onPressed: _isReadingTransponder ? null : _scanTransponder,
@@ -358,7 +349,23 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
 
           const SizedBox(height: 16),
 
-          // Detected Transponder Info Card
+          // Transponder reference card: technical reference data, NOT read from a key
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            margin: const EdgeInsets.only(bottom: 12),
+            decoration: BoxDecoration(
+              color: AppColors.warningOrange.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppColors.warningOrange),
+            ),
+            child: Text(
+              isAr
+                  ? "قراءة شريحة المفتاح الفعلية غير ممكنة عبر فيشة ELM327 (لا يوجد ملف هوائي 125kHz). البيانات التالية مرجع فني للشرائح الشائعة وليست قراءة من مفتاح حقيقي."
+                  : "Reading an actual key transponder is not possible via an ELM327 adapter (no 125kHz coil). The data below is a technical reference of common chip types, not read from a real key.",
+              style: const TextStyle(fontSize: 12, color: AppColors.warningOrange, fontWeight: FontWeight.w600),
+            ),
+          ),
           Card(
             color: AppColors.cardSurface,
             shape: RoundedRectangleBorder(
@@ -406,38 +413,11 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
                     ],
                   ),
                   const SizedBox(height: 14),
-                  _buildDetailRow(Provider.of<ObdState>(context, listen: false).isArabic ? "معرّف شريحة المفتاح:" : "Transponder Key ID:", chip.keyIdHex, AppColors.primaryYellow),
                   _buildDetailRow(Provider.of<ObdState>(context, listen: false).isArabic ? "التشفير:" : "Crypto / Encryption:", chip.encryptionType, AppColors.textWhite),
                   _buildDetailRow(Provider.of<ObdState>(context, listen: false).isArabic ? "تردد الريموت:" : "RF Remote Frequency:", chip.frequency, AppColors.electricBlue),
                   _buildDetailRow(Provider.of<ObdState>(context, listen: false).isArabic ? "حالة الشريحة:" : "Chip Condition:", chip.isVirgin ? (Provider.of<ObdState>(context, listen: false).isArabic ? "فاضية / غير مبرمجة" : "Virgin / Unprogrammed") : (Provider.of<ObdState>(context, listen: false).isArabic ? "متعلمة على السيارة" : "Learned to Vehicle"), AppColors.textMuted),
 
-                  const SizedBox(height: 14),
-                  Text(Provider.of<ObdState>(context, listen: false).isArabic ? "بيانات ذاكرة EEPROM:" : "EEPROM Page Dump Data:", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.primaryYellow)),
-                  const SizedBox(height: 8),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF151B20),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppColors.cardBorder),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: chip.pageData.entries.map((entry) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 2),
-                          child: Row(
-                            children: [
-                              Text("${entry.key}: ", style: const TextStyle(fontFamily: 'monospace', fontSize: 11, color: AppColors.textMuted)),
-                              Text(entry.value, style: const TextStyle(fontFamily: 'monospace', fontSize: 11, color: AppColors.accentCyan, fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-
-                  const SizedBox(height: 14),
+const SizedBox(height: 14),
                   Text(Provider.of<ObdState>(context, listen: false).isArabic ? "المنصات الشائعة المدعومة:" : "Supported Common Platforms:", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.textWhite)),
                   const SizedBox(height: 6),
                   Wrap(
@@ -466,6 +446,54 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            margin: const EdgeInsets.only(bottom: 12),
+            decoration: BoxDecoration(
+              color: AppColors.warningOrange.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppColors.warningOrange),
+            ),
+            child: Text(
+              isAr
+                  ? "قياس تردد الريموت الفعلي يحتاج جهاز استقبال راديو (433/315/868MHz) - فيشة ELM327 لا تستقبل راديو. القائمة بالأسفل مرجع للترددات القياسية فقط."
+                  : "Measuring an actual remote frequency needs an RF receiver (433/315/868MHz) - an ELM327 adapter cannot receive radio. The list below is a standard-frequency reference only.",
+              style: const TextStyle(fontSize: 12, color: AppColors.warningOrange, fontWeight: FontWeight.w600),
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            margin: const EdgeInsets.only(bottom: 12),
+            decoration: BoxDecoration(
+              color: AppColors.warningOrange.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppColors.warningOrange),
+            ),
+            child: Text(
+              isAr
+                  ? "قياس تردد الريموت الفعلي يحتاج جهاز استقبال راديو (433/315/868MHz) - فيشة ELM327 لا تستقبل راديو. القائمة بالأسفل مرجع للترددات القياسية فقط."
+                  : "Measuring an actual remote frequency needs an RF receiver (433/315/868MHz) - an ELM327 adapter cannot receive radio. The list below is a standard-frequency reference only.",
+              style: const TextStyle(fontSize: 12, color: AppColors.warningOrange, fontWeight: FontWeight.w600),
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            margin: const EdgeInsets.only(bottom: 12),
+            decoration: BoxDecoration(
+              color: AppColors.warningOrange.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppColors.warningOrange),
+            ),
+            child: Text(
+              isAr
+                  ? "قياس تردد الريموت الفعلي يحتاج جهاز استقبال راديو (433/315/868MHz) - فيشة ELM327 لا تستقبل راديو. القائمة بالأسفل مرجع للترددات القياسية فقط."
+                  : "Measuring an actual remote frequency needs an RF receiver (433/315/868MHz) - an ELM327 adapter cannot receive radio. The list below is a standard-frequency reference only.",
+              style: const TextStyle(fontSize: 12, color: AppColors.warningOrange, fontWeight: FontWeight.w600),
+            ),
+          ),
           Container(
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
@@ -609,153 +637,41 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
     );
   }
 
-  // --- TAB 3: PIN Code Calculator ---
+  // --- TAB 3: PIN Code Calculator (REMOVED - honest notice) ---
   Widget _buildPinCalculatorTab(bool isAr) {
-    final system = _supportedSystems[_selectedSystemIndex];
-
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.cardSurface,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: AppColors.cardBorder),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: AppColors.cardSurface,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppColors.dangerRed),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                Text(
-                  Provider.of<ObdState>(context, listen: false).isArabic ? "اختر خوارزمية استخراج PIN الإيموبيلايزر:" : "Select Immobilizer PIN Extraction Algorithm:",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primaryYellow),
-                ),
-                const SizedBox(height: 8),
-                DropdownButtonFormField<int>(
-                  value: _selectedSystemIndex,
-                  dropdownColor: AppColors.cardSurface,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                const Icon(Icons.gpp_bad, color: AppColors.dangerRed, size: 26),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    isAr ? "حاسبة الـ PIN أزيلت" : "PIN calculator removed",
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.dangerRed),
                   ),
-                  items: List.generate(_supportedSystems.length, (i) {
-                    return DropdownMenuItem(
-                      value: i,
-                      child: Text(_supportedSystems[i].systemName, style: const TextStyle(fontSize: 12, color: AppColors.textWhite)),
-                    );
-                  }),
-                  onChanged: (val) {
-                    if (val != null) {
-                      setState(() {
-                        _selectedSystemIndex = val;
-                        _pinInputController.text = _supportedSystems[val].exampleInput;
-                        _calculatedPin = PinCodeCalculation.calculatePin(
-                          _supportedSystems[val].systemName,
-                          _pinInputController.text,
-                        );
-                      });
-                    }
-                  },
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  isAr ? system.descriptionAr : system.descriptionEn,
-                  style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                 ),
               ],
             ),
-          ),
-
-          const SizedBox(height: 16),
-
-          Card(
-            color: AppColors.cardSurface,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    system.inputHint,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.textWhite),
-                  ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _pinInputController,
-                    style: const TextStyle(color: AppColors.textWhite, fontFamily: 'monospace', fontWeight: FontWeight.bold),
-                    decoration: InputDecoration(
-                      hintText: system.exampleInput,
-                      hintStyle: const TextStyle(color: Colors.white24),
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryYellow,
-                      foregroundColor: Colors.black,
-                      minimumSize: const Size.fromHeight(44),
-                    ),
-                    icon: const Icon(Icons.lock_open),
-                    label: Text(isAr ? "استخراج وحساب كود الحماية PIN" : "Calculate Security PIN Code", style: const TextStyle(fontWeight: FontWeight.bold)),
-                    onPressed: () {
-                      setState(() {
-                        _calculatedPin = PinCodeCalculation.calculatePin(
-                          system.systemName,
-                          _pinInputController.text,
-                        );
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          if (_calculatedPin.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                color: const Color(0xFF1E262C),
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppColors.successGreen, width: 1.5),
-              ),
-              child: Column(
-                children: [
-                  Text(Provider.of<ObdState>(context, listen: false).isArabic ? "الـ PIN الأمني المحسوب للإيموبيلايزر:" : "Calculated Immobilizer Security PIN:", style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
-                  const SizedBox(height: 6),
-                  Text(
-                    _calculatedPin,
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 4,
-                      color: AppColors.successGreen,
-                      fontFamily: 'monospace',
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  OutlinedButton.icon(
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.successGreen,
-                      side: const BorderSide(color: AppColors.successGreen),
-                    ),
-                    icon: const Icon(Icons.copy, size: 16),
-                    label: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "نسخ الـ PIN" : "Copy PIN Code"),
-                    onPressed: () {
-                      Clipboard.setData(ClipboardData(text: _calculatedPin));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "تم نسخ الـ PIN!" : "PIN Code copied to clipboard!"), backgroundColor: AppColors.successGreen),
-                      );
-                    },
-                  ),
-                ],
-              ),
+            const SizedBox(height: 10),
+            Text(
+              isAr
+                  ? "الخوارزميات الرسمية لحساب كود الحماية من رقم الشاسيه ملكية وغير موثقة. النسخة السابقة كانت تعرض أرقامًا غير حقيقية، وإدخال كود خطأ في السيارة قد يقفل الإيموبيلايزر. لن نخمّن كود حماية أبدًا. استخدم أداة وكالة موثقة لهذه العملية."
+                  : "Official VIN-to-PIN algorithms are proprietary and undocumented. The previous version showed invented numbers, and entering a wrong PIN can lock the immobilizer. We will never guess a security PIN. Use a trusted dealer tool for this job.",
+              style: const TextStyle(fontSize: 13, color: AppColors.textWhite, height: 1.5),
             ),
           ],
-        ],
+        ),
       ),
     );
   }

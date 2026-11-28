@@ -188,17 +188,16 @@ class ExhaustAftertreatmentBundle {
     double? egtPreCatC,
     double? postCatEgtC,
   }) {
+    // No invented values: only sensor inputs actually read from the car are used.
+    // Anything not provided is reported as 0 (unknown), never estimated.
     final diffPressure = differentialPressureMbar ??
-        (diffPressureKpa != null
-            ? (diffPressureKpa * 10.0)
-            : (rpm > 0 ? (8.0 + (rpm / 350.0)).clamp(8.0, 45.0) : 0.0));
-    final sootGrams = diffPressure > 0
-        ? (diffPressure * 0.25).clamp(4.0, 48.0)
-        : (rpm > 0 ? (diffPressure * 0.95).clamp(6.0, 48.0) : 12.0);
-    final ashGrams = 14.5;
-    final egtPre = egtPreCatC ?? preCatEgtC ?? (rpm > 0 ? (180.0 + (coolantTempC * 1.5)).clamp(150.0, 680.0) : 25.0);
-    final egtPreDpf = rpm > 0 ? (egtPre * 1.05).clamp(160.0, 720.0) : 25.0;
-    final egtPost = postCatEgtC ?? (rpm > 0 ? (egtPreDpf * 0.92) : 25.0);
+        (diffPressureKpa != null ? (diffPressureKpa * 10.0) : 0.0);
+    final sootGrams =
+        diffPressure > 0 ? (diffPressure * 0.25).clamp(4.0, 48.0) : 0.0;
+    final ashGrams = 0.0;
+    final egtPre = egtPreCatC ?? preCatEgtC ?? 0.0;
+    final egtPreDpf = egtPre > 0 ? (egtPre * 1.05).clamp(160.0, 720.0) : 0.0;
+    final egtPost = postCatEgtC ?? (egtPreDpf > 0 ? egtPreDpf * 0.92 : 0.0);
 
     return ExhaustAftertreatmentBundle(
       dpfStatus: DpfSootAshStatus.evaluate(
@@ -211,14 +210,16 @@ class ExhaustAftertreatmentBundle {
         sensor2PreDpfC: double.parse(egtPreDpf.toStringAsFixed(1)),
         sensor3PostDpfC: double.parse(egtPost.toStringAsFixed(1)),
       ),
+      // SCR/AdBlue/NOx values are not readable over standard OBD-II:
+      // reported as unknown (0) instead of fabricated.
       scrStatus: const ScrAdBlueStatus(
-        tankLevelPercent: 78.0,
-        pumpPressureBar: 6.0,
-        defQualityConcentrationPercent: 32.5,
-        noxUpstreamPpm: 420.0,
-        noxDownstreamPpm: 45.0,
-        noxConversionEfficiencyPercent: 89.2,
-        isAdBlueSystemHealthy: true,
+        tankLevelPercent: 0.0,
+        pumpPressureBar: 0.0,
+        defQualityConcentrationPercent: 0.0,
+        noxUpstreamPpm: 0.0,
+        noxDownstreamPpm: 0.0,
+        noxConversionEfficiencyPercent: 0.0,
+        isAdBlueSystemHealthy: false,
       ),
     );
   }

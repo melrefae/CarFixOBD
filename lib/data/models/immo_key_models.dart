@@ -129,92 +129,9 @@ class PinCodeCalculation {
     required this.descriptionAr,
   });
 
-  static List<PinCodeCalculation> getSupportedSystems() {
-    return [
-      const PinCodeCalculation(
-        systemName: "PSA Peugeot / Citroën (4-Digit PIN)",
-        inputHint: "Enter 17-digit VIN or 4-byte BSI EEPROM Dump Hex",
-        exampleInput: "VF38E9HP0DM123456",
-        descriptionEn: "Extracts 4-character alpha-numeric security PIN required for Peugeot 301, 208, 508, Citroën C-Elysée.",
-        descriptionAr: "حساب كود الحماية الرباعي السري لسيارات بيجو 301 وسي إليزيه من رقم الشاسيه أو قراءة BSI.",
-      ),
-      const PinCodeCalculation(
-        systemName: "Nissan / Infiniti BCM (20-Digit to PIN)",
-        inputHint: "Enter 20-digit BCM Outcode from Diagnostic Session",
-        exampleInput: "B987F23E4510AB89CD21",
-        descriptionEn: "Converts 20-digit rolling BCM Outcode into 4-digit Incode for Nissan Sunny N17, Sentra B17, Qashqai.",
-        descriptionAr: "تحويل كود الخرج 20 رقماً إلى كود الدخول الرباعي لنيسان صني وقشقاي وسنترا.",
-      ),
-      const PinCodeCalculation(
-        systemName: "Hyundai / Kia (6-Digit VIN-to-PIN)",
-        inputHint: "Enter 17-digit Chassis VIN (or last 6 digits)",
-        exampleInput: "KMHCT41CBFU123456",
-        descriptionEn: "Calculates official 6-digit dealer immobilizer PIN for smart keys & transponders (pre-2007 & post-2007).",
-        descriptionAr: "استخراج كود الإيموبليزر السداسي الرسمي لهيونداي وكيا من رقم الشاسيه لبرمجة المفاتيح.",
-      ),
-      const PinCodeCalculation(
-        systemName: "Renault ISK / Incode Calculator",
-        inputHint: "Enter 8-digit ISK Hex or Outcode",
-        exampleInput: "A4B1C2D3",
-        descriptionEn: "Derives 4-digit Renault programming PIN from ISK for Logan, Sandero, Stepway, Duster, Megane.",
-        descriptionAr: "توليد كود برمجة رينو لوجان وداستر وستيب واي من كود ISK أو Outcode.",
-      ),
-      const PinCodeCalculation(
-        systemName: "VAG Group 5-Digit Secret Key (SKC)",
-        inputHint: "Enter 14-digit Cluster / IMMO ID (e.g. VWZ...)",
-        exampleInput: "VWZ7Z0E1234567",
-        descriptionEn: "Calculates 5-digit Secret Key Code (SKC) for VW Golf 5/6, Skoda Octavia A5, Passat B6 cluster access.",
-        descriptionAr: "استخراج كود الدخول السري الخماسي (SKC) لطبلونات فولكس فاجن وسكودا أوكتافيا وباسات.",
-      ),
-    ];
-  }
-
-  static String calculatePin(String systemName, String input) {
-    final clean = input.replaceAll(' ', '').toUpperCase();
-    if (clean.isEmpty) return "INVALID";
-
-    if (systemName.contains("PSA")) {
-      // Deterministic 4-char hash for PSA
-      final chars = "0123456789ABCDEFGHJKLMNPRSTUVWXYZ";
-      int hash = 0;
-      for (int i = 0; i < clean.length; i++) {
-        hash = (hash * 31 + clean.codeUnitAt(i)) & 0xFFFFFF;
-      }
-      final c1 = chars[(hash >> 18) % chars.length];
-      final c2 = chars[(hash >> 12) % chars.length];
-      final c3 = chars[(hash >> 6) % chars.length];
-      final c4 = chars[hash % chars.length];
-      return "$c1$c2$c3$c4";
-    } else if (systemName.contains("Nissan")) {
-      // Nissan 4-digit pin from 20-digit rolling outcode
-      int val = 0;
-      for (int i = 0; i < clean.length; i++) {
-        val = (val * 17 + clean.codeUnitAt(i)) % 9000;
-      }
-      return (1000 + val).toString().padLeft(4, '0');
-    } else if (systemName.contains("Hyundai")) {
-      // Hyundai/Kia 6-digit pin
-      int val = 0;
-      for (int i = 0; i < clean.length; i++) {
-        val = (val * 37 + clean.codeUnitAt(i)) % 900000;
-      }
-      return (100000 + val).toString().padLeft(6, '0');
-    } else if (systemName.contains("Renault")) {
-      // Renault 4-digit PIN
-      int val = 0;
-      for (int i = 0; i < clean.length; i++) {
-        val = (val * 23 + clean.codeUnitAt(i)) % 9000;
-      }
-      return (1000 + val).toString().padLeft(4, '0');
-    } else {
-      // VAG 5-digit SKC
-      int val = 0;
-      for (int i = 0; i < clean.length; i++) {
-        val = (val * 19 + clean.codeUnitAt(i)) % 90000;
-      }
-      return (10000 + val).toString().padLeft(5, '0');
-    }
-  }
+  // Fabricated VIN-to-PIN calculation removed: the official algorithms are
+  // proprietary, and a guessed PIN can lock a car's immobilizer.
+  static List<PinCodeCalculation> getSupportedSystems() => const [];
 }
 
 /// Guided Step for Key Learning Wizard

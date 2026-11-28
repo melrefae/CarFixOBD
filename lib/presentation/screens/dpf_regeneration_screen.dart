@@ -19,7 +19,6 @@ class DpfRegenerationScreen extends StatefulWidget {
 }
 
 class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
-  late ExhaustAftertreatmentBundle _bundle;
 
   // Regeneration wizard state
   bool _isRegenRunning = false;
@@ -37,7 +36,6 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
   void initState() {
     super.initState();
     // Neutral placeholder: soot mass / ash / SCR values are NOT available over standard OBD and are not shown.
-    _bundle = ExhaustAftertreatmentBundle.fromLiveTelemetry(coolantTempC: 25.0, rpm: 0.0);
   }
 
   @override
