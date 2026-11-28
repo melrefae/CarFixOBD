@@ -63,8 +63,8 @@ class _CloudBackupScreenState extends State<CloudBackupScreen> {
       await _loadBackupSummary();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Backup archive generated and shared successfully! 💾"),
+          SnackBar(
+            content: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "تم إنشاء ومشاركة أرشيف النسخة الاحتياطية بنجاح! 💾" : "Backup archive generated and shared successfully! 💾"),
             backgroundColor: AppColors.successGreen,
           ),
         );
@@ -73,7 +73,7 @@ class _CloudBackupScreenState extends State<CloudBackupScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Failed to export backup: $e"),
+            content: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "فشل تصدير النسخة الاحتياطية: $e" : "Failed to export backup: $e"),
             backgroundColor: AppColors.dangerRed,
           ),
         );
@@ -158,7 +158,7 @@ class _CloudBackupScreenState extends State<CloudBackupScreen> {
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text("Failed to parse backup package: $e"),
+                      content: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "فشل قراءة حزمة النسخة الاحتياطية: $e" : "Failed to parse backup package: $e"),
                       backgroundColor: AppColors.dangerRed,
                     ),
                   );
@@ -401,11 +401,12 @@ class _CloudBackupScreenState extends State<CloudBackupScreen> {
 
                       SizedBox(
                         width: double.infinity,
-                        height: 46,
                         child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.accentBlue,
                             foregroundColor: Colors.white,
+                            minimumSize: const Size.fromHeight(52),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           ),
                           icon: _isSyncing

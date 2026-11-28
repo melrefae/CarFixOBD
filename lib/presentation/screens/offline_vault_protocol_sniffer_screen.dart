@@ -370,17 +370,17 @@ class _OfflineVaultProtocolSnifferScreenState
                         value: null,
                         child: Text(isArabic ? "كل الكنترولات" : "All ECUs", style: const TextStyle(fontSize: 12)),
                       ),
-                      const DropdownMenuItem<String?>(
+                      DropdownMenuItem<String?>(
                         value: "Engine",
-                        child: Text("Engine (0x7E8)", style: TextStyle(fontSize: 12)),
+                        child: Text(isArabic ? "المحرك (0x7E8)" : "Engine (0x7E8)", style: const TextStyle(fontSize: 12)),
                       ),
-                      const DropdownMenuItem<String?>(
+                      DropdownMenuItem<String?>(
                         value: "Transmission",
-                        child: Text("Transmission (0x7E9)", style: TextStyle(fontSize: 12)),
+                        child: Text(isArabic ? "الفتيس (0x7E9)" : "Transmission (0x7E9)", style: const TextStyle(fontSize: 12)),
                       ),
-                      const DropdownMenuItem<String?>(
+                      DropdownMenuItem<String?>(
                         value: "ABS",
-                        child: Text("ABS / ESC (0x7EA)", style: TextStyle(fontSize: 12)),
+                        child: Text(isArabic ? "الفرامل والثبات ABS / ESC (0x7EA)" : "ABS / ESC (0x7EA)", style: const TextStyle(fontSize: 12)),
                       ),
                     ],
                     onChanged: (val) {

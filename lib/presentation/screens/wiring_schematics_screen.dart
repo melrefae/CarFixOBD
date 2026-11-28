@@ -55,8 +55,8 @@ class _WiringSchematicsScreenState extends State<WiringSchematicsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Select OEM Circuit Schematic:",
+                  Text(
+                    Provider.of<ObdState>(context, listen: false).isArabic ? "اختر مخطط الدائرة الأصلي:" : "Select OEM Circuit Schematic:",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primaryYellow),
                   ),
                   const SizedBox(height: 8),
@@ -229,11 +229,11 @@ class _WiringSchematicsScreenState extends State<WiringSchematicsScreen> {
 
             // SECTION 2: ECU Multimeter Probe Test Guide
             Row(
-              children: const [
+              children: [
                 Icon(Icons.precision_manufacturing, size: 18, color: AppColors.accentCyan),
                 SizedBox(width: 8),
                 Text(
-                  "ECU Pinout Multimeter Probe Guide",
+                  Provider.of<ObdState>(context, listen: false).isArabic ? "دليل فحص أطراف الكنترول بالمالتيميتر" : "ECU Pinout Multimeter Probe Guide",
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.accentCyan),
                 ),
               ],

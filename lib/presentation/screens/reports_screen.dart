@@ -141,7 +141,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             ),
             const SizedBox(height: 6),
             Text(AppLocalizations.of(context).reportCustomerLine(report.customerName, report.customerPhone), style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
-            Text("VIN: ${report.vin}", style: const TextStyle(fontSize: 11, color: AppColors.textDisabled, fontFamily: 'monospace')),
+            Text(AppLocalizations.of(context).reportVinLine(report.vin), style: const TextStyle(fontSize: 11, color: AppColors.textDisabled, fontFamily: 'monospace')),
             Text(AppLocalizations.of(context).reportDateLine(dateStr), style: const TextStyle(fontSize: 10, color: AppColors.textDisabled)),
 
             const SizedBox(height: 8),

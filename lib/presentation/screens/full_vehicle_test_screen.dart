@@ -289,7 +289,7 @@ class _FullVehicleTestScreenState extends State<FullVehicleTestScreen> {
                   ),
                 ),
                 Text(
-                  "Stage ${state.fullTestCurrentStage}/10",
+                  Provider.of<ObdState>(context, listen: false).isArabic ? "المرحلة ${state.fullTestCurrentStage}/10" : "Stage ${state.fullTestCurrentStage}/10",
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
@@ -424,7 +424,7 @@ class _FullVehicleTestScreenState extends State<FullVehicleTestScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "VIN: ${result.vin} • Voltage: ${result.batteryVoltage.toStringAsFixed(1)}V",
+                        Provider.of<ObdState>(context, listen: false).isArabic ? "VIN: ${result.vin} • الجهد: ${result.batteryVoltage.toStringAsFixed(1)} فولت" : "VIN: ${result.vin} • Voltage: ${result.batteryVoltage.toStringAsFixed(1)}V",
                         style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                       ),
                     ],

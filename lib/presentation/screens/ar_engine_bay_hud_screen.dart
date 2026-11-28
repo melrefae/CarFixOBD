@@ -376,7 +376,7 @@ class _ArEngineBayHudScreenState extends State<ArEngineBayHudScreen>
                               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primaryYellow),
                             ),
                             Text(
-                              "PID: 0x${comp.livePidCode} | Category: ${comp.category.name.toUpperCase()}",
+                              Provider.of<ObdState>(context, listen: false).isArabic ? "PID: 0x${comp.livePidCode} | الفئة: ${comp.category.name.toUpperCase()}" : "PID: 0x${comp.livePidCode} | Category: ${comp.category.name.toUpperCase()}",
                               style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
                             ),
                           ],

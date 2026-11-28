@@ -160,8 +160,8 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Emergency Abort: Forced regeneration canceled safely."),
+      SnackBar(
+        content: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "إيقاف طارئ: تم إلغاء التجديد الإجباري بأمان." : "Emergency Abort: Forced regeneration canceled safely."),
         backgroundColor: AppColors.dangerRed,
       ),
     );
@@ -177,11 +177,11 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
         backgroundColor: AppColors.cardSurface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Row(
-          children: const [
+          children: [
             Icon(Icons.check_circle, color: AppColors.successGreen, size: 28),
             SizedBox(width: 8),
             Text(
-              "Regeneration request completed",
+              Provider.of<ObdState>(context, listen: false).isArabic ? "اكتمل طلب التجديد" : "Regeneration request completed",
               style: TextStyle(color: AppColors.textWhite, fontWeight: FontWeight.bold, fontSize: 16),
             ),
           ],
@@ -196,7 +196,7 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryYellow),
             onPressed: () => Navigator.pop(ctx),
-            child: const Text("OK", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+            child: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "حسناً" : "OK", style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -361,11 +361,11 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                children: const [
+                children: [
                   Icon(Icons.filter_list_alt, color: AppColors.primaryYellow, size: 20),
                   SizedBox(width: 8),
                   Text(
-                    "DPF Soot & Ash Saturation",
+                    Provider.of<ObdState>(context, listen: false).isArabic ? "تشبع الفلتر بالسخام والرماد" : "DPF Soot & Ash Saturation",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
                   ),
                 ],
@@ -445,11 +445,11 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                children: const [
+                children: [
                   Icon(Icons.thermostat, color: AppColors.accentCyan, size: 20),
                   SizedBox(width: 8),
                   Text(
-                    "Exhaust Gas Temperature (EGT) Bank",
+                    Provider.of<ObdState>(context, listen: false).isArabic ? "حرارة العادم (EGT) للبنك" : "Exhaust Gas Temperature (EGT) Bank",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
                   ),
                 ],
@@ -533,11 +533,11 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: const [
+            children: [
               Icon(Icons.autorenew, color: AppColors.warningOrange, size: 20),
               SizedBox(width: 8),
               Text(
-                "Stationary Forced Regeneration Wizard",
+                Provider.of<ObdState>(context, listen: false).isArabic ? "معالج التجديد الإجباري الثابت" : "Stationary Forced Regeneration Wizard",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
               ),
             ],
@@ -553,8 +553,8 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
 
           // Interlocks checklist (collapsible or displayed when idle)
           if (!_isRegenRunning) ...[
-            const Text(
-              "Pre-Regeneration Safety Interlocks:",
+            Text(
+              Provider.of<ObdState>(context, listen: false).isArabic ? "إجراءات الأمان قبل التجديد:" : "Pre-Regeneration Safety Interlocks:",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.textWhite),
             ),
             const SizedBox(height: 6),
@@ -581,7 +581,7 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "PHASE ${_currentPhaseIndex + 1} OF ${phases.length}",
+                        Provider.of<ObdState>(context, listen: false).isArabic ? "المرحلة ${_currentPhaseIndex + 1} من ${phases.length}" : "PHASE ${_currentPhaseIndex + 1} OF ${phases.length}",
                         style: const TextStyle(color: AppColors.warningOrange, fontWeight: FontWeight.bold, fontSize: 12),
                       ),
                       Text(
@@ -598,9 +598,9 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      Text("Target: ${phases[_currentPhaseIndex].targetRpm} RPM", style: const TextStyle(fontSize: 11, color: AppColors.accentCyan)),
+                      Text(Provider.of<ObdState>(context, listen: false).isArabic ? "المستهدف: ${phases[_currentPhaseIndex].targetRpm} RPM" : "Target: ${phases[_currentPhaseIndex].targetRpm} RPM", style: const TextStyle(fontSize: 11, color: AppColors.accentCyan)),
                       const SizedBox(width: 12),
-                      Text("Target Temp: ${phases[_currentPhaseIndex].targetDpfTempC}°C", style: const TextStyle(fontSize: 11, color: AppColors.warningOrange)),
+                      Text(Provider.of<ObdState>(context, listen: false).isArabic ? "الحرارة المستهدفة: ${phases[_currentPhaseIndex].targetDpfTempC}°C" : "Target Temp: ${phases[_currentPhaseIndex].targetDpfTempC}°C", style: const TextStyle(fontSize: 11, color: AppColors.warningOrange)),
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -701,11 +701,11 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                children: const [
+                children: [
                   Icon(Icons.opacity, color: AppColors.accentCyan, size: 20),
                   SizedBox(width: 8),
                   Text(
-                    "SCR AdBlue / DEF Injection Diagnostics",
+                    Provider.of<ObdState>(context, listen: false).isArabic ? "تشخيص حقن الأدبلو SCR / DEF" : "SCR AdBlue / DEF Injection Diagnostics",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
                   ),
                 ],
@@ -768,7 +768,7 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Upstream NOx (Engine Raw)", style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
+                    Text(Provider.of<ObdState>(context, listen: false).isArabic ? "NOx قبل المعالجة (خام المحرك)" : "Upstream NOx (Engine Raw)", style: const TextStyle(fontSize: 11, color: AppColors.textMuted)),
                     const SizedBox(height: 2),
                     Text("${scr.noxUpstreamPpm.toStringAsFixed(0)} ppm", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.warningOrange)),
                   ],
@@ -777,7 +777,7 @@ class _DpfRegenerationScreenState extends State<DpfRegenerationScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const Text("Downstream NOx (Post-SCR)", style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
+                    Text(Provider.of<ObdState>(context, listen: false).isArabic ? "NOx بعد المعالجة (خلف SCR)" : "Downstream NOx (Post-SCR)", style: const TextStyle(fontSize: 11, color: AppColors.textMuted)),
                     const SizedBox(height: 2),
                     Text("${scr.noxDownstreamPpm.toStringAsFixed(0)} ppm", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.successGreen)),
                   ],

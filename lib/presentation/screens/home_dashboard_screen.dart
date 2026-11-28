@@ -500,8 +500,8 @@ class HomeDashboardScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(6),
                           border: Border.all(color: AppColors.successGreen.withOpacity(0.5)),
                         ),
-                        child: const Text(
-                          "AUTO-DETECTED",
+                        child: Text(
+                          Provider.of<ObdState>(context, listen: false).isArabic ? "تم الكشف تلقائياً" : "AUTO-DETECTED",
                           style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: AppColors.successGreen),
                         ),
                       ),

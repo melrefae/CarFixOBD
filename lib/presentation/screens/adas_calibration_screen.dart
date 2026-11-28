@@ -211,8 +211,8 @@ class _AdasCalibrationScreenState extends State<AdasCalibrationScreen> with Sing
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Select ADAS Sensor & Vehicle Platform:",
+                Text(
+                  Provider.of<ObdState>(context, listen: false).isArabic ? "اختر حساس ADAS ومنصة السيارة:" : "Select ADAS Sensor & Vehicle Platform:",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primaryYellow),
                 ),
                 const SizedBox(height: 8),
@@ -308,13 +308,13 @@ class _AdasCalibrationScreenState extends State<AdasCalibrationScreen> with Sing
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Required Target Pattern:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.primaryYellow)),
+                  Text(Provider.of<ObdState>(context, listen: false).isArabic ? "نمط اللوحة المطلوب:" : "Required Target Pattern:", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.primaryYellow)),
                   const SizedBox(height: 4),
                   Text(preset.targetPatternType, style: const TextStyle(fontSize: 13, color: AppColors.textWhite, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 12),
                   const Divider(color: AppColors.cardBorder),
                   const SizedBox(height: 6),
-                  const Text("Workshop Placement Instructions:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.textWhite)),
+                  Text(Provider.of<ObdState>(context, listen: false).isArabic ? "تعليمات التثبيت في الورشة:" : "Workshop Placement Instructions:", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.textWhite)),
                   const SizedBox(height: 4),
                   Text(
                     isAr ? preset.notesAr : preset.notesEn,
@@ -527,7 +527,7 @@ class _AdasCalibrationScreenState extends State<AdasCalibrationScreen> with Sing
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
                     ),
                     Text(
-                      "Step ${_currentStepIndex + 1} of ${_roadSteps.length}",
+                      Provider.of<ObdState>(context, listen: false).isArabic ? "الخطوة ${_currentStepIndex + 1} من ${_roadSteps.length}" : "Step ${_currentStepIndex + 1} of ${_roadSteps.length}",
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: AppColors.primaryYellow),
                     ),
                   ],
@@ -604,7 +604,7 @@ class _AdasCalibrationScreenState extends State<AdasCalibrationScreen> with Sing
                         if (step.targetSpeedKmH > 0) ...[
                           const SizedBox(height: 6),
                           Text(
-                            "Target Vehicle Speed: ${step.targetSpeedKmH} km/h steady",
+                            Provider.of<ObdState>(context, listen: false).isArabic ? "السرعة المستهدفة: ${step.targetSpeedKmH} كم/س ثابتة" : "Target Vehicle Speed: ${step.targetSpeedKmH} km/h steady",
                             style: const TextStyle(fontSize: 10, color: AppColors.electricBlue, fontWeight: FontWeight.w600),
                           ),
                         ],

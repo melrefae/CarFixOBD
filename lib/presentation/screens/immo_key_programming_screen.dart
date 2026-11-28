@@ -172,7 +172,7 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text("RF Key Receiver tuned to $freq. Ready to detect incoming key fob carrier transmissions."),
+        content: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "تم ضبط مستقبل الريموت على $freq. جاهز لالتقاط إشارات الريموت." : "RF Key Receiver tuned to $freq. Ready to detect incoming key fob carrier transmissions."),
         duration: const Duration(milliseconds: 1500),
         backgroundColor: AppColors.electricBlue,
       ),
@@ -230,7 +230,7 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
     if (!stepResult.isPositive) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Step not accepted by the ECU. Reply: ${stepResult.raw}"),
+          content: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "الكونترول لم يقبل الخطوة. الرد: ${stepResult.raw}" : "Step not accepted by the ECU. Reply: ${stepResult.raw}"),
           backgroundColor: AppColors.dangerRed,
         ),
       );
@@ -406,13 +406,13 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
                     ],
                   ),
                   const SizedBox(height: 14),
-                  _buildDetailRow("Transponder Key ID:", chip.keyIdHex, AppColors.primaryYellow),
-                  _buildDetailRow("Crypto / Encryption:", chip.encryptionType, AppColors.textWhite),
-                  _buildDetailRow("RF Remote Frequency:", chip.frequency, AppColors.electricBlue),
-                  _buildDetailRow("Chip Condition:", chip.isVirgin ? "Virgin / Unprogrammed" : "Learned to Vehicle", AppColors.textMuted),
+                  _buildDetailRow(Provider.of<ObdState>(context, listen: false).isArabic ? "معرّف شريحة المفتاح:" : "Transponder Key ID:", chip.keyIdHex, AppColors.primaryYellow),
+                  _buildDetailRow(Provider.of<ObdState>(context, listen: false).isArabic ? "التشفير:" : "Crypto / Encryption:", chip.encryptionType, AppColors.textWhite),
+                  _buildDetailRow(Provider.of<ObdState>(context, listen: false).isArabic ? "تردد الريموت:" : "RF Remote Frequency:", chip.frequency, AppColors.electricBlue),
+                  _buildDetailRow(Provider.of<ObdState>(context, listen: false).isArabic ? "حالة الشريحة:" : "Chip Condition:", chip.isVirgin ? (Provider.of<ObdState>(context, listen: false).isArabic ? "فاضية / غير مبرمجة" : "Virgin / Unprogrammed") : (Provider.of<ObdState>(context, listen: false).isArabic ? "متعلمة على السيارة" : "Learned to Vehicle"), AppColors.textMuted),
 
                   const SizedBox(height: 14),
-                  const Text("EEPROM Page Dump Data:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.primaryYellow)),
+                  Text(Provider.of<ObdState>(context, listen: false).isArabic ? "بيانات ذاكرة EEPROM:" : "EEPROM Page Dump Data:", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.primaryYellow)),
                   const SizedBox(height: 8),
                   Container(
                     padding: const EdgeInsets.all(10),
@@ -438,7 +438,7 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
                   ),
 
                   const SizedBox(height: 14),
-                  const Text("Supported Common Platforms:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.textWhite)),
+                  Text(Provider.of<ObdState>(context, listen: false).isArabic ? "المنصات الشائعة المدعومة:" : "Supported Common Platforms:", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.textWhite)),
                   const SizedBox(height: 6),
                   Wrap(
                     spacing: 6,
@@ -509,7 +509,7 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "Modulation: $_activeModulation • Signal: ${_rssiStrength.toStringAsFixed(1)} dBm",
+                        Provider.of<ObdState>(context, listen: false).isArabic ? "التضمين: $_activeModulation • الإشارة: ${_rssiStrength.toStringAsFixed(1)} dBm" : "Modulation: $_activeModulation • Signal: ${_rssiStrength.toStringAsFixed(1)} dBm",
                         style: const TextStyle(fontSize: 12, color: AppColors.accentCyan),
                       ),
                       const SizedBox(height: 12),
@@ -521,7 +521,7 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        "Last RF Frame: $_lastRfPacket",
+                        Provider.of<ObdState>(context, listen: false).isArabic ? "آخر إشارة راديو: $_lastRfPacket" : "Last RF Frame: $_lastRfPacket",
                         style: const TextStyle(fontFamily: 'monospace', fontSize: 11, color: AppColors.textMuted),
                       ),
                     ],
@@ -533,8 +533,8 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
 
           const SizedBox(height: 16),
 
-          const Text(
-            "Select RF Receiver Monitoring Band:",
+          Text(
+            Provider.of<ObdState>(context, listen: false).isArabic ? "اختر نطاق مراقبة مستقبل الريموت:" : "Select RF Receiver Monitoring Band:",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primaryYellow),
           ),
           const SizedBox(height: 10),
@@ -595,11 +595,11 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Egypt & Global Standard Frequencies:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.textWhite)),
+                  Text(Provider.of<ObdState>(context, listen: false).isArabic ? "الترددات القياسية في مصر والعالم:" : "Egypt & Global Standard Frequencies:", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.textWhite)),
                   const SizedBox(height: 6),
-                  _buildFreqInfoRow("433.92 MHz", "Official European, Egyptian & Middle East Standard"),
-                  _buildFreqInfoRow("315.00 MHz", "US Market Import Vehicles (Ford, GM, US Toyota)"),
-                  _buildFreqInfoRow("868.35 MHz", "High-Security Smart Key Fobs (BMW, VAG Keyless)"),
+                  _buildFreqInfoRow("433.92 MHz", Provider.of<ObdState>(context, listen: false).isArabic ? "المعتمد الأوروبي والمصري والشرق أوسطي" : "Official European, Egyptian & Middle East Standard"),
+                  _buildFreqInfoRow("315.00 MHz", Provider.of<ObdState>(context, listen: false).isArabic ? "سيارات السوق الأمريكي المستوردة (فورد، GM، تويوتا أمريكا)" : "US Market Import Vehicles (Ford, GM, US Toyota)"),
+                  _buildFreqInfoRow("868.35 MHz", Provider.of<ObdState>(context, listen: false).isArabic ? "مفاتيح ذكية عالية الأمان (BMW، VAG بدون مفتاح)" : "High-Security Smart Key Fobs (BMW, VAG Keyless)"),
                 ],
               ),
             ),
@@ -628,8 +628,8 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Select Immobilizer PIN Extraction Algorithm:",
+                Text(
+                  Provider.of<ObdState>(context, listen: false).isArabic ? "اختر خوارزمية استخراج PIN الإيموبيلايزر:" : "Select Immobilizer PIN Extraction Algorithm:",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primaryYellow),
                 ),
                 const SizedBox(height: 8),
@@ -724,7 +724,7 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
               ),
               child: Column(
                 children: [
-                  const Text("Calculated Immobilizer Security PIN:", style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
+                  Text(Provider.of<ObdState>(context, listen: false).isArabic ? "الـ PIN الأمني المحسوب للإيموبيلايزر:" : "Calculated Immobilizer Security PIN:", style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
                   const SizedBox(height: 6),
                   Text(
                     _calculatedPin,
@@ -743,11 +743,11 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
                       side: const BorderSide(color: AppColors.successGreen),
                     ),
                     icon: const Icon(Icons.copy, size: 16),
-                    label: const Text("Copy PIN Code"),
+                    label: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "نسخ الـ PIN" : "Copy PIN Code"),
                     onPressed: () {
                       Clipboard.setData(ClipboardData(text: _calculatedPin));
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("PIN Code copied to clipboard!"), backgroundColor: AppColors.successGreen),
+                        SnackBar(content: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "تم نسخ الـ PIN!" : "PIN Code copied to clipboard!"), backgroundColor: AppColors.successGreen),
                       );
                     },
                   ),
@@ -787,7 +787,7 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textWhite),
                     ),
                     Text(
-                      "Step ${_currentStepIndex + 1} of ${_learningSteps.length}",
+                      Provider.of<ObdState>(context, listen: false).isArabic ? "الخطوة ${_currentStepIndex + 1} من ${_learningSteps.length}" : "Step ${_currentStepIndex + 1} of ${_learningSteps.length}",
                       style: const TextStyle(color: AppColors.primaryYellow, fontWeight: FontWeight.bold, fontSize: 12),
                     ),
                   ],
@@ -864,7 +864,7 @@ class _ImmoKeyProgrammingScreenState extends State<ImmoKeyProgrammingScreen> wit
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          "UDS Command: ${step.commandHex}",
+                          Provider.of<ObdState>(context, listen: false).isArabic ? "أمر UDS: ${step.commandHex}" : "UDS Command: ${step.commandHex}",
                           style: const TextStyle(fontFamily: 'monospace', fontSize: 10, color: AppColors.electricBlue),
                         ),
                       ],

@@ -2779,4 +2779,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get copRepBulletin => 'Egyptian Workshop Bulletin:';
+
+  @override
+  String reportVinLine(String vin) {
+    return 'VIN: $vin';
+  }
+
+  @override
+  String get vatLabel => 'VAT';
 }

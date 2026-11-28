@@ -146,7 +146,7 @@ class _UsedCarAuditScreenState extends State<UsedCarAuditScreen> with SingleTick
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error sharing PDF: $e"), backgroundColor: AppColors.dangerRed),
+          SnackBar(content: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "خطأ في مشاركة PDF: $e" : "Error sharing PDF: $e"), backgroundColor: AppColors.dangerRed),
         );
       }
     }
@@ -164,7 +164,7 @@ class _UsedCarAuditScreenState extends State<UsedCarAuditScreen> with SingleTick
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error printing report: $e"), backgroundColor: AppColors.dangerRed),
+          SnackBar(content: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "خطأ في طباعة التقرير: $e" : "Error printing report: $e"), backgroundColor: AppColors.dangerRed),
         );
       }
     }
@@ -855,7 +855,7 @@ class _UsedCarAuditScreenState extends State<UsedCarAuditScreen> with SingleTick
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "VIN: ${card.vinAudit.registeredVin} • Hash: ${card.verificationHash}",
+                        Provider.of<ObdState>(context, listen: false).isArabic ? "VIN: ${card.vinAudit.registeredVin} • البصمة: ${card.verificationHash}" : "VIN: ${card.vinAudit.registeredVin} • Hash: ${card.verificationHash}",
                         style: TextStyle(
                           fontSize: 10,
                           color: isLight ? AppColors.lightTextSecondary : AppColors.textMuted,

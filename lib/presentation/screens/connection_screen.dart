@@ -883,7 +883,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                           );
                           if (ok && mounted) Navigator.pop(context);
                         },
-                  child: const Text("Connect", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                  child: Text(AppLocalizations.of(context).connect, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
                 ),
               ),
             );
@@ -914,7 +914,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                       final ok = await state.connectBle(target, deviceName: target);
                       if (ok && mounted) Navigator.pop(context);
                     },
-              child: const Text("Connect"),
+              child: Text(AppLocalizations.of(context).connect),
             ),
           ],
         ),
@@ -1036,7 +1036,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                           );
                           if (ok && mounted) Navigator.pop(context);
                         },
-                  child: const Text("Connect", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                  child: Text(AppLocalizations.of(context).connect, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
                 ),
               ),
             );

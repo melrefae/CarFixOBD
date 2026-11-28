@@ -815,5 +815,7 @@
   "copRepEvidence": "الأدلة الرئيسية:",
   "copRepRoadmap": "خارطة عمل الفني:",
   "copRepAction": "الإجراء: {a}",
-  "copRepBulletin": "نشرة الورشة المصرية:"
+  "copRepBulletin": "نشرة الورشة المصرية:",
+  "reportVinLine": "رقم الشاسيه (VIN): {vin}",
+  "vatLabel": "الضريبة"
 }

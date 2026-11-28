@@ -268,16 +268,16 @@ class _LabScopeWaveformScreenState extends State<LabScopeWaveformScreen> with Si
                         children: [
                           Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFFFFD54F), shape: BoxShape.circle)),
                           const SizedBox(width: 4),
-                          const Text("CH A: CKP (60-2)", style: TextStyle(fontSize: 10, color: Color(0xFFFFD54F), fontWeight: FontWeight.bold)),
+                          Text(Provider.of<ObdState>(context, listen: false).isArabic ? "القناة A: حساس الكرنك (60-2)" : "CH A: CKP (60-2)", style: const TextStyle(fontSize: 10, color: Color(0xFFFFD54F), fontWeight: FontWeight.bold)),
                           const SizedBox(width: 10),
                           Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF00E5FF), shape: BoxShape.circle)),
                           const SizedBox(width: 4),
-                          const Text("CH B: CMP Hall", style: TextStyle(fontSize: 10, color: Color(0xFF00E5FF), fontWeight: FontWeight.bold)),
+                          Text(Provider.of<ObdState>(context, listen: false).isArabic ? "القناة B: حساس الكامة Hall" : "CH B: CMP Hall", style: const TextStyle(fontSize: 10, color: Color(0xFF00E5FF), fontWeight: FontWeight.bold)),
                         ],
                       ),
                       Row(
                         children: [
-                          const Text("OEM Golden Overlay", style: TextStyle(fontSize: 10, color: AppColors.textMuted)),
+                          Text(Provider.of<ObdState>(context, listen: false).isArabic ? "المرجع الأصلي (OEM)" : "OEM Golden Overlay", style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
                           Switch(
                             value: _showGoldenOverlay,
                             activeColor: AppColors.primaryYellow,
@@ -322,9 +322,9 @@ class _LabScopeWaveformScreenState extends State<LabScopeWaveformScreen> with Si
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text("Δt: ${_cursors.deltaTimeMs.toStringAsFixed(1)} ms", style: const TextStyle(fontSize: 10, color: AppColors.primaryYellow, fontFamily: 'monospace')),
-                        Text("Freq: ${_cursors.frequencyHz.toStringAsFixed(1)} Hz", style: const TextStyle(fontSize: 10, color: AppColors.accentCyan, fontFamily: 'monospace')),
-                        Text("TB: ${_timebaseMs.toStringAsFixed(0)}ms (A:${_chAVoltsPerDiv.toStringAsFixed(0)}V B:${_chBVoltsPerDiv.toStringAsFixed(0)}V)", style: const TextStyle(fontSize: 10, color: AppColors.textMuted, fontFamily: 'monospace')),
-                        Text("Phase Offset: ${_chainAnalysis.measuredPhaseOffsetDeg.toStringAsFixed(1)}°", style: TextStyle(fontSize: 10, color: statusColor, fontWeight: FontWeight.bold, fontFamily: 'monospace')),
+                        Text(Provider.of<ObdState>(context, listen: false).isArabic ? "التردد: ${_cursors.frequencyHz.toStringAsFixed(1)} Hz" : "Freq: ${_cursors.frequencyHz.toStringAsFixed(1)} Hz", style: const TextStyle(fontSize: 10, color: AppColors.accentCyan, fontFamily: 'monospace')),
+                        Text(Provider.of<ObdState>(context, listen: false).isArabic ? "قاعدة الزمن: ${_timebaseMs.toStringAsFixed(0)}ms (A:${_chAVoltsPerDiv.toStringAsFixed(0)}V B:${_chBVoltsPerDiv.toStringAsFixed(0)}V)" : "TB: ${_timebaseMs.toStringAsFixed(0)}ms (A:${_chAVoltsPerDiv.toStringAsFixed(0)}V B:${_chBVoltsPerDiv.toStringAsFixed(0)}V)", style: const TextStyle(fontSize: 10, color: AppColors.textMuted, fontFamily: 'monospace')),
+                        Text(Provider.of<ObdState>(context, listen: false).isArabic ? "إزاحة الطور: ${_chainAnalysis.measuredPhaseOffsetDeg.toStringAsFixed(1)}°" : "Phase Offset: ${_chainAnalysis.measuredPhaseOffsetDeg.toStringAsFixed(1)}°", style: TextStyle(fontSize: 10, color: statusColor, fontWeight: FontWeight.bold, fontFamily: 'monospace')),
                       ],
                     ),
                   ),

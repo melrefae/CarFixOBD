@@ -256,7 +256,7 @@ class _SgwAssistantScreenState extends State<SgwAssistantScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      "Type: ${_selectedGuide.sgwType} • Years: ${_selectedGuide.years}",
+                      Provider.of<ObdState>(context, listen: false).isArabic ? "النوع: ${_selectedGuide.sgwType} • السنوات: ${_selectedGuide.years}" : "Type: ${_selectedGuide.sgwType} • Years: ${_selectedGuide.years}",
                       style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                     ),
                   ],

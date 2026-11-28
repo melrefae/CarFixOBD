@@ -2770,4 +2770,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get copRepBulletin => 'نشرة الورشة المصرية:';
+
+  @override
+  String reportVinLine(String vin) {
+    return 'رقم الشاسيه (VIN): $vin';
+  }
+
+  @override
+  String get vatLabel => 'الضريبة';
 }

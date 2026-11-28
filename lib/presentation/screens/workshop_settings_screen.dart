@@ -297,11 +297,13 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
 
             // Cloud Backup & Fleet Sync button
             SizedBox(
-              height: 48,
+              width: double.infinity,
               child: OutlinedButton.icon(
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.accentBlue,
                   side: const BorderSide(color: AppColors.accentBlue),
+                  minimumSize: const Size.fromHeight(52),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 icon: const Icon(Icons.cloud_sync),
@@ -398,11 +400,13 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
 
             // Save Button
             SizedBox(
-              height: 50,
+              width: double.infinity,
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryYellow,
                   foregroundColor: Colors.black,
+                  minimumSize: const Size.fromHeight(52),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 icon: const Icon(Icons.save),

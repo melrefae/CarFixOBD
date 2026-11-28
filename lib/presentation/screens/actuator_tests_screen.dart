@@ -31,8 +31,8 @@ class _ActuatorTestsScreenState extends State<ActuatorTestsScreen> {
     final ok = await state.executeActuatorTest(test, true);
     if (!ok && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Actuator command rejected by ECU or not supported by vehicle profile."),
+        SnackBar(
+          content: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "الكونترول رفض أمر المشغل أو غير مدعوم في ملف السيارة." : "Actuator command rejected by ECU or not supported by vehicle profile."),
           backgroundColor: AppColors.dangerRed,
         ),
       );
@@ -233,11 +233,12 @@ class _ActuatorTestsScreenState extends State<ActuatorTestsScreen> {
                   ] else ...[
                     SizedBox(
                       width: double.infinity,
-                      height: 44,
                       child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: isActive ? AppColors.dangerRed : AppColors.primaryYellow,
                           foregroundColor: isActive ? Colors.white : Colors.black,
+                          minimumSize: const Size.fromHeight(52),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
                         icon: Icon(isActive ? Icons.stop : Icons.play_arrow),
                         label: Text(
@@ -587,7 +588,7 @@ class _GuidedActuationRunnerModalState extends State<_GuidedActuationRunnerModal
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(
-                                "Step ${_currentStepIndex + 1}/${steps.length}",
+                                Provider.of<ObdState>(context, listen: false).isArabic ? "الخطوة ${_currentStepIndex + 1}/${steps.length}" : "Step ${_currentStepIndex + 1}/${steps.length}",
                                 style: const TextStyle(color: AppColors.accentCyan, fontWeight: FontWeight.bold, fontSize: 12),
                               ),
                             ),
@@ -653,11 +654,12 @@ class _GuidedActuationRunnerModalState extends State<_GuidedActuationRunnerModal
                         // Step CTA button
                         SizedBox(
                           width: double.infinity,
-                          height: 46,
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: _isStepActive ? AppColors.warningOrange : AppColors.accentCyan,
                               foregroundColor: Colors.black,
+                              minimumSize: const Size.fromHeight(52),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
                             ),
                             icon: Icon(_isStepActive ? Icons.sync : Icons.play_arrow),
                             label: Text(

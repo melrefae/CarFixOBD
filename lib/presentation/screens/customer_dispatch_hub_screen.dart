@@ -211,7 +211,7 @@ class _CustomerDispatchHubScreenState extends State<CustomerDispatchHubScreen> {
                             style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
                           ),
                           Text(
-                            "Odo: ${_selectedOrder!.currentMileageKm} km | Phone: ${_selectedOrder!.phoneNumber}",
+                            Provider.of<ObdState>(context, listen: false).isArabic ? "العداد: ${_selectedOrder!.currentMileageKm} كم | التليفون: ${_selectedOrder!.phoneNumber}" : "Odo: ${_selectedOrder!.currentMileageKm} km | Phone: ${_selectedOrder!.phoneNumber}",
                             style: const TextStyle(fontSize: 11, color: AppColors.accentCyan),
                           ),
                         ],

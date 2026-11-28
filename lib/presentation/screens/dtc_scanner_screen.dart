@@ -106,12 +106,13 @@ class _DtcScannerScreenState extends State<DtcScannerScreen> with SingleTickerPr
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: SizedBox(
               width: double.infinity,
-              height: 48,
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.dangerRed,
                   foregroundColor: Colors.white,
                   elevation: 3,
+                  minimumSize: const Size.fromHeight(52),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
                 icon: const Icon(Icons.delete_forever),
                 label: Text(

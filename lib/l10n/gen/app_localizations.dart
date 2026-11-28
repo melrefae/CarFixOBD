@@ -4993,6 +4993,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Egyptian Workshop Bulletin:'**
   String get copRepBulletin;
+
+  /// No description provided for @reportVinLine.
+  ///
+  /// In en, this message translates to:
+  /// **'VIN: {vin}'**
+  String reportVinLine(String vin);
+
+  /// No description provided for @vatLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'VAT'**
+  String get vatLabel;
 }
 
 class _AppLocalizationsDelegate

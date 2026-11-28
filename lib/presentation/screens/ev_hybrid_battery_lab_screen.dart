@@ -118,10 +118,10 @@ class _EvHybridBatteryLabScreenState extends State<EvHybridBatteryLabScreen> {
           backgroundColor: AppColors.cardSurface,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           title: Row(
-            children: const [
+            children: [
               Icon(Icons.verified, color: AppColors.successGreen, size: 24),
               SizedBox(width: 8),
-              Text("EV Battery Certificate", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textWhite)),
+              Text(Provider.of<ObdState>(context, listen: false).isArabic ? "شهادة بطارية السيارة الكهربائية" : "EV Battery Certificate", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textWhite)),
             ],
           ),
           content: SingleChildScrollView(
@@ -130,7 +130,7 @@ class _EvHybridBatteryLabScreenState extends State<EvHybridBatteryLabScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "Pre-Purchase High-Voltage Inspection Report • VIN: ${state.currentVin}",
+                  Provider.of<ObdState>(context, listen: false).isArabic ? "تقرير فحص الجهد العالي قبل الشراء • VIN: ${state.currentVin}" : "Pre-Purchase High-Voltage Inspection Report • VIN: ${state.currentVin}",
                   style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
                 ),
                 const Divider(color: AppColors.cardBorder),
@@ -151,7 +151,7 @@ class _EvHybridBatteryLabScreenState extends State<EvHybridBatteryLabScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    "Vehicle VIN: ${state.currentVin}\nCertified by AutoSpect Diagnostic Lab",
+                    Provider.of<ObdState>(context, listen: false).isArabic ? "VIN السيارة: ${state.currentVin}\nمعتمد من معمل AutoSpect للتشخيص" : "Vehicle VIN: ${state.currentVin}\nCertified by AutoSpect Diagnostic Lab",
                     style: const TextStyle(fontFamily: 'monospace', fontSize: 10, color: AppColors.textMuted),
                   ),
                 ),
@@ -161,7 +161,7 @@ class _EvHybridBatteryLabScreenState extends State<EvHybridBatteryLabScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text("Close", style: TextStyle(color: AppColors.primaryYellow, fontWeight: FontWeight.bold)),
+              child: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "إغلاق" : "Close", style: const TextStyle(color: AppColors.primaryYellow, fontWeight: FontWeight.bold)),
             ),
           ],
         );
@@ -443,15 +443,15 @@ class _EvHybridBatteryLabScreenState extends State<EvHybridBatteryLabScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(
-                "Pack: ${_pack.totalVoltage} V",
+                Provider.of<ObdState>(context, listen: false).isArabic ? "الحزمة: ${_pack.totalVoltage} فولت" : "Pack: ${_pack.totalVoltage} V",
                 style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textWhite),
               ),
               Text(
-                "Current: ${_pack.totalCurrentAmps} A",
+                Provider.of<ObdState>(context, listen: false).isArabic ? "التيار: ${_pack.totalCurrentAmps} أمبير" : "Current: ${_pack.totalCurrentAmps} A",
                 style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primaryYellow),
               ),
               Text(
-                "Cells: ${_pack.cells.length}s",
+                Provider.of<ObdState>(context, listen: false).isArabic ? "الخلايا: ${_pack.cells.length}s" : "Cells: ${_pack.cells.length}s",
                 style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.electricBlue),
               ),
             ],
@@ -536,7 +536,7 @@ class _EvHybridBatteryLabScreenState extends State<EvHybridBatteryLabScreen> {
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text("Cell #${cell.cellNumber}: ${cell.voltage}V (Δ: ${cell.deltaFromAvgMv > 0 ? "+" : ""}${cell.deltaFromAvgMv} mV from avg)"),
+                  content: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "خلية #${cell.cellNumber}: ${cell.voltage} فولت (Δ: ${cell.deltaFromAvgMv > 0 ? "+" : ""}${cell.deltaFromAvgMv} mV عن المتوسط)" : "Cell #${cell.cellNumber}: ${cell.voltage}V (Δ: ${cell.deltaFromAvgMv > 0 ? "+" : ""}${cell.deltaFromAvgMv} mV from avg)"),
                   duration: const Duration(seconds: 1),
                 ),
               );
@@ -690,11 +690,11 @@ class _EvHybridBatteryLabScreenState extends State<EvHybridBatteryLabScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Coolant Pump: ${_pack.safetyStatus.coolantPumpLpm} L/min",
+                  Provider.of<ObdState>(context, listen: false).isArabic ? "طلمبة التبريد: ${_pack.safetyStatus.coolantPumpLpm} لتر/د" : "Coolant Pump: ${_pack.safetyStatus.coolantPumpLpm} L/min",
                   style: const TextStyle(fontSize: 11, color: AppColors.electricBlue, fontWeight: FontWeight.w600),
                 ),
                 Text(
-                  "Chiller Valve: ${_pack.safetyStatus.chillerValveOpen ? "OPEN (Active)" : "CLOSED"}",
+                  Provider.of<ObdState>(context, listen: false).isArabic ? "صمام التبريد: ${_pack.safetyStatus.chillerValveOpen ? "مفتوح (نشط)" : "مغلق"}" : "Chiller Valve: ${_pack.safetyStatus.chillerValveOpen ? "OPEN (Active)" : "CLOSED"}",
                   style: const TextStyle(fontSize: 11, color: AppColors.successGreen, fontWeight: FontWeight.w600),
                 ),
               ],

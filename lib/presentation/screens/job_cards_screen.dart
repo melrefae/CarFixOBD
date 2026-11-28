@@ -212,7 +212,7 @@ class _JobCardEditScreenState extends State<JobCardEditScreen> {
                 Text('${AppLocalizations.of(context).parts}: ${JobCardPdfService.money(_j.partsTotal)}'),
                 Text('${AppLocalizations.of(context).labour}: ${JobCardPdfService.money(_j.labourTotal)}'),
                 if (_j.discount > 0) Text('${AppLocalizations.of(context).discount}: -${JobCardPdfService.money(_j.discount)}'),
-                if (_j.vatPercent > 0) Text('VAT: ${JobCardPdfService.money(_j.vat)}'),
+                if (_j.vatPercent > 0) Text('${AppLocalizations.of(context).vatLabel}: ${JobCardPdfService.money(_j.vat)}'),
                 Text('${AppLocalizations.of(context).total}: ${JobCardPdfService.money(_j.total)}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               ]),
             ),

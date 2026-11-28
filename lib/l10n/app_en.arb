@@ -1526,5 +1526,14 @@
       }
     }
   },
-  "copRepBulletin": "Egyptian Workshop Bulletin:"
+  "copRepBulletin": "Egyptian Workshop Bulletin:",
+  "reportVinLine": "VIN: {vin}",
+  "@reportVinLine": {
+    "placeholders": {
+      "vin": {
+        "type": "String"
+      }
+    }
+  },
+  "vatLabel": "VAT"
 }

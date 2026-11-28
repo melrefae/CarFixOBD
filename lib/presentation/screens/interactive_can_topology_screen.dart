@@ -797,23 +797,23 @@ class _InteractiveCanTopologyScreenState extends State<InteractiveCanTopologyScr
 
               // Module Technical Specs
               Text(
-                "Bus: ${node.busNameEn} • Baud: ${node.baudRate}",
+                Provider.of<ObdState>(context, listen: false).isArabic ? "الناقل: ${node.busNameEn} • الباود: ${node.baudRate}" : "Bus: ${node.busNameEn} • Baud: ${node.baudRate}",
                 style: const TextStyle(fontSize: 11, color: AppColors.electricBlue, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 4),
               Text(
-                "Part Number: ${node.softwarePartNumber} (HW: ${node.hardwarePartNumber})",
+                Provider.of<ObdState>(context, listen: false).isArabic ? "رقم القطعة: ${node.softwarePartNumber} (HW: ${node.hardwarePartNumber})" : "Part Number: ${node.softwarePartNumber} (HW: ${node.hardwarePartNumber})",
                 style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
               ),
               const SizedBox(height: 4),
               Text(
-                "Coding: ${node.codingHex} • Latency: ${node.responseLatencyMs}ms",
+                Provider.of<ObdState>(context, listen: false).isArabic ? "البرمجة: ${node.codingHex} • زمن الاستجابة: ${node.responseLatencyMs}ms" : "Coding: ${node.codingHex} • Latency: ${node.responseLatencyMs}ms",
                 style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
               ),
 
               if (node.dtcs.isNotEmpty) ...[
                 const SizedBox(height: 12),
-                const Text("Active Trouble Codes:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.dangerRed)),
+                Text(Provider.of<ObdState>(context, listen: false).isArabic ? "أكواد الأعطال النشطة:" : "Active Trouble Codes:", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.dangerRed)),
                 const SizedBox(height: 6),
                 Wrap(
                   spacing: 6,
@@ -839,7 +839,7 @@ class _InteractiveCanTopologyScreenState extends State<InteractiveCanTopologyScr
                         side: const BorderSide(color: AppColors.primaryYellow),
                       ),
                       icon: const Icon(Icons.error_outline, size: 16),
-                      label: const Text("Read DTCs", style: TextStyle(fontSize: 12)),
+                      label: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "قراءة الأعطال" : "Read DTCs", style: const TextStyle(fontSize: 12)),
                       onPressed: () {
                         Navigator.pop(ctx);
                         Navigator.push(context, MaterialPageRoute(builder: (_) => const DtcScannerScreen()));
@@ -854,7 +854,7 @@ class _InteractiveCanTopologyScreenState extends State<InteractiveCanTopologyScr
                         side: const BorderSide(color: AppColors.electricBlue),
                       ),
                       icon: const Icon(Icons.speed, size: 16),
-                      label: const Text("Live Stream", style: TextStyle(fontSize: 12)),
+                      label: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "البيانات الحية" : "Live Stream", style: const TextStyle(fontSize: 12)),
                       onPressed: () {
                         Navigator.pop(ctx);
                         Navigator.push(context, MaterialPageRoute(builder: (_) => const LiveDataScreen()));
@@ -873,7 +873,7 @@ class _InteractiveCanTopologyScreenState extends State<InteractiveCanTopologyScr
                         side: const BorderSide(color: AppColors.accentCyan),
                       ),
                       icon: const Icon(Icons.play_circle_fill, size: 16),
-                      label: const Text("Actuator Tests", style: TextStyle(fontSize: 12)),
+                      label: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "فحص المشغلات" : "Actuator Tests", style: const TextStyle(fontSize: 12)),
                       onPressed: () {
                         Navigator.pop(ctx);
                         LabGate.open(context, const ActuatorTestsScreen());
@@ -888,7 +888,7 @@ class _InteractiveCanTopologyScreenState extends State<InteractiveCanTopologyScr
                         side: const BorderSide(color: AppColors.warningOrange),
                       ),
                       icon: const Icon(Icons.code, size: 16),
-                      label: const Text("ECU Coding", style: TextStyle(fontSize: 12)),
+                      label: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "برمجة الكنترول" : "ECU Coding", style: const TextStyle(fontSize: 12)),
                       onPressed: () {
                         Navigator.pop(ctx);
                         LabGate.open(context, const EcuCodingScreen());
@@ -902,7 +902,7 @@ class _InteractiveCanTopologyScreenState extends State<InteractiveCanTopologyScr
                 width: double.infinity,
                 child: TextButton.icon(
                   icon: const Icon(Icons.terminal, size: 16, color: AppColors.textMuted),
-                  label: Text("Open ELM327 Terminal (Header: ATSH${node.header})", style: const TextStyle(fontSize: 11, color: AppColors.textMuted)),
+                  label: Text(Provider.of<ObdState>(context, listen: false).isArabic ? "فتح طرفية ELM327 (العنوان: ATSH${node.header})" : "Open ELM327 Terminal (Header: ATSH${node.header})", style: const TextStyle(fontSize: 11, color: AppColors.textMuted)),
                   onPressed: () {
                     Navigator.pop(ctx);
                     Navigator.push(context, MaterialPageRoute(builder: (_) => const TerminalScreen()));
