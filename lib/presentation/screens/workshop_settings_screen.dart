@@ -167,13 +167,16 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
                       children: [
                         const Icon(Icons.phone, color: AppColors.successGreen, size: 16),
                         const SizedBox(width: 6),
-                        SelectableText(
-                          _phoneController.text,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            fontFamily: 'monospace',
+                        Directionality(
+                          textDirection: TextDirection.ltr,
+                          child: SelectableText(
+                            _phoneController.text,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              fontFamily: 'monospace',
+                            ),
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -207,7 +210,10 @@ class _WorkshopSettingsScreenState extends State<WorkshopSettingsScreen> {
 
             _buildTextField(l10n.workshopCenterName, _nameController, Icons.storefront),
             const SizedBox(height: 10),
-            _buildTextField(l10n.phoneWhatsapp, _phoneController, Icons.phone_android, keyboardType: TextInputType.phone),
+            Directionality(
+              textDirection: TextDirection.ltr,
+              child: _buildTextField(l10n.phoneWhatsapp, _phoneController, Icons.phone_android, keyboardType: TextInputType.phone),
+            ),
             const SizedBox(height: 10),
             _buildTextField(l10n.workshopAddress, _addressController, Icons.location_on_outlined),
             const SizedBox(height: 10),

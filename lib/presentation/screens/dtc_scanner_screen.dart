@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/localization/app_strings_en.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../data/models/dtc_model.dart';
 import '../providers/obd_state.dart';
 import '../widgets/dtc_card_item.dart';
@@ -52,23 +52,25 @@ class _DtcScannerScreenState extends State<DtcScannerScreen> with SingleTickerPr
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.readDtcs),
+        title: Text(AppLocalizations.of(context).readDtcs),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            tooltip: "Rescan DTCs",
+            tooltip: AppLocalizations.of(context).rescanDtcs,
             onPressed: state.isScanning ? null : () => state.scanTroubleCodes(),
           ),
         ],
         bottom: TabBar(
           controller: _tabController,
+          isScrollable: true,
+          tabAlignment: TabAlignment.start,
           indicatorColor: AppColors.primaryYellow,
           labelColor: AppColors.primaryYellow,
           unselectedLabelColor: AppColors.textMuted,
           tabs: [
-            Tab(text: "${AppStrings.storedDtcs} (${state.storedDtcs.length})"),
-            Tab(text: "${AppStrings.pendingDtcs} (${state.pendingDtcs.length})"),
-            Tab(text: "${AppStrings.permanentDtcs} (${state.permanentDtcs.length})"),
+            Tab(text: "${AppLocalizations.of(context).storedDtcs} (${state.storedDtcs.length})"),
+            Tab(text: "${AppLocalizations.of(context).pendingDtcs} (${state.pendingDtcs.length})"),
+            Tab(text: "${AppLocalizations.of(context).permanentDtcs} (${state.permanentDtcs.length})"),
           ],
         ),
       ),
@@ -82,7 +84,7 @@ class _DtcScannerScreenState extends State<DtcScannerScreen> with SingleTickerPr
               onChanged: (val) => _onSearchChanged(val, state),
               style: const TextStyle(color: AppColors.textWhite),
               decoration: InputDecoration(
-                hintText: AppStrings.searchDtcHint,
+                hintText: AppLocalizations.of(context).searchDtcHint,
                 hintStyle: const TextStyle(color: AppColors.textMuted),
                 prefixIcon: const Icon(Icons.search, color: AppColors.primaryYellow),
                 suffixIcon: _searchController.text.isNotEmpty
@@ -112,9 +114,9 @@ class _DtcScannerScreenState extends State<DtcScannerScreen> with SingleTickerPr
                   elevation: 3,
                 ),
                 icon: const Icon(Icons.delete_forever),
-                label: const Text(
-                  AppStrings.clearDtcsButton,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                label: Text(
+                  AppLocalizations.of(context).clearDtcsButton,
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                 ),
                 onPressed: state.isScanning || !state.isConnected
                     ? null
@@ -129,12 +131,12 @@ class _DtcScannerScreenState extends State<DtcScannerScreen> with SingleTickerPr
                                   SnackBar(
                                     content: Text(
                                       success
-                                          ? AppStrings.dtcsClearedSuccess
+                                          ? AppLocalizations.of(context).dtcsClearedSuccess
                                           : (state.lastClearOutcome?.codesRemain ?? false)
-                                              ? 'The ECU accepted the clear but ${state.lastClearOutcome!.remainingCodes!.length} code(s) are still stored: ${state.lastClearOutcome!.remainingCodes!.join(", ")}. The fault is probably still present. / الكمبيوتر قبل المسح لكن الأعطال لسه مسجلة، العطل غالباً لسه موجود.'
+                                              ? AppLocalizations.of(context).clearPartialRemaining(state.lastClearOutcome!.remainingCodes!.length, state.lastClearOutcome!.remainingCodes!.join(", "))
                                               : (state.lastClearOutcome != null && state.lastClearOutcome!.accepted)
-                                                  ? 'The ECU accepted the clear but the read-back could not confirm it. Read the codes again. / تم قبول المسح لكن مقدرتش أتأكد، اقرا الأعطال تاني.'
-                                                  : AppStrings.dtcsClearedFail,
+                                                  ? AppLocalizations.of(context).clearUnconfirmed
+                                                  : AppLocalizations.of(context).dtcsClearedFail,
                                     ),
                                     backgroundColor: success ? AppColors.successGreen : AppColors.dangerRed,
                                   ),
@@ -157,9 +159,9 @@ class _DtcScannerScreenState extends State<DtcScannerScreen> with SingleTickerPr
                 : TabBarView(
                     controller: _tabController,
                     children: [
-                      _buildDtcList(state.storedDtcs, AppStrings.noStoredDtcs),
-                      _buildDtcList(state.pendingDtcs, AppStrings.noPendingDtcs),
-                      _buildDtcList(state.permanentDtcs, AppStrings.noPermanentDtcs),
+                      _buildDtcList(state.storedDtcs, AppLocalizations.of(context).noStoredDtcs),
+                      _buildDtcList(state.pendingDtcs, AppLocalizations.of(context).noPendingDtcs),
+                      _buildDtcList(state.permanentDtcs, AppLocalizations.of(context).noPermanentDtcs),
                     ],
                   ),
           ),
@@ -195,7 +197,7 @@ class _DtcScannerScreenState extends State<DtcScannerScreen> with SingleTickerPr
     if (_searchResults.isEmpty) {
       return Center(
         child: Text(
-          "No diagnostic trouble codes found matching '${_searchController.text}'",
+          AppLocalizations.of(context).noDtcsMatching(_searchController.text),
           style: const TextStyle(color: AppColors.textMuted),
         ),
       );

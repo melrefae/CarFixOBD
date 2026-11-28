@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/localization/app_strings_en.dart';
-import '../../core/localization/workshop_ar.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../data/models/sensor_pid.dart';
 import '../providers/obd_state.dart';
 
@@ -48,7 +47,7 @@ class _LiveGraphScreenState extends State<LiveGraphScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isAr ? WorkshopAr.liveGraphs : AppStrings.liveGraphs),
+        title: Text(AppLocalizations.of(context).liveGraphsTitle),
         actions: [
           IconButton(
             icon: Icon(
@@ -56,8 +55,8 @@ class _LiveGraphScreenState extends State<LiveGraphScreen> {
               color: _dualChannelMode ? AppColors.primaryYellow : AppColors.textMuted,
             ),
             tooltip: _dualChannelMode
-                ? (isAr ? "إلغاء المقارنة المزدوجة" : "Disable Dual Channel")
-                : (isAr ? "تفعيل مقارنة إشارتين معاً" : "Enable Dual Channel"),
+                ? AppLocalizations.of(context).disableDual
+                : AppLocalizations.of(context).enableDual,
             onPressed: () {
               setState(() {
                 _dualChannelMode = !_dualChannelMode;
@@ -82,7 +81,7 @@ class _LiveGraphScreenState extends State<LiveGraphScreen> {
           children: [
             // Sensor selector 1
             _buildSensorSelector(
-              label: isAr ? "القناة الأولى (الأصفر):" : "Channel 1 (Yellow):",
+              label: AppLocalizations.of(context).channel1,
               currentPid: _channel1Pid,
               sensors: state.sensors,
               color: AppColors.primaryYellow,
@@ -100,7 +99,7 @@ class _LiveGraphScreenState extends State<LiveGraphScreen> {
               const SizedBox(height: 8),
               // Sensor selector 2
               _buildSensorSelector(
-                label: isAr ? "القناة الثانية للمقارنة (الأزرق):" : "Channel 2 Comparison (Cyan):",
+                label: AppLocalizations.of(context).channel2,
                 currentPid: _channel2Pid ?? state.sensors.last.pid,
                 sensors: state.sensors,
                 color: AppColors.electricBlue,

@@ -650,4 +650,482 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get saveWorkshopSettings => 'حفظ إعدادات الورشة';
+
+  @override
+  String get connectionTitle => 'مدير الاتصال بفيشة ELM327';
+
+  @override
+  String get disconnect => 'قطع الاتصال';
+
+  @override
+  String get autoDetectConnect => 'كشف واتصال تلقائي فوري';
+
+  @override
+  String get pairedDevicesOs => 'الأجهزة المقترنة مسبقاً';
+
+  @override
+  String get noPairedDevices => 'لا توجد فيشات بلوتوث مقترنة';
+
+  @override
+  String get discoveredDevices => 'الأجهزة المكتشفة في النطاق';
+
+  @override
+  String get unknownDevice => 'جهاز عام';
+
+  @override
+  String get wifiSettingsTitle => 'إعدادات الواي فاي لفيشة ELM327:';
+
+  @override
+  String get wifiDescription =>
+      'معظم فيشات OBD الواي فاي في مصر تبث شبكة باسم \'WiFi_OBDII\' وتستخدم العنوان الافتراضي 192.168.0.10 على بورت 35000.';
+
+  @override
+  String get adapterAddressLabel => 'عنوان الفيشة (IP:Port)';
+
+  @override
+  String get connectWifi => 'اتصال عبر الواي فاي';
+
+  @override
+  String get protocolPickerLabel => 'البروتوكول: ';
+
+  @override
+  String get checkAdapter20s => 'فحص الفيشة (حوالي 20 ثانية)';
+
+  @override
+  String get adapterCheckTitle => 'فحص الفيشة';
+
+  @override
+  String get readModulesUds => 'قراءة الوحدات UDS (قراءة فقط، CAN فقط)';
+
+  @override
+  String get modulesUdsTitle => 'الوحدات (UDS)';
+
+  @override
+  String get lastAttempt => 'آخر محاولة:';
+
+  @override
+  String get retryEcuHandshake =>
+      'إعادة محاولة المصافحة مع الكمبيوتر (الكونتاك ON)';
+
+  @override
+  String quickReconnect(Object name, Object type) {
+    return 'إعادة اتصال سريعة: $name ($type)';
+  }
+
+  @override
+  String get autoDetectSubtitle =>
+      'يفحص USB وبلوتوث كلاسيك وBLE وواي فاي تلقائياً + يتعرف على رقم شاسيه وموديل السيارة';
+
+  @override
+  String get autoDetecting => 'جاري الكشف التلقائي...';
+
+  @override
+  String get autoDetectAnyAdapter => 'كشف واتصال تلقائي بأي فيشة OBD';
+
+  @override
+  String connectedToAdapter(Object adapter) {
+    return 'تم الاتصال بـ $adapter!';
+  }
+
+  @override
+  String get scanning => 'جاري البحث...';
+
+  @override
+  String get scanNearby => 'بحث في النطاق';
+
+  @override
+  String get refreshPaired => 'تحديث المقترنة';
+
+  @override
+  String get pairedNonAndroidNote =>
+      'على اللابتوب أو الأجهزة غير الأندرويد، افحص تبويب USB / Serial لمنافذ البلوتوث المقترنة أو تبويب BLE 5.0.';
+
+  @override
+  String get listeningNearby => 'يستمع لفيشات البلوتوث القريبة...';
+
+  @override
+  String get pairedBadge => 'مقترن';
+
+  @override
+  String get nearbyBadge => 'قريب';
+
+  @override
+  String chipLabel(Object chip) {
+    return 'الشريحة: $chip';
+  }
+
+  @override
+  String scoreLabel(Object score) {
+    return 'التقييم: $score';
+  }
+
+  @override
+  String get autoProbeWifi => 'بحث تلقائي عن بوابة OBD الواي فاي النشطة';
+
+  @override
+  String get noWifiGateway =>
+      'لم تستجب أي بوابة ELM327 واي فاي على المنافذ القياسية.';
+
+  @override
+  String get bleTitle => 'بلوتوث منخفض الطاقة (BLE 4.0 / 5.0 GATT)';
+
+  @override
+  String get bleDescription =>
+      'يفحص أجهزة BLE القريبة التي تدعم Nordic UART (6E400001)، و0xFFF0 (Veepeak/Vgate)، و0x18F0 (OBDLink/vLinker)، وخصائص 0xFFE0 GATT.';
+
+  @override
+  String get scanningBle => 'جاري فحص أجهزة BLE القريبة...';
+
+  @override
+  String get scanBleAdapters => 'فحص فيشات OBD BLE القريبة';
+
+  @override
+  String bleScanResults(Object count) {
+    return 'نتائج فحص BLE المباشر ($count)';
+  }
+
+  @override
+  String get listening => 'يستمع...';
+
+  @override
+  String get searchingBle => 'يبحث في إعلانات BLE...';
+
+  @override
+  String get tapScanBle =>
+      'اضغط \'فحص فيشات OBD BLE القريبة\' بالأعلى لاكتشاف الفيشات العاملة.';
+
+  @override
+  String bleIdRssi(Object id, Object rssi) {
+    return 'المعرف: $id • الإشارة: $rssi dBm';
+  }
+
+  @override
+  String get manualBleId => 'معرف/عنوان BLE يدوي:';
+
+  @override
+  String get bleIdHint => 'مثال: 00:1B:10:E2:33:44 أو UUID الجهاز';
+
+  @override
+  String get usbSerialTitle => 'USB OTG والمنافذ التسلسلية / منافذ COM';
+
+  @override
+  String get usbSerialDescription =>
+      'تعريفات USB-OTG حقيقية لأندرويد (FTDI، CH340، CP2102، PL2303، CDC-ACM) بالإضافة لمنافذ macOS/Linux والبلوتوث التسلسلي.';
+
+  @override
+  String get enumeratingPorts => 'جاري عدّ المنافذ المتصلة...';
+
+  @override
+  String get refreshUsbDevices => 'تحديث أجهزة USB / التسلسلي المتصلة';
+
+  @override
+  String detectedSerialPorts(Object count) {
+    return 'المنافذ التسلسلية المكتشفة ($count):';
+  }
+
+  @override
+  String get noUsbDetected =>
+      'لم يتم اكتشاف كابلات USB OTG أو منافذ OBD تسلسلية الآن. وصّل الكابل أو قم بإقران فيشة البلوتوث ثم اضغط تحديث.';
+
+  @override
+  String portLine(Object port, Object transport) {
+    return 'المنفذ: $port • $transport';
+  }
+
+  @override
+  String get manualSerialOverride => 'منفذ تسلسلي / Baud يدوي';
+
+  @override
+  String get serialPortPathLabel => 'مسار منفذ USB / التسلسلي أو معرف الجهاز';
+
+  @override
+  String get uartBaudRate => 'معدل البود UART: ';
+
+  @override
+  String get openSerialPort => 'فتح المنفذ التسلسلي المحدد';
+
+  @override
+  String get noDtcsFound =>
+      'لا توجد أعطال مسجلة. كنترول المحرك يعمل بحالة ممتازة!';
+
+  @override
+  String get vinLabel => 'رقم الشاسيه (VIN):';
+
+  @override
+  String get protocolLabel => 'بروتوكول الكان الفعّال:';
+
+  @override
+  String get batteryVoltageLabel => 'فولت البطارية:';
+
+  @override
+  String get milStatusLabel => 'حالة لمبة المحرك (MIL):';
+
+  @override
+  String get milOn => 'مضاءة (توجد أعطال مسجلة)';
+
+  @override
+  String get milOff => 'مطفأة (لا توجد أعطال نشطة)';
+
+  @override
+  String get saveReport => 'حفظ تقرير الفحص بالورشة';
+
+  @override
+  String get rescan => 'إعادة الفحص';
+
+  @override
+  String get scanningVinMil =>
+      'جاري فحص رقم الشاسيه وحالة لمبة المحرك والأعطال والفولت...';
+
+  @override
+  String detectedDtcs(Object count) {
+    return 'الأعطال المكتشفة ($count):';
+  }
+
+  @override
+  String get activeFaults => 'أعطال نشطة';
+
+  @override
+  String get optimalHealth => 'المحرك والانبعاثات في حالة ممتازة';
+
+  @override
+  String get codesDetectedCel => 'تم اكتشاف أعطال ولمبة المحرك مضاءة!';
+
+  @override
+  String get noMisfires =>
+      'لا توجد أكواد ميسفاير أو كتاليست أو انبعاثات مسجلة في الكمبيوتر.';
+
+  @override
+  String get saveJobCard => 'حفظ أمر شغل الفحص:';
+
+  @override
+  String get licensePlateLabel => 'رقم اللوحة (مثال: أ ب ج 1234)';
+
+  @override
+  String get customerName => 'اسم العميل';
+
+  @override
+  String get phoneWhatsappNumber => 'رقم الهاتف / واتساب';
+
+  @override
+  String get enterPlate => 'من فضلك أدخل رقم اللوحة';
+
+  @override
+  String get walkInCustomer => 'عميل نقدي (بدون حجز)';
+
+  @override
+  String get jobCardSaved => 'تم حفظ أمر الشغل بنجاح!';
+
+  @override
+  String get readDtcs => 'أكواد الأعطال (DTCs)';
+
+  @override
+  String get storedDtcs => 'المؤكدة (Mode 03)';
+
+  @override
+  String get pendingDtcs => 'المعلقة (Mode 07)';
+
+  @override
+  String get permanentDtcs => 'الدائمة (Mode 0A)';
+
+  @override
+  String get searchDtcHint =>
+      'ابحث بكود العطل أو كلمة (مثال: P0300، ميسفاير)...';
+
+  @override
+  String get clearDtcsButton => 'مسح جميع الأعطال وإطفاء لمبة المحرك (Mode 04)';
+
+  @override
+  String get dtcsClearedSuccess =>
+      'تم مسح جميع الأعطال وإطفاء لمبة المحرك بنجاح!';
+
+  @override
+  String get dtcsClearedFail =>
+      'فشل مسح الأعطال. تأكد أن الكونتاك مفتوح (ON) والمحرك مطفي.';
+
+  @override
+  String clearPartialRemaining(Object codes, Object count) {
+    return 'الكمبيوتر قبل المسح لكن $count كود لسه مسجلين: $codes. العطل غالباً لسه موجود.';
+  }
+
+  @override
+  String get clearUnconfirmed =>
+      'تم قبول المسح لكن مقدرنش أتأكد، اقرأ الأعطال تاني.';
+
+  @override
+  String get noStoredDtcs => 'لا توجد أعطال مؤكدة مسجلة.';
+
+  @override
+  String get noPendingDtcs => 'لا توجد أعطال معلقة.';
+
+  @override
+  String get noPermanentDtcs => 'لا توجد أعطال دائمة.';
+
+  @override
+  String get rescanDtcs => 'إعادة فحص الأعطال';
+
+  @override
+  String noDtcsMatching(Object query) {
+    return 'لا توجد أكواد أعطال مطابقة لـ \'$query\'';
+  }
+
+  @override
+  String get liveSensorsTitle => 'البيانات الحية والحساسات';
+
+  @override
+  String get liveGraphsTitle => 'الرسوم البيانية والإشارات اللحظية';
+
+  @override
+  String get discoverPids => 'اكتشاف الحساسات المدعومة';
+
+  @override
+  String get pausePolling => 'إيقاف التحديث المباشر';
+
+  @override
+  String get startPolling => 'بدء التحديث المباشر';
+
+  @override
+  String get allSensors => 'جميع الحساسات';
+
+  @override
+  String get engineSensors => 'المحرك والسرعة';
+
+  @override
+  String get coolingSensors => 'دورة التبريد والحرارة';
+
+  @override
+  String get electricalSensors => 'الكهرباء والشحن';
+
+  @override
+  String get fuelAir => 'الهواء والبنزين';
+
+  @override
+  String get railTurbo => 'التوربو والمسطرة';
+
+  @override
+  String get transmission => 'الفتيس';
+
+  @override
+  String get absSpeeds => 'سرعات العجلات';
+
+  @override
+  String get oemCustom => 'حساسات الموديل';
+
+  @override
+  String get noSensorsCategory => 'لا توجد حساسات في هذا التصنيف';
+
+  @override
+  String get variance5 => 'فرق سرعة > 5 كم/س';
+
+  @override
+  String get disableDual => 'إلغاء المقارنة المزدوجة';
+
+  @override
+  String get enableDual => 'تفعيل مقارنة إشارتين معاً';
+
+  @override
+  String get channel1 => 'القناة الأولى (الأصفر):';
+
+  @override
+  String get channel2 => 'القناة الثانية للمقارنة (الأزرق):';
+
+  @override
+  String get freezeFrameTitle => 'تجميد بيانات العطل (Freeze Frame)';
+
+  @override
+  String get refreshFreezeFrame => 'تحديث لقطة العطل';
+
+  @override
+  String get queryingFreezeFrame =>
+      'جاري قراءة بيانات لقطة العطل من الكمبيوتر (Mode 02)...';
+
+  @override
+  String get noFreezeFrame => 'لا توجد لقطة عطل مسجلة في ذاكرة الكمبيوتر';
+
+  @override
+  String get freezeFrameStoredWhen =>
+      'تُحفظ بيانات اللقطة فقط عند تسجيل عطل مؤكد لأول مرة';
+
+  @override
+  String get triggeringFaultCode => 'كود العطل المسبب:';
+
+  @override
+  String get sensorSnapshot => 'لقطة الحساسات لحظة حدوث العطل:';
+
+  @override
+  String get engineSpeedRpm => 'سرعة المحرك (RPM):';
+
+  @override
+  String get vehicleSpeedLabel => 'سرعة السيارة:';
+
+  @override
+  String get coolantTempLabel => 'حرارة مياه التبريد:';
+
+  @override
+  String get engineLoadLabel => 'حمل المحرك المحسوب:';
+
+  @override
+  String get throttlePositionLabel => 'وضعية الخانق (TPS):';
+
+  @override
+  String get manifoldPressureLabel => 'ضغط المانيفولد المطلق:';
+
+  @override
+  String get intakeAirTempLabel => 'حرارة هواء السحب (IAT):';
+
+  @override
+  String get stftLabel => 'تصحيح الوقود قصير المدى (STFT):';
+
+  @override
+  String get ltftLabel => 'تصحيح الوقود طويل المدى (LTFT):';
+
+  @override
+  String get workshopAnalysis => 'تحليل الورشة وسياق التشغيل:';
+
+  @override
+  String faultContextLine1(Object coolant, Object rpm, Object speed) {
+    return 'حدث هذا العطل أثناء القيادة بسرعة $speed كم/س والمحرك يعمل عند $rpm لفة وحرارة المياه $coolant°م.';
+  }
+
+  @override
+  String faultContextLine2(Object condition, Object ltft) {
+    return 'كان تصحيح الوقود طويل المدى ($ltft%)، أي أن الكمبيوتر كان يعوّض $condition لحظة حدوث العطل.';
+  }
+
+  @override
+  String get leanCondition =>
+      'خليط فقير (تسريب هواء بالمانيفولد أو ضغط بنزين منخفض)';
+
+  @override
+  String get richCondition => 'خليط غني (رشاش يقطر أو سحب هواء مقيد)';
+
+  @override
+  String get normalCondition => 'نسبة هواء/وقود طبيعية';
+
+  @override
+  String codesNeedInspection(Object count) {
+    return 'تم اكتشاف $count كود عطل يحتاجون فحص فني.';
+  }
+
+  @override
+  String get absCompareTitle => 'مقارنة سرعات العجلات الأربعة (ABS)';
+
+  @override
+  String get targetVsActual =>
+      'مقارنة القيم المستهدفة والفعلية (Target vs Actual)';
+
+  @override
+  String get railPressure => 'ضغط مسطرة الوقود';
+
+  @override
+  String get turboBoost => 'ضغط شاحن التوربو';
+
+  @override
+  String actualValue(Object value) {
+    return 'الفعلي: $value';
+  }
+
+  @override
+  String targetValue(Object value) {
+    return 'المستهدف: $value';
+  }
 }

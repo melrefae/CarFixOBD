@@ -652,4 +652,482 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveWorkshopSettings => 'Save Workshop Settings';
+
+  @override
+  String get connectionTitle => 'ELM327 Connection Manager';
+
+  @override
+  String get disconnect => 'Disconnect';
+
+  @override
+  String get autoDetectConnect => 'Auto Detect & Connect';
+
+  @override
+  String get pairedDevicesOs => 'Paired Devices (OS Settings)';
+
+  @override
+  String get noPairedDevices => 'No paired Bluetooth devices found';
+
+  @override
+  String get discoveredDevices => 'Nearby Discovered Devices';
+
+  @override
+  String get unknownDevice => 'Generic Device';
+
+  @override
+  String get wifiSettingsTitle => 'ELM327 Wi-Fi Configuration:';
+
+  @override
+  String get wifiDescription =>
+      'Most Wi-Fi OBD adapters in Egypt broadcast an SSID named \'WiFi_OBDII\' and use default IP 192.168.0.10 on port 35000.';
+
+  @override
+  String get adapterAddressLabel => 'Adapter Address (IP:Port)';
+
+  @override
+  String get connectWifi => 'Connect via Wi-Fi';
+
+  @override
+  String get protocolPickerLabel => 'Protocol: ';
+
+  @override
+  String get checkAdapter20s => 'Check adapter (about 20 s)';
+
+  @override
+  String get adapterCheckTitle => 'Adapter check';
+
+  @override
+  String get readModulesUds => 'Read modules, UDS (read-only, CAN only)';
+
+  @override
+  String get modulesUdsTitle => 'Modules (UDS)';
+
+  @override
+  String get lastAttempt => 'Last attempt:';
+
+  @override
+  String get retryEcuHandshake => 'Retry ECU Handshake (Key in ON/RUN)';
+
+  @override
+  String quickReconnect(Object name, Object type) {
+    return 'Quick Reconnect: $name ($type)';
+  }
+
+  @override
+  String get autoDetectSubtitle =>
+      'Probes USB-OTG / Paired Serial, BT Classic, BLE 5.0 & Wi-Fi automatically + auto-detects car VIN/Model';
+
+  @override
+  String get autoDetecting => 'Auto-Detecting...';
+
+  @override
+  String get autoDetectAnyAdapter => 'Auto-Detect & Connect Any OBD Adapter';
+
+  @override
+  String connectedToAdapter(Object adapter) {
+    return 'Connected to $adapter!';
+  }
+
+  @override
+  String get scanning => 'Scanning...';
+
+  @override
+  String get scanNearby => 'Scan Nearby';
+
+  @override
+  String get refreshPaired => 'Refresh Paired';
+
+  @override
+  String get pairedNonAndroidNote =>
+      'On laptop/desktop or non-Android devices, check USB / Serial tab for paired Bluetooth COM/cu ports or BLE 5.0 tab.';
+
+  @override
+  String get listeningNearby => 'Listening for nearby Bluetooth adapters...';
+
+  @override
+  String get pairedBadge => 'Paired';
+
+  @override
+  String get nearbyBadge => 'Nearby';
+
+  @override
+  String chipLabel(Object chip) {
+    return 'Chip: $chip';
+  }
+
+  @override
+  String scoreLabel(Object score) {
+    return 'Score: $score';
+  }
+
+  @override
+  String get autoProbeWifi => 'Auto-Probe Active Wi-Fi OBD Gateway';
+
+  @override
+  String get noWifiGateway =>
+      'No Wi-Fi ELM327 gateway responded on standard ports.';
+
+  @override
+  String get bleTitle => 'Bluetooth Low Energy (BLE 4.0 / 5.0 GATT)';
+
+  @override
+  String get bleDescription =>
+      'Scans live nearby BLE peripherals supporting Nordic UART (6E400001), 0xFFF0 (Veepeak/Vgate), 0x18F0 (OBDLink/vLinker), and 0xFFE0 GATT characteristics.';
+
+  @override
+  String get scanningBle => 'Scanning Nearby BLE Peripherals...';
+
+  @override
+  String get scanBleAdapters => 'Scan Nearby BLE OBD Adapters';
+
+  @override
+  String bleScanResults(Object count) {
+    return 'Live BLE Scan Results ($count)';
+  }
+
+  @override
+  String get listening => 'Listening...';
+
+  @override
+  String get searchingBle => 'Searching BLE advertisements...';
+
+  @override
+  String get tapScanBle =>
+      'Tap \'Scan Nearby BLE OBD Adapters\' above to discover powered BLE dongles.';
+
+  @override
+  String bleIdRssi(Object id, Object rssi) {
+    return 'ID: $id • RSSI: $rssi dBm';
+  }
+
+  @override
+  String get manualBleId => 'Manual BLE Remote ID / Address:';
+
+  @override
+  String get bleIdHint => 'e.g. 00:1B:10:E2:33:44 or device UUID';
+
+  @override
+  String get usbSerialTitle => 'USB OTG & Serial / Paired COM Ports';
+
+  @override
+  String get usbSerialDescription =>
+      'Real Android USB-OTG drivers (FTDI, CH340, CP2102, PL2303, CDC-ACM) plus macOS/Linux POSIX serial & paired Bluetooth serial ports (/dev/cu.*).';
+
+  @override
+  String get enumeratingPorts => 'Enumerating Attached Ports...';
+
+  @override
+  String get refreshUsbDevices => 'Refresh Attached USB / Serial Devices';
+
+  @override
+  String detectedSerialPorts(Object count) {
+    return 'Detected Hardware Serial Ports ($count):';
+  }
+
+  @override
+  String get noUsbDetected =>
+      'No USB OTG cables or OBD serial ports detected right now. Plug in USB cable or pair Bluetooth adapter, then tap Refresh.';
+
+  @override
+  String portLine(Object port, Object transport) {
+    return 'Port: $port • $transport';
+  }
+
+  @override
+  String get manualSerialOverride => 'Manual Serial Port / Baud Override';
+
+  @override
+  String get serialPortPathLabel => 'USB / Serial Port Path or Device ID';
+
+  @override
+  String get uartBaudRate => 'UART Baud Rate: ';
+
+  @override
+  String get openSerialPort => 'Open Specified Serial Port';
+
+  @override
+  String get noDtcsFound =>
+      'No trouble codes found. ECU reports healthy status!';
+
+  @override
+  String get vinLabel => 'Chassis Number (VIN):';
+
+  @override
+  String get protocolLabel => 'Active Protocol:';
+
+  @override
+  String get batteryVoltageLabel => 'Battery Voltage:';
+
+  @override
+  String get milStatusLabel => 'MIL (Check Engine) Status:';
+
+  @override
+  String get milOn => 'ON (Active Trouble Codes)';
+
+  @override
+  String get milOff => 'OFF (No Active Faults)';
+
+  @override
+  String get saveReport => 'Save Inspection Report';
+
+  @override
+  String get rescan => 'Rescan';
+
+  @override
+  String get scanningVinMil =>
+      'Scanning VIN, MIL status, DTCs, and system voltage...';
+
+  @override
+  String detectedDtcs(Object count) {
+    return 'Detected Trouble Codes ($count):';
+  }
+
+  @override
+  String get activeFaults => 'Active Faults';
+
+  @override
+  String get optimalHealth => 'Engine & Emissions in Optimal Health';
+
+  @override
+  String get codesDetectedCel =>
+      'Trouble Codes Detected & Check Engine Active!';
+
+  @override
+  String get noMisfires =>
+      'No misfires, catalyst, or emission-related trouble codes logged in ECU.';
+
+  @override
+  String get saveJobCard => 'Save Inspection Job Card:';
+
+  @override
+  String get licensePlateLabel => 'License Plate (e.g. ABC 1234)';
+
+  @override
+  String get customerName => 'Customer Name';
+
+  @override
+  String get phoneWhatsappNumber => 'Phone / WhatsApp Number';
+
+  @override
+  String get enterPlate => 'Please enter the license plate number';
+
+  @override
+  String get walkInCustomer => 'Walk-in Customer';
+
+  @override
+  String get jobCardSaved => 'Job card saved successfully!';
+
+  @override
+  String get readDtcs => 'Diagnostic Codes (DTCs)';
+
+  @override
+  String get storedDtcs => 'Confirmed Trouble Codes (Mode 03)';
+
+  @override
+  String get pendingDtcs => 'Pending Trouble Codes (Mode 07)';
+
+  @override
+  String get permanentDtcs => 'Permanent Trouble Codes (Mode 0A)';
+
+  @override
+  String get searchDtcHint =>
+      'Search DTC code or keyword (e.g., P0300, Misfire)...';
+
+  @override
+  String get clearDtcsButton => 'Clear Trouble Codes & Reset MIL (Mode 04)';
+
+  @override
+  String get dtcsClearedSuccess =>
+      'Diagnostic trouble codes cleared and MIL light reset successfully!';
+
+  @override
+  String get dtcsClearedFail =>
+      'Failed to clear trouble codes. Ensure Key is ON and Engine is OFF.';
+
+  @override
+  String clearPartialRemaining(Object codes, Object count) {
+    return 'The ECU accepted the clear but $count code(s) are still stored: $codes. The fault is probably still present.';
+  }
+
+  @override
+  String get clearUnconfirmed =>
+      'The ECU accepted the clear but the read-back could not confirm it. Read the codes again.';
+
+  @override
+  String get noStoredDtcs => 'No confirmed trouble codes found.';
+
+  @override
+  String get noPendingDtcs => 'No pending trouble codes found.';
+
+  @override
+  String get noPermanentDtcs => 'No permanent trouble codes found.';
+
+  @override
+  String get rescanDtcs => 'Rescan DTCs';
+
+  @override
+  String noDtcsMatching(Object query) {
+    return 'No diagnostic trouble codes found matching \'$query\'';
+  }
+
+  @override
+  String get liveSensorsTitle => 'Live Sensors';
+
+  @override
+  String get liveGraphsTitle => 'Live Waveforms (Graphs)';
+
+  @override
+  String get discoverPids => 'Discover Supported PIDs';
+
+  @override
+  String get pausePolling => 'Pause Live Polling';
+
+  @override
+  String get startPolling => 'Start Live Polling';
+
+  @override
+  String get allSensors => 'All Sensors';
+
+  @override
+  String get engineSensors => 'Engine & Speed';
+
+  @override
+  String get coolingSensors => 'Cooling System';
+
+  @override
+  String get electricalSensors => 'Electrical & Battery';
+
+  @override
+  String get fuelAir => 'Fuel & Air';
+
+  @override
+  String get railTurbo => 'Rail & Turbo';
+
+  @override
+  String get transmission => 'Transmission';
+
+  @override
+  String get absSpeeds => '4-Wheel ABS';
+
+  @override
+  String get oemCustom => 'OEM Custom';
+
+  @override
+  String get noSensorsCategory => 'No sensors found in this category';
+
+  @override
+  String get variance5 => 'Variance > 5 km/h';
+
+  @override
+  String get disableDual => 'Disable Dual Channel';
+
+  @override
+  String get enableDual => 'Enable Dual Channel';
+
+  @override
+  String get channel1 => 'Channel 1 (Yellow):';
+
+  @override
+  String get channel2 => 'Channel 2 Comparison (Cyan):';
+
+  @override
+  String get freezeFrameTitle => 'Freeze Frame Data';
+
+  @override
+  String get refreshFreezeFrame => 'Refresh Freeze Frame';
+
+  @override
+  String get queryingFreezeFrame =>
+      'Querying Freeze Frame data from ECU (Mode 02)...';
+
+  @override
+  String get noFreezeFrame => 'No Freeze Frame logged in ECU memory';
+
+  @override
+  String get freezeFrameStoredWhen =>
+      'Freeze frame data is stored only when a confirmed DTC is first triggered';
+
+  @override
+  String get triggeringFaultCode => 'Triggering Fault Code:';
+
+  @override
+  String get sensorSnapshot => 'Sensor Snapshot at Event Occurrence:';
+
+  @override
+  String get engineSpeedRpm => 'Engine Speed (RPM):';
+
+  @override
+  String get vehicleSpeedLabel => 'Vehicle Speed:';
+
+  @override
+  String get coolantTempLabel => 'Coolant Temperature:';
+
+  @override
+  String get engineLoadLabel => 'Calculated Engine Load:';
+
+  @override
+  String get throttlePositionLabel => 'Throttle Position (TPS):';
+
+  @override
+  String get manifoldPressureLabel => 'Manifold Absolute Pressure:';
+
+  @override
+  String get intakeAirTempLabel => 'Intake Air Temp (IAT):';
+
+  @override
+  String get stftLabel => 'Short Term Fuel Trim (STFT):';
+
+  @override
+  String get ltftLabel => 'Long Term Fuel Trim (LTFT):';
+
+  @override
+  String get workshopAnalysis => 'Workshop Analysis & Operating Context:';
+
+  @override
+  String faultContextLine1(Object coolant, Object rpm, Object speed) {
+    return 'This fault was triggered while driving at $speed km/h with engine running at $rpm RPM and coolant at $coolant°C.';
+  }
+
+  @override
+  String faultContextLine2(Object condition, Object ltft) {
+    return 'Long Term Fuel Trim was ($ltft%), indicating the ECU was compensating for a $condition at the moment the fault occurred.';
+  }
+
+  @override
+  String get leanCondition =>
+      'lean condition (intake vacuum leak or low fuel pressure)';
+
+  @override
+  String get richCondition =>
+      'rich condition (dripping injector or restricted air intake)';
+
+  @override
+  String get normalCondition => 'normal air-fuel ratio';
+
+  @override
+  String codesNeedInspection(Object count) {
+    return '$count diagnostic trouble code(s) detected requiring technical inspection.';
+  }
+
+  @override
+  String get absCompareTitle => '4-Wheel Independent ABS Speeds';
+
+  @override
+  String get targetVsActual => 'Target vs Actual OEM Tracking';
+
+  @override
+  String get railPressure => 'Common Rail Fuel Pressure';
+
+  @override
+  String get turboBoost => 'Turbo Boost Pressure';
+
+  @override
+  String actualValue(Object value) {
+    return 'Actual: $value';
+  }
+
+  @override
+  String targetValue(Object value) {
+    return 'Target: $value';
+  }
 }

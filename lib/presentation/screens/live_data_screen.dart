@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/localization/app_strings_en.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../providers/obd_state.dart';
 import '../widgets/sensor_gauge_card.dart';
 import 'live_graph_screen.dart';
@@ -51,7 +51,7 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
           children: [
             Flexible(
               child: Text(
-                isAr ? "البيانات الحية والحساسات" : AppStrings.liveSensors,
+                AppLocalizations.of(context).liveSensorsTitle,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -75,7 +75,7 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.radar, color: AppColors.primaryYellow),
-            tooltip: isAr ? "اكتشاف الحساسات المدعومة" : "Discover Supported PIDs",
+            tooltip: AppLocalizations.of(context).discoverPids,
             onPressed: state.isConnected ? () => state.refreshSupportedPidsAndPoll() : null,
           ),
           IconButton(
@@ -84,12 +84,12 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
               color: state.isPolling ? AppColors.dangerRed : AppColors.successGreen,
               size: 28,
             ),
-            tooltip: state.isPolling ? "Pause Live Polling" : "Start Live Polling",
+            tooltip: state.isPolling ? AppLocalizations.of(context).pausePolling : AppLocalizations.of(context).startPolling,
             onPressed: state.isConnected ? () => state.toggleLivePolling() : null,
           ),
           IconButton(
             icon: const Icon(Icons.show_chart, color: AppColors.accentCyan),
-            tooltip: AppStrings.liveGraphs,
+            tooltip: AppLocalizations.of(context).liveGraphsTitle,
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) => const LiveGraphScreen()));
             },
@@ -104,16 +104,16 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
               children: [
-                _buildFilterChip("All", isAr ? "جميع الحساسات" : AppStrings.allSensors),
-                _buildFilterChip("Engine", isAr ? "المحرك" : AppStrings.engineSensors),
-                _buildFilterChip("FuelAir", isAr ? "الهواء والبنزين" : "Fuel & Air"),
-                _buildFilterChip("Fuel & Turbo", isAr ? "التوربو والمسطرة" : "Rail & Turbo"),
-                _buildFilterChip("Cooling", isAr ? "دورة التبريد" : AppStrings.coolingSensors),
-                _buildFilterChip("Electrical", isAr ? "الكهرباء والشحن" : AppStrings.electricalSensors),
-                _buildFilterChip("Transmission", isAr ? "الفتيس" : "Transmission"),
-                _buildFilterChip("ABS Speeds", isAr ? "سرعات العجلات" : "4-Wheel ABS"),
+                _buildFilterChip("All", AppLocalizations.of(context).allSensors),
+                _buildFilterChip("Engine", AppLocalizations.of(context).engineSensors),
+                _buildFilterChip("FuelAir", AppLocalizations.of(context).fuelAir),
+                _buildFilterChip("Fuel & Turbo", AppLocalizations.of(context).railTurbo),
+                _buildFilterChip("Cooling", AppLocalizations.of(context).coolingSensors),
+                _buildFilterChip("Electrical", AppLocalizations.of(context).electricalSensors),
+                _buildFilterChip("Transmission", AppLocalizations.of(context).transmission),
+                _buildFilterChip("ABS Speeds", AppLocalizations.of(context).absSpeeds),
                 if (state.sensors.any((s) => s.category == "Custom"))
-                  _buildFilterChip("Custom", isAr ? "حساسات الموديل" : "OEM Custom"),
+                  _buildFilterChip("Custom", AppLocalizations.of(context).oemCustom),
               ],
             ),
           ),
@@ -132,7 +132,7 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
             child: sortedSensors.isEmpty
                 ? Center(
                     child: Text(
-                      isAr ? "لا توجد حساسات في هذا التصنيف" : "No sensors found in this category",
+                      AppLocalizations.of(context).noSensorsCategory,
                       style: const TextStyle(color: AppColors.textMuted),
                     ),
                   )
@@ -232,7 +232,7 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
                   const Icon(Icons.speed, color: AppColors.accentCyan, size: 18),
                   const SizedBox(width: 6),
                   Text(
-                    isAr ? "مقارنة سرعات العجلات الأربعة (ABS)" : "4-Wheel Independent ABS Speeds",
+                    AppLocalizations.of(context).absCompareTitle,
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.textWhite),
                   ),
                 ],
@@ -245,7 +245,7 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    isAr ? "فرق سرعة > 5 كم/س" : "Variance > 5 km/h",
+                    AppLocalizations.of(context).variance5,
                     style: const TextStyle(fontSize: 10, color: AppColors.warningOrange, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -312,7 +312,7 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
               const Icon(Icons.compare_arrows, color: AppColors.primaryYellow, size: 18),
               const SizedBox(width: 6),
               Text(
-                isAr ? "مقارنة القيم المستهدفة والفعلية (Target vs Actual)" : "Target vs Actual OEM Tracking",
+                AppLocalizations.of(context).targetVsActual,
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.textWhite),
               ),
             ],
@@ -327,10 +327,10 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(isAr ? "ضغط مسطرة الوقود" : "Common Rail Fuel Pressure", style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
+                      Text(AppLocalizations.of(context).railPressure, style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
                       const SizedBox(height: 4),
-                      Text("Actual: ${railActual != null ? '${railActual.toStringAsFixed(1)} bar' : '--'}", style: const TextStyle(fontSize: 12, color: AppColors.accentCyan, fontWeight: FontWeight.bold)),
-                      Text("Target: ${railTarget != null ? '${railTarget.toStringAsFixed(1)} bar' : '--'}", style: const TextStyle(fontSize: 11, color: AppColors.textWhite)),
+                      Text(AppLocalizations.of(context).actualValue(railActual != null ? '${railActual.toStringAsFixed(1)} bar' : '--'), style: const TextStyle(fontSize: 12, color: AppColors.accentCyan, fontWeight: FontWeight.bold)),
+                      Text(AppLocalizations.of(context).targetValue(railTarget != null ? '${railTarget.toStringAsFixed(1)} bar' : '--'), style: const TextStyle(fontSize: 11, color: AppColors.textWhite)),
                     ],
                   ),
                 ),
@@ -343,10 +343,10 @@ class _LiveDataScreenState extends State<LiveDataScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(isAr ? "ضغط شاحن التوربو" : "Turbo Boost Pressure", style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
+                      Text(AppLocalizations.of(context).turboBoost, style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
                       const SizedBox(height: 4),
-                      Text("Actual: ${turboActual != null ? '${turboActual.toStringAsFixed(2)} bar' : '--'}", style: const TextStyle(fontSize: 12, color: AppColors.primaryYellow, fontWeight: FontWeight.bold)),
-                      Text("Target: ${turboTarget != null ? '${turboTarget.toStringAsFixed(2)} bar' : '--'}", style: const TextStyle(fontSize: 11, color: AppColors.textWhite)),
+                      Text(AppLocalizations.of(context).actualValue(turboActual != null ? '${turboActual.toStringAsFixed(2)} bar' : '--'), style: const TextStyle(fontSize: 12, color: AppColors.primaryYellow, fontWeight: FontWeight.bold)),
+                      Text(AppLocalizations.of(context).targetValue(turboTarget != null ? '${turboTarget.toStringAsFixed(2)} bar' : '--'), style: const TextStyle(fontSize: 11, color: AppColors.textWhite)),
                     ],
                   ),
                 ),

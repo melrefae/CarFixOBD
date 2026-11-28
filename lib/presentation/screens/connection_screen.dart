@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/localization/app_strings_en.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../data/models/adapter_profile.dart';
 import '../../data/datasources/wifi_obd_connection.dart';
 import '../providers/obd_state.dart';
@@ -136,7 +136,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.connectionTitle),
+        title: Text(AppLocalizations.of(context).connectionTitle),
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: AppColors.primaryYellow,
@@ -193,7 +193,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(children: [
-            const Text('Protocol: ', style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
+            Text(AppLocalizations.of(context).protocolPickerLabel, style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
             Expanded(
               child: DropdownButton<int>(
                 isExpanded: true,
@@ -208,7 +208,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
               alignment: Alignment.centerLeft,
               child: TextButton.icon(
                 icon: const Icon(Icons.fact_check_outlined, size: 18),
-                label: const Text('Check adapter (about 20 s)', style: TextStyle(fontSize: 12)),
+                label: Text(AppLocalizations.of(context).checkAdapter20s, style: const TextStyle(fontSize: 12)),
                 onPressed: () async {
                   final d = state.driver;
                   if (d == null) return;
@@ -217,7 +217,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                   if (!mounted) return;
                   Navigator.of(context).pop();
                   showDialog(context: context, builder: (_) => AlertDialog(
-                    title: const Text('Adapter check'),
+                    title: Text(AppLocalizations.of(context).adapterCheckTitle),
                     content: SingleChildScrollView(child: Text(r.toText(), style: const TextStyle(fontSize: 12))),
                     actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK'))],
                   ));
@@ -229,7 +229,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
               alignment: Alignment.centerLeft,
               child: TextButton.icon(
                 icon: const Icon(Icons.memory, size: 18),
-                label: const Text('Read modules, UDS (read-only, CAN only)', style: TextStyle(fontSize: 12)),
+                label: Text(AppLocalizations.of(context).readModulesUds, style: const TextStyle(fontSize: 12)),
                 onPressed: () async {
                   final d = state.driver;
                   if (d == null) return;
@@ -248,7 +248,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                     if (e.note.isNotEmpty) lines.add('  ${e.note}');
                   }
                   showDialog(context: context, builder: (_) => AlertDialog(
-                    title: const Text('Modules (UDS)'),
+                    title: Text(AppLocalizations.of(context).modulesUdsTitle),
                     content: SingleChildScrollView(child: Text(lines.join('\n'), style: const TextStyle(fontSize: 12))),
                     actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK'))],
                   ));
@@ -256,7 +256,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
               ),
             ),
           if (attempts.isNotEmpty && !state.isEcuReady)
-            Text('Last attempt:\n${attempts.join("\n")}', style: const TextStyle(fontSize: 10.5, color: AppColors.textMuted)),
+            Text('${AppLocalizations.of(context).lastAttempt}\n${attempts.join("\n")}', style: const TextStyle(fontSize: 10.5, color: AppColors.textMuted)),
         ],
       ),
     );
@@ -299,7 +299,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
               if (state.isConnected)
                 TextButton.icon(
                   icon: const Icon(Icons.close, size: 16, color: AppColors.dangerRed),
-                  label: const Text(AppStrings.disconnect, style: TextStyle(color: AppColors.dangerRed, fontSize: 12)),
+                  label: Text(AppLocalizations.of(context).disconnect, style: const TextStyle(color: AppColors.dangerRed, fontSize: 12)),
                   onPressed: () => state.disconnect(),
                 ),
             ],
@@ -316,7 +316,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                       padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
                     icon: const Icon(Icons.refresh, size: 18),
-                    label: const Text("Retry ECU Handshake (Key in ON/RUN)"),
+                    label: Text(AppLocalizations.of(context).retryEcuHandshake),
                     onPressed: () => state.retryEcuHandshake(),
                   ),
                 ),
@@ -335,7 +335,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                     ),
                     icon: const Icon(Icons.history, size: 18),
                     label: Text(
-                      "Quick Reconnect: ${state.lastSavedAdapterName ?? state.lastSavedAdapterTarget} (${state.lastSavedAdapterType ?? 'OBD'})",
+                      AppLocalizations.of(context).quickReconnect(state.lastSavedAdapterName ?? state.lastSavedAdapterTarget ?? '', state.lastSavedAdapterType ?? 'OBD'),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -381,15 +381,15 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
-                            AppStrings.autoDetect,
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textWhite),
+                            AppLocalizations.of(context).autoDetectConnect,
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textWhite),
                           ),
-                          SizedBox(height: 3),
+                          const SizedBox(height: 3),
                           Text(
-                            "Probes USB-OTG / Paired Serial, BT Classic, BLE 5.0 & Wi-Fi automatically + auto-detects car VIN/Model",
-                            style: TextStyle(fontSize: 11, color: AppColors.textMuted),
+                            AppLocalizations.of(context).autoDetectSubtitle,
+                            style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                           ),
                         ],
                       ),
@@ -412,7 +412,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                         )
                       : const Icon(Icons.flash_on),
                   label: Text(
-                    state.isConnecting ? "Auto-Detecting..." : "Auto-Detect & Connect Any OBD Adapter",
+                    state.isConnecting ? AppLocalizations.of(context).autoDetecting : AppLocalizations.of(context).autoDetectAnyAdapter,
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   ),
                   onPressed: state.isConnecting
@@ -422,7 +422,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                           if (ok && mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text("Connected to ${state.detectedAdapterProfile.displayName}!"),
+                                content: Text(AppLocalizations.of(context).connectedToAdapter(state.detectedAdapterProfile.displayName)),
                                 backgroundColor: AppColors.successGreen,
                               ),
                             );
@@ -452,20 +452,20 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              AppStrings.pairedDevices,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primaryYellow),
+            Text(
+              AppLocalizations.of(context).pairedDevicesOs,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primaryYellow),
             ),
             Row(
               children: [
                 TextButton.icon(
                   icon: Icon(_isDiscoveringNearby ? Icons.stop : Icons.search, size: 16, color: AppColors.accentCyan),
-                  label: Text(_isDiscoveringNearby ? "Scanning..." : "Scan Nearby", style: const TextStyle(fontSize: 12, color: AppColors.accentCyan)),
+                  label: Text(_isDiscoveringNearby ? AppLocalizations.of(context).scanning : AppLocalizations.of(context).scanNearby, style: const TextStyle(fontSize: 12, color: AppColors.accentCyan)),
                   onPressed: _isDiscoveringNearby ? () => _discoverySub?.cancel() : _startActiveDiscovery,
                 ),
                 IconButton(
                   icon: const Icon(Icons.refresh, color: AppColors.primaryYellow, size: 20),
-                  tooltip: "Refresh Paired",
+                  tooltip: AppLocalizations.of(context).refreshPaired,
                   onPressed: _loadPairedDevices,
                 ),
               ],
@@ -486,14 +486,14 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
-              children: const [
-                Icon(Icons.bluetooth_disabled, size: 40, color: AppColors.textDisabled),
-                SizedBox(height: 8),
-                Text(AppStrings.noPairedDevices, style: TextStyle(color: AppColors.textWhite, fontWeight: FontWeight.bold)),
-                SizedBox(height: 6),
+              children: [
+                const Icon(Icons.bluetooth_disabled, size: 40, color: AppColors.textDisabled),
+                const SizedBox(height: 8),
+                Text(AppLocalizations.of(context).noPairedDevices, style: const TextStyle(color: AppColors.textWhite, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 6),
                 Text(
-                  "On laptop/desktop or non-Android devices, check USB / Serial tab for paired Bluetooth COM/cu ports or BLE 5.0 tab.",
-                  style: TextStyle(fontSize: 11, color: AppColors.textMuted),
+                  AppLocalizations.of(context).pairedNonAndroidNote,
+                  style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -514,17 +514,17 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                   child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.accentCyan),
                 ),
               const SizedBox(width: 8),
-              const Text(
-                AppStrings.discoveredDevices,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.accentCyan),
+              Text(
+                AppLocalizations.of(context).discoveredDevices,
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.accentCyan),
               ),
             ],
           ),
           const SizedBox(height: 8),
           if (_discoveredDevices.isEmpty && _isDiscoveringNearby)
-            const Padding(
-              padding: EdgeInsets.all(12),
-              child: Center(child: Text("Listening for nearby Bluetooth adapters...", style: TextStyle(fontSize: 12, color: AppColors.textMuted))),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Center(child: Text(AppLocalizations.of(context).listeningNearby, style: const TextStyle(fontSize: 12, color: AppColors.textMuted))),
             )
           else
             ..._discoveredDevices.map((d) => _buildDeviceCard(d, state, isPaired: false)),
@@ -584,7 +584,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
           children: [
             Expanded(
               child: Text(
-                device.name ?? AppStrings.unknownDevice,
+                device.name ?? AppLocalizations.of(context).unknownDevice,
                 style: TextStyle(
                   fontWeight: isKnownObd ? FontWeight.bold : FontWeight.normal,
                   color: AppColors.textWhite,
@@ -601,7 +601,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
               child: Text(
                 profile.brand != AdapterBrand.unknown
                     ? profile.displayName
-                    : (isKnownObd ? "OBD-II" : (isPaired ? "Paired" : "Nearby")),
+                    : (isKnownObd ? "OBD-II" : (isPaired ? AppLocalizations.of(context).pairedBadge : AppLocalizations.of(context).nearbyBadge)),
                 style: TextStyle(
                   fontSize: 10,
                   color: badgeColor,
@@ -624,7 +624,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
               Row(
                 children: [
                   Text(
-                    "Chip: ${profile.chipsetFamily}",
+                    AppLocalizations.of(context).chipLabel(profile.chipsetFamily),
                     style: TextStyle(
                       fontSize: 10,
                       color: profile.highSpeedCapable ? AppColors.accentCyan : AppColors.textMuted,
@@ -632,7 +632,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    "Score: $score",
+                    AppLocalizations.of(context).scoreLabel(score),
                     style: const TextStyle(fontSize: 10, color: AppColors.primaryYellow),
                   ),
                 ],
@@ -655,7 +655,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                     Navigator.pop(context);
                   }
                 },
-          child: const Text(AppStrings.connect, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+          child: Text(AppLocalizations.of(context).connect, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
         ),
       ),
     );
@@ -665,14 +665,14 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
-        const Text(
-          AppStrings.wifiSettingsTitle,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primaryYellow),
+        Text(
+          AppLocalizations.of(context).wifiSettingsTitle,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primaryYellow),
         ),
         const SizedBox(height: 10),
-        const Text(
-          AppStrings.wifiDescription,
-          style: TextStyle(fontSize: 12, color: AppColors.textMuted, height: 1.4),
+        Text(
+          AppLocalizations.of(context).wifiDescription,
+          style: const TextStyle(fontSize: 12, color: AppColors.textMuted, height: 1.4),
         ),
         const SizedBox(height: 14),
         Wrap(
@@ -693,15 +693,15 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
         const SizedBox(height: 14),
         TextField(
           controller: _wifiIpController,
-          decoration: const InputDecoration(
-            labelText: AppStrings.adapterAddressLabel,
-            prefixIcon: Icon(Icons.settings_ethernet, color: AppColors.primaryYellow),
+          decoration: InputDecoration(
+            labelText: AppLocalizations.of(context).adapterAddressLabel,
+            prefixIcon: const Icon(Icons.settings_ethernet, color: AppColors.primaryYellow),
           ),
         ),
         const SizedBox(height: 18),
         ElevatedButton.icon(
           icon: const Icon(Icons.wifi, color: Colors.black),
-          label: const Text(AppStrings.connectWifi),
+          label: Text(AppLocalizations.of(context).connectWifi),
           onPressed: state.isConnecting
               ? null
               : () async {
@@ -714,7 +714,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
         const SizedBox(height: 10),
         OutlinedButton.icon(
           icon: const Icon(Icons.radar, color: AppColors.accentCyan),
-          label: const Text("Auto-Probe Active Wi-Fi OBD Gateway", style: TextStyle(color: AppColors.accentCyan)),
+          label: Text(AppLocalizations.of(context).autoProbeWifi, style: const TextStyle(color: AppColors.accentCyan)),
           onPressed: state.isConnecting
               ? null
               : () async {
@@ -726,8 +726,8 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                     if (ok && mounted) Navigator.pop(context);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("No Wi-Fi ELM327 gateway responded on standard ports."),
+                      SnackBar(
+                        content: Text(AppLocalizations.of(context).noWifiGateway),
                         backgroundColor: AppColors.warningOrange,
                       ),
                     );
@@ -756,21 +756,21 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  children: const [
-                    Icon(Icons.bluetooth_searching, color: AppColors.accentCyan, size: 24),
-                    SizedBox(width: 8),
+                  children: [
+                    const Icon(Icons.bluetooth_searching, color: AppColors.accentCyan, size: 24),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        "Bluetooth Low Energy (BLE 4.0 / 5.0 GATT)",
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
+                        AppLocalizations.of(context).bleTitle,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  "Scans live nearby BLE peripherals supporting Nordic UART (6E400001), 0xFFF0 (Veepeak/Vgate), 0x18F0 (OBDLink/vLinker), and 0xFFE0 GATT characteristics.",
-                  style: TextStyle(fontSize: 12, color: AppColors.textMuted, height: 1.4),
+                Text(
+                  AppLocalizations.of(context).bleDescription,
+                  style: const TextStyle(fontSize: 12, color: AppColors.textMuted, height: 1.4),
                 ),
                 const SizedBox(height: 14),
                 ElevatedButton.icon(
@@ -787,7 +787,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                         )
                       : const Icon(Icons.radar),
                   label: Text(
-                    state.isScanningBle ? "Scanning Nearby BLE Peripherals..." : "Scan Nearby BLE OBD Adapters",
+                    state.isScanningBle ? AppLocalizations.of(context).scanningBle : AppLocalizations.of(context).scanBleAdapters,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   onPressed: state.isScanningBle ? null : () => state.scanBleDevices(),
@@ -801,11 +801,11 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Live BLE Scan Results (${discoveredBle.length})",
+              AppLocalizations.of(context).bleScanResults(discoveredBle.length),
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.accentCyan),
             ),
             if (state.isScanningBle)
-              const Text("Listening...", style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
+              Text(AppLocalizations.of(context).listening, style: const TextStyle(fontSize: 11, color: AppColors.textMuted)),
           ],
         ),
         const SizedBox(height: 8),
@@ -818,8 +818,8 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
             ),
             child: Text(
               state.isScanningBle
-                  ? "Searching BLE advertisements..."
-                  : "Tap 'Scan Nearby BLE OBD Adapters' above to discover powered BLE dongles.",
+                  ? AppLocalizations.of(context).searchingBle
+                  : AppLocalizations.of(context).tapScanBle,
               style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
               textAlign: TextAlign.center,
             ),
@@ -863,7 +863,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                   ],
                 ),
                 subtitle: Text(
-                  "ID: ${item.remoteId} • RSSI: ${item.rssi} dBm",
+                  AppLocalizations.of(context).bleIdRssi(item.remoteId, item.rssi),
                   style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                 ),
                 trailing: ElevatedButton(
@@ -888,9 +888,9 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
             );
           }),
         const SizedBox(height: 18),
-        const Text(
-          "Manual BLE Remote ID / Address:",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.textMuted),
+        Text(
+          AppLocalizations.of(context).manualBleId,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.textMuted),
         ),
         const SizedBox(height: 8),
         Row(
@@ -898,9 +898,9 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
             Expanded(
               child: TextField(
                 controller: _bleIdController,
-                decoration: const InputDecoration(
-                  hintText: "e.g. 00:1B:10:E2:33:44 or device UUID",
-                  prefixIcon: Icon(Icons.fingerprint, color: AppColors.accentCyan),
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context).bleIdHint,
+                  prefixIcon: const Icon(Icons.fingerprint, color: AppColors.accentCyan),
                 ),
               ),
             ),
@@ -940,21 +940,21 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  children: const [
-                    Icon(Icons.usb, color: AppColors.successGreen, size: 24),
-                    SizedBox(width: 8),
+                  children: [
+                    const Icon(Icons.usb, color: AppColors.successGreen, size: 24),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        "USB OTG & Serial / Paired COM Ports",
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
+                        AppLocalizations.of(context).usbSerialTitle,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  "Real Android USB-OTG drivers (FTDI, CH340, CP2102, PL2303, CDC-ACM) plus macOS/Linux POSIX serial & paired Bluetooth serial ports (/dev/cu.*).",
-                  style: TextStyle(fontSize: 12, color: AppColors.textMuted, height: 1.4),
+                Text(
+                  AppLocalizations.of(context).usbSerialDescription,
+                  style: const TextStyle(fontSize: 12, color: AppColors.textMuted, height: 1.4),
                 ),
                 const SizedBox(height: 12),
                 ElevatedButton.icon(
@@ -971,7 +971,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                         )
                       : const Icon(Icons.refresh),
                   label: Text(
-                    state.isScanningSerial ? "Enumerating Attached Ports..." : "Refresh Attached USB / Serial Devices",
+                    state.isScanningSerial ? AppLocalizations.of(context).enumeratingPorts : AppLocalizations.of(context).refreshUsbDevices,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   onPressed: state.isScanningSerial ? null : () => state.scanSerialDevices(),
@@ -982,7 +982,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
         ),
         const SizedBox(height: 14),
         Text(
-          "Detected Hardware Serial Ports (${attachedSerial.length}):",
+          AppLocalizations.of(context).detectedSerialPorts(attachedSerial.length),
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.successGreen),
         ),
         const SizedBox(height: 8),
@@ -993,9 +993,9 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
               color: AppColors.cardSurface,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Text(
-              "No USB OTG cables or OBD serial ports detected right now. Plug in USB cable or pair Bluetooth adapter, then tap Refresh.",
-              style: TextStyle(fontSize: 12, color: AppColors.textMuted),
+            child: Text(
+              AppLocalizations.of(context).noUsbDetected,
+              style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
               textAlign: TextAlign.center,
             ),
           )
@@ -1015,7 +1015,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                   style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.textWhite),
                 ),
                 subtitle: Text(
-                  "Port: ${dev.portId} • ${dev.transportKind}${dev.chipsetName != null ? ' • ${dev.chipsetName}' : ''}",
+                  AppLocalizations.of(context).portLine(dev.portId, dev.transportKind) + (dev.chipsetName != null ? ' • ${dev.chipsetName}' : ''),
                   style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                 ),
                 trailing: ElevatedButton(
@@ -1048,21 +1048,21 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Manual Serial Port / Baud Override",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.textWhite)),
+                Text(AppLocalizations.of(context).manualSerialOverride,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.textWhite)),
                 const SizedBox(height: 10),
                 TextField(
                   controller: _usbPortController,
-                  decoration: const InputDecoration(
-                    labelText: "USB / Serial Port Path or Device ID",
-                    prefixIcon: Icon(Icons.cable, color: AppColors.successGreen),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context).serialPortPathLabel,
+                    prefixIcon: const Icon(Icons.cable, color: AppColors.successGreen),
                     hintText: "/dev/cu.987696098341 or Android USB ID",
                   ),
                 ),
                 const SizedBox(height: 10),
                 Row(
                   children: [
-                    const Text("UART Baud Rate: ", style: TextStyle(fontSize: 12, color: AppColors.textWhite)),
+                    Text(AppLocalizations.of(context).uartBaudRate, style: const TextStyle(fontSize: 12, color: AppColors.textWhite)),
                     const SizedBox(width: 8),
                     DropdownButton<int>(
                       value: _selectedUsbBaud,
@@ -1092,7 +1092,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                     minimumSize: const Size(double.infinity, 42),
                   ),
                   icon: const Icon(Icons.power),
-                  label: const Text("Open Specified Serial Port", style: TextStyle(fontWeight: FontWeight.bold)),
+                  label: Text(AppLocalizations.of(context).openSerialPort, style: const TextStyle(fontWeight: FontWeight.bold)),
                   onPressed: state.isConnecting
                       ? null
                       : () async {

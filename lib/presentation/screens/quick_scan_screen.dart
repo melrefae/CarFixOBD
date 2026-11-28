@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/localization/app_strings_en.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../providers/obd_state.dart';
 import '../widgets/dtc_card_item.dart';
 import 'reports_screen.dart';
@@ -34,11 +34,11 @@ class _QuickScanScreenState extends State<QuickScanScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.quickScan),
+        title: Text(AppLocalizations.of(context).quickScan30s),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            tooltip: "Rescan",
+            tooltip: AppLocalizations.of(context).rescan,
             onPressed: state.isScanning ? null : () => state.runQuickScan(),
           ),
         ],
@@ -47,10 +47,10 @@ class _QuickScanScreenState extends State<QuickScanScreen> {
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CircularProgressIndicator(color: AppColors.primaryYellow),
-                  SizedBox(height: 16),
-                  Text("Scanning VIN, MIL status, DTCs, and system voltage...", style: TextStyle(color: AppColors.textWhite)),
+                children: [
+                  const CircularProgressIndicator(color: AppColors.primaryYellow),
+                  const SizedBox(height: 16),
+                  Text(AppLocalizations.of(context).scanningVinMil, style: const TextStyle(color: AppColors.textWhite)),
                 ],
               ),
             )
@@ -74,14 +74,14 @@ class _QuickScanScreenState extends State<QuickScanScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Detected Trouble Codes (${state.storedDtcs.length}):",
+                        AppLocalizations.of(context).detectedDtcs(state.storedDtcs.length),
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.primaryYellow),
                       ),
                       if (state.storedDtcs.isNotEmpty)
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(color: AppColors.dangerRed, borderRadius: BorderRadius.circular(4)),
-                          child: const Text("Active Faults", style: TextStyle(fontSize: 11, color: Colors.white)),
+                          child: Text(AppLocalizations.of(context).activeFaults, style: const TextStyle(fontSize: 11, color: Colors.white)),
                         ),
                     ],
                   ),
@@ -96,13 +96,13 @@ class _QuickScanScreenState extends State<QuickScanScreen> {
                         border: Border.all(color: AppColors.successGreen.withOpacity(0.3)),
                       ),
                       child: Row(
-                        children: const [
-                          Icon(Icons.check_circle, color: AppColors.successGreen, size: 28),
-                          SizedBox(width: 12),
+                        children: [
+                          const Icon(Icons.check_circle, color: AppColors.successGreen, size: 28),
+                          const SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              AppStrings.noDtcsFound,
-                              style: TextStyle(color: AppColors.textWhite, fontSize: 13),
+                              AppLocalizations.of(context).noDtcsFound,
+                              style: const TextStyle(color: AppColors.textWhite, fontSize: 13),
                             ),
                           ),
                         ],
@@ -141,14 +141,14 @@ class _QuickScanScreenState extends State<QuickScanScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  isClean ? "Engine & Emissions in Optimal Health" : "Trouble Codes Detected & Check Engine Active!",
+                  isClean ? AppLocalizations.of(context).optimalHealth : AppLocalizations.of(context).codesDetectedCel,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: color),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   isClean
-                      ? "No misfires, catalyst, or emission-related trouble codes logged in ECU."
-                      : "${state.storedDtcs.length} diagnostic trouble code(s) detected requiring technical inspection.",
+                      ? AppLocalizations.of(context).noMisfires
+                      : AppLocalizations.of(context).codesNeedInspection(state.storedDtcs.length),
                   style: const TextStyle(fontSize: 12, color: AppColors.textWhite),
                 ),
               ],
@@ -165,15 +165,15 @@ class _QuickScanScreenState extends State<QuickScanScreen> {
         padding: const EdgeInsets.all(14),
         child: Column(
           children: [
-            _buildDataRow(AppStrings.vinLabel, state.currentVin, isMonospace: true),
+            _buildDataRow(AppLocalizations.of(context).vinLabel, state.currentVin, isMonospace: true),
             const Divider(color: Color(0xFF37474F)),
-            _buildDataRow(AppStrings.protocolLabel, state.activeProtocol),
+            _buildDataRow(AppLocalizations.of(context).protocolLabel, state.activeProtocol),
             const Divider(color: Color(0xFF37474F)),
-            _buildDataRow(AppStrings.batteryVoltageLabel, "${state.batteryVoltage.toStringAsFixed(1)}V"),
+            _buildDataRow(AppLocalizations.of(context).batteryVoltageLabel, "${state.batteryVoltage.toStringAsFixed(1)}V"),
             const Divider(color: Color(0xFF37474F)),
             _buildDataRow(
-              AppStrings.milStatusLabel,
-              state.isMilOn ? AppStrings.milOn : AppStrings.milOff,
+              AppLocalizations.of(context).milStatusLabel,
+              state.isMilOn ? AppLocalizations.of(context).milOn : AppLocalizations.of(context).milOff,
               textColor: state.isMilOn ? AppColors.dangerRed : AppColors.successGreen,
             ),
           ],
@@ -188,14 +188,20 @@ class _QuickScanScreenState extends State<QuickScanScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(fontSize: 13, color: AppColors.textMuted)),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: textColor ?? AppColors.textWhite,
-              fontFamily: isMonospace ? 'monospace' : null,
+          Expanded(
+            child: Text(label, style: const TextStyle(fontSize: 13, color: AppColors.textMuted)),
+          ),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: textColor ?? AppColors.textWhite,
+                fontFamily: isMonospace ? 'monospace' : null,
+              ),
             ),
           ),
         ],
@@ -211,54 +217,54 @@ class _QuickScanScreenState extends State<QuickScanScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              "Save Inspection Job Card:",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primaryYellow),
+            Text(
+              AppLocalizations.of(context).saveJobCard,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primaryYellow),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: _plateController,
-              decoration: const InputDecoration(labelText: "License Plate (e.g. ABC 1234)"),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context).licensePlateLabel),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _customerController,
-              decoration: const InputDecoration(labelText: "Customer Name"),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context).customerName),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _phoneController,
               keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(labelText: "Phone / WhatsApp Number"),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context).phoneWhatsappNumber),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _notesController,
               maxLines: 2,
-              decoration: const InputDecoration(labelText: "Technician Notes & Recommendations"),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context).technicianNotes),
             ),
             const SizedBox(height: 16),
             ElevatedButton.icon(
               icon: const Icon(Icons.save, color: Colors.black),
-              label: const Text(AppStrings.saveReport),
+              label: Text(AppLocalizations.of(context).saveReport),
               onPressed: () async {
                 if (_plateController.text.trim().isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Please enter the license plate number"), backgroundColor: AppColors.warningOrange),
+                    SnackBar(content: Text(AppLocalizations.of(context).enterPlate), backgroundColor: AppColors.warningOrange),
                   );
                   return;
                 }
 
                 await state.saveCurrentInspection(
                   plateNumber: _plateController.text.trim(),
-                  customerName: _customerController.text.trim().isEmpty ? "Walk-in Customer" : _customerController.text.trim(),
+                  customerName: _customerController.text.trim().isEmpty ? AppLocalizations.of(context).walkInCustomer : _customerController.text.trim(),
                   customerPhone: _phoneController.text.trim(),
                   notes: _notesController.text.trim(),
                 );
 
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Job card saved successfully!"), backgroundColor: AppColors.successGreen),
+                    SnackBar(content: Text(AppLocalizations.of(context).jobCardSaved), backgroundColor: AppColors.successGreen),
                   );
                   Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportsScreen()));
                 }

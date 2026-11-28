@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../data/models/sensor_pid.dart';
 
+String _localizedSensorName(BuildContext context, SensorPid sensor) {
+  final isAr = Localizations.maybeLocaleOf(context)?.languageCode == 'ar';
+  final ar = sensor.nameAr.trim();
+  return (isAr && ar.isNotEmpty) ? ar : sensor.name;
+}
+
 /// High-contrast live gauge tile for an OBD-II sensor PID
 class SensorGaugeCard extends StatelessWidget {
   final SensorPid sensor;
@@ -59,7 +65,7 @@ class SensorGaugeCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          sensor.name,
+                          _localizedSensorName(context, sensor),
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,

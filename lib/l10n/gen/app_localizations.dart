@@ -1315,6 +1315,858 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save Workshop Settings'**
   String get saveWorkshopSettings;
+
+  /// No description provided for @connectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'ELM327 Connection Manager'**
+  String get connectionTitle;
+
+  /// No description provided for @disconnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnect'**
+  String get disconnect;
+
+  /// No description provided for @autoDetectConnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Detect & Connect'**
+  String get autoDetectConnect;
+
+  /// No description provided for @pairedDevicesOs.
+  ///
+  /// In en, this message translates to:
+  /// **'Paired Devices (OS Settings)'**
+  String get pairedDevicesOs;
+
+  /// No description provided for @noPairedDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'No paired Bluetooth devices found'**
+  String get noPairedDevices;
+
+  /// No description provided for @discoveredDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearby Discovered Devices'**
+  String get discoveredDevices;
+
+  /// No description provided for @unknownDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Generic Device'**
+  String get unknownDevice;
+
+  /// No description provided for @wifiSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'ELM327 Wi-Fi Configuration:'**
+  String get wifiSettingsTitle;
+
+  /// No description provided for @wifiDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Wi-Fi OBD adapters in Egypt broadcast an SSID named \'WiFi_OBDII\' and use default IP 192.168.0.10 on port 35000.'**
+  String get wifiDescription;
+
+  /// No description provided for @adapterAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Adapter Address (IP:Port)'**
+  String get adapterAddressLabel;
+
+  /// No description provided for @connectWifi.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect via Wi-Fi'**
+  String get connectWifi;
+
+  /// No description provided for @protocolPickerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Protocol: '**
+  String get protocolPickerLabel;
+
+  /// No description provided for @checkAdapter20s.
+  ///
+  /// In en, this message translates to:
+  /// **'Check adapter (about 20 s)'**
+  String get checkAdapter20s;
+
+  /// No description provided for @adapterCheckTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Adapter check'**
+  String get adapterCheckTitle;
+
+  /// No description provided for @readModulesUds.
+  ///
+  /// In en, this message translates to:
+  /// **'Read modules, UDS (read-only, CAN only)'**
+  String get readModulesUds;
+
+  /// No description provided for @modulesUdsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Modules (UDS)'**
+  String get modulesUdsTitle;
+
+  /// No description provided for @lastAttempt.
+  ///
+  /// In en, this message translates to:
+  /// **'Last attempt:'**
+  String get lastAttempt;
+
+  /// No description provided for @retryEcuHandshake.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry ECU Handshake (Key in ON/RUN)'**
+  String get retryEcuHandshake;
+
+  /// No description provided for @quickReconnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Reconnect: {name} ({type})'**
+  String quickReconnect(Object name, Object type);
+
+  /// No description provided for @autoDetectSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Probes USB-OTG / Paired Serial, BT Classic, BLE 5.0 & Wi-Fi automatically + auto-detects car VIN/Model'**
+  String get autoDetectSubtitle;
+
+  /// No description provided for @autoDetecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-Detecting...'**
+  String get autoDetecting;
+
+  /// No description provided for @autoDetectAnyAdapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-Detect & Connect Any OBD Adapter'**
+  String get autoDetectAnyAdapter;
+
+  /// No description provided for @connectedToAdapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected to {adapter}!'**
+  String connectedToAdapter(Object adapter);
+
+  /// No description provided for @scanning.
+  ///
+  /// In en, this message translates to:
+  /// **'Scanning...'**
+  String get scanning;
+
+  /// No description provided for @scanNearby.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan Nearby'**
+  String get scanNearby;
+
+  /// No description provided for @refreshPaired.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Paired'**
+  String get refreshPaired;
+
+  /// No description provided for @pairedNonAndroidNote.
+  ///
+  /// In en, this message translates to:
+  /// **'On laptop/desktop or non-Android devices, check USB / Serial tab for paired Bluetooth COM/cu ports or BLE 5.0 tab.'**
+  String get pairedNonAndroidNote;
+
+  /// No description provided for @listeningNearby.
+  ///
+  /// In en, this message translates to:
+  /// **'Listening for nearby Bluetooth adapters...'**
+  String get listeningNearby;
+
+  /// No description provided for @pairedBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Paired'**
+  String get pairedBadge;
+
+  /// No description provided for @nearbyBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearby'**
+  String get nearbyBadge;
+
+  /// No description provided for @chipLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Chip: {chip}'**
+  String chipLabel(Object chip);
+
+  /// No description provided for @scoreLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Score: {score}'**
+  String scoreLabel(Object score);
+
+  /// No description provided for @autoProbeWifi.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-Probe Active Wi-Fi OBD Gateway'**
+  String get autoProbeWifi;
+
+  /// No description provided for @noWifiGateway.
+  ///
+  /// In en, this message translates to:
+  /// **'No Wi-Fi ELM327 gateway responded on standard ports.'**
+  String get noWifiGateway;
+
+  /// No description provided for @bleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth Low Energy (BLE 4.0 / 5.0 GATT)'**
+  String get bleTitle;
+
+  /// No description provided for @bleDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Scans live nearby BLE peripherals supporting Nordic UART (6E400001), 0xFFF0 (Veepeak/Vgate), 0x18F0 (OBDLink/vLinker), and 0xFFE0 GATT characteristics.'**
+  String get bleDescription;
+
+  /// No description provided for @scanningBle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scanning Nearby BLE Peripherals...'**
+  String get scanningBle;
+
+  /// No description provided for @scanBleAdapters.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan Nearby BLE OBD Adapters'**
+  String get scanBleAdapters;
+
+  /// No description provided for @bleScanResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Live BLE Scan Results ({count})'**
+  String bleScanResults(Object count);
+
+  /// No description provided for @listening.
+  ///
+  /// In en, this message translates to:
+  /// **'Listening...'**
+  String get listening;
+
+  /// No description provided for @searchingBle.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching BLE advertisements...'**
+  String get searchingBle;
+
+  /// No description provided for @tapScanBle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap \'Scan Nearby BLE OBD Adapters\' above to discover powered BLE dongles.'**
+  String get tapScanBle;
+
+  /// No description provided for @bleIdRssi.
+  ///
+  /// In en, this message translates to:
+  /// **'ID: {id} • RSSI: {rssi} dBm'**
+  String bleIdRssi(Object id, Object rssi);
+
+  /// No description provided for @manualBleId.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual BLE Remote ID / Address:'**
+  String get manualBleId;
+
+  /// No description provided for @bleIdHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 00:1B:10:E2:33:44 or device UUID'**
+  String get bleIdHint;
+
+  /// No description provided for @usbSerialTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'USB OTG & Serial / Paired COM Ports'**
+  String get usbSerialTitle;
+
+  /// No description provided for @usbSerialDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Real Android USB-OTG drivers (FTDI, CH340, CP2102, PL2303, CDC-ACM) plus macOS/Linux POSIX serial & paired Bluetooth serial ports (/dev/cu.*).'**
+  String get usbSerialDescription;
+
+  /// No description provided for @enumeratingPorts.
+  ///
+  /// In en, this message translates to:
+  /// **'Enumerating Attached Ports...'**
+  String get enumeratingPorts;
+
+  /// No description provided for @refreshUsbDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Attached USB / Serial Devices'**
+  String get refreshUsbDevices;
+
+  /// No description provided for @detectedSerialPorts.
+  ///
+  /// In en, this message translates to:
+  /// **'Detected Hardware Serial Ports ({count}):'**
+  String detectedSerialPorts(Object count);
+
+  /// No description provided for @noUsbDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'No USB OTG cables or OBD serial ports detected right now. Plug in USB cable or pair Bluetooth adapter, then tap Refresh.'**
+  String get noUsbDetected;
+
+  /// No description provided for @portLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Port: {port} • {transport}'**
+  String portLine(Object port, Object transport);
+
+  /// No description provided for @manualSerialOverride.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual Serial Port / Baud Override'**
+  String get manualSerialOverride;
+
+  /// No description provided for @serialPortPathLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'USB / Serial Port Path or Device ID'**
+  String get serialPortPathLabel;
+
+  /// No description provided for @uartBaudRate.
+  ///
+  /// In en, this message translates to:
+  /// **'UART Baud Rate: '**
+  String get uartBaudRate;
+
+  /// No description provided for @openSerialPort.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Specified Serial Port'**
+  String get openSerialPort;
+
+  /// No description provided for @noDtcsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No trouble codes found. ECU reports healthy status!'**
+  String get noDtcsFound;
+
+  /// No description provided for @vinLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Chassis Number (VIN):'**
+  String get vinLabel;
+
+  /// No description provided for @protocolLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Protocol:'**
+  String get protocolLabel;
+
+  /// No description provided for @batteryVoltageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery Voltage:'**
+  String get batteryVoltageLabel;
+
+  /// No description provided for @milStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'MIL (Check Engine) Status:'**
+  String get milStatusLabel;
+
+  /// No description provided for @milOn.
+  ///
+  /// In en, this message translates to:
+  /// **'ON (Active Trouble Codes)'**
+  String get milOn;
+
+  /// No description provided for @milOff.
+  ///
+  /// In en, this message translates to:
+  /// **'OFF (No Active Faults)'**
+  String get milOff;
+
+  /// No description provided for @saveReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Inspection Report'**
+  String get saveReport;
+
+  /// No description provided for @rescan.
+  ///
+  /// In en, this message translates to:
+  /// **'Rescan'**
+  String get rescan;
+
+  /// No description provided for @scanningVinMil.
+  ///
+  /// In en, this message translates to:
+  /// **'Scanning VIN, MIL status, DTCs, and system voltage...'**
+  String get scanningVinMil;
+
+  /// No description provided for @detectedDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'Detected Trouble Codes ({count}):'**
+  String detectedDtcs(Object count);
+
+  /// No description provided for @activeFaults.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Faults'**
+  String get activeFaults;
+
+  /// No description provided for @optimalHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Engine & Emissions in Optimal Health'**
+  String get optimalHealth;
+
+  /// No description provided for @codesDetectedCel.
+  ///
+  /// In en, this message translates to:
+  /// **'Trouble Codes Detected & Check Engine Active!'**
+  String get codesDetectedCel;
+
+  /// No description provided for @noMisfires.
+  ///
+  /// In en, this message translates to:
+  /// **'No misfires, catalyst, or emission-related trouble codes logged in ECU.'**
+  String get noMisfires;
+
+  /// No description provided for @saveJobCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Inspection Job Card:'**
+  String get saveJobCard;
+
+  /// No description provided for @licensePlateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'License Plate (e.g. ABC 1234)'**
+  String get licensePlateLabel;
+
+  /// No description provided for @customerName.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer Name'**
+  String get customerName;
+
+  /// No description provided for @phoneWhatsappNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone / WhatsApp Number'**
+  String get phoneWhatsappNumber;
+
+  /// No description provided for @enterPlate.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the license plate number'**
+  String get enterPlate;
+
+  /// No description provided for @walkInCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Walk-in Customer'**
+  String get walkInCustomer;
+
+  /// No description provided for @jobCardSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Job card saved successfully!'**
+  String get jobCardSaved;
+
+  /// No description provided for @readDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostic Codes (DTCs)'**
+  String get readDtcs;
+
+  /// No description provided for @storedDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed Trouble Codes (Mode 03)'**
+  String get storedDtcs;
+
+  /// No description provided for @pendingDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Trouble Codes (Mode 07)'**
+  String get pendingDtcs;
+
+  /// No description provided for @permanentDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent Trouble Codes (Mode 0A)'**
+  String get permanentDtcs;
+
+  /// No description provided for @searchDtcHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search DTC code or keyword (e.g., P0300, Misfire)...'**
+  String get searchDtcHint;
+
+  /// No description provided for @clearDtcsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Trouble Codes & Reset MIL (Mode 04)'**
+  String get clearDtcsButton;
+
+  /// No description provided for @dtcsClearedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostic trouble codes cleared and MIL light reset successfully!'**
+  String get dtcsClearedSuccess;
+
+  /// No description provided for @dtcsClearedFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to clear trouble codes. Ensure Key is ON and Engine is OFF.'**
+  String get dtcsClearedFail;
+
+  /// No description provided for @clearPartialRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'The ECU accepted the clear but {count} code(s) are still stored: {codes}. The fault is probably still present.'**
+  String clearPartialRemaining(Object codes, Object count);
+
+  /// No description provided for @clearUnconfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'The ECU accepted the clear but the read-back could not confirm it. Read the codes again.'**
+  String get clearUnconfirmed;
+
+  /// No description provided for @noStoredDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'No confirmed trouble codes found.'**
+  String get noStoredDtcs;
+
+  /// No description provided for @noPendingDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'No pending trouble codes found.'**
+  String get noPendingDtcs;
+
+  /// No description provided for @noPermanentDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'No permanent trouble codes found.'**
+  String get noPermanentDtcs;
+
+  /// No description provided for @rescanDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'Rescan DTCs'**
+  String get rescanDtcs;
+
+  /// No description provided for @noDtcsMatching.
+  ///
+  /// In en, this message translates to:
+  /// **'No diagnostic trouble codes found matching \'{query}\''**
+  String noDtcsMatching(Object query);
+
+  /// No description provided for @liveSensorsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Sensors'**
+  String get liveSensorsTitle;
+
+  /// No description provided for @liveGraphsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Waveforms (Graphs)'**
+  String get liveGraphsTitle;
+
+  /// No description provided for @discoverPids.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover Supported PIDs'**
+  String get discoverPids;
+
+  /// No description provided for @pausePolling.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause Live Polling'**
+  String get pausePolling;
+
+  /// No description provided for @startPolling.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Live Polling'**
+  String get startPolling;
+
+  /// No description provided for @allSensors.
+  ///
+  /// In en, this message translates to:
+  /// **'All Sensors'**
+  String get allSensors;
+
+  /// No description provided for @engineSensors.
+  ///
+  /// In en, this message translates to:
+  /// **'Engine & Speed'**
+  String get engineSensors;
+
+  /// No description provided for @coolingSensors.
+  ///
+  /// In en, this message translates to:
+  /// **'Cooling System'**
+  String get coolingSensors;
+
+  /// No description provided for @electricalSensors.
+  ///
+  /// In en, this message translates to:
+  /// **'Electrical & Battery'**
+  String get electricalSensors;
+
+  /// No description provided for @fuelAir.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel & Air'**
+  String get fuelAir;
+
+  /// No description provided for @railTurbo.
+  ///
+  /// In en, this message translates to:
+  /// **'Rail & Turbo'**
+  String get railTurbo;
+
+  /// No description provided for @transmission.
+  ///
+  /// In en, this message translates to:
+  /// **'Transmission'**
+  String get transmission;
+
+  /// No description provided for @absSpeeds.
+  ///
+  /// In en, this message translates to:
+  /// **'4-Wheel ABS'**
+  String get absSpeeds;
+
+  /// No description provided for @oemCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'OEM Custom'**
+  String get oemCustom;
+
+  /// No description provided for @noSensorsCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'No sensors found in this category'**
+  String get noSensorsCategory;
+
+  /// No description provided for @variance5.
+  ///
+  /// In en, this message translates to:
+  /// **'Variance > 5 km/h'**
+  String get variance5;
+
+  /// No description provided for @disableDual.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable Dual Channel'**
+  String get disableDual;
+
+  /// No description provided for @enableDual.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Dual Channel'**
+  String get enableDual;
+
+  /// No description provided for @channel1.
+  ///
+  /// In en, this message translates to:
+  /// **'Channel 1 (Yellow):'**
+  String get channel1;
+
+  /// No description provided for @channel2.
+  ///
+  /// In en, this message translates to:
+  /// **'Channel 2 Comparison (Cyan):'**
+  String get channel2;
+
+  /// No description provided for @freezeFrameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Freeze Frame Data'**
+  String get freezeFrameTitle;
+
+  /// No description provided for @refreshFreezeFrame.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Freeze Frame'**
+  String get refreshFreezeFrame;
+
+  /// No description provided for @queryingFreezeFrame.
+  ///
+  /// In en, this message translates to:
+  /// **'Querying Freeze Frame data from ECU (Mode 02)...'**
+  String get queryingFreezeFrame;
+
+  /// No description provided for @noFreezeFrame.
+  ///
+  /// In en, this message translates to:
+  /// **'No Freeze Frame logged in ECU memory'**
+  String get noFreezeFrame;
+
+  /// No description provided for @freezeFrameStoredWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'Freeze frame data is stored only when a confirmed DTC is first triggered'**
+  String get freezeFrameStoredWhen;
+
+  /// No description provided for @triggeringFaultCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Triggering Fault Code:'**
+  String get triggeringFaultCode;
+
+  /// No description provided for @sensorSnapshot.
+  ///
+  /// In en, this message translates to:
+  /// **'Sensor Snapshot at Event Occurrence:'**
+  String get sensorSnapshot;
+
+  /// No description provided for @engineSpeedRpm.
+  ///
+  /// In en, this message translates to:
+  /// **'Engine Speed (RPM):'**
+  String get engineSpeedRpm;
+
+  /// No description provided for @vehicleSpeedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle Speed:'**
+  String get vehicleSpeedLabel;
+
+  /// No description provided for @coolantTempLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Coolant Temperature:'**
+  String get coolantTempLabel;
+
+  /// No description provided for @engineLoadLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculated Engine Load:'**
+  String get engineLoadLabel;
+
+  /// No description provided for @throttlePositionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Throttle Position (TPS):'**
+  String get throttlePositionLabel;
+
+  /// No description provided for @manifoldPressureLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Manifold Absolute Pressure:'**
+  String get manifoldPressureLabel;
+
+  /// No description provided for @intakeAirTempLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Intake Air Temp (IAT):'**
+  String get intakeAirTempLabel;
+
+  /// No description provided for @stftLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Short Term Fuel Trim (STFT):'**
+  String get stftLabel;
+
+  /// No description provided for @ltftLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Long Term Fuel Trim (LTFT):'**
+  String get ltftLabel;
+
+  /// No description provided for @workshopAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Workshop Analysis & Operating Context:'**
+  String get workshopAnalysis;
+
+  /// No description provided for @faultContextLine1.
+  ///
+  /// In en, this message translates to:
+  /// **'This fault was triggered while driving at {speed} km/h with engine running at {rpm} RPM and coolant at {coolant}°C.'**
+  String faultContextLine1(Object coolant, Object rpm, Object speed);
+
+  /// No description provided for @faultContextLine2.
+  ///
+  /// In en, this message translates to:
+  /// **'Long Term Fuel Trim was ({ltft}%), indicating the ECU was compensating for a {condition} at the moment the fault occurred.'**
+  String faultContextLine2(Object condition, Object ltft);
+
+  /// No description provided for @leanCondition.
+  ///
+  /// In en, this message translates to:
+  /// **'lean condition (intake vacuum leak or low fuel pressure)'**
+  String get leanCondition;
+
+  /// No description provided for @richCondition.
+  ///
+  /// In en, this message translates to:
+  /// **'rich condition (dripping injector or restricted air intake)'**
+  String get richCondition;
+
+  /// No description provided for @normalCondition.
+  ///
+  /// In en, this message translates to:
+  /// **'normal air-fuel ratio'**
+  String get normalCondition;
+
+  /// No description provided for @codesNeedInspection.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} diagnostic trouble code(s) detected requiring technical inspection.'**
+  String codesNeedInspection(Object count);
+
+  /// No description provided for @absCompareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'4-Wheel Independent ABS Speeds'**
+  String get absCompareTitle;
+
+  /// No description provided for @targetVsActual.
+  ///
+  /// In en, this message translates to:
+  /// **'Target vs Actual OEM Tracking'**
+  String get targetVsActual;
+
+  /// No description provided for @railPressure.
+  ///
+  /// In en, this message translates to:
+  /// **'Common Rail Fuel Pressure'**
+  String get railPressure;
+
+  /// No description provided for @turboBoost.
+  ///
+  /// In en, this message translates to:
+  /// **'Turbo Boost Pressure'**
+  String get turboBoost;
+
+  /// No description provided for @actualValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Actual: {value}'**
+  String actualValue(Object value);
+
+  /// No description provided for @targetValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Target: {value}'**
+  String targetValue(Object value);
 }
 
 class _AppLocalizationsDelegate
