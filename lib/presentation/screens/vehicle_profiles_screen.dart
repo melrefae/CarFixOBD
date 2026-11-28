@@ -18,6 +18,20 @@ class VehicleProfilesScreen extends StatefulWidget {
 }
 
 class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with SingleTickerProviderStateMixin {
+
+String _localizedRegion(BuildContext context, String region) {
+  final l10n = AppLocalizations.of(context);
+  switch (region) {
+    case 'All Regions': return l10n.regionAll;
+    case 'Asian': return l10n.regionAsian;
+    case 'European': return l10n.regionEuropean;
+    case 'American': return l10n.regionAmerican;
+    case 'Chinese': return l10n.regionChinese;
+    case 'Commercial': return l10n.regionCommercial;
+    default: return region;
+  }
+}
+
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   String _selectedRegion = 'All Regions';
@@ -100,7 +114,7 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
                 final r = regions[i];
                 final isSelected = _selectedRegion == r;
                 return ChoiceChip(
-                  label: Text(r),
+                  label: Text(_localizedRegion(context, r)),
                   selected: isSelected,
                   selectedColor: AppColors.primaryYellow,
                   backgroundColor: AppColors.cardSurface,
@@ -152,7 +166,7 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
             const Icon(Icons.search_off, size: 64, color: AppColors.textMuted),
             const SizedBox(height: 12),
             Text(
-              AppLocalizations.of(context).noProfilesFound(_selectedRegion, _searchQuery),
+              AppLocalizations.of(context).noProfilesFound(_localizedRegion(context, _selectedRegion), _searchQuery),
               style: const TextStyle(color: AppColors.textMuted, fontSize: 14),
             ),
           ],
@@ -366,7 +380,7 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
             const Icon(Icons.public_off, size: 64, color: AppColors.textMuted),
             const SizedBox(height: 12),
             Text(
-              AppLocalizations.of(context).noBrandsFound(_selectedRegion, _searchQuery),
+              AppLocalizations.of(context).noBrandsFound(_localizedRegion(context, _selectedRegion), _searchQuery),
               style: const TextStyle(color: AppColors.textMuted, fontSize: 14),
             ),
           ],
@@ -427,7 +441,7 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
             subtitle: Row(
               children: [
                 Text(
-                  "${brand.region} • ${brand.country}",
+                  "${_localizedRegion(context, brand.region)} • ${brand.country}",
                   style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                 ),
                 const SizedBox(width: 8),

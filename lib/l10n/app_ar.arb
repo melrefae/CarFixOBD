@@ -454,5 +454,11 @@
   "hwChipWifi": "واي فاي TCP",
   "hwChipAutoVin": "قراءة الشاسيه تلقائيًا",
   "statusDisconnected": "غير متصل بفيشة الفحص",
-  "statusDisconnectedShort": "غير متصل"
+  "statusDisconnectedShort": "غير متصل",
+  "regionAll": "كل المناطق",
+  "regionAsian": "آسيوية",
+  "regionEuropean": "أوروبية",
+  "regionAmerican": "أمريكية",
+  "regionChinese": "صينية",
+  "regionCommercial": "تجارية"
 }

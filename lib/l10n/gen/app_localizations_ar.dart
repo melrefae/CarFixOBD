@@ -1504,4 +1504,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get statusDisconnectedShort => 'غير متصل';
+
+  @override
+  String get regionAll => 'كل المناطق';
+
+  @override
+  String get regionAsian => 'آسيوية';
+
+  @override
+  String get regionEuropean => 'أوروبية';
+
+  @override
+  String get regionAmerican => 'أمريكية';
+
+  @override
+  String get regionChinese => 'صينية';
+
+  @override
+  String get regionCommercial => 'تجارية';
 }

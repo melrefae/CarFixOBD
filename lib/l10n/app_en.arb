@@ -624,5 +624,11 @@
   "hwChipWifi": "Wi-Fi TCP",
   "hwChipAutoVin": "Auto Car VIN",
   "statusDisconnected": "Disconnected from adapter",
-  "statusDisconnectedShort": "Disconnected"
+  "statusDisconnectedShort": "Disconnected",
+  "regionAll": "All Regions",
+  "regionAsian": "Asian",
+  "regionEuropean": "European",
+  "regionAmerican": "American",
+  "regionChinese": "Chinese",
+  "regionCommercial": "Commercial"
 }

@@ -1507,4 +1507,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statusDisconnectedShort => 'Disconnected';
+
+  @override
+  String get regionAll => 'All Regions';
+
+  @override
+  String get regionAsian => 'Asian';
+
+  @override
+  String get regionEuropean => 'European';
+
+  @override
+  String get regionAmerican => 'American';
+
+  @override
+  String get regionChinese => 'Chinese';
+
+  @override
+  String get regionCommercial => 'Commercial';
 }

@@ -92,7 +92,7 @@ class _EcuInfoScreenState extends State<EcuInfoScreen> {
                         children: [
                           _buildDetailRow(
                             title: AppLocalizations.of(context).vinLabel,
-                            value: details['vin'] ?? state.currentVin,
+                            value: (details['vin'] ?? state.currentVin) == 'N/A' ? AppLocalizations.of(context).notAvailable : (details['vin'] ?? state.currentVin),
                             subtitle: AppLocalizations.of(context).vinSubtitle,
                           ),
                           const Divider(color: Color(0xFF37474F)),
@@ -110,7 +110,7 @@ class _EcuInfoScreenState extends State<EcuInfoScreen> {
                           const Divider(color: Color(0xFF37474F)),
                           _buildDetailRow(
                             title: AppLocalizations.of(context).protocolLabel,
-                            value: state.activeProtocol,
+                            value: state.activeProtocol == 'Not Detected' ? AppLocalizations.of(context).notDetected : state.activeProtocol,
                             subtitle: AppLocalizations.of(context).protocolSubtitle,
                           ),
                         ],

@@ -2827,6 +2827,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disconnected'**
   String get statusDisconnectedShort;
+
+  /// No description provided for @regionAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All Regions'**
+  String get regionAll;
+
+  /// No description provided for @regionAsian.
+  ///
+  /// In en, this message translates to:
+  /// **'Asian'**
+  String get regionAsian;
+
+  /// No description provided for @regionEuropean.
+  ///
+  /// In en, this message translates to:
+  /// **'European'**
+  String get regionEuropean;
+
+  /// No description provided for @regionAmerican.
+  ///
+  /// In en, this message translates to:
+  /// **'American'**
+  String get regionAmerican;
+
+  /// No description provided for @regionChinese.
+  ///
+  /// In en, this message translates to:
+  /// **'Chinese'**
+  String get regionChinese;
+
+  /// No description provided for @regionCommercial.
+  ///
+  /// In en, this message translates to:
+  /// **'Commercial'**
+  String get regionCommercial;
 }
 
 class _AppLocalizationsDelegate
