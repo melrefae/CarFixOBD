@@ -895,5 +895,274 @@
   "minValueLabel": "Min Value",
   "maxValueLabel": "Max Value",
   "requiredField": "Required",
-  "savePid": "Save PID"
+  "savePid": "Save PID",
+  "unitSec": "s",
+  "unitKmh": "km/h",
+  "unitDegC": "°C",
+  "unitVolt": "V",
+  "unitKpa": "kPa",
+  "unitMeter": "m",
+  "frTitle": "Black Box Flight Recorder",
+  "frActive": "Flight Recording ACTIVE",
+  "frBlackBox": "Black Box Flight Logger",
+  "frFramesLogged": "{count} frames logged ({secs}s)",
+  "@frFramesLogged": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "secs": {
+        "type": "String"
+      }
+    }
+  },
+  "frRecordsDesc": "Records 10 key telemetry PIDs for road testing",
+  "frStop": "Stop & Save Flight Log",
+  "frStart": "Start New Flight Recording",
+  "frVehicleFallback": "Vehicle",
+  "frSavedLogs": "Saved Flight Logs (Road Tests):",
+  "frNoLogs": "No flight logs recorded yet.\nTap 'Start New Flight Recording' during a road test to capture telemetry.",
+  "frFramesEntry": "{date} • {count} Telemetry Frames",
+  "@frFramesEntry": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "frExportCsv": "Export CSV (Excel / MegaLogViewer)",
+  "frDeleteLog": "Delete Log",
+  "frDuration": "Duration",
+  "frMaxSpeed": "Max Speed",
+  "frMaxRpm": "Max RPM",
+  "frMaxTemp": "Max Temp",
+  "frScrub": "Scrub & Replay Timeline",
+  "frTimestamp": "Timestamp: {pos}s / {total}s",
+  "@frTimestamp": {
+    "placeholders": {
+      "pos": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "frSpeed": "Speed",
+  "frCoolant": "Coolant",
+  "frThrottle": "Throttle",
+  "frBattery": "Battery",
+  "topoTitle": "Multi-ECU Network Topology",
+  "topoRescan": "Rescan All Systems",
+  "topoBusTitle": "CAN Gateway Bus Topology",
+  "topoModulesOnline": "{online} / {total} Modules Online • {faults} Total Faults",
+  "@topoModulesOnline": {
+    "placeholders": {
+      "online": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "faults": {
+        "type": "int"
+      }
+    }
+  },
+  "topoScanningBus": "Scanning Bus...",
+  "topoSmartScan": "Smart Scan (All Modules)",
+  "topoClearAll": "Clear All",
+  "topoClearedOk": "All module trouble codes cleared!",
+  "topoClearedFail": "Failed to clear some modules.",
+  "topoOpenGraph": "Open Interactive Multi-Trunk Bus Graph (CAN/LIN)",
+  "topoSubsystems": "Detected Vehicle Subsystems:",
+  "topoScanning": "Scanning...",
+  "topoHealthy": "Healthy / Pass",
+  "topoFaults": "{count} Fault(s)",
+  "@topoFaults": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "topoOffline": "Not Fitted / Offline",
+  "topoPending": "Pending Scan",
+  "topoProtocol": "Protocol: {protocol}",
+  "@topoProtocol": {
+    "placeholders": {
+      "protocol": {
+        "type": "String"
+      }
+    }
+  },
+  "topoLatency": "Latency: {ms}ms",
+  "@topoLatency": {
+    "placeholders": {
+      "ms": {
+        "type": "int"
+      }
+    }
+  },
+  "topoStoredCodes": "Stored Trouble Codes:",
+  "o2Title": "Dual O2 & Catalytic Health",
+  "o2Pause": "Pause Live Waveform",
+  "o2Start": "Start Live Waveform",
+  "o2HealthTitle": "Catalytic Converter Health",
+  "o2Efficiency": "{pct}% Efficiency",
+  "@o2Efficiency": {
+    "placeholders": {
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "o2Upstream": "Upstream Transitions",
+  "o2Downstream": "Downstream Transitions",
+  "o2Ratio": "Switching Ratio",
+  "o2Waveforms": "Dual O2 Waveforms (0.0V - 1.0V)",
+  "o2UpstreamShort": "B1S1 (Upstream)",
+  "o2DownstreamShort": "B1S2 (Downstream)",
+  "o2TapPlay": "Tap Play button above to start live O2 sensor telemetry",
+  "o2Assessment": "Diagnostic Assessment:",
+  "o2Guide": "Technician Action Guide:",
+  "o2StatusInsufficient": "Normal / Insufficient Samples",
+  "o2DiagInsufficient": "Collecting oxygen sensor telemetry data...",
+  "o2RecInsufficient": "Allow engine to idle or cruise steadily for 15 seconds to accumulate sensor waveforms.",
+  "o2StatusExcellent": "Excellent / High Efficiency (OEM Benchmark)",
+  "o2DiagExcellent": "Upstream sensor switches rapidly ({upCross} transitions) while downstream sensor remains flat and steady (~{avgDown}V). The catalytic substrate has strong oxygen storage capacity.",
+  "@o2DiagExcellent": {
+    "placeholders": {
+      "upCross": {
+        "type": "int"
+      },
+      "avgDown": {
+        "type": "String"
+      }
+    }
+  },
+  "o2RecExcellent": "No service required. Emissions system is operating within optimum Euro 4/5/6 compliance limits.",
+  "o2StatusAging": "Aging Catalytic Converter (Moderate Efficiency)",
+  "o2DiagAging": "Downstream sensor is beginning to mimic upstream switching ({downCross} transitions vs {upCross}). Oxygen storage capacity has degraded by {degradation}%.",
+  "@o2DiagAging": {
+    "placeholders": {
+      "downCross": {
+        "type": "int"
+      },
+      "upCross": {
+        "type": "int"
+      },
+      "degradation": {
+        "type": "String"
+      }
+    }
+  },
+  "o2RecAging": "Inspect for minor exhaust manifold gasket leaks or unburnt fuel from rich misfires. Add high-grade catalytic converter cleaner additive.",
+  "o2StatusFailing": "Severely Degraded / Catalytic Failure (P0420 Precursor)",
+  "o2DiagFailing": "Downstream oxygen sensor is mirroring upstream oscillations with high switching ratio ({ratio}%). The catalytic converter is no longer storing oxygen or reducing emissions.",
+  "@o2DiagFailing": {
+    "placeholders": {
+      "ratio": {
+        "type": "String"
+      }
+    }
+  },
+  "o2RecFailing": "Catalytic converter core is melted, hollowed, or poisoned by leaded/contaminated fuel. Replacement of the converter or cleaning core is required.",
+  "dynoTitle": "0-100 km/h & Dyno HP Meter",
+  "dynoArmed": "ARMED: Stop vehicle completely to begin",
+  "dynoAccelerating": "ACCELERATING: Floor the accelerator!",
+  "dynoCompleted": "RUN COMPLETED: 0-100 km/h Recorded!",
+  "dynoReset": "Reset Performance Timers",
+  "dynoZeroHundred": "0 – 100 km/h (0 – 62 mph)",
+  "dynoZeroSixty": "0-60 km/h Split",
+  "dynoDistance": "Distance Covered",
+  "dynoMaxSpeed": "Max Speed",
+  "dynoQuarter": "400m Quarter Mile",
+  "dynoTrap": "Trap: {speed} km/h",
+  "@dynoTrap": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "dynoBraking": "100 – 0 Braking",
+  "dynoEmergencyStop": "Emergency Stop",
+  "dynoEstTitle": "Estimated Dyno Power & Torque:",
+  "dynoWeight": "Weight: {kg} kg",
+  "@dynoWeight": {
+    "placeholders": {
+      "kg": {
+        "type": "int"
+      }
+    }
+  },
+  "dynoPeakWHP": "Peak Wheel Horsepower",
+  "dynoPeakTorque": "Peak Engine Torque",
+  "dynoAdjustWeight": "Adjust Vehicle Weight ({kg} kg):",
+  "@dynoAdjustWeight": {
+    "placeholders": {
+      "kg": {
+        "type": "int"
+      }
+    }
+  },
+  "lanTitle": "Workshop LAN Sync Hub",
+  "lanUnspecified": "Unspecified",
+  "lanNewReport": "New inspection report received for: {name}",
+  "@lanNewReport": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "lanTabServer": "Local Server (Master)",
+  "lanTabSync": "Sync Reports (Client)",
+  "lanServerActive": "Local LAN Server Active",
+  "lanServerStopped": "Local LAN Server Stopped",
+  "lanActiveDesc": "Any desktop, laptop, or smartphone on workshop Wi-Fi can open the URL below",
+  "lanStoppedDesc": "Tap the button below to start broadcasting live diagnostics and job cards over local Wi-Fi",
+  "lanCopyUrl": "Copy URL",
+  "lanCopied": "Server URL copied to clipboard!",
+  "lanStop": "Stop LAN Server",
+  "lanStart": "Start Workshop Server (Port 8080)",
+  "lanStartFail": "Unable to start server. Ensure device is connected to Wi-Fi / Hotspot.",
+  "lanHowTitle": "How Does Offline LAN Hub Work?",
+  "lanHowSteps": "1. Ensure the diagnostic tablet and reception/accounting PC are connected to the same workshop Wi-Fi router or phone Hotspot.\n2. No external internet or cellular data is required; data communicates entirely offline across local subnet.\n3. Open Google Chrome on the reception PC and enter the URL shown above.\n4. A real-time dashboard appears displaying live telemetry, trouble codes, and printable PDF inspection job cards for standard A4 printers.",
+  "lanSyncTitle": "Sync Inspection Job Cards with Master PC",
+  "lanSyncDesc": "If using this tablet under the vehicle or in the service bay, push saved inspection job cards directly to the main reception PC with one tap.",
+  "lanMasterIp": "Master PC IP Address",
+  "lanSyncing": "Syncing...",
+  "lanSyncAll": "Sync All Reports ({count})",
+  "@lanSyncAll": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lanInvalidIp": "Please enter a valid IP address for the Master PC",
+  "lanSyncResultOk": "Sync result: Sent {success} report(s) successfully without errors! ✅",
+  "@lanSyncResultOk": {
+    "placeholders": {
+      "success": {
+        "type": "int"
+      }
+    }
+  },
+  "lanSyncResultFail": "Sync result: Sent {success} report(s) successfully, {fail} failed.",
+  "@lanSyncResultFail": {
+    "placeholders": {
+      "success": {
+        "type": "int"
+      },
+      "fail": {
+        "type": "int"
+      }
+    }
+  }
 }

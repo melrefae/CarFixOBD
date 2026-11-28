@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/localization/app_strings_en.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../domain/analyzers/catalytic_health_analyzer.dart';
 import '../providers/obd_state.dart';
 
@@ -12,6 +12,7 @@ class O2CatAnalyzerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final state = Provider.of<ObdState>(context);
     final upVolts = state.o2B1S1History;
     final downVolts = state.o2B1S2History;
@@ -40,11 +41,11 @@ class O2CatAnalyzerScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.catalyticAnalyzer),
+        title: Text(l10n.o2Title),
         actions: [
           IconButton(
             icon: Icon(state.isPolling ? Icons.pause_circle : Icons.play_circle),
-            tooltip: state.isPolling ? "Pause Live Waveform" : "Start Live Waveform",
+            tooltip: state.isPolling ? l10n.o2Pause : l10n.o2Start,
             onPressed: !state.isConnected ? null : () => state.toggleLivePolling(),
           ),
         ],
@@ -70,13 +71,13 @@ class O2CatAnalyzerScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Catalytic Converter Health",
+                          Text(
+                            l10n.o2HealthTitle,
                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.textWhite),
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            report.status,
+                            _o2StatusText(l10n, report),
                             style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: healthColor),
                           ),
                         ],
@@ -89,7 +90,7 @@ class O2CatAnalyzerScreen extends StatelessWidget {
                           border: Border.all(color: healthColor),
                         ),
                         child: Text(
-                          "${report.efficiencyPercent.toInt()}% Efficiency",
+                          l10n.o2Efficiency(report.efficiencyPercent.toInt()),
                           style: TextStyle(color: healthColor, fontWeight: FontWeight.bold, fontSize: 14),
                         ),
                       ),
@@ -109,9 +110,9 @@ class O2CatAnalyzerScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildMetricStat("Upstream Transitions", "${report.upstreamCrossCount}", AppColors.primaryYellow),
-                      _buildMetricStat("Downstream Transitions", "${report.downstreamCrossCount}", AppColors.accentCyan),
-                      _buildMetricStat("Switching Ratio", report.switchingRatio.toStringAsFixed(2), AppColors.electricBlue),
+                      _buildMetricStat(l10n.o2Upstream, "${report.upstreamCrossCount}", AppColors.primaryYellow),
+                      _buildMetricStat(l10n.o2Downstream, "${report.downstreamCrossCount}", AppColors.accentCyan),
+                      _buildMetricStat(l10n.o2Ratio, report.switchingRatio.toStringAsFixed(2), AppColors.electricBlue),
                     ],
                   ),
                 ],
@@ -135,19 +136,19 @@ class O2CatAnalyzerScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "Dual O2 Waveforms (0.0V - 1.0V)",
+                      Text(
+                        l10n.o2Waveforms,
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.textWhite),
                       ),
                       Row(
-                        children: const [
-                          Icon(Icons.circle, color: AppColors.primaryYellow, size: 10),
-                          SizedBox(width: 4),
-                          Text("B1S1 (Upstream)", style: TextStyle(fontSize: 10, color: AppColors.textMuted)),
-                          SizedBox(width: 10),
-                          Icon(Icons.circle, color: AppColors.accentCyan, size: 10),
-                          SizedBox(width: 4),
-                          Text("B1S2 (Downstream)", style: TextStyle(fontSize: 10, color: AppColors.textMuted)),
+                        children: [
+                          const Icon(Icons.circle, color: AppColors.primaryYellow, size: 10),
+                          const SizedBox(width: 4),
+                          Text(l10n.o2UpstreamShort, style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
+                          const SizedBox(width: 10),
+                          const Icon(Icons.circle, color: AppColors.accentCyan, size: 10),
+                          const SizedBox(width: 4),
+                          Text(l10n.o2DownstreamShort, style: TextStyle(fontSize: 10, color: AppColors.textMuted)),
                         ],
                       ),
                     ],
@@ -155,9 +156,9 @@ class O2CatAnalyzerScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                   Expanded(
                     child: upSpots.isEmpty
-                        ? const Center(
+                        ? Center(
                             child: Text(
-                              "Tap Play button above to start live O2 sensor telemetry",
+                              l10n.o2TapPlay,
                               style: TextStyle(color: AppColors.textMuted, fontSize: 12),
                             ),
                           )
@@ -226,13 +227,13 @@ class O2CatAnalyzerScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Diagnostic Assessment:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primaryYellow)),
+                  Text(l10n.o2Assessment, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primaryYellow)),
                   const SizedBox(height: 6),
-                  Text(report.diagnosis, style: const TextStyle(fontSize: 12, color: AppColors.textWhite, height: 1.3)),
+                  Text(_o2DiagnosisText(l10n, report), style: const TextStyle(fontSize: 12, color: AppColors.textWhite, height: 1.3)),
                   const SizedBox(height: 12),
-                  const Text("Technician Action Guide:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.accentCyan)),
+                  Text(l10n.o2Guide, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.accentCyan)),
                   const SizedBox(height: 6),
-                  Text(report.recommendation, style: const TextStyle(fontSize: 12, color: AppColors.textMuted, height: 1.3)),
+                  Text(_o2RecText(l10n, report), style: const TextStyle(fontSize: 12, color: AppColors.textMuted, height: 1.3)),
                 ],
               ),
             ),
@@ -250,5 +251,44 @@ class O2CatAnalyzerScreen extends StatelessWidget {
         Text(label, style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
       ],
     );
+  }
+}
+
+String _o2StatusText(AppLocalizations l10n, CatalyticHealthReport r) {
+  switch (r.state) {
+    case CatalyticHealthState.insufficientData:
+      return l10n.o2StatusInsufficient;
+    case CatalyticHealthState.excellent:
+      return l10n.o2StatusExcellent;
+    case CatalyticHealthState.aging:
+      return l10n.o2StatusAging;
+    case CatalyticHealthState.failing:
+      return l10n.o2StatusFailing;
+  }
+}
+
+String _o2DiagnosisText(AppLocalizations l10n, CatalyticHealthReport r) {
+  switch (r.state) {
+    case CatalyticHealthState.insufficientData:
+      return l10n.o2DiagInsufficient;
+    case CatalyticHealthState.excellent:
+      return l10n.o2DiagExcellent(r.upstreamCrossCount, r.avgDownstreamVoltage.toStringAsFixed(2));
+    case CatalyticHealthState.aging:
+      return l10n.o2DiagAging(r.downstreamCrossCount, r.upstreamCrossCount, (100 - r.efficiencyPercent).toStringAsFixed(0));
+    case CatalyticHealthState.failing:
+      return l10n.o2DiagFailing((r.switchingRatio * 100).toStringAsFixed(0));
+  }
+}
+
+String _o2RecText(AppLocalizations l10n, CatalyticHealthReport r) {
+  switch (r.state) {
+    case CatalyticHealthState.insufficientData:
+      return l10n.o2RecInsufficient;
+    case CatalyticHealthState.excellent:
+      return l10n.o2RecExcellent;
+    case CatalyticHealthState.aging:
+      return l10n.o2RecAging;
+    case CatalyticHealthState.failing:
+      return l10n.o2RecFailing;
   }
 }

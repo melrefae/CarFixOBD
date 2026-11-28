@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/localization/app_strings_en.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../data/datasources/workshop_lan_server.dart';
 import '../providers/obd_state.dart';
 
@@ -37,12 +37,13 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
   Widget build(BuildContext context) {
     final server = WorkshopLanServer();
     final state = Provider.of<ObdState>(context);
+    final l10n = AppLocalizations.of(context);
 
     // Link real-time status callbacks
     server.getLiveStatusCallback = () => {
       'isConnected': state.isConnected,
       'batteryVoltage': state.batteryVoltage,
-      'vehicleModel': state.selectedVehicle?.model ?? "Unspecified",
+      'vehicleModel': state.selectedVehicle?.model ?? l10n.lanUnspecified,
       'dtcs': state.storedDtcs.map((d) => d.toJson()).toList(),
     };
 
@@ -50,7 +51,7 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
       state.refreshReports();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("New inspection report received for: ${report.customerName}"),
+          content: Text(l10n.lanNewReport(report.customerName)),
           backgroundColor: AppColors.successGreen,
         ),
       );
@@ -58,13 +59,13 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.workshopLanSync),
+        title: Text(l10n.lanTitle),
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: AppColors.primaryYellow,
-          tabs: const [
-            Tab(icon: Icon(Icons.router), text: "Local Server (Master)"),
-            Tab(icon: Icon(Icons.sync_alt), text: "Sync Reports (Client)"),
+          tabs: [
+            Tab(icon: const Icon(Icons.router), text: l10n.lanTabServer),
+            Tab(icon: const Icon(Icons.sync_alt), text: l10n.lanTabSync),
           ],
         ),
       ),
@@ -82,6 +83,7 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
   }
 
   Widget _buildServerTab(WorkshopLanServer server, ObdState state) {
+    final l10n = AppLocalizations.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -107,7 +109,7 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  server.isRunning ? "Local LAN Server Active" : "Local LAN Server Stopped",
+                  server.isRunning ? l10n.lanServerActive : l10n.lanServerStopped,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -117,8 +119,8 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
                 const SizedBox(height: 8),
                 Text(
                   server.isRunning
-                      ? "Any desktop, laptop, or smartphone on workshop Wi-Fi can open the URL below"
-                      : "Tap the button below to start broadcasting live diagnostics and job cards over local Wi-Fi",
+                      ? l10n.lanActiveDesc
+                      : l10n.lanStoppedDesc,
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
                 ),
@@ -149,12 +151,12 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
                         ),
                         IconButton(
                           icon: const Icon(Icons.copy, color: Colors.white, size: 20),
-                          tooltip: "Copy URL",
+                          tooltip: l10n.lanCopyUrl,
                           onPressed: () {
                             Clipboard.setData(ClipboardData(text: server.serverUrl));
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Server URL copied to clipboard!"),
+                              SnackBar(
+                                content: Text(l10n.lanCopied),
                                 backgroundColor: AppColors.primaryAmber,
                               ),
                             );
@@ -177,7 +179,7 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
                     ),
                     icon: Icon(server.isRunning ? Icons.stop : Icons.play_arrow),
                     label: Text(
-                      server.isRunning ? "Stop LAN Server" : "Start Workshop Server (Port 8080)",
+                      server.isRunning ? l10n.lanStop : l10n.lanStart,
                       style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                     onPressed: () async {
@@ -187,8 +189,8 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
                         final ok = await server.startServer();
                         if (!ok && mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Unable to start server. Ensure device is connected to Wi-Fi / Hotspot."),
+                            SnackBar(
+                              content: Text(l10n.lanStartFail),
                               backgroundColor: AppColors.dangerRed,
                             ),
                           );
@@ -215,12 +217,12 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
+                Row(
                   children: [
-                    Icon(Icons.info_outline, color: AppColors.electricBlue, size: 20),
-                    SizedBox(width: 8),
+                    const Icon(Icons.info_outline, color: AppColors.electricBlue, size: 20),
+                    const SizedBox(width: 8),
                     Text(
-                      "How Does Offline LAN Hub Work?",
+                      l10n.lanHowTitle,
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -230,11 +232,8 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
                   ],
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  "1. Ensure the diagnostic tablet and reception/accounting PC are connected to the same workshop Wi-Fi router or phone Hotspot.\n"
-                  "2. No external internet or cellular data is required; data communicates entirely offline across local subnet.\n"
-                  "3. Open Google Chrome on the reception PC and enter the URL shown above.\n"
-                  "4. A real-time dashboard appears displaying live telemetry, trouble codes, and printable PDF inspection job cards for standard A4 printers.",
+                Text(
+                  l10n.lanHowSteps,
                   style: TextStyle(fontSize: 13, height: 1.6, color: AppColors.textSecondary),
                 ),
               ],
@@ -246,6 +245,7 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
   }
 
   Widget _buildClientSyncTab(ObdState state) {
+    final l10n = AppLocalizations.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -261,13 +261,13 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Sync Inspection Job Cards with Master PC",
+                Text(
+                  l10n.lanSyncTitle,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primaryYellow),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  "If using this tablet under the vehicle or in the service bay, push saved inspection job cards directly to the main reception PC with one tap.",
+                Text(
+                  l10n.lanSyncDesc,
                   style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
                 ),
                 const SizedBox(height: 16),
@@ -277,7 +277,7 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
                   keyboardType: TextInputType.number,
                   style: const TextStyle(color: AppColors.textWhite),
                   decoration: InputDecoration(
-                    labelText: "Master PC IP Address",
+                    labelText: l10n.lanMasterIp,
                     hintText: "e.g. 192.168.1.50",
                     hintStyle: const TextStyle(color: AppColors.textMuted),
                     prefixIcon: const Icon(Icons.computer, color: AppColors.electricBlue),
@@ -302,7 +302,7 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
                           )
                         : const Icon(Icons.cloud_upload),
                     label: Text(
-                      _isSyncing ? "Syncing..." : "Sync All Reports (${state.savedReports.length})",
+                      _isSyncing ? l10n.lanSyncing : l10n.lanSyncAll(state.savedReports.length),
                       style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                     onPressed: _isSyncing ? null : () => _performSync(state),
@@ -336,7 +336,7 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
     final ip = _masterIpController.text.trim();
     if (ip.isEmpty || ip.length < 7) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter a valid IP address for the Master PC")),
+        SnackBar(content: Text(AppLocalizations.of(context).lanInvalidIp)),
       );
       return;
     }
@@ -360,8 +360,9 @@ class _WorkshopLanSyncScreenState extends State<WorkshopLanSyncScreen> with Sing
 
     setState(() {
       _isSyncing = false;
-      _syncResult = "Sync result: Sent $successCount report(s) successfully" +
-          (failCount > 0 ? ", $failCount failed." : " without errors! ✅");
+      _syncResult = failCount > 0
+              ? AppLocalizations.of(context).lanSyncResultFail(successCount, failCount)
+              : AppLocalizations.of(context).lanSyncResultOk(successCount);
     });
   }
 }

@@ -1852,4 +1852,399 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get savePid => 'حفظ PID';
+
+  @override
+  String get unitSec => 'ث';
+
+  @override
+  String get unitKmh => 'كم/س';
+
+  @override
+  String get unitDegC => '°م';
+
+  @override
+  String get unitVolt => 'ف';
+
+  @override
+  String get unitKpa => 'كيلوباسكال';
+
+  @override
+  String get unitMeter => 'م';
+
+  @override
+  String get frTitle => 'الصندوق الأسود لتسجيل الرحلة';
+
+  @override
+  String get frActive => 'التسجيل نشط';
+
+  @override
+  String get frBlackBox => 'مسجل الرحلة (الصندوق الأسود)';
+
+  @override
+  String frFramesLogged(int count, String secs) {
+    return 'تم تسجيل $count إطار ($secs ث)';
+  }
+
+  @override
+  String get frRecordsDesc => 'يسجل 10 حساسات أساسية أثناء اختبار الطريق';
+
+  @override
+  String get frStop => 'إيقاف وحفظ سجل الرحلة';
+
+  @override
+  String get frStart => 'بدء تسجيل رحلة جديدة';
+
+  @override
+  String get frVehicleFallback => 'المركبة';
+
+  @override
+  String get frSavedLogs => 'سجلات الرحلات المحفوظة (اختبارات الطريق):';
+
+  @override
+  String get frNoLogs =>
+      'لا توجد سجلات رحلات بعد.\nاضغط «بدء تسجيل رحلة جديدة» أثناء اختبار الطريق لتسجيل البيانات.';
+
+  @override
+  String frFramesEntry(String date, int count) {
+    return '$date • $count إطار بيانات';
+  }
+
+  @override
+  String get frExportCsv => 'تصدير CSV (Excel / MegaLogViewer)';
+
+  @override
+  String get frDeleteLog => 'حذف السجل';
+
+  @override
+  String get frDuration => 'المدة';
+
+  @override
+  String get frMaxSpeed => 'أقصى سرعة';
+
+  @override
+  String get frMaxRpm => 'أقصى RPM';
+
+  @override
+  String get frMaxTemp => 'أقصى حرارة';
+
+  @override
+  String get frScrub => 'تصفح وإعادة تشغيل التسجيل';
+
+  @override
+  String frTimestamp(String pos, String total) {
+    return 'الزمن: $pos ث / $total ث';
+  }
+
+  @override
+  String get frSpeed => 'السرعة';
+
+  @override
+  String get frCoolant => 'حرارة المياه';
+
+  @override
+  String get frThrottle => 'الخانق';
+
+  @override
+  String get frBattery => 'البطارية';
+
+  @override
+  String get topoTitle => 'طوبولوجيا شبكة الكان والكنترولات';
+
+  @override
+  String get topoRescan => 'إعادة فحص كل الأنظمة';
+
+  @override
+  String get topoBusTitle => 'طوبولوجيا شبكة الـ CAN';
+
+  @override
+  String topoModulesOnline(int online, int total, int faults) {
+    return '$online / $total كنترول متصل • $faults عطل إجمالي';
+  }
+
+  @override
+  String get topoScanningBus => 'جاري فحص الشبكة...';
+
+  @override
+  String get topoSmartScan => 'الفحص الذكي (كل الكنترولات)';
+
+  @override
+  String get topoClearAll => 'مسح الكل';
+
+  @override
+  String get topoClearedOk => 'تم مسح أعطال كل الكنترولات!';
+
+  @override
+  String get topoClearedFail => 'فشل مسح بعض الكنترولات.';
+
+  @override
+  String get topoOpenGraph => 'فتح الرسم التفاعلي للشبكة (CAN/LIN)';
+
+  @override
+  String get topoSubsystems => 'أنظمة السيارة المكتشفة:';
+
+  @override
+  String get topoScanning => 'جاري الفحص...';
+
+  @override
+  String get topoHealthy => 'سليم';
+
+  @override
+  String topoFaults(int count) {
+    return '$count عطل';
+  }
+
+  @override
+  String get topoOffline => 'غير موجود / لا يستجيب';
+
+  @override
+  String get topoPending => 'في انتظار الفحص';
+
+  @override
+  String topoProtocol(String protocol) {
+    return 'البروتوكول: $protocol';
+  }
+
+  @override
+  String topoLatency(int ms) {
+    return 'زمن الاستجابة: $ms م.ث';
+  }
+
+  @override
+  String get topoStoredCodes => 'الأعطال المخزنة:';
+
+  @override
+  String get o2Title => 'فحص حساس الشكمان وكفاءة علبة البيئة';
+
+  @override
+  String get o2Pause => 'إيقاف الإشارة الحية';
+
+  @override
+  String get o2Start => 'تشغيل الإشارة الحية';
+
+  @override
+  String get o2HealthTitle => 'حالة علبة البيئة (الكتالايزر)';
+
+  @override
+  String o2Efficiency(int pct) {
+    return 'كفاءة $pct٪';
+  }
+
+  @override
+  String get o2Upstream => 'تبدلات الحساس الأمامي';
+
+  @override
+  String get o2Downstream => 'تبدلات الحساس الخلفي';
+
+  @override
+  String get o2Ratio => 'نسبة التبديل';
+
+  @override
+  String get o2Waveforms => 'إشارات حساسي الأكسجين (0.0 - 1.0 فولت)';
+
+  @override
+  String get o2UpstreamShort => 'B1S1 (أمامي)';
+
+  @override
+  String get o2DownstreamShort => 'B1S2 (خلفي)';
+
+  @override
+  String get o2TapPlay =>
+      'اضغط زر التشغيل بالأعلى لبدء قراءة حساسات الأكسجين الحية';
+
+  @override
+  String get o2Assessment => 'التقييم التشخيصي:';
+
+  @override
+  String get o2Guide => 'دليل إجراءات الفني:';
+
+  @override
+  String get o2StatusInsufficient => 'طبيعي / عينات غير كافية';
+
+  @override
+  String get o2DiagInsufficient => 'جاري جمع بيانات حساسات الأكسجين...';
+
+  @override
+  String get o2RecInsufficient =>
+      'اترك المحرك على السلست أو بسرعة ثابتة لمدة 15 ثانية لتجميع الإشارات.';
+
+  @override
+  String get o2StatusExcellent => 'ممتاز / كفاءة عالية (معيار الوكالة)';
+
+  @override
+  String o2DiagExcellent(int upCross, String avgDown) {
+    return 'الحساس الأمامي يتبدل بسرعة ($upCross تبدلة) بينما الحساس الخلفي ثابت ومستقر (~$avgDown فولت). علبة البيئة تخزن الأكسجين بكفاءة عالية.';
+  }
+
+  @override
+  String get o2RecExcellent =>
+      'لا تحتاج صيانة. نظام العادم يعمل ضمن الحدود المثلى.';
+
+  @override
+  String get o2StatusAging => 'علبة البيئة بدأت في التقادم (كفاءة متوسطة)';
+
+  @override
+  String o2DiagAging(int downCross, int upCross, String degradation) {
+    return 'الحساس الخلفي بدأ يحاكي تبدلات الأمامي ($downCross مقابل $upCross تبدلة). قدرة تخزين الأكسجين انخفضت بنسبة $degradation٪.';
+  }
+
+  @override
+  String get o2RecAging =>
+      'افحص تسريب وش العادم أو وقود غير محترق من شر. أضف منظف علبة بيئة عالي الجودة.';
+
+  @override
+  String get o2StatusFailing => 'تدهور شديد / فشل علبة البيئة (مقدمة P0420)';
+
+  @override
+  String o2DiagFailing(String ratio) {
+    return 'الحساس الخلفي يحاكي تذبذب الأمامي بنسبة تبديل عالية ($ratio٪). علبة البيئة لم تعد تخزن الأكسجين أو تقلل الانبعاثات.';
+  }
+
+  @override
+  String get o2RecFailing =>
+      'قلب علبة البيئة منصهر أو مفرغ أو متسمم بوقود ملوث. يلزم استبدال العلبة أو تنظيف القلب.';
+
+  @override
+  String get dynoTitle => 'داينو التسارع وقياس القوة الحصانية';
+
+  @override
+  String get dynoArmed => 'جاهز: أوقف السيارة تمامًا للبدء';
+
+  @override
+  String get dynoAccelerating => 'تتسارع: ادعص بنزين!';
+
+  @override
+  String get dynoCompleted => 'اكتمل القياس: تم تسجيل 0-100 كم/س!';
+
+  @override
+  String get dynoReset => 'إعادة ضبط عدادات الأداء';
+
+  @override
+  String get dynoZeroHundred => '0 – 100 كم/س (0 – 62 ميل/س)';
+
+  @override
+  String get dynoZeroSixty => 'زمن 0-60 كم/س';
+
+  @override
+  String get dynoDistance => 'المسافة المقطوعة';
+
+  @override
+  String get dynoMaxSpeed => 'أقصى سرعة';
+
+  @override
+  String get dynoQuarter => 'ربع ميل (400 متر)';
+
+  @override
+  String dynoTrap(String speed) {
+    return 'سرعة النهاية: $speed كم/س';
+  }
+
+  @override
+  String get dynoBraking => 'فرملة 100 – 0';
+
+  @override
+  String get dynoEmergencyStop => 'توقف طارئ';
+
+  @override
+  String get dynoEstTitle => 'القوة والعزم التقديرية (داينو):';
+
+  @override
+  String dynoWeight(int kg) {
+    return 'الوزن: $kg كجم';
+  }
+
+  @override
+  String get dynoPeakWHP => 'أقصى قوة على العجلات';
+
+  @override
+  String get dynoPeakTorque => 'أقصى عزم للمحرك';
+
+  @override
+  String dynoAdjustWeight(int kg) {
+    return 'اضبط وزن السيارة ($kg كجم):';
+  }
+
+  @override
+  String get lanTitle => 'مركز مزامنة الورشة (شبكة محلية)';
+
+  @override
+  String get lanUnspecified => 'غير محدد';
+
+  @override
+  String lanNewReport(String name) {
+    return 'تم استلام تقرير فحص جديد لـ: $name';
+  }
+
+  @override
+  String get lanTabServer => 'الخادم المحلي (رئيسي)';
+
+  @override
+  String get lanTabSync => 'مزامنة التقارير (فرعي)';
+
+  @override
+  String get lanServerActive => 'الخادم المحلي يعمل';
+
+  @override
+  String get lanServerStopped => 'الخادم المحلي متوقف';
+
+  @override
+  String get lanActiveDesc =>
+      'أي كمبيوتر أو موبايل على شبكة الـ Wi-Fi الخاصة بالورشة يقدر يفتح الرابط بالأسفل';
+
+  @override
+  String get lanStoppedDesc =>
+      'اضغط الزر بالأسفل لبدء بث التشخيص الحي وكروت الشغل عبر الـ Wi-Fi المحلي';
+
+  @override
+  String get lanCopyUrl => 'نسخ الرابط';
+
+  @override
+  String get lanCopied => 'تم نسخ رابط الخادم!';
+
+  @override
+  String get lanStop => 'إيقاف الخادم';
+
+  @override
+  String get lanStart => 'تشغيل خادم الورشة (منفذ 8080)';
+
+  @override
+  String get lanStartFail =>
+      'تعذر تشغيل الخادم. تأكد أن الجهاز متصل بشبكة Wi-Fi أو نقطة اتصال.';
+
+  @override
+  String get lanHowTitle => 'كيف يعمل المركز المحلي بدون إنترنت؟';
+
+  @override
+  String get lanHowSteps =>
+      '1. تأكد أن تابلت التشخيص وكمبيوتر الاستقبال/الحسابات متصلين بنفس راوتر الـ Wi-Fi الخاص بالورشة أو نقطة اتصال الموبايل.\n2. لا حاجة لإنترنت خارجي أو باقة؛ البيانات تنتقل بالكامل داخل الشبكة المحلية.\n3. افتح Google Chrome على كمبيوتر الاستقبال واكتب الرابط الظاهر بالأعلى.\n4. تظهر شاشة متابعة لحظية تعرض قراءات الحساسات الحية والأعطال وكروت فحص PDF جاهزة للطباعة على ورق A4.';
+
+  @override
+  String get lanSyncTitle => 'مزامنة كروت الفحص مع الكمبيوتر الرئيسي';
+
+  @override
+  String get lanSyncDesc =>
+      'لو تستخدم هذا التابلت تحت السيارة أو في عنبر الصيانة، أرسل كروت الفحص المحفوظة مباشرة إلى كمبيوتر الاستقبال الرئيسي بضغطة واحدة.';
+
+  @override
+  String get lanMasterIp => 'عنوان IP للكمبيوتر الرئيسي';
+
+  @override
+  String get lanSyncing => 'جاري المزامنة...';
+
+  @override
+  String lanSyncAll(int count) {
+    return 'مزامنة كل التقارير ($count)';
+  }
+
+  @override
+  String get lanInvalidIp => 'من فضلك أدخل عنوان IP صحيح للكمبيوتر الرئيسي';
+
+  @override
+  String lanSyncResultOk(int success) {
+    return 'نتيجة المزامنة: تم إرسال $success تقرير بنجاح بدون أخطاء! ✅';
+  }
+
+  @override
+  String lanSyncResultFail(int success, int fail) {
+    return 'نتيجة المزامنة: تم إرسال $success تقرير بنجاح، وفشل $fail.';
+  }
 }

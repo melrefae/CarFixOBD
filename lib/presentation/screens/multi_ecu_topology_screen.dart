@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/localization/app_strings_en.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../data/models/ecu_module_node.dart';
 import '../providers/obd_state.dart';
 import 'interactive_can_topology_screen.dart';
@@ -12,6 +12,7 @@ class MultiEcuTopologyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final state = Provider.of<ObdState>(context);
     final nodes = state.ecuTopology;
 
@@ -20,11 +21,11 @@ class MultiEcuTopologyScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.multiEcuTopology),
+        title: Text(l10n.topoTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            tooltip: "Rescan All Systems",
+            tooltip: l10n.topoRescan,
             onPressed: state.isScanningTopology || !state.isConnected
                 ? null
                 : () => state.scanAllEcuModules(),
@@ -56,13 +57,13 @@ class MultiEcuTopologyScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "CAN Gateway Bus Topology",
+                          Text(
+                            l10n.topoBusTitle,
                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.textWhite),
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            "$onlineCount / ${nodes.length} Modules Online • $totalFaults Total Faults",
+                            l10n.topoModulesOnline(onlineCount, nodes.length, totalFaults),
                             style: TextStyle(
                               fontSize: 12,
                               color: totalFaults > 0 ? AppColors.dangerRed : AppColors.successGreen,
@@ -96,7 +97,7 @@ class MultiEcuTopologyScreen extends StatelessWidget {
                               ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black))
                               : const Icon(Icons.radar),
                           label: Text(
-                            state.isScanningTopology ? "Scanning Bus..." : "Smart Scan (All Modules)",
+                            state.isScanningTopology ? l10n.topoScanningBus : l10n.topoSmartScan,
                             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                           ),
                           onPressed: state.isScanningTopology || !state.isConnected
@@ -113,7 +114,7 @@ class MultiEcuTopologyScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
                         ),
                         icon: const Icon(Icons.delete_sweep, size: 18),
-                        label: const Text("Clear All", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                        label: Text(l10n.topoClearAll, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                         onPressed: state.isScanningTopology || !state.isConnected || totalFaults == 0
                             ? null
                             : () async {
@@ -121,7 +122,7 @@ class MultiEcuTopologyScreen extends StatelessWidget {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text(ok ? "All module trouble codes cleared!" : "Failed to clear some modules."),
+                                      content: Text(ok ? l10n.topoClearedOk : l10n.topoClearedFail),
                                       backgroundColor: ok ? AppColors.successGreen : AppColors.dangerRed,
                                     ),
                                   );
@@ -140,8 +141,8 @@ class MultiEcuTopologyScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                       ),
                       icon: const Icon(Icons.account_tree, size: 16),
-                      label: const Text(
-                        "Open Interactive Multi-Trunk Bus Graph (CAN/LIN)",
+                      label: Text(
+                        l10n.topoOpenGraph,
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                       ),
                       onPressed: () {
@@ -158,21 +159,21 @@ class MultiEcuTopologyScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            const Text(
-              "Detected Vehicle Subsystems:",
+            Text(
+              l10n.topoSubsystems,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primaryYellow),
             ),
             const SizedBox(height: 10),
 
             // Modules Topology Cards
-            ...nodes.map((node) => _buildModuleCard(node)),
+            ...nodes.map((node) => _buildModuleCard(node, l10n)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildModuleCard(EcuModuleNode node) {
+  Widget _buildModuleCard(EcuModuleNode node, AppLocalizations l10n) {
     Color statusColor;
     String statusLabel;
     IconData statusIcon;
@@ -180,28 +181,28 @@ class MultiEcuTopologyScreen extends StatelessWidget {
     switch (node.status) {
       case EcuModuleStatus.scanning:
         statusColor = AppColors.primaryYellow;
-        statusLabel = "Scanning...";
+        statusLabel = l10n.topoScanning;
         statusIcon = Icons.hourglass_top;
         break;
       case EcuModuleStatus.healthy:
         statusColor = AppColors.successGreen;
-        statusLabel = "Healthy / Pass";
+        statusLabel = l10n.topoHealthy;
         statusIcon = Icons.check_circle;
         break;
       case EcuModuleStatus.faultPresent:
         statusColor = AppColors.dangerRed;
-        statusLabel = "${node.dtcs.length} Fault(s)";
+        statusLabel = l10n.topoFaults(node.dtcs.length);
         statusIcon = Icons.warning;
         break;
       case EcuModuleStatus.notResponding:
         statusColor = AppColors.textDisabled;
-        statusLabel = "Not Fitted / Offline";
+        statusLabel = l10n.topoOffline;
         statusIcon = Icons.cancel_outlined;
         break;
       case EcuModuleStatus.notScanned:
       default:
         statusColor = AppColors.textMuted;
-        statusLabel = "Pending Scan";
+        statusLabel = l10n.topoPending;
         statusIcon = Icons.radio_button_unchecked;
         break;
     }
@@ -261,15 +262,15 @@ class MultiEcuTopologyScreen extends StatelessWidget {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    Text("Protocol: ${node.protocol}", style: const TextStyle(fontSize: 11, color: AppColors.electricBlue)),
+                    Text(l10n.topoProtocol(node.protocol), style: const TextStyle(fontSize: 11, color: AppColors.electricBlue)),
                     const Spacer(),
                     if (node.responseLatencyMs > 0)
-                      Text("Latency: ${node.responseLatencyMs}ms", style: const TextStyle(fontSize: 11, color: AppColors.textDisabled)),
+                      Text(l10n.topoLatency(node.responseLatencyMs), style: const TextStyle(fontSize: 11, color: AppColors.textDisabled)),
                   ],
                 ),
                 if (node.dtcs.isNotEmpty) ...[
                   const SizedBox(height: 10),
-                  const Text("Stored Trouble Codes:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.dangerRed)),
+                  Text(l10n.topoStoredCodes, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.dangerRed)),
                   const SizedBox(height: 6),
                   Wrap(
                     spacing: 8,

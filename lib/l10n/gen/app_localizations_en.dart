@@ -1858,4 +1858,402 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get savePid => 'Save PID';
+
+  @override
+  String get unitSec => 's';
+
+  @override
+  String get unitKmh => 'km/h';
+
+  @override
+  String get unitDegC => '°C';
+
+  @override
+  String get unitVolt => 'V';
+
+  @override
+  String get unitKpa => 'kPa';
+
+  @override
+  String get unitMeter => 'm';
+
+  @override
+  String get frTitle => 'Black Box Flight Recorder';
+
+  @override
+  String get frActive => 'Flight Recording ACTIVE';
+
+  @override
+  String get frBlackBox => 'Black Box Flight Logger';
+
+  @override
+  String frFramesLogged(int count, String secs) {
+    return '$count frames logged (${secs}s)';
+  }
+
+  @override
+  String get frRecordsDesc => 'Records 10 key telemetry PIDs for road testing';
+
+  @override
+  String get frStop => 'Stop & Save Flight Log';
+
+  @override
+  String get frStart => 'Start New Flight Recording';
+
+  @override
+  String get frVehicleFallback => 'Vehicle';
+
+  @override
+  String get frSavedLogs => 'Saved Flight Logs (Road Tests):';
+
+  @override
+  String get frNoLogs =>
+      'No flight logs recorded yet.\nTap \'Start New Flight Recording\' during a road test to capture telemetry.';
+
+  @override
+  String frFramesEntry(String date, int count) {
+    return '$date • $count Telemetry Frames';
+  }
+
+  @override
+  String get frExportCsv => 'Export CSV (Excel / MegaLogViewer)';
+
+  @override
+  String get frDeleteLog => 'Delete Log';
+
+  @override
+  String get frDuration => 'Duration';
+
+  @override
+  String get frMaxSpeed => 'Max Speed';
+
+  @override
+  String get frMaxRpm => 'Max RPM';
+
+  @override
+  String get frMaxTemp => 'Max Temp';
+
+  @override
+  String get frScrub => 'Scrub & Replay Timeline';
+
+  @override
+  String frTimestamp(String pos, String total) {
+    return 'Timestamp: ${pos}s / ${total}s';
+  }
+
+  @override
+  String get frSpeed => 'Speed';
+
+  @override
+  String get frCoolant => 'Coolant';
+
+  @override
+  String get frThrottle => 'Throttle';
+
+  @override
+  String get frBattery => 'Battery';
+
+  @override
+  String get topoTitle => 'Multi-ECU Network Topology';
+
+  @override
+  String get topoRescan => 'Rescan All Systems';
+
+  @override
+  String get topoBusTitle => 'CAN Gateway Bus Topology';
+
+  @override
+  String topoModulesOnline(int online, int total, int faults) {
+    return '$online / $total Modules Online • $faults Total Faults';
+  }
+
+  @override
+  String get topoScanningBus => 'Scanning Bus...';
+
+  @override
+  String get topoSmartScan => 'Smart Scan (All Modules)';
+
+  @override
+  String get topoClearAll => 'Clear All';
+
+  @override
+  String get topoClearedOk => 'All module trouble codes cleared!';
+
+  @override
+  String get topoClearedFail => 'Failed to clear some modules.';
+
+  @override
+  String get topoOpenGraph =>
+      'Open Interactive Multi-Trunk Bus Graph (CAN/LIN)';
+
+  @override
+  String get topoSubsystems => 'Detected Vehicle Subsystems:';
+
+  @override
+  String get topoScanning => 'Scanning...';
+
+  @override
+  String get topoHealthy => 'Healthy / Pass';
+
+  @override
+  String topoFaults(int count) {
+    return '$count Fault(s)';
+  }
+
+  @override
+  String get topoOffline => 'Not Fitted / Offline';
+
+  @override
+  String get topoPending => 'Pending Scan';
+
+  @override
+  String topoProtocol(String protocol) {
+    return 'Protocol: $protocol';
+  }
+
+  @override
+  String topoLatency(int ms) {
+    return 'Latency: ${ms}ms';
+  }
+
+  @override
+  String get topoStoredCodes => 'Stored Trouble Codes:';
+
+  @override
+  String get o2Title => 'Dual O2 & Catalytic Health';
+
+  @override
+  String get o2Pause => 'Pause Live Waveform';
+
+  @override
+  String get o2Start => 'Start Live Waveform';
+
+  @override
+  String get o2HealthTitle => 'Catalytic Converter Health';
+
+  @override
+  String o2Efficiency(int pct) {
+    return '$pct% Efficiency';
+  }
+
+  @override
+  String get o2Upstream => 'Upstream Transitions';
+
+  @override
+  String get o2Downstream => 'Downstream Transitions';
+
+  @override
+  String get o2Ratio => 'Switching Ratio';
+
+  @override
+  String get o2Waveforms => 'Dual O2 Waveforms (0.0V - 1.0V)';
+
+  @override
+  String get o2UpstreamShort => 'B1S1 (Upstream)';
+
+  @override
+  String get o2DownstreamShort => 'B1S2 (Downstream)';
+
+  @override
+  String get o2TapPlay =>
+      'Tap Play button above to start live O2 sensor telemetry';
+
+  @override
+  String get o2Assessment => 'Diagnostic Assessment:';
+
+  @override
+  String get o2Guide => 'Technician Action Guide:';
+
+  @override
+  String get o2StatusInsufficient => 'Normal / Insufficient Samples';
+
+  @override
+  String get o2DiagInsufficient => 'Collecting oxygen sensor telemetry data...';
+
+  @override
+  String get o2RecInsufficient =>
+      'Allow engine to idle or cruise steadily for 15 seconds to accumulate sensor waveforms.';
+
+  @override
+  String get o2StatusExcellent => 'Excellent / High Efficiency (OEM Benchmark)';
+
+  @override
+  String o2DiagExcellent(int upCross, String avgDown) {
+    return 'Upstream sensor switches rapidly ($upCross transitions) while downstream sensor remains flat and steady (~${avgDown}V). The catalytic substrate has strong oxygen storage capacity.';
+  }
+
+  @override
+  String get o2RecExcellent =>
+      'No service required. Emissions system is operating within optimum Euro 4/5/6 compliance limits.';
+
+  @override
+  String get o2StatusAging => 'Aging Catalytic Converter (Moderate Efficiency)';
+
+  @override
+  String o2DiagAging(int downCross, int upCross, String degradation) {
+    return 'Downstream sensor is beginning to mimic upstream switching ($downCross transitions vs $upCross). Oxygen storage capacity has degraded by $degradation%.';
+  }
+
+  @override
+  String get o2RecAging =>
+      'Inspect for minor exhaust manifold gasket leaks or unburnt fuel from rich misfires. Add high-grade catalytic converter cleaner additive.';
+
+  @override
+  String get o2StatusFailing =>
+      'Severely Degraded / Catalytic Failure (P0420 Precursor)';
+
+  @override
+  String o2DiagFailing(String ratio) {
+    return 'Downstream oxygen sensor is mirroring upstream oscillations with high switching ratio ($ratio%). The catalytic converter is no longer storing oxygen or reducing emissions.';
+  }
+
+  @override
+  String get o2RecFailing =>
+      'Catalytic converter core is melted, hollowed, or poisoned by leaded/contaminated fuel. Replacement of the converter or cleaning core is required.';
+
+  @override
+  String get dynoTitle => '0-100 km/h & Dyno HP Meter';
+
+  @override
+  String get dynoArmed => 'ARMED: Stop vehicle completely to begin';
+
+  @override
+  String get dynoAccelerating => 'ACCELERATING: Floor the accelerator!';
+
+  @override
+  String get dynoCompleted => 'RUN COMPLETED: 0-100 km/h Recorded!';
+
+  @override
+  String get dynoReset => 'Reset Performance Timers';
+
+  @override
+  String get dynoZeroHundred => '0 – 100 km/h (0 – 62 mph)';
+
+  @override
+  String get dynoZeroSixty => '0-60 km/h Split';
+
+  @override
+  String get dynoDistance => 'Distance Covered';
+
+  @override
+  String get dynoMaxSpeed => 'Max Speed';
+
+  @override
+  String get dynoQuarter => '400m Quarter Mile';
+
+  @override
+  String dynoTrap(String speed) {
+    return 'Trap: $speed km/h';
+  }
+
+  @override
+  String get dynoBraking => '100 – 0 Braking';
+
+  @override
+  String get dynoEmergencyStop => 'Emergency Stop';
+
+  @override
+  String get dynoEstTitle => 'Estimated Dyno Power & Torque:';
+
+  @override
+  String dynoWeight(int kg) {
+    return 'Weight: $kg kg';
+  }
+
+  @override
+  String get dynoPeakWHP => 'Peak Wheel Horsepower';
+
+  @override
+  String get dynoPeakTorque => 'Peak Engine Torque';
+
+  @override
+  String dynoAdjustWeight(int kg) {
+    return 'Adjust Vehicle Weight ($kg kg):';
+  }
+
+  @override
+  String get lanTitle => 'Workshop LAN Sync Hub';
+
+  @override
+  String get lanUnspecified => 'Unspecified';
+
+  @override
+  String lanNewReport(String name) {
+    return 'New inspection report received for: $name';
+  }
+
+  @override
+  String get lanTabServer => 'Local Server (Master)';
+
+  @override
+  String get lanTabSync => 'Sync Reports (Client)';
+
+  @override
+  String get lanServerActive => 'Local LAN Server Active';
+
+  @override
+  String get lanServerStopped => 'Local LAN Server Stopped';
+
+  @override
+  String get lanActiveDesc =>
+      'Any desktop, laptop, or smartphone on workshop Wi-Fi can open the URL below';
+
+  @override
+  String get lanStoppedDesc =>
+      'Tap the button below to start broadcasting live diagnostics and job cards over local Wi-Fi';
+
+  @override
+  String get lanCopyUrl => 'Copy URL';
+
+  @override
+  String get lanCopied => 'Server URL copied to clipboard!';
+
+  @override
+  String get lanStop => 'Stop LAN Server';
+
+  @override
+  String get lanStart => 'Start Workshop Server (Port 8080)';
+
+  @override
+  String get lanStartFail =>
+      'Unable to start server. Ensure device is connected to Wi-Fi / Hotspot.';
+
+  @override
+  String get lanHowTitle => 'How Does Offline LAN Hub Work?';
+
+  @override
+  String get lanHowSteps =>
+      '1. Ensure the diagnostic tablet and reception/accounting PC are connected to the same workshop Wi-Fi router or phone Hotspot.\n2. No external internet or cellular data is required; data communicates entirely offline across local subnet.\n3. Open Google Chrome on the reception PC and enter the URL shown above.\n4. A real-time dashboard appears displaying live telemetry, trouble codes, and printable PDF inspection job cards for standard A4 printers.';
+
+  @override
+  String get lanSyncTitle => 'Sync Inspection Job Cards with Master PC';
+
+  @override
+  String get lanSyncDesc =>
+      'If using this tablet under the vehicle or in the service bay, push saved inspection job cards directly to the main reception PC with one tap.';
+
+  @override
+  String get lanMasterIp => 'Master PC IP Address';
+
+  @override
+  String get lanSyncing => 'Syncing...';
+
+  @override
+  String lanSyncAll(int count) {
+    return 'Sync All Reports ($count)';
+  }
+
+  @override
+  String get lanInvalidIp =>
+      'Please enter a valid IP address for the Master PC';
+
+  @override
+  String lanSyncResultOk(int success) {
+    return 'Sync result: Sent $success report(s) successfully without errors! ✅';
+  }
+
+  @override
+  String lanSyncResultFail(int success, int fail) {
+    return 'Sync result: Sent $success report(s) successfully, $fail failed.';
+  }
 }

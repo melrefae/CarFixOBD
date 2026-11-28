@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/localization/app_strings_en.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../data/models/flight_record_model.dart';
 import '../../domain/services/flight_recorder_service.dart';
 import '../providers/obd_state.dart';
@@ -18,13 +18,14 @@ class FlightRecorderScreen extends StatefulWidget {
 class _FlightRecorderScreenState extends State<FlightRecorderScreen> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final state = Provider.of<ObdState>(context);
     final recorder = state.flightRecorder;
     final sessions = recorder.savedSessions;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.flightRecorder),
+        title: Text(l10n.frTitle),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -51,14 +52,14 @@ class _FlightRecorderScreenState extends State<FlightRecorderScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            recorder.isRecording ? "Flight Recording ACTIVE" : "Black Box Flight Logger",
+                            recorder.isRecording ? l10n.frActive : l10n.frBlackBox,
                             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.textWhite),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             recorder.isRecording
-                                ? "${recorder.currentSession?.frameCount ?? 0} frames logged (${((recorder.currentSession?.durationMs ?? 0) / 1000).toStringAsFixed(1)}s)"
-                                : "Records 10 key telemetry PIDs for road testing",
+                                ? l10n.frFramesLogged(recorder.currentSession?.frameCount ?? 0, ((recorder.currentSession?.durationMs ?? 0) / 1000).toStringAsFixed(1))
+                                : l10n.frRecordsDesc,
                             style: TextStyle(
                               fontSize: 12,
                               color: recorder.isRecording ? AppColors.dangerRed : AppColors.textMuted,
@@ -92,7 +93,7 @@ class _FlightRecorderScreenState extends State<FlightRecorderScreen> {
                       ),
                       icon: Icon(recorder.isRecording ? Icons.stop : Icons.fiber_manual_record),
                       label: Text(
-                        recorder.isRecording ? "Stop & Save Flight Log" : "Start New Flight Recording",
+                        recorder.isRecording ? l10n.frStop : l10n.frStart,
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                       ),
                       onPressed: () {
@@ -100,7 +101,7 @@ class _FlightRecorderScreenState extends State<FlightRecorderScreen> {
                           if (recorder.isRecording) {
                             recorder.stopRecording();
                           } else {
-                            final vehicleName = state.selectedVehicle?.model ?? "Vehicle";
+                            final vehicleName = state.selectedVehicle?.model ?? l10n.frVehicleFallback;
                             recorder.startRecording(vehicleTitle: vehicleName);
                             if (!state.isPolling) {
                               state.toggleLivePolling();
@@ -116,8 +117,8 @@ class _FlightRecorderScreenState extends State<FlightRecorderScreen> {
 
             const SizedBox(height: 20),
 
-            const Text(
-              "Saved Flight Logs (Road Tests):",
+            Text(
+              l10n.frSavedLogs,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primaryYellow),
             ),
             const SizedBox(height: 10),
@@ -126,8 +127,8 @@ class _FlightRecorderScreenState extends State<FlightRecorderScreen> {
               Container(
                 padding: const EdgeInsets.all(32),
                 alignment: Alignment.center,
-                child: const Text(
-                  "No flight logs recorded yet.\nTap 'Start New Flight Recording' during a road test to capture telemetry.",
+                child: Text(
+                  l10n.frNoLogs,
                   textAlign: TextAlign.center,
                   style: TextStyle(color: AppColors.textMuted, fontSize: 13),
                 ),
@@ -141,6 +142,7 @@ class _FlightRecorderScreenState extends State<FlightRecorderScreen> {
   }
 
   Widget _buildSessionCard(FlightRecordingSession session, FlightRecorderService recorder) {
+    final l10n = AppLocalizations.of(context);
     final durationSec = (session.durationMs / 1000).toStringAsFixed(1);
     final dateStr = "${session.recordedAt.hour.toString().padLeft(2, '0')}:${session.recordedAt.minute.toString().padLeft(2, '0')} • ${session.recordedAt.day}/${session.recordedAt.month}/${session.recordedAt.year}";
 
@@ -165,13 +167,13 @@ class _FlightRecorderScreenState extends State<FlightRecorderScreen> {
                     children: [
                       Text(session.vehicleTitle, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite)),
                       const SizedBox(height: 2),
-                      Text("$dateStr • ${session.frameCount} Telemetry Frames", style: const TextStyle(fontSize: 11, color: AppColors.textDisabled)),
+                      Text(l10n.frFramesEntry(dateStr, session.frameCount), style: const TextStyle(fontSize: 11, color: AppColors.textDisabled)),
                     ],
                   ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.share, size: 20, color: AppColors.accentCyan),
-                  tooltip: "Export CSV (Excel / MegaLogViewer)",
+                  tooltip: l10n.frExportCsv,
                   onPressed: () {
                     final csv = session.toCsv();
                     Share.share(csv, subject: "${session.vehicleTitle}_FlightLog.csv");
@@ -179,7 +181,7 @@ class _FlightRecorderScreenState extends State<FlightRecorderScreen> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.delete_outline, size: 20, color: AppColors.textDisabled),
-                  tooltip: "Delete Log",
+                  tooltip: l10n.frDeleteLog,
                   onPressed: () {
                     setState(() {
                       recorder.deleteSession(session.id);
@@ -192,10 +194,10 @@ class _FlightRecorderScreenState extends State<FlightRecorderScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildMetricSmall("Duration", "${durationSec}s", AppColors.electricBlue),
-                _buildMetricSmall("Max Speed", "${session.maxSpeed.toInt()} km/h", AppColors.primaryYellow),
-                _buildMetricSmall("Max RPM", "${session.maxRpm.toInt()}", AppColors.accentCyan),
-                _buildMetricSmall("Max Temp", "${session.maxCoolant.toInt()}°C", AppColors.dangerRed),
+                _buildMetricSmall(l10n.frDuration, "$durationSec${l10n.unitSec}", AppColors.electricBlue),
+                _buildMetricSmall(l10n.frMaxSpeed, "${session.maxSpeed.toInt()} ${l10n.unitKmh}", AppColors.primaryYellow),
+                _buildMetricSmall(l10n.frMaxRpm, "${session.maxRpm.toInt()}", AppColors.accentCyan),
+                _buildMetricSmall(l10n.frMaxTemp, "${session.maxCoolant.toInt()}${l10n.unitDegC}", AppColors.dangerRed),
               ],
             ),
             const SizedBox(height: 12),
@@ -208,7 +210,7 @@ class _FlightRecorderScreenState extends State<FlightRecorderScreen> {
                   side: const BorderSide(color: AppColors.primaryYellow),
                 ),
                 icon: const Icon(Icons.tune, size: 16),
-                label: const Text("Scrub & Replay Timeline", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                label: Text(l10n.frScrub, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
                 onPressed: () => _openScrubberModal(session, recorder),
               ),
             ),
@@ -229,6 +231,7 @@ class _FlightRecorderScreenState extends State<FlightRecorderScreen> {
   }
 
   void _openScrubberModal(FlightRecordingSession session, FlightRecorderService recorder) {
+    final l10n = AppLocalizations.of(context);
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -257,7 +260,7 @@ class _FlightRecorderScreenState extends State<FlightRecorderScreen> {
                         children: [
                           Text(session.vehicleTitle, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.textWhite)),
                           Text(
-                            "Timestamp: ${(currentPositionMs / 1000).toStringAsFixed(2)}s / ${(session.durationMs / 1000).toStringAsFixed(2)}s",
+                            l10n.frTimestamp((currentPositionMs / 1000).toStringAsFixed(2), (session.durationMs / 1000).toStringAsFixed(2)),
                             style: const TextStyle(fontSize: 12, color: AppColors.accentCyan),
                           ),
                         ],
@@ -288,15 +291,15 @@ class _FlightRecorderScreenState extends State<FlightRecorderScreen> {
                         mainAxisSpacing: 8,
                         childAspectRatio: 1.4,
                         children: [
-                          _buildScrubStat("Speed", "${frame.speed.toInt()} km/h", AppColors.primaryYellow),
+                          _buildScrubStat(l10n.frSpeed, "${frame.speed.toInt()} ${l10n.unitKmh}", AppColors.primaryYellow),
                           _buildScrubStat("RPM", "${frame.rpm.toInt()}", AppColors.accentCyan),
-                          _buildScrubStat("Coolant", "${frame.coolantTemp.toInt()}°C", AppColors.dangerRed),
-                          _buildScrubStat("Throttle", "${frame.throttlePercent.toInt()}%", AppColors.electricBlue),
+                          _buildScrubStat(l10n.frCoolant, "${frame.coolantTemp.toInt()}${l10n.unitDegC}", AppColors.dangerRed),
+                          _buildScrubStat(l10n.frThrottle, "${frame.throttlePercent.toInt()}%", AppColors.electricBlue),
                           _buildScrubStat("MAP", "${frame.mapKpa.toInt()} kPa", AppColors.textWhite),
-                          _buildScrubStat("Battery", "${frame.batteryVoltage.toStringAsFixed(1)}V", AppColors.successGreen),
+                          _buildScrubStat(l10n.frBattery, "${frame.batteryVoltage.toStringAsFixed(1)}${l10n.unitVolt}", AppColors.successGreen),
                           _buildScrubStat("STFT", "${frame.stft.toStringAsFixed(1)}%", AppColors.primaryYellow),
                           _buildScrubStat("LTFT", "${frame.ltft.toStringAsFixed(1)}%", AppColors.electricBlue),
-                          _buildScrubStat("O2 B1S1", "${frame.o2B1S1.toStringAsFixed(2)}V", AppColors.accentCyan),
+                          _buildScrubStat("O2 B1S1", "${frame.o2B1S1.toStringAsFixed(2)}${l10n.unitVolt}", AppColors.accentCyan),
                         ],
                       ),
                     ),

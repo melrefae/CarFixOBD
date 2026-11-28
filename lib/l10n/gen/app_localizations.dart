@@ -3391,6 +3391,702 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save PID'**
   String get savePid;
+
+  /// No description provided for @unitSec.
+  ///
+  /// In en, this message translates to:
+  /// **'s'**
+  String get unitSec;
+
+  /// No description provided for @unitKmh.
+  ///
+  /// In en, this message translates to:
+  /// **'km/h'**
+  String get unitKmh;
+
+  /// No description provided for @unitDegC.
+  ///
+  /// In en, this message translates to:
+  /// **'°C'**
+  String get unitDegC;
+
+  /// No description provided for @unitVolt.
+  ///
+  /// In en, this message translates to:
+  /// **'V'**
+  String get unitVolt;
+
+  /// No description provided for @unitKpa.
+  ///
+  /// In en, this message translates to:
+  /// **'kPa'**
+  String get unitKpa;
+
+  /// No description provided for @unitMeter.
+  ///
+  /// In en, this message translates to:
+  /// **'m'**
+  String get unitMeter;
+
+  /// No description provided for @frTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Black Box Flight Recorder'**
+  String get frTitle;
+
+  /// No description provided for @frActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Flight Recording ACTIVE'**
+  String get frActive;
+
+  /// No description provided for @frBlackBox.
+  ///
+  /// In en, this message translates to:
+  /// **'Black Box Flight Logger'**
+  String get frBlackBox;
+
+  /// No description provided for @frFramesLogged.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} frames logged ({secs}s)'**
+  String frFramesLogged(int count, String secs);
+
+  /// No description provided for @frRecordsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Records 10 key telemetry PIDs for road testing'**
+  String get frRecordsDesc;
+
+  /// No description provided for @frStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop & Save Flight Log'**
+  String get frStop;
+
+  /// No description provided for @frStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start New Flight Recording'**
+  String get frStart;
+
+  /// No description provided for @frVehicleFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle'**
+  String get frVehicleFallback;
+
+  /// No description provided for @frSavedLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved Flight Logs (Road Tests):'**
+  String get frSavedLogs;
+
+  /// No description provided for @frNoLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'No flight logs recorded yet.\nTap \'Start New Flight Recording\' during a road test to capture telemetry.'**
+  String get frNoLogs;
+
+  /// No description provided for @frFramesEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'{date} • {count} Telemetry Frames'**
+  String frFramesEntry(String date, int count);
+
+  /// No description provided for @frExportCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'Export CSV (Excel / MegaLogViewer)'**
+  String get frExportCsv;
+
+  /// No description provided for @frDeleteLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Log'**
+  String get frDeleteLog;
+
+  /// No description provided for @frDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get frDuration;
+
+  /// No description provided for @frMaxSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Max Speed'**
+  String get frMaxSpeed;
+
+  /// No description provided for @frMaxRpm.
+  ///
+  /// In en, this message translates to:
+  /// **'Max RPM'**
+  String get frMaxRpm;
+
+  /// No description provided for @frMaxTemp.
+  ///
+  /// In en, this message translates to:
+  /// **'Max Temp'**
+  String get frMaxTemp;
+
+  /// No description provided for @frScrub.
+  ///
+  /// In en, this message translates to:
+  /// **'Scrub & Replay Timeline'**
+  String get frScrub;
+
+  /// No description provided for @frTimestamp.
+  ///
+  /// In en, this message translates to:
+  /// **'Timestamp: {pos}s / {total}s'**
+  String frTimestamp(String pos, String total);
+
+  /// No description provided for @frSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Speed'**
+  String get frSpeed;
+
+  /// No description provided for @frCoolant.
+  ///
+  /// In en, this message translates to:
+  /// **'Coolant'**
+  String get frCoolant;
+
+  /// No description provided for @frThrottle.
+  ///
+  /// In en, this message translates to:
+  /// **'Throttle'**
+  String get frThrottle;
+
+  /// No description provided for @frBattery.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery'**
+  String get frBattery;
+
+  /// No description provided for @topoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-ECU Network Topology'**
+  String get topoTitle;
+
+  /// No description provided for @topoRescan.
+  ///
+  /// In en, this message translates to:
+  /// **'Rescan All Systems'**
+  String get topoRescan;
+
+  /// No description provided for @topoBusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'CAN Gateway Bus Topology'**
+  String get topoBusTitle;
+
+  /// No description provided for @topoModulesOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'{online} / {total} Modules Online • {faults} Total Faults'**
+  String topoModulesOnline(int online, int total, int faults);
+
+  /// No description provided for @topoScanningBus.
+  ///
+  /// In en, this message translates to:
+  /// **'Scanning Bus...'**
+  String get topoScanningBus;
+
+  /// No description provided for @topoSmartScan.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Scan (All Modules)'**
+  String get topoSmartScan;
+
+  /// No description provided for @topoClearAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear All'**
+  String get topoClearAll;
+
+  /// No description provided for @topoClearedOk.
+  ///
+  /// In en, this message translates to:
+  /// **'All module trouble codes cleared!'**
+  String get topoClearedOk;
+
+  /// No description provided for @topoClearedFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to clear some modules.'**
+  String get topoClearedFail;
+
+  /// No description provided for @topoOpenGraph.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Interactive Multi-Trunk Bus Graph (CAN/LIN)'**
+  String get topoOpenGraph;
+
+  /// No description provided for @topoSubsystems.
+  ///
+  /// In en, this message translates to:
+  /// **'Detected Vehicle Subsystems:'**
+  String get topoSubsystems;
+
+  /// No description provided for @topoScanning.
+  ///
+  /// In en, this message translates to:
+  /// **'Scanning...'**
+  String get topoScanning;
+
+  /// No description provided for @topoHealthy.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthy / Pass'**
+  String get topoHealthy;
+
+  /// No description provided for @topoFaults.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Fault(s)'**
+  String topoFaults(int count);
+
+  /// No description provided for @topoOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Fitted / Offline'**
+  String get topoOffline;
+
+  /// No description provided for @topoPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Scan'**
+  String get topoPending;
+
+  /// No description provided for @topoProtocol.
+  ///
+  /// In en, this message translates to:
+  /// **'Protocol: {protocol}'**
+  String topoProtocol(String protocol);
+
+  /// No description provided for @topoLatency.
+  ///
+  /// In en, this message translates to:
+  /// **'Latency: {ms}ms'**
+  String topoLatency(int ms);
+
+  /// No description provided for @topoStoredCodes.
+  ///
+  /// In en, this message translates to:
+  /// **'Stored Trouble Codes:'**
+  String get topoStoredCodes;
+
+  /// No description provided for @o2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Dual O2 & Catalytic Health'**
+  String get o2Title;
+
+  /// No description provided for @o2Pause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause Live Waveform'**
+  String get o2Pause;
+
+  /// No description provided for @o2Start.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Live Waveform'**
+  String get o2Start;
+
+  /// No description provided for @o2HealthTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Catalytic Converter Health'**
+  String get o2HealthTitle;
+
+  /// No description provided for @o2Efficiency.
+  ///
+  /// In en, this message translates to:
+  /// **'{pct}% Efficiency'**
+  String o2Efficiency(int pct);
+
+  /// No description provided for @o2Upstream.
+  ///
+  /// In en, this message translates to:
+  /// **'Upstream Transitions'**
+  String get o2Upstream;
+
+  /// No description provided for @o2Downstream.
+  ///
+  /// In en, this message translates to:
+  /// **'Downstream Transitions'**
+  String get o2Downstream;
+
+  /// No description provided for @o2Ratio.
+  ///
+  /// In en, this message translates to:
+  /// **'Switching Ratio'**
+  String get o2Ratio;
+
+  /// No description provided for @o2Waveforms.
+  ///
+  /// In en, this message translates to:
+  /// **'Dual O2 Waveforms (0.0V - 1.0V)'**
+  String get o2Waveforms;
+
+  /// No description provided for @o2UpstreamShort.
+  ///
+  /// In en, this message translates to:
+  /// **'B1S1 (Upstream)'**
+  String get o2UpstreamShort;
+
+  /// No description provided for @o2DownstreamShort.
+  ///
+  /// In en, this message translates to:
+  /// **'B1S2 (Downstream)'**
+  String get o2DownstreamShort;
+
+  /// No description provided for @o2TapPlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap Play button above to start live O2 sensor telemetry'**
+  String get o2TapPlay;
+
+  /// No description provided for @o2Assessment.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostic Assessment:'**
+  String get o2Assessment;
+
+  /// No description provided for @o2Guide.
+  ///
+  /// In en, this message translates to:
+  /// **'Technician Action Guide:'**
+  String get o2Guide;
+
+  /// No description provided for @o2StatusInsufficient.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal / Insufficient Samples'**
+  String get o2StatusInsufficient;
+
+  /// No description provided for @o2DiagInsufficient.
+  ///
+  /// In en, this message translates to:
+  /// **'Collecting oxygen sensor telemetry data...'**
+  String get o2DiagInsufficient;
+
+  /// No description provided for @o2RecInsufficient.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow engine to idle or cruise steadily for 15 seconds to accumulate sensor waveforms.'**
+  String get o2RecInsufficient;
+
+  /// No description provided for @o2StatusExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent / High Efficiency (OEM Benchmark)'**
+  String get o2StatusExcellent;
+
+  /// No description provided for @o2DiagExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Upstream sensor switches rapidly ({upCross} transitions) while downstream sensor remains flat and steady (~{avgDown}V). The catalytic substrate has strong oxygen storage capacity.'**
+  String o2DiagExcellent(int upCross, String avgDown);
+
+  /// No description provided for @o2RecExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'No service required. Emissions system is operating within optimum Euro 4/5/6 compliance limits.'**
+  String get o2RecExcellent;
+
+  /// No description provided for @o2StatusAging.
+  ///
+  /// In en, this message translates to:
+  /// **'Aging Catalytic Converter (Moderate Efficiency)'**
+  String get o2StatusAging;
+
+  /// No description provided for @o2DiagAging.
+  ///
+  /// In en, this message translates to:
+  /// **'Downstream sensor is beginning to mimic upstream switching ({downCross} transitions vs {upCross}). Oxygen storage capacity has degraded by {degradation}%.'**
+  String o2DiagAging(int downCross, int upCross, String degradation);
+
+  /// No description provided for @o2RecAging.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspect for minor exhaust manifold gasket leaks or unburnt fuel from rich misfires. Add high-grade catalytic converter cleaner additive.'**
+  String get o2RecAging;
+
+  /// No description provided for @o2StatusFailing.
+  ///
+  /// In en, this message translates to:
+  /// **'Severely Degraded / Catalytic Failure (P0420 Precursor)'**
+  String get o2StatusFailing;
+
+  /// No description provided for @o2DiagFailing.
+  ///
+  /// In en, this message translates to:
+  /// **'Downstream oxygen sensor is mirroring upstream oscillations with high switching ratio ({ratio}%). The catalytic converter is no longer storing oxygen or reducing emissions.'**
+  String o2DiagFailing(String ratio);
+
+  /// No description provided for @o2RecFailing.
+  ///
+  /// In en, this message translates to:
+  /// **'Catalytic converter core is melted, hollowed, or poisoned by leaded/contaminated fuel. Replacement of the converter or cleaning core is required.'**
+  String get o2RecFailing;
+
+  /// No description provided for @dynoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'0-100 km/h & Dyno HP Meter'**
+  String get dynoTitle;
+
+  /// No description provided for @dynoArmed.
+  ///
+  /// In en, this message translates to:
+  /// **'ARMED: Stop vehicle completely to begin'**
+  String get dynoArmed;
+
+  /// No description provided for @dynoAccelerating.
+  ///
+  /// In en, this message translates to:
+  /// **'ACCELERATING: Floor the accelerator!'**
+  String get dynoAccelerating;
+
+  /// No description provided for @dynoCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'RUN COMPLETED: 0-100 km/h Recorded!'**
+  String get dynoCompleted;
+
+  /// No description provided for @dynoReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Performance Timers'**
+  String get dynoReset;
+
+  /// No description provided for @dynoZeroHundred.
+  ///
+  /// In en, this message translates to:
+  /// **'0 – 100 km/h (0 – 62 mph)'**
+  String get dynoZeroHundred;
+
+  /// No description provided for @dynoZeroSixty.
+  ///
+  /// In en, this message translates to:
+  /// **'0-60 km/h Split'**
+  String get dynoZeroSixty;
+
+  /// No description provided for @dynoDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance Covered'**
+  String get dynoDistance;
+
+  /// No description provided for @dynoMaxSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Max Speed'**
+  String get dynoMaxSpeed;
+
+  /// No description provided for @dynoQuarter.
+  ///
+  /// In en, this message translates to:
+  /// **'400m Quarter Mile'**
+  String get dynoQuarter;
+
+  /// No description provided for @dynoTrap.
+  ///
+  /// In en, this message translates to:
+  /// **'Trap: {speed} km/h'**
+  String dynoTrap(String speed);
+
+  /// No description provided for @dynoBraking.
+  ///
+  /// In en, this message translates to:
+  /// **'100 – 0 Braking'**
+  String get dynoBraking;
+
+  /// No description provided for @dynoEmergencyStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency Stop'**
+  String get dynoEmergencyStop;
+
+  /// No description provided for @dynoEstTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated Dyno Power & Torque:'**
+  String get dynoEstTitle;
+
+  /// No description provided for @dynoWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight: {kg} kg'**
+  String dynoWeight(int kg);
+
+  /// No description provided for @dynoPeakWHP.
+  ///
+  /// In en, this message translates to:
+  /// **'Peak Wheel Horsepower'**
+  String get dynoPeakWHP;
+
+  /// No description provided for @dynoPeakTorque.
+  ///
+  /// In en, this message translates to:
+  /// **'Peak Engine Torque'**
+  String get dynoPeakTorque;
+
+  /// No description provided for @dynoAdjustWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust Vehicle Weight ({kg} kg):'**
+  String dynoAdjustWeight(int kg);
+
+  /// No description provided for @lanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Workshop LAN Sync Hub'**
+  String get lanTitle;
+
+  /// No description provided for @lanUnspecified.
+  ///
+  /// In en, this message translates to:
+  /// **'Unspecified'**
+  String get lanUnspecified;
+
+  /// No description provided for @lanNewReport.
+  ///
+  /// In en, this message translates to:
+  /// **'New inspection report received for: {name}'**
+  String lanNewReport(String name);
+
+  /// No description provided for @lanTabServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Server (Master)'**
+  String get lanTabServer;
+
+  /// No description provided for @lanTabSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync Reports (Client)'**
+  String get lanTabSync;
+
+  /// No description provided for @lanServerActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Local LAN Server Active'**
+  String get lanServerActive;
+
+  /// No description provided for @lanServerStopped.
+  ///
+  /// In en, this message translates to:
+  /// **'Local LAN Server Stopped'**
+  String get lanServerStopped;
+
+  /// No description provided for @lanActiveDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Any desktop, laptop, or smartphone on workshop Wi-Fi can open the URL below'**
+  String get lanActiveDesc;
+
+  /// No description provided for @lanStoppedDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the button below to start broadcasting live diagnostics and job cards over local Wi-Fi'**
+  String get lanStoppedDesc;
+
+  /// No description provided for @lanCopyUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy URL'**
+  String get lanCopyUrl;
+
+  /// No description provided for @lanCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Server URL copied to clipboard!'**
+  String get lanCopied;
+
+  /// No description provided for @lanStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop LAN Server'**
+  String get lanStop;
+
+  /// No description provided for @lanStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Workshop Server (Port 8080)'**
+  String get lanStart;
+
+  /// No description provided for @lanStartFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to start server. Ensure device is connected to Wi-Fi / Hotspot.'**
+  String get lanStartFail;
+
+  /// No description provided for @lanHowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How Does Offline LAN Hub Work?'**
+  String get lanHowTitle;
+
+  /// No description provided for @lanHowSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Ensure the diagnostic tablet and reception/accounting PC are connected to the same workshop Wi-Fi router or phone Hotspot.\n2. No external internet or cellular data is required; data communicates entirely offline across local subnet.\n3. Open Google Chrome on the reception PC and enter the URL shown above.\n4. A real-time dashboard appears displaying live telemetry, trouble codes, and printable PDF inspection job cards for standard A4 printers.'**
+  String get lanHowSteps;
+
+  /// No description provided for @lanSyncTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync Inspection Job Cards with Master PC'**
+  String get lanSyncTitle;
+
+  /// No description provided for @lanSyncDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'If using this tablet under the vehicle or in the service bay, push saved inspection job cards directly to the main reception PC with one tap.'**
+  String get lanSyncDesc;
+
+  /// No description provided for @lanMasterIp.
+  ///
+  /// In en, this message translates to:
+  /// **'Master PC IP Address'**
+  String get lanMasterIp;
+
+  /// No description provided for @lanSyncing.
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing...'**
+  String get lanSyncing;
+
+  /// No description provided for @lanSyncAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync All Reports ({count})'**
+  String lanSyncAll(int count);
+
+  /// No description provided for @lanInvalidIp.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid IP address for the Master PC'**
+  String get lanInvalidIp;
+
+  /// No description provided for @lanSyncResultOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync result: Sent {success} report(s) successfully without errors! ✅'**
+  String lanSyncResultOk(int success);
+
+  /// No description provided for @lanSyncResultFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync result: Sent {success} report(s) successfully, {fail} failed.'**
+  String lanSyncResultFail(int success, int fail);
 }
 
 class _AppLocalizationsDelegate

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/localization/app_strings_en.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../domain/analyzers/dyno_performance_calculator.dart';
 import '../providers/obd_state.dart';
 
@@ -18,26 +18,27 @@ class _PerformanceDynoScreenState extends State<PerformanceDynoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final state = Provider.of<ObdState>(context);
     final dyno = state.dynoCalculator;
 
     Color runColor = AppColors.primaryYellow;
-    String statusTitle = "ARMED: Stop vehicle completely to begin";
+    String statusTitle = l10n.dynoArmed;
     if (dyno.state == PerformanceRunState.accelerating) {
       runColor = AppColors.dangerRed;
-      statusTitle = "ACCELERATING: Floor the accelerator!";
+      statusTitle = l10n.dynoAccelerating;
     } else if (dyno.state == PerformanceRunState.completed) {
       runColor = AppColors.successGreen;
-      statusTitle = "RUN COMPLETED: 0-100 km/h Recorded!";
+      statusTitle = l10n.dynoCompleted;
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.performanceDyno),
+        title: Text(l10n.dynoTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            tooltip: "Reset Performance Timers",
+            tooltip: l10n.dynoReset,
             onPressed: () => setState(() => dyno.reset()),
           ),
         ],
@@ -85,13 +86,13 @@ class _PerformanceDynoScreenState extends State<PerformanceDynoScreen> {
               ),
               child: Column(
                 children: [
-                  const Text(
-                    "0 – 100 km/h (0 – 62 mph)",
+                  Text(
+                    l10n.dynoZeroHundred,
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textMuted),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    dyno.zeroToHundredSec != null ? "${dyno.zeroToHundredSec!.toStringAsFixed(2)}s" : "--.-s",
+                    dyno.zeroToHundredSec != null ? "${dyno.zeroToHundredSec!.toStringAsFixed(2)}${l10n.unitSec}" : "--.-${l10n.unitSec}",
                     style: const TextStyle(
                       fontSize: 48,
                       fontWeight: FontWeight.bold,
@@ -103,9 +104,9 @@ class _PerformanceDynoScreenState extends State<PerformanceDynoScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildTimerStat("0-60 km/h Split", dyno.zeroToSixtySec != null ? "${dyno.zeroToSixtySec!.toStringAsFixed(2)}s" : "--.-s", AppColors.electricBlue),
-                      _buildTimerStat("Distance Covered", "${dyno.distanceMeters.toStringAsFixed(0)} m", AppColors.textWhite),
-                      _buildTimerStat("Max Speed", "${dyno.maxRecordedSpeedKmh.toStringAsFixed(0)} km/h", AppColors.accentCyan),
+                      _buildTimerStat(l10n.dynoZeroSixty, dyno.zeroToSixtySec != null ? "${dyno.zeroToSixtySec!.toStringAsFixed(2)}${l10n.unitSec}" : "--.-${l10n.unitSec}", AppColors.electricBlue),
+                      _buildTimerStat(l10n.dynoDistance, "${dyno.distanceMeters.toStringAsFixed(0)} ${l10n.unitMeter}", AppColors.textWhite),
+                      _buildTimerStat(l10n.dynoMaxSpeed, "${dyno.maxRecordedSpeedKmh.toStringAsFixed(0)} ${l10n.unitKmh}", AppColors.accentCyan),
                     ],
                   ),
                 ],
@@ -128,14 +129,14 @@ class _PerformanceDynoScreenState extends State<PerformanceDynoScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("400m Quarter Mile", style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
+                        Text(l10n.dynoQuarter, style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
                         const SizedBox(height: 6),
                         Text(
-                          dyno.quarterMileSec != null ? "${dyno.quarterMileSec!.toStringAsFixed(2)}s" : "--.-s",
+                          dyno.quarterMileSec != null ? "${dyno.quarterMileSec!.toStringAsFixed(2)}${l10n.unitSec}" : "--.-${l10n.unitSec}",
                           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.textWhite),
                         ),
                         Text(
-                          dyno.quarterMileTrapSpeedKmh != null ? "Trap: ${dyno.quarterMileTrapSpeedKmh!.toStringAsFixed(0)} km/h" : "Trap: -- km/h",
+                          dyno.quarterMileTrapSpeedKmh != null ? l10n.dynoTrap(dyno.quarterMileTrapSpeedKmh!.toStringAsFixed(0)) : l10n.dynoTrap("--"),
                           style: const TextStyle(fontSize: 11, color: AppColors.accentCyan),
                         ),
                       ],
@@ -154,13 +155,13 @@ class _PerformanceDynoScreenState extends State<PerformanceDynoScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("100 – 0 Braking", style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
+                        Text(l10n.dynoBraking, style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
                         const SizedBox(height: 6),
                         Text(
-                          dyno.brakingDistanceMeters != null ? "${dyno.brakingDistanceMeters!.toStringAsFixed(1)} m" : "--.- m",
+                          dyno.brakingDistanceMeters != null ? "${dyno.brakingDistanceMeters!.toStringAsFixed(1)} ${l10n.unitMeter}" : "--.- ${l10n.unitMeter}",
                           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.dangerRed),
                         ),
-                        const Text("Emergency Stop", style: TextStyle(fontSize: 11, color: AppColors.textDisabled)),
+                        Text(l10n.dynoEmergencyStop, style: TextStyle(fontSize: 11, color: AppColors.textDisabled)),
                       ],
                     ),
                   ),
@@ -184,8 +185,8 @@ class _PerformanceDynoScreenState extends State<PerformanceDynoScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "Estimated Dyno Power & Torque:",
+                      Text(
+                        l10n.dynoEstTitle,
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primaryYellow),
                       ),
                       Container(
@@ -195,7 +196,7 @@ class _PerformanceDynoScreenState extends State<PerformanceDynoScreen> {
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          "Weight: ${_curbWeightKg.toInt()} kg",
+                          l10n.dynoWeight(_curbWeightKg.toInt()),
                           style: const TextStyle(fontSize: 11, color: AppColors.electricBlue),
                         ),
                       ),
@@ -212,7 +213,7 @@ class _PerformanceDynoScreenState extends State<PerformanceDynoScreen> {
                             style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: AppColors.primaryYellow),
                           ),
                           const SizedBox(height: 2),
-                          const Text("Peak Wheel Horsepower", style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
+                          Text(l10n.dynoPeakWHP, style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
                         ],
                       ),
                       Column(
@@ -222,7 +223,7 @@ class _PerformanceDynoScreenState extends State<PerformanceDynoScreen> {
                             style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: AppColors.accentCyan),
                           ),
                           const SizedBox(height: 2),
-                          const Text("Peak Engine Torque", style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
+                          Text(l10n.dynoPeakTorque, style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
                         ],
                       ),
                     ],
@@ -230,7 +231,7 @@ class _PerformanceDynoScreenState extends State<PerformanceDynoScreen> {
                   const SizedBox(height: 16),
                   const Divider(color: AppColors.cardBorder),
                   const SizedBox(height: 8),
-                  Text("Adjust Vehicle Weight (${_curbWeightKg.toInt()} kg):", style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
+                  Text(l10n.dynoAdjustWeight(_curbWeightKg.toInt()), style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
                   Slider(
                     value: _curbWeightKg,
                     min: 800.0,
