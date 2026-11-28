@@ -219,8 +219,11 @@ class _LabScopeWaveformScreenState extends State<LabScopeWaveformScreen> with Si
 
   // --- TAB 1: CKP / CMP Timing Chain Sync ---
   Widget _buildCkpCmpSyncTab(ObdState state, bool isAr) {
+    final hasLive = state.isConnected && state.currentRpm > 0;
     final isStretched = _chainAnalysis.isChainStretched;
-    final statusColor = isStretched ? AppColors.dangerRed : AppColors.successGreen;
+    final statusColor = !hasLive
+        ? AppColors.textMuted
+        : (isStretched ? AppColors.dangerRed : AppColors.successGreen);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -237,7 +240,7 @@ class _LabScopeWaveformScreenState extends State<LabScopeWaveformScreen> with Si
             ),
             child: Row(
               children: [
-                Icon(isStretched ? Icons.warning_amber_rounded : Icons.check_circle, color: statusColor, size: 24),
+                Icon(!hasLive ? Icons.sensors_off : (isStretched ? Icons.warning_amber_rounded : Icons.check_circle), color: statusColor, size: 24),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(
@@ -249,7 +252,9 @@ class _LabScopeWaveformScreenState extends State<LabScopeWaveformScreen> with Si
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        isAr ? _chainAnalysis.verdictAr : _chainAnalysis.verdictEn,
+                        !hasLive
+                            ? (isAr ? "لا توجد بيانات حية - القيم المعروضة تقديرية من معادلات وليست مقروءة من السيارة" : "No live data - shown values are formula estimates, not read from the vehicle")
+                            : (isAr ? _chainAnalysis.verdictAr : _chainAnalysis.verdictEn),
                         style: const TextStyle(fontSize: 11, color: AppColors.textWhite),
                       ),
                     ],
@@ -333,10 +338,10 @@ class _LabScopeWaveformScreenState extends State<LabScopeWaveformScreen> with Si
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text("Δt: ${_cursors.deltaTimeMs.toStringAsFixed(1)} ms", style: const TextStyle(fontSize: 10, color: AppColors.primaryYellow, fontFamily: 'monospace')),
-                        Text(Provider.of<ObdState>(context, listen: false).isArabic ? "التردد: ${_cursors.frequencyHz.toStringAsFixed(1)} Hz" : "Freq: ${_cursors.frequencyHz.toStringAsFixed(1)} Hz", style: const TextStyle(fontSize: 10, color: AppColors.accentCyan, fontFamily: 'monospace')),
+                        Text(hasLive ? "Δt: ${_cursors.deltaTimeMs.toStringAsFixed(1)} ms" : (Provider.of<ObdState>(context, listen: false).isArabic ? "Δt: لا بيانات" : "Δt: no data"), style: const TextStyle(fontSize: 10, color: AppColors.primaryYellow, fontFamily: 'monospace')),
+                        Text(!hasLive ? (Provider.of<ObdState>(context, listen: false).isArabic ? "التردد: لا بيانات" : "Freq: no data") : (Provider.of<ObdState>(context, listen: false).isArabic ? "التردد: ${_cursors.frequencyHz.toStringAsFixed(1)} Hz" : "Freq: ${_cursors.frequencyHz.toStringAsFixed(1)} Hz"), style: const TextStyle(fontSize: 10, color: AppColors.accentCyan, fontFamily: 'monospace')),
                         Text(Provider.of<ObdState>(context, listen: false).isArabic ? "قاعدة الزمن: ${_timebaseMs.toStringAsFixed(0)}ms (A:${_chAVoltsPerDiv.toStringAsFixed(0)}V B:${_chBVoltsPerDiv.toStringAsFixed(0)}V)" : "TB: ${_timebaseMs.toStringAsFixed(0)}ms (A:${_chAVoltsPerDiv.toStringAsFixed(0)}V B:${_chBVoltsPerDiv.toStringAsFixed(0)}V)", style: const TextStyle(fontSize: 10, color: AppColors.textMuted, fontFamily: 'monospace')),
-                        Text(Provider.of<ObdState>(context, listen: false).isArabic ? "إزاحة الطور: ${_chainAnalysis.measuredPhaseOffsetDeg.toStringAsFixed(1)}°" : "Phase Offset: ${_chainAnalysis.measuredPhaseOffsetDeg.toStringAsFixed(1)}°", style: TextStyle(fontSize: 10, color: statusColor, fontWeight: FontWeight.bold, fontFamily: 'monospace')),
+                        Text(!hasLive ? (Provider.of<ObdState>(context, listen: false).isArabic ? "إزاحة الطور: لا بيانات" : "Phase Offset: no data") : (Provider.of<ObdState>(context, listen: false).isArabic ? "إزاحة الطور: ${_chainAnalysis.measuredPhaseOffsetDeg.toStringAsFixed(1)}°" : "Phase Offset: ${_chainAnalysis.measuredPhaseOffsetDeg.toStringAsFixed(1)}°"), style: TextStyle(fontSize: 10, color: statusColor, fontWeight: FontWeight.bold, fontFamily: 'monospace')),
                       ],
                     ),
                   ),
@@ -357,7 +362,7 @@ class _LabScopeWaveformScreenState extends State<LabScopeWaveformScreen> with Si
                 children: [
                   _buildMetricRow(Provider.of<ObdState>(context, listen: false).isArabic ? "منصة المحرك:" : "Engine Platform:", _chainAnalysis.enginePlatform, AppColors.textWhite),
                   const Divider(color: AppColors.cardBorder),
-                  _buildMetricRow(Provider.of<ObdState>(context, listen: false).isArabic ? "إزاحة الكرنك/الكامة (تقديري):" : "Cam/Crank Relative Offset (estimated):", "+${_chainAnalysis.measuredPhaseOffsetDeg.toStringAsFixed(1)}°", statusColor),
+                  _buildMetricRow(Provider.of<ObdState>(context, listen: false).isArabic ? "إزاحة الكرنك/الكامة (تقديري):" : "Cam/Crank Relative Offset (estimated):", hasLive ? "+${_chainAnalysis.measuredPhaseOffsetDeg.toStringAsFixed(1)}°" : "—", statusColor),
                   const Divider(color: AppColors.cardBorder),
                   _buildMetricRow(Provider.of<ObdState>(context, listen: false).isArabic ? "تفاوت المصنع:" : "OEM Manufacturer Tolerance:", "±${_chainAnalysis.nominalToleranceDeg.toStringAsFixed(1)}° max", AppColors.textMuted),
                   const Divider(color: AppColors.cardBorder),
@@ -484,13 +489,13 @@ class _LabScopeWaveformScreenState extends State<LabScopeWaveformScreen> with Si
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  _buildMetricRow("Spark Burn Time:", "${ig.sparkBurnTimeMs} ms (Nominal: 1.2 - 2.0 ms)", AppColors.successGreen),
+                  _buildMetricRow(isAr ? "زمن احتراق الشرارة (تقديري):" : "Spark Burn Time (estimated):", "${ig.sparkBurnTimeMs} ms (Nominal: 1.2 - 2.0 ms)", AppColors.textMuted),
                   const Divider(color: AppColors.cardBorder),
-                  _buildMetricRow("Dwell Saturation Charging:", "${ig.dwellChargingTimeMs} ms", AppColors.accentCyan),
+                  _buildMetricRow(isAr ? "زمن شحن الملف (تقديري):" : "Dwell Saturation Charging (estimated):", "${ig.dwellChargingTimeMs} ms", AppColors.accentCyan),
                   const Divider(color: AppColors.cardBorder),
-                  _buildMetricRow("Firing KV Peak Spike:", "${ig.sparkLineKv} kV", AppColors.primaryYellow),
+                  _buildMetricRow(isAr ? "جهد الاشتعال الأقصى (تقديري):" : "Firing KV Peak Spike (estimated):", "${ig.sparkLineKv} kV", AppColors.primaryYellow),
                   const Divider(color: AppColors.cardBorder),
-                  _buildMetricRow("Ignition Coil Status:", state.isConnected && state.currentRpm > 0 ? "LIVE FIRING / HEALTHY" : "ENGINE AT STANDBY", AppColors.successGreen),
+                  _buildMetricRow(isAr ? "حالة ملف الإشعال:" : "Ignition Coil Status:", state.isConnected && state.currentRpm > 0 ? (isAr ? "احتراق حي" : "LIVE FIRING") : (isAr ? "المحرك متوقف - لا بيانات" : "ENGINE OFF - no data"), state.isConnected && state.currentRpm > 0 ? AppColors.successGreen : AppColors.textMuted),
                 ],
               ),
             ),
@@ -608,13 +613,13 @@ class _LabScopeWaveformScreenState extends State<LabScopeWaveformScreen> with Si
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  _buildMetricRow("Injector Pulse Width:", "${inj.pulseWidthMs} ms (${state.isConnected && state.currentRpm > 0 ? "Live Load" : "Standby"})", AppColors.accentCyan),
+                  _buildMetricRow(isAr ? "عرض نبضة الرشاش (تقديري):" : "Injector Pulse Width (estimated):", "${inj.pulseWidthMs} ms (${state.isConnected && state.currentRpm > 0 ? (isAr ? "حمل حي" : "Live Load") : (isAr ? "توقف" : "Standby")})", AppColors.accentCyan),
                   const Divider(color: AppColors.cardBorder),
-                  _buildMetricRow("Flyback Back-EMF Spike:", "${inj.flybackVoltagePeak} V (Nominal: 50 - 75 V)", AppColors.successGreen),
+                  _buildMetricRow(isAr ? "جهد الارتداد العكسي (تقديري):" : "Flyback Back-EMF Spike (estimated):", "${inj.flybackVoltagePeak} V (Nominal: 50 - 75 V)", AppColors.textMuted),
                   const Divider(color: AppColors.cardBorder),
-                  _buildMetricRow("Peak Hold Amperage:", "${inj.peakCurrentAmps} A", AppColors.primaryYellow),
+                  _buildMetricRow(isAr ? "أمبير الذروة (تقديري):" : "Peak Hold Amperage (estimated):", "${inj.peakCurrentAmps} A", AppColors.primaryYellow),
                   const Divider(color: AppColors.cardBorder),
-                  _buildMetricRow("Solenoid Coil Health:", state.isConnected && state.currentRpm > 0 ? "LIVE INJECTION / HEALTHY" : "STANDBY", AppColors.successGreen),
+                  _buildMetricRow(isAr ? "حالة ملف الرشاش:" : "Solenoid Coil Health:", state.isConnected && state.currentRpm > 0 ? (isAr ? "حقن حي" : "LIVE INJECTION") : (isAr ? "المحرك متوقف - لا بيانات" : "ENGINE OFF - no data"), state.isConnected && state.currentRpm > 0 ? AppColors.successGreen : AppColors.textMuted),
                 ],
               ),
             ),
