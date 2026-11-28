@@ -165,9 +165,9 @@ class _QuickScanScreenState extends State<QuickScanScreen> {
         padding: const EdgeInsets.all(14),
         child: Column(
           children: [
-            _buildDataRow(AppLocalizations.of(context).vinLabel, state.currentVin, isMonospace: true),
+            _buildDataRow(AppLocalizations.of(context).vinLabel, state.currentVin == 'N/A' ? AppLocalizations.of(context).notAvailable : state.currentVin, isMonospace: true),
             const Divider(color: Color(0xFF37474F)),
-            _buildDataRow(AppLocalizations.of(context).protocolLabel, state.activeProtocol),
+            _buildDataRow(AppLocalizations.of(context).protocolLabel, state.activeProtocol == 'Not Detected' ? AppLocalizations.of(context).notDetected : state.activeProtocol),
             const Divider(color: Color(0xFF37474F)),
             _buildDataRow(AppLocalizations.of(context).batteryVoltageLabel, "${state.batteryVoltage.toStringAsFixed(1)}V"),
             const Divider(color: Color(0xFF37474F)),

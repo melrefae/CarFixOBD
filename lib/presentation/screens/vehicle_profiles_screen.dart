@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/localization/app_strings_en.dart';
 import '../../data/models/vehicle_profile.dart';
@@ -42,15 +43,15 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.vehicleProfiles),
+        title: Text(AppLocalizations.of(context).vehicleProfiles),
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: AppColors.primaryYellow,
           labelColor: AppColors.primaryYellow,
           unselectedLabelColor: AppColors.textMuted,
-          tabs: const [
-            Tab(icon: Icon(Icons.directions_car), text: "Egyptian Presets"),
-            Tab(icon: Icon(Icons.public), text: "250+ Global Brands"),
+          tabs: [
+            Tab(icon: const Icon(Icons.directions_car), text: AppLocalizations.of(context).tabEgyptianPresets),
+            Tab(icon: const Icon(Icons.public), text: AppLocalizations.of(context).tabGlobalBrands),
           ],
         ),
       ),
@@ -68,7 +69,7 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
               },
               style: const TextStyle(color: AppColors.textWhite),
               decoration: InputDecoration(
-                hintText: AppStrings.searchVehicles,
+                hintText: AppLocalizations.of(context).searchVehicles,
                 hintStyle: const TextStyle(color: AppColors.textMuted),
                 prefixIcon: const Icon(Icons.search, color: AppColors.primaryYellow),
                 suffixIcon: _searchQuery.isNotEmpty
@@ -151,7 +152,7 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
             const Icon(Icons.search_off, size: 64, color: AppColors.textMuted),
             const SizedBox(height: 12),
             Text(
-              "No vehicle profiles found in '$_selectedRegion' matching '$_searchQuery'",
+              AppLocalizations.of(context).noProfilesFound(_selectedRegion, _searchQuery),
               style: const TextStyle(color: AppColors.textMuted, fontSize: 14),
             ),
           ],
@@ -238,8 +239,8 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
                               color: AppColors.successGreen,
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            child: const Text(
-                              AppStrings.activeProfile,
+                            child: Text(
+                              AppLocalizations.of(context).activeProfile,
                               style: TextStyle(
                                 fontSize: 11,
                                 color: Colors.black,
@@ -257,7 +258,7 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
                             ),
                             icon: const Icon(Icons.speed, size: 14),
                             label: Text(
-                              isAr ? "فحص شامل" : "Full Test",
+                              AppLocalizations.of(context).fullTest,
                               style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
                             ),
                             onPressed: () {
@@ -278,17 +279,17 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
                         onPressed: () {
                           state.selectProfile(profile);
                         },
-                        child: const Text(AppStrings.activateProfile, style: TextStyle(fontSize: 12)),
+                        child: Text(AppLocalizations.of(context).activateProfile, style: const TextStyle(fontSize: 12)),
                       ),
                   ],
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  "${AppStrings.engineLabel}: ${profile.engine} | ${AppStrings.transmissionLabel}: ${profile.transmission}",
+                  '${AppLocalizations.of(context).engineLabel}: ${profile.engine} | ${AppLocalizations.of(context).transmissionLabel}: ${profile.transmission}',
                   style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
                 ),
                 Text(
-                  "${AppStrings.protocolLabel}: ${profile.protocol} (${profile.atProtocolCmd})",
+                  '${AppLocalizations.of(context).protocolLabel} ${profile.protocol} (${profile.atProtocolCmd})',
                   style: const TextStyle(fontSize: 11, color: AppColors.electricBlue),
                 ),
                 if (notes.isNotEmpty) ...[
@@ -301,7 +302,7 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
-                      "${AppStrings.workshopNote}: $notes",
+                      '${AppLocalizations.of(context).workshopNote}: $notes',
                       style: const TextStyle(fontSize: 11, color: AppColors.textWhite),
                     ),
                   ),
@@ -326,8 +327,8 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
                   alignment: Alignment.centerLeft,
                   child: TextButton.icon(
                     icon: const Icon(Icons.add, size: 16, color: AppColors.primaryYellow),
-                    label: const Text(
-                      AppStrings.addCustomPid,
+                    label: Text(
+                      AppLocalizations.of(context).addCustomPid,
                       style: TextStyle(fontSize: 11, color: AppColors.primaryYellow),
                     ),
                     onPressed: () {
@@ -365,7 +366,7 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
             const Icon(Icons.public_off, size: 64, color: AppColors.textMuted),
             const SizedBox(height: 12),
             Text(
-              "No brands found for '$_selectedRegion' matching '$_searchQuery'",
+              AppLocalizations.of(context).noBrandsFound(_selectedRegion, _searchQuery),
               style: const TextStyle(color: AppColors.textMuted, fontSize: 14),
             ),
           ],
@@ -438,7 +439,7 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      "${models.length} Egyptian Presets",
+                      AppLocalizations.of(context).egyptianPresetsCount('${models.length}'),
                       style: const TextStyle(fontSize: 10, color: AppColors.successGreen),
                     ),
                   )
@@ -449,8 +450,8 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
                       color: AppColors.electricBlue.withOpacity(0.15),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: const Text(
-                      "Generic UDS / OBD2",
+                    child: Text(
+                      AppLocalizations.of(context).genericUdsObd2,
                       style: TextStyle(fontSize: 10, color: AppColors.electricBlue),
                     ),
                   ),
@@ -459,10 +460,10 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
             trailing: hasPresets
                 ? TextButton(
                     onPressed: () => _showBrandModelsModal(context, state, brand, models),
-                    child: const Row(
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text("Select Model", style: TextStyle(color: AppColors.primaryYellow, fontSize: 12)),
+                        Text(AppLocalizations.of(context).selectModel, style: const TextStyle(color: AppColors.primaryYellow, fontSize: 12)),
                         Icon(Icons.arrow_forward_ios, size: 12, color: AppColors.primaryYellow),
                       ],
                     ),
@@ -477,13 +478,13 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
                       state.selectProfile(genericProfile);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text("Activated generic diagnostic profile for ${brand.name}"),
+                          content: Text(AppLocalizations.of(context).activatedGenericProfile(brand.name)),
                           backgroundColor: AppColors.cardSurface,
                           behavior: SnackBarBehavior.floating,
                         ),
                       );
                     },
-                    child: const Text("Activate", style: TextStyle(fontSize: 11)),
+                    child: Text(AppLocalizations.of(context).activateProfile, style: const TextStyle(fontSize: 11)),
                   ),
           ),
         );
@@ -514,7 +515,7 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    state.isArabic ? "${brand.name} (${brand.nameAr}) الطرازات" : "${brand.name} Models",
+                    AppLocalizations.of(context).brandModelsTitle(state.isArabic ? "${brand.name} (${brand.nameAr})" : brand.name),
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -557,7 +558,7 @@ class _VehicleProfilesScreenState extends State<VehicleProfilesScreen> with Sing
                                     MaterialPageRoute(builder: (_) => const FullVehicleTestScreen()),
                                   );
                                 },
-                                child: Text(state.isArabic ? "فحص" : "Test", style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                                child: Text(AppLocalizations.of(context).testShort, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
                               ),
                       ),
                     );

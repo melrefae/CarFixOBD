@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/localization/app_strings_en.dart';
 import '../providers/obd_state.dart';
@@ -22,7 +23,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
     if (cmd.trim().isEmpty) return;
     if (!state.isConnected || state.driver == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please connect to OBD adapter first"), backgroundColor: AppColors.warningOrange),
+        SnackBar(content: Text(AppLocalizations.of(context).connectFirstSnack), backgroundColor: AppColors.warningOrange),
       );
       return;
     }
@@ -72,11 +73,11 @@ class _TerminalScreenState extends State<TerminalScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.terminal),
+        title: Text(AppLocalizations.of(context).terminalTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete_outline),
-            tooltip: "Clear Terminal Logs",
+            tooltip: AppLocalizations.of(context).clearTerminalTooltip,
             onPressed: () {
               setState(() {
                 _logs.clear();
@@ -93,15 +94,15 @@ class _TerminalScreenState extends State<TerminalScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             child: Row(
               children: [
-                _buildQuickCmdChip("AT Z", "Reset Adapter", state),
-                _buildQuickCmdChip("AT RV", "Read Battery", state),
-                _buildQuickCmdChip("AT DP", "Active Protocol", state),
-                _buildQuickCmdChip("0100", "Supported PIDs 1-20", state),
-                _buildQuickCmdChip("01 0C", "Engine RPM", state),
-                _buildQuickCmdChip("01 0D", "Vehicle Speed", state),
-                _buildQuickCmdChip("03", "Read Stored DTCs", state),
-                _buildQuickCmdChip("07", "Read Pending DTCs", state),
-                _buildQuickCmdChip("09 02", "Read VIN", state),
+                _buildQuickCmdChip("AT Z", AppLocalizations.of(context).qcResetAdapter, state),
+                _buildQuickCmdChip("AT RV", AppLocalizations.of(context).qcReadBattery, state),
+                _buildQuickCmdChip("AT DP", AppLocalizations.of(context).qcActiveProtocol, state),
+                _buildQuickCmdChip("0100", AppLocalizations.of(context).qcSupportedPids, state),
+                _buildQuickCmdChip("01 0C", AppLocalizations.of(context).qcEngineRpm, state),
+                _buildQuickCmdChip("01 0D", AppLocalizations.of(context).qcVehicleSpeed, state),
+                _buildQuickCmdChip("03", AppLocalizations.of(context).qcReadStoredDtcs, state),
+                _buildQuickCmdChip("07", AppLocalizations.of(context).qcReadPendingDtcs, state),
+                _buildQuickCmdChip("09 02", AppLocalizations.of(context).qcReadVin, state),
               ],
             ),
           ),
@@ -117,9 +118,9 @@ class _TerminalScreenState extends State<TerminalScreen> {
                 border: Border.all(color: const Color(0xFF263238)),
               ),
               child: _logs.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Text(
-                        "ELM327 Serial Terminal Ready.\nType an AT or OBD command below or tap a quick shortcut above.",
+                        AppLocalizations.of(context).terminalReadyHint,
                         textAlign: TextAlign.center,
                         style: TextStyle(color: AppColors.textDisabled, fontSize: 12),
                       ),
@@ -164,7 +165,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
                     controller: _cmdController,
                     style: const TextStyle(fontFamily: 'monospace', color: AppColors.textWhite),
                     decoration: InputDecoration(
-                      hintText: "Enter AT or OBD command (e.g. AT RV or 01 0C)...",
+                      hintText: AppLocalizations.of(context).terminalInputHint,
                       hintStyle: const TextStyle(color: AppColors.textMuted),
                       prefixIcon: const Icon(Icons.chevron_right, color: AppColors.primaryYellow),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -177,7 +178,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
                   icon: _isSending
                       ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(color: AppColors.primaryYellow, strokeWidth: 2))
                       : const Icon(Icons.send, color: AppColors.primaryYellow),
-                  tooltip: "Send Command",
+                  tooltip: AppLocalizations.of(context).sendCommandTooltip,
                   onPressed: _isSending ? null : () => _sendCommand(_cmdController.text, state),
                 ),
               ],

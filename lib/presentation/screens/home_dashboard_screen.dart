@@ -513,7 +513,9 @@ class HomeDashboardScreen extends StatelessWidget {
                       ? (state.isVehicleAutoDetected && state.detectedVehicleInfo != null
                           ? l10n.batterySummary(state.batteryVoltage.toStringAsFixed(1), state.detectedVehicleInfo!.displaySummary)
                           : l10n.batteryVehicle(state.batteryVoltage.toStringAsFixed(1), state.selectedVehicle?.model ?? l10n.genericVehicle))
-                      : state.statusMessage,
+                      : (state.statusMessage == 'Disconnected from adapter'
+                          ? l10n.statusDisconnected
+                          : (state.statusMessage == 'Disconnected' ? l10n.statusDisconnectedShort : state.statusMessage)),
                   style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,

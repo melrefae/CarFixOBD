@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import 'package:printing/printing.dart';
 import 'package:intl/intl.dart';
 import '../../core/constants/app_colors.dart';
@@ -34,11 +35,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.inspectionReports),
+        title: Text(AppLocalizations.of(context).inspectionReports),
         actions: [
           IconButton(
             icon: const Icon(Icons.cloud_sync, color: AppColors.primaryYellow),
-            tooltip: "Cloud Backup & Fleet Sync",
+            tooltip: AppLocalizations.of(context).cloudBackupTooltip,
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const CloudBackupScreen()),
@@ -60,7 +61,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
               },
               style: const TextStyle(color: AppColors.textWhite),
               decoration: InputDecoration(
-                hintText: "Search by plate number, VIN, or customer...",
+                hintText: AppLocalizations.of(context).searchReportsHint,
                 hintStyle: const TextStyle(color: AppColors.textMuted),
                 prefixIcon: const Icon(Icons.search, color: AppColors.primaryYellow),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -73,13 +74,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.folder_open, size: 56, color: AppColors.textDisabled),
+                      children: [
+                        const Icon(Icons.folder_open, size: 56, color: AppColors.textDisabled),
                         SizedBox(height: 12),
-                        Text("No saved inspection reports found", style: TextStyle(color: AppColors.textMuted)),
+                        Text(AppLocalizations.of(context).noReportsFound, style: TextStyle(color: AppColors.textMuted)),
                         SizedBox(height: 6),
                         Text(
-                          "Run a 'Quick Scan' to generate and save customer inspection reports",
+                          AppLocalizations.of(context).noReportsHint,
                           style: TextStyle(fontSize: 11, color: AppColors.textDisabled),
                         ),
                       ],
@@ -131,7 +132,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.delete_outline, color: AppColors.textDisabled, size: 20),
-                  tooltip: "Delete Report",
+                  tooltip: AppLocalizations.of(context).deleteReportTooltip,
                   onPressed: () async {
                     await state.deleteReport(report.id);
                   },
@@ -139,9 +140,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
               ],
             ),
             const SizedBox(height: 6),
-            Text("Customer: ${report.customerName} | Phone: ${report.customerPhone}", style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
+            Text(AppLocalizations.of(context).reportCustomerLine(report.customerName, report.customerPhone), style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
             Text("VIN: ${report.vin}", style: const TextStyle(fontSize: 11, color: AppColors.textDisabled, fontFamily: 'monospace')),
-            Text("Date: $dateStr", style: const TextStyle(fontSize: 10, color: AppColors.textDisabled)),
+            Text(AppLocalizations.of(context).reportDateLine(dateStr), style: const TextStyle(fontSize: 10, color: AppColors.textDisabled)),
 
             const SizedBox(height: 8),
             Row(
@@ -153,7 +154,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    report.dtcsFound.isEmpty ? "All Systems Clear" : "${report.dtcsFound.length} Trouble Codes",
+                    report.dtcsFound.isEmpty ? AppLocalizations.of(context).allSystemsClear : AppLocalizations.of(context).troubleCodesCount('${report.dtcsFound.length}'),
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
@@ -162,7 +163,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Text("Voltage: ${report.batteryVoltage.toStringAsFixed(1)}V", style: const TextStyle(fontSize: 11, color: AppColors.textMuted)),
+                Text(AppLocalizations.of(context).voltageLine(report.batteryVoltage.toStringAsFixed(1)), style: const TextStyle(fontSize: 11, color: AppColors.textMuted)),
               ],
             ),
 
@@ -173,7 +174,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(color: AppColors.cardSurfaceHighlight, borderRadius: BorderRadius.circular(6)),
                 child: Text(
-                  "Technician Notes: ${report.mechanicNotes}",
+                  AppLocalizations.of(context).reportNotesLine(report.mechanicNotes),
                   style: const TextStyle(fontSize: 11, color: AppColors.textWhite),
                 ),
               ),
@@ -185,7 +186,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
               children: [
                 OutlinedButton.icon(
                   icon: const Icon(Icons.picture_as_pdf, size: 16),
-                  label: const Text(AppStrings.exportPdf, style: TextStyle(fontSize: 12)),
+                  label: Text(AppLocalizations.of(context).exportPdf, style: const TextStyle(fontSize: 12)),
                   onPressed: () async {
                     final pdfBytes = await PdfReportGenerator.generatePdf(report);
                     await Printing.layoutPdf(onLayout: (_) => pdfBytes);
@@ -198,7 +199,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     foregroundColor: Colors.white,
                   ),
                   icon: const Icon(Icons.share, size: 16),
-                  label: const Text(AppStrings.shareWhatsapp, style: TextStyle(fontSize: 12)),
+                  label: Text(AppLocalizations.of(context).shareWhatsapp, style: const TextStyle(fontSize: 12)),
                   onPressed: () async {
                     final pdfBytes = await PdfReportGenerator.generatePdf(report);
                     await Printing.sharePdf(

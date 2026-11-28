@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/localization/app_strings_en.dart';
 import '../providers/obd_state.dart';
@@ -28,11 +29,11 @@ class _EcuInfoScreenState extends State<EcuInfoScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.ecuInfo),
+        title: Text(AppLocalizations.of(context).ecuInfo),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            tooltip: "Refresh ECU Details",
+            tooltip: AppLocalizations.of(context).refreshEcuDetails,
             onPressed: state.isScanning ? null : () => state.fetchEcuDetails(),
           ),
         ],
@@ -41,10 +42,10 @@ class _EcuInfoScreenState extends State<EcuInfoScreen> {
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CircularProgressIndicator(color: AppColors.primaryYellow),
+                children: [
+                  const CircularProgressIndicator(color: AppColors.primaryYellow),
                   SizedBox(height: 16),
-                  Text("Querying VIN and calibration identification numbers (Mode 09)...", style: TextStyle(color: AppColors.textWhite)),
+                  Text(AppLocalizations.of(context).ecuQuerying, style: TextStyle(color: AppColors.textWhite)),
                 ],
               ),
             )
@@ -69,9 +70,9 @@ class _EcuInfoScreenState extends State<EcuInfoScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("Electronic Control Module:", style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
+                              Text(AppLocalizations.of(context).ecuModuleLabel, style: const TextStyle(fontSize: 11, color: AppColors.textMuted)),
                               Text(
-                                details['ecu_name'] ?? 'Engine Control Module (ECM/PCM)',
+                                details['ecu_name'] ?? AppLocalizations.of(context).ecuDefaultName,
                                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textWhite),
                               ),
                             ],
@@ -90,27 +91,27 @@ class _EcuInfoScreenState extends State<EcuInfoScreen> {
                       child: Column(
                         children: [
                           _buildDetailRow(
-                            title: "${AppStrings.vinLabel}:",
+                            title: AppLocalizations.of(context).vinLabel,
                             value: details['vin'] ?? state.currentVin,
-                            subtitle: "Standard vehicle electronic identification number stored in ECU flash memory",
+                            subtitle: AppLocalizations.of(context).vinSubtitle,
                           ),
                           const Divider(color: Color(0xFF37474F)),
                           _buildDetailRow(
-                            title: "Calibration ID (CALID):",
-                            value: details['cal_id'] ?? 'Not Available',
-                            subtitle: "Software revision and firmware version installed on the engine control unit",
+                            title: AppLocalizations.of(context).calIdLabel,
+                            value: details['cal_id'] ?? AppLocalizations.of(context).notAvailable,
+                            subtitle: AppLocalizations.of(context).calIdSubtitle,
                           ),
                           const Divider(color: Color(0xFF37474F)),
                           _buildDetailRow(
-                            title: "Calibration Verification Number (CVN):",
-                            value: details['cvn'] ?? 'Not Available',
-                            subtitle: "Cryptographic checksum ensuring software calibration integrity and authenticity",
+                            title: AppLocalizations.of(context).cvnLabel,
+                            value: details['cvn'] ?? AppLocalizations.of(context).notAvailable,
+                            subtitle: AppLocalizations.of(context).cvnSubtitle,
                           ),
                           const Divider(color: Color(0xFF37474F)),
                           _buildDetailRow(
-                            title: "${AppStrings.protocolLabel}:",
+                            title: AppLocalizations.of(context).protocolLabel,
                             value: state.activeProtocol,
-                            subtitle: "Active serial communications bus protocol over OBD-II DLC connector",
+                            subtitle: AppLocalizations.of(context).protocolSubtitle,
                           ),
                         ],
                       ),
@@ -129,20 +130,20 @@ class _EcuInfoScreenState extends State<EcuInfoScreen> {
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Row(
                           children: [
-                            Icon(Icons.security, color: AppColors.electricBlue, size: 20),
-                            SizedBox(width: 8),
+                            const Icon(Icons.security, color: AppColors.electricBlue, size: 20),
+                            const SizedBox(width: 8),
                             Text(
-                              "Technician Note (ECU Software & Remap Check):",
+                              AppLocalizations.of(context).ecuTechNoteTitle,
                               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.electricBlue),
                             ),
                           ],
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         Text(
-                          "CALID and CVN codes are used by service centers to verify whether vehicle software has been altered with aftermarket ECU tunes/remaps, or if an official OEM factory reflash is needed to resolve technical service bulletins.",
+                          AppLocalizations.of(context).ecuTechNoteBody,
                           style: TextStyle(fontSize: 11, color: AppColors.textWhite, height: 1.4),
                         ),
                       ],

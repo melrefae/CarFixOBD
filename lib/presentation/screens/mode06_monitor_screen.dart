@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/utils/hex_parser.dart';
 import '../providers/obd_state.dart';
@@ -13,7 +14,6 @@ class Mode06MonitorScreen extends StatefulWidget {
 }
 
 class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
-  String _filter = 'All';
 
   @override
   void initState() {
@@ -26,13 +26,15 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
     });
   }
 
+  int _filterIndex = 0;
+
   List<Mode06TestResult> _applyFilter(List<Mode06TestResult> raw) {
-    switch (_filter) {
-      case 'Misfires':
+    switch (_filterIndex) {
+      case 1:
         return raw.where((r) => r.mid >= 0xA1 && r.mid <= 0xA9).toList();
-      case 'O2 & Catalyst':
+      case 2:
         return raw.where((r) => (r.mid >= 0x01 && r.mid <= 0x08) || r.mid == 0x21 || r.mid == 0x22).toList();
-      case 'Failed Only':
+      case 3:
         return raw.where((r) => !r.isPassed && !r.noResult && r.hasLimits).toList();
       default:
         return raw;
@@ -49,7 +51,7 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isAr ? "اختبارات المكونات والمس فاير (Mode 06)" : "Mode \$06 Misfire & Component Monitor"),
+        title: Text(AppLocalizations.of(context).mode06Title),
         actions: [
           IconButton(
             icon: state.isScanningMode06
@@ -59,7 +61,7 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
                     child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primaryYellow),
                   )
                 : const Icon(Icons.refresh, color: AppColors.primaryYellow),
-            tooltip: isAr ? "إعادة الفحص" : "Scan Mode \$06",
+            tooltip: AppLocalizations.of(context).mode06ScanTooltip,
             onPressed: state.isConnected && !state.isScanningMode06
                 ? () => state.fetchMode06Monitors()
                 : null,
@@ -98,16 +100,12 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        isAr
-                            ? "نتائج Mode 06: $total اختبار ($failedCount خارج الحدود)"
-                            : "Mode \$06 Summary: $total Monitors ($failedCount Out-of-Spec)",
+                        AppLocalizations.of(context).mode06Summary('$total', '$failedCount'),
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textWhite),
                       ),
                       const SizedBox(height: 3),
                       Text(
-                        isAr
-                            ? "يكشف عدادات تفويت السلندرات (Misfire) وحالة علبة البيئة والحساسات قبل إضاءة لمبة الأعطال."
-                            : "Reads early cylinder misfire counters, catalyst & O2 margins before a Check Engine light triggers.",
+                        AppLocalizations.of(context).mode06Subtitle,
                         style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                       ),
                     ],
@@ -123,21 +121,21 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             child: Row(
               children: [
-                for (final label in const ['All', 'Misfires', 'O2 & Catalyst', 'Failed Only'])
+                for (final (i, label) in [AppLocalizations.of(context).filterAll, AppLocalizations.of(context).filterMisfires, AppLocalizations.of(context).filterO2Cat, AppLocalizations.of(context).filterFailedOnly].indexed)
                   Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: ChoiceChip(
                       label: Text(label),
-                      selected: _filter == label,
+                      selected: _filterIndex == i,
                       selectedColor: AppColors.primaryYellow,
                       backgroundColor: AppColors.cardSurface,
                       labelStyle: TextStyle(
-                        color: _filter == label ? Colors.black : AppColors.textWhite,
+                        color: _filterIndex == i ? Colors.black : AppColors.textWhite,
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
                       ),
                       onSelected: (v) {
-                        if (v) setState(() => _filter = label);
+                        if (v) setState(() => _filterIndex = i);
                       },
                     ),
                   ),
@@ -151,23 +149,21 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(24),
                       child: Text(
-                        isAr
-                            ? "يرجى توصيل فيشة الفحص بالسيارة أولاً لقراءة اختبارات Mode 06."
-                            : "Connect an OBD adapter to query real-time Mode \$06 component monitors.",
+                        AppLocalizations.of(context).mode06ConnectFirst,
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
                       ),
                     ),
                   )
                 : state.isScanningMode06
-                    ? const Center(
+                    ? Center(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            CircularProgressIndicator(color: AppColors.primaryYellow),
-                            SizedBox(height: 12),
+                            const CircularProgressIndicator(color: AppColors.primaryYellow),
+                            const SizedBox(height: 12),
                             Text(
-                              "Interrogating ECU Mode \$06 Test IDs...",
+                              AppLocalizations.of(context).mode06Scanning,
                               style: TextStyle(color: AppColors.textMuted, fontSize: 12),
                             ),
                           ],
@@ -183,16 +179,14 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
                                   const Icon(Icons.info_outline, size: 42, color: AppColors.textDisabled),
                                   const SizedBox(height: 10),
                                   Text(
-                                    isAr
-                                        ? "لا توجد اختبارات Mode 06 متاحة أو الكنترول لا يدعم Mode 06 في هذا التصفية."
-                                        : "No Mode \$06 test records returned by this ECU for the current filter.",
+                                    AppLocalizations.of(context).mode06NoResults,
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
                                   ),
                                   const SizedBox(height: 14),
                                   ElevatedButton.icon(
                                     icon: const Icon(Icons.refresh),
-                                    label: Text(isAr ? "إعادة المسح" : "Re-Scan Mode \$06"),
+                                    label: Text(AppLocalizations.of(context).mode06Rescan),
                                     onPressed: () => state.fetchMode06Monitors(),
                                   ),
                                 ],
@@ -211,7 +205,8 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
   }
 
   Widget _buildTestCard(Mode06TestResult r) {
-    final String status = r.noResult ? 'NO RESULT YET' : (!r.hasLimits ? 'INFO' : (r.isPassed ? 'PASS' : 'FAIL'));
+    final l10n = AppLocalizations.of(context);
+    final String status = r.noResult ? l10n.statusNoResult : (!r.hasLimits ? l10n.statusInfo : (r.isPassed ? l10n.statusPass : l10n.statusFail));
     final color = r.noResult || !r.hasLimits ? AppColors.textMuted : (r.isPassed ? AppColors.successGreen : AppColors.dangerRed);
     String fmt(double v) => v == v.roundToDouble() ? v.toStringAsFixed(0) : (v.abs() < 1 ? v.toStringAsFixed(4) : v.toStringAsFixed(2));
     final span = (r.maxLimit - r.minLimit).abs();
@@ -257,11 +252,11 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${r.source} • ${r.source == 'Mode 05' ? 'sensor' : 'MID'} ${r.midHex} • TID ${r.tidHex}",
+                  "${r.source} • ${r.source == 'Mode 05' ? l10n.sensorWord : 'MID'} ${r.midHex} • TID ${r.tidHex}",
                   style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                 ),
                 Text(
-                  "${fmt(r.measuredValue)} ${r.scalingKnown ? r.unit : '(raw)'}",
+                  "${fmt(r.measuredValue)} ${r.scalingKnown ? r.unit : l10n.rawUnit}",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -285,9 +280,9 @@ class _Mode06MonitorScreenState extends State<Mode06MonitorScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(r.hasLimits ? "Min: ${fmt(r.minLimit)} ${r.unit}" : (r.noResult ? "Never completed since codes were erased" : "Constant (no limits)"),
+                Text(r.hasLimits ? l10n.minLimitLabel(fmt(r.minLimit), r.unit) : (r.noResult ? l10n.neverCompleted : l10n.constantNoLimits),
                     style: const TextStyle(fontSize: 10, color: AppColors.textDisabled)),
-                Text(r.hasLimits ? "Max: ${fmt(r.maxLimit)} ${r.unit}" : "",
+                Text(r.hasLimits ? l10n.maxLimitLabel(fmt(r.maxLimit), r.unit) : "",
                     style: const TextStyle(fontSize: 10, color: AppColors.textDisabled)),
               ],
             ),

@@ -1130,4 +1130,381 @@ class AppLocalizationsEn extends AppLocalizations {
   String targetValue(Object value) {
     return 'Target: $value';
   }
+
+  @override
+  String get inspectionReports => 'Inspection Reports';
+
+  @override
+  String get cloudBackupTooltip => 'Cloud Backup & Fleet Sync';
+
+  @override
+  String get searchReportsHint => 'Search by plate number, VIN, or customer...';
+
+  @override
+  String get noReportsFound => 'No saved inspection reports found';
+
+  @override
+  String get noReportsHint =>
+      'Run a \'Quick Scan\' to generate and save customer inspection reports';
+
+  @override
+  String get deleteReportTooltip => 'Delete Report';
+
+  @override
+  String reportCustomerLine(String p0, String p1) {
+    return 'Customer: $p0 | Phone: $p1';
+  }
+
+  @override
+  String reportDateLine(String p0) {
+    return 'Date: $p0';
+  }
+
+  @override
+  String get allSystemsClear => 'All Systems Clear';
+
+  @override
+  String troubleCodesCount(String p0) {
+    return '$p0 Trouble Codes';
+  }
+
+  @override
+  String voltageLine(String p0) {
+    return 'Voltage: ${p0}V';
+  }
+
+  @override
+  String reportNotesLine(String p0) {
+    return 'Technician Notes: $p0';
+  }
+
+  @override
+  String get exportPdf => 'Export PDF Report';
+
+  @override
+  String get shareWhatsapp => 'Share with Customer via WhatsApp';
+
+  @override
+  String get vehicleProfiles => 'Egyptian Vehicle Profiles';
+
+  @override
+  String get searchVehicles => 'Search vehicles (Make, Model, Year, Engine)...';
+
+  @override
+  String get tabEgyptianPresets => 'Egyptian Presets';
+
+  @override
+  String get tabGlobalBrands => '250+ Global Brands';
+
+  @override
+  String noProfilesFound(String p0, String p1) {
+    return 'No vehicle profiles found in \'$p0\' matching \'$p1\'';
+  }
+
+  @override
+  String noBrandsFound(String p0, String p1) {
+    return 'No brands found for \'$p0\' matching \'$p1\'';
+  }
+
+  @override
+  String get activeProfile => 'Active Profile';
+
+  @override
+  String get activateProfile => 'Activate';
+
+  @override
+  String get fullTest => 'Full Test';
+
+  @override
+  String get engineLabel => 'Engine';
+
+  @override
+  String get transmissionLabel => 'Transmission';
+
+  @override
+  String get workshopNote => 'Workshop Note';
+
+  @override
+  String get addCustomPid => 'Add Custom PID';
+
+  @override
+  String egyptianPresetsCount(String p0) {
+    return '$p0 Egyptian Presets';
+  }
+
+  @override
+  String get genericUdsObd2 => 'Generic UDS / OBD2';
+
+  @override
+  String get selectModel => 'Select Model';
+
+  @override
+  String activatedGenericProfile(String p0) {
+    return 'Activated generic diagnostic profile for $p0';
+  }
+
+  @override
+  String brandModelsTitle(String p0) {
+    return '$p0 Models';
+  }
+
+  @override
+  String get testShort => 'Test';
+
+  @override
+  String get readinessMonitors => 'Emissions Readiness Monitors';
+
+  @override
+  String get refreshReadiness => 'Refresh Readiness';
+
+  @override
+  String get readinessQuerying =>
+      'Querying I/M Readiness drive cycle monitors (Mode 01 PID 01)...';
+
+  @override
+  String get readinessNoData => 'No readiness monitor data retrieved yet';
+
+  @override
+  String get readinessAllReady => 'All Drive Cycle Monitors Ready';
+
+  @override
+  String readinessIncomplete(String p0) {
+    return 'Incomplete Monitors Detected ($p0)';
+  }
+
+  @override
+  String readinessSummary(String p0, String p1, String p2) {
+    return 'Ready: $p0 | Incomplete: $p1 | Check Engine: $p2';
+  }
+
+  @override
+  String get readinessTip =>
+      'Pre-purchase Inspection Tip: If the Check Engine Light is OFF but several monitors show \'Incomplete\', this indicates fault codes were cleared recently to temporarily hide the light without completing a full drive cycle!';
+
+  @override
+  String get readinessSubtitle => 'Subsystem Readiness Status:';
+
+  @override
+  String get badgeUnsupported => 'Unsupported';
+
+  @override
+  String get badgeReady => 'Ready';
+
+  @override
+  String get badgeIncomplete => 'Incomplete';
+
+  @override
+  String get refreshEcuDetails => 'Refresh ECU Details';
+
+  @override
+  String get ecuQuerying =>
+      'Querying VIN and calibration identification numbers (Mode 09)...';
+
+  @override
+  String get ecuModuleLabel => 'Electronic Control Module:';
+
+  @override
+  String get ecuDefaultName => 'Engine Control Module (ECM/PCM)';
+
+  @override
+  String get notAvailable => 'Not Available';
+
+  @override
+  String get notDetected => 'Not Detected';
+
+  @override
+  String get calIdLabel => 'Calibration ID (CALID):';
+
+  @override
+  String get calIdSubtitle =>
+      'Software revision and firmware version installed on the engine control unit';
+
+  @override
+  String get cvnLabel => 'Calibration Verification Number (CVN):';
+
+  @override
+  String get cvnSubtitle =>
+      'Cryptographic checksum ensuring software calibration integrity and authenticity';
+
+  @override
+  String get vinSubtitle =>
+      'Standard vehicle electronic identification number stored in ECU flash memory';
+
+  @override
+  String get protocolSubtitle =>
+      'Active serial communications bus protocol over OBD-II DLC connector';
+
+  @override
+  String get ecuTechNoteTitle =>
+      'Technician Note (ECU Software & Remap Check):';
+
+  @override
+  String get ecuTechNoteBody =>
+      'CALID and CVN codes are used by service centers to verify whether vehicle software has been altered with aftermarket ECU tunes/remaps, or if an official OEM factory reflash is needed to resolve technical service bulletins.';
+
+  @override
+  String get terminalTitle => 'OBD Terminal';
+
+  @override
+  String get clearTerminalTooltip => 'Clear Terminal Logs';
+
+  @override
+  String get terminalReadyHint =>
+      'ELM327 Serial Terminal Ready.\nType an AT or OBD command below or tap a quick shortcut above.';
+
+  @override
+  String get terminalInputHint =>
+      'Enter AT or OBD command (e.g. AT RV or 01 0C)...';
+
+  @override
+  String get sendCommandTooltip => 'Send Command';
+
+  @override
+  String get connectFirstSnack => 'Please connect to OBD adapter first';
+
+  @override
+  String get qcResetAdapter => 'Reset Adapter';
+
+  @override
+  String get qcReadBattery => 'Read Battery';
+
+  @override
+  String get qcActiveProtocol => 'Active Protocol';
+
+  @override
+  String get qcSupportedPids => 'Supported PIDs 1-20';
+
+  @override
+  String get qcEngineRpm => 'Engine RPM';
+
+  @override
+  String get qcVehicleSpeed => 'Vehicle Speed';
+
+  @override
+  String get qcReadStoredDtcs => 'Read Stored DTCs';
+
+  @override
+  String get qcReadPendingDtcs => 'Read Pending DTCs';
+
+  @override
+  String get qcReadVin => 'Read VIN';
+
+  @override
+  String get mode06Title => 'Mode \$06 Misfire & Component Monitor';
+
+  @override
+  String get mode06ScanTooltip => 'Scan Mode \$06';
+
+  @override
+  String mode06Summary(String p0, String p1) {
+    return 'Mode \$06 Summary: $p0 Monitors ($p1 Out-of-Spec)';
+  }
+
+  @override
+  String get mode06Subtitle =>
+      'Reads early cylinder misfire counters, catalyst & O2 margins before a Check Engine light triggers.';
+
+  @override
+  String get mode06ConnectFirst =>
+      'Connect an OBD adapter to query real-time Mode \$06 component monitors.';
+
+  @override
+  String get mode06Scanning => 'Interrogating ECU Mode \$06 Test IDs...';
+
+  @override
+  String get mode06NoResults =>
+      'No Mode \$06 test records returned by this ECU for the current filter.';
+
+  @override
+  String get mode06Rescan => 'Re-Scan Mode \$06';
+
+  @override
+  String get filterAll => 'All';
+
+  @override
+  String get filterMisfires => 'Misfires';
+
+  @override
+  String get filterO2Cat => 'O2 & Catalyst';
+
+  @override
+  String get filterFailedOnly => 'Failed Only';
+
+  @override
+  String get statusNoResult => 'NO RESULT YET';
+
+  @override
+  String get statusInfo => 'INFO';
+
+  @override
+  String get statusPass => 'PASS';
+
+  @override
+  String get statusFail => 'FAIL';
+
+  @override
+  String minLimitLabel(String p0, String p1) {
+    return 'Min: $p0 $p1';
+  }
+
+  @override
+  String maxLimitLabel(String p0, String p1) {
+    return 'Max: $p0 $p1';
+  }
+
+  @override
+  String get neverCompleted => 'Never completed since codes were erased';
+
+  @override
+  String get constantNoLimits => 'Constant (no limits)';
+
+  @override
+  String get rawUnit => '(raw)';
+
+  @override
+  String get sensorWord => 'sensor';
+
+  @override
+  String rawLogTitle(String p0) {
+    return 'Raw log ($p0)';
+  }
+
+  @override
+  String get exportTooltip => 'Export';
+
+  @override
+  String get exportEvidenceTooltip => 'Export log + feature status';
+
+  @override
+  String get clearTooltip => 'Clear';
+
+  @override
+  String get noCommandsYet => 'No commands sent yet';
+
+  @override
+  String get waitingForData => 'Waiting...';
+
+  @override
+  String get protocolAutoSearch => 'Auto (adapter searches all protocols)';
+
+  @override
+  String get hwChipUsb => 'USB / Serial';
+
+  @override
+  String get hwChipBtClassic => 'BT Classic SPP';
+
+  @override
+  String get hwChipBle => 'BLE 4.0 / 5.0';
+
+  @override
+  String get hwChipWifi => 'Wi-Fi TCP';
+
+  @override
+  String get hwChipAutoVin => 'Auto Car VIN';
+
+  @override
+  String get statusDisconnected => 'Disconnected from adapter';
+
+  @override
+  String get statusDisconnectedShort => 'Disconnected';
 }

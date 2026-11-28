@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -494,6 +495,9 @@ void main() {
         ChangeNotifierProvider<ObdState>.value(
           value: state,
           child: const MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: Locale('en'),
             home: Mode06MonitorScreen(),
           ),
         ),

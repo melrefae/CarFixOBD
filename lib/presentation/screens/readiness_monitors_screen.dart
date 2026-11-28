@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/localization/app_strings_en.dart';
 import '../../data/models/readiness_monitors.dart';
@@ -45,11 +46,11 @@ class _ReadinessMonitorsScreenState extends State<ReadinessMonitorsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.readinessMonitors),
+        title: Text(AppLocalizations.of(context).readinessMonitors),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            tooltip: "Refresh Readiness",
+            tooltip: AppLocalizations.of(context).refreshReadiness,
             onPressed: state.isScanning ? null : () => state.fetchReadinessMonitors(),
           ),
         ],
@@ -58,10 +59,10 @@ class _ReadinessMonitorsScreenState extends State<ReadinessMonitorsScreen> {
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CircularProgressIndicator(color: AppColors.primaryYellow),
+                children: [
+                  const CircularProgressIndicator(color: AppColors.primaryYellow),
                   SizedBox(height: 16),
-                  Text("Querying I/M Readiness drive cycle monitors (Mode 01 PID 01)...", style: TextStyle(color: AppColors.textWhite)),
+                  Text(AppLocalizations.of(context).readinessQuerying, style: TextStyle(color: AppColors.textWhite)),
                 ],
               ),
             )
@@ -69,10 +70,10 @@ class _ReadinessMonitorsScreenState extends State<ReadinessMonitorsScreen> {
               ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.rule_folder_outlined, size: 64, color: AppColors.textDisabled),
+                    children: [
+                      const Icon(Icons.rule_folder_outlined, size: 64, color: AppColors.textDisabled),
                       SizedBox(height: 16),
-                      Text("No readiness monitor data retrieved yet", style: TextStyle(color: AppColors.textWhite)),
+                      Text(AppLocalizations.of(context).readinessNoData, style: TextStyle(color: AppColors.textWhite)),
                     ],
                   ),
                 )
@@ -105,7 +106,7 @@ class _ReadinessMonitorsScreenState extends State<ReadinessMonitorsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    incompleteCount == 0 ? "All Drive Cycle Monitors Ready" : "Incomplete Monitors Detected ($incompleteCount)",
+                                    incompleteCount == 0 ? AppLocalizations.of(context).readinessAllReady : AppLocalizations.of(context).readinessIncomplete('$incompleteCount'),
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -114,7 +115,7 @@ class _ReadinessMonitorsScreenState extends State<ReadinessMonitorsScreen> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    "Ready: $completedCount | Incomplete: $incompleteCount | Check Engine: ${rm.milOn ? 'ON' : 'OFF'}",
+                                    AppLocalizations.of(context).readinessSummary('$completedCount', '$incompleteCount', rm.milOn ? AppLocalizations.of(context).milOn : AppLocalizations.of(context).milOff),
                                     style: const TextStyle(fontSize: 12, color: AppColors.textWhite),
                                   ),
                                 ],
@@ -136,12 +137,12 @@ class _ReadinessMonitorsScreenState extends State<ReadinessMonitorsScreen> {
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Icon(Icons.info_outline, color: AppColors.primaryYellow, size: 20),
+                          children: [
+                            const Icon(Icons.info_outline, color: AppColors.primaryYellow, size: 20),
                             SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                "Pre-purchase Inspection Tip: If the Check Engine Light is OFF but several monitors show 'Incomplete', this indicates fault codes were cleared recently to temporarily hide the light without completing a full drive cycle!",
+                                AppLocalizations.of(context).readinessTip,
                                 style: TextStyle(fontSize: 11, color: AppColors.textWhite, height: 1.4),
                               ),
                             ),
@@ -151,8 +152,8 @@ class _ReadinessMonitorsScreenState extends State<ReadinessMonitorsScreen> {
 
                       const SizedBox(height: 16),
 
-                      const Text(
-                        "Subsystem Readiness Status:",
+                      Text(
+                        AppLocalizations.of(context).readinessSubtitle,
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primaryYellow),
                       ),
                       const SizedBox(height: 10),
@@ -166,15 +167,15 @@ class _ReadinessMonitorsScreenState extends State<ReadinessMonitorsScreen> {
 
   Widget _buildMonitorCard(MonitorStatus m) {
     Color badgeColor = AppColors.textDisabled;
-    String badgeText = "Unsupported";
+    String badgeText = AppLocalizations.of(context).badgeUnsupported;
 
     if (m.isAvailable) {
       if (m.isComplete) {
         badgeColor = AppColors.successGreen;
-        badgeText = "Ready";
+        badgeText = AppLocalizations.of(context).badgeReady;
       } else {
         badgeColor = AppColors.warningOrange;
-        badgeText = "Incomplete";
+        badgeText = AppLocalizations.of(context).badgeIncomplete;
       }
     }
 

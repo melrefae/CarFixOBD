@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:automotive_scanner/l10n/gen/app_localizations.dart';
 import '../../core/constants/app_colors.dart';
 import '../../data/models/sensor_pid.dart';
 
@@ -114,7 +115,7 @@ class SensorGaugeCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    sensor.isSupported ? (sensor.hasValidReading ? sensor.unit : "Waiting...") : "",
+                    sensor.isSupported ? (sensor.hasValidReading ? sensor.unit : AppLocalizations.of(context).waitingForData) : '',
                     style: const TextStyle(fontSize: 13, color: AppColors.textMuted, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -136,12 +137,15 @@ class SensorGaugeCard extends StatelessWidget {
               const SizedBox(height: 4),
 
               // Min and max range values
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("${sensor.min.toInt()} ${sensor.unit}", style: const TextStyle(fontSize: 9, color: AppColors.textDisabled)),
-                  Text("${sensor.max.toInt()} ${sensor.unit}", style: const TextStyle(fontSize: 9, color: AppColors.textDisabled)),
-                ],
+              Directionality(
+                textDirection: TextDirection.ltr,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("${sensor.min.toInt()} ${sensor.unit}", style: const TextStyle(fontSize: 9, color: AppColors.textDisabled)),
+                    Text("${sensor.max.toInt()} ${sensor.unit}", style: const TextStyle(fontSize: 9, color: AppColors.textDisabled)),
+                  ],
+                ),
               ),
             ],
           ),

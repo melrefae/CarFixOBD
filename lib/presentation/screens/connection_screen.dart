@@ -198,7 +198,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
               child: DropdownButton<int>(
                 isExpanded: true,
                 value: state.protocolOverride,
-                items: [for (final e in _protocolNames.entries) DropdownMenuItem(value: e.key, child: Text(e.value, style: const TextStyle(fontSize: 12), overflow: TextOverflow.ellipsis))],
+                items: [for (final e in _protocolNames.entries) DropdownMenuItem(value: e.key, child: Text(e.key == 0 ? AppLocalizations.of(context).protocolAutoSearch : e.value, style: const TextStyle(fontSize: 12), overflow: TextOverflow.ellipsis))],
                 onChanged: state.isConnecting ? null : (v) { if (v != null) state.setProtocolOverride(v); },
               ),
             ),
@@ -292,7 +292,9 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  state.statusMessage,
+                  state.statusMessage == 'Disconnected from adapter'
+                      ? AppLocalizations.of(context).statusDisconnected
+                      : (state.statusMessage == 'Disconnected' ? AppLocalizations.of(context).statusDisconnectedShort : state.statusMessage),
                   style: const TextStyle(fontSize: 12, color: AppColors.textWhite, fontWeight: FontWeight.w500),
                 ),
               ),
@@ -434,11 +436,11 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                   spacing: 6,
                   runSpacing: 4,
                   children: [
-                    _buildHardwareChip("USB / Serial", AppColors.successGreen),
-                    _buildHardwareChip("BT Classic SPP", AppColors.primaryYellow),
-                    _buildHardwareChip("BLE 4.0 / 5.0", AppColors.accentCyan),
-                    _buildHardwareChip("Wi-Fi TCP", AppColors.electricBlue),
-                    _buildHardwareChip("Auto Car VIN", AppColors.primaryAmber),
+                    _buildHardwareChip(AppLocalizations.of(context).hwChipUsb, AppColors.successGreen),
+                    _buildHardwareChip(AppLocalizations.of(context).hwChipBtClassic, AppColors.primaryYellow),
+                    _buildHardwareChip(AppLocalizations.of(context).hwChipBle, AppColors.accentCyan),
+                    _buildHardwareChip(AppLocalizations.of(context).hwChipWifi, AppColors.electricBlue),
+                    _buildHardwareChip(AppLocalizations.of(context).hwChipAutoVin, AppColors.primaryAmber),
                   ],
                 ),
               ],

@@ -2167,6 +2167,666 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Target: {value}'**
   String targetValue(Object value);
+
+  /// No description provided for @inspectionReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspection Reports'**
+  String get inspectionReports;
+
+  /// No description provided for @cloudBackupTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud Backup & Fleet Sync'**
+  String get cloudBackupTooltip;
+
+  /// No description provided for @searchReportsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by plate number, VIN, or customer...'**
+  String get searchReportsHint;
+
+  /// No description provided for @noReportsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved inspection reports found'**
+  String get noReportsFound;
+
+  /// No description provided for @noReportsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Run a \'Quick Scan\' to generate and save customer inspection reports'**
+  String get noReportsHint;
+
+  /// No description provided for @deleteReportTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Report'**
+  String get deleteReportTooltip;
+
+  /// No description provided for @reportCustomerLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer: {p0} | Phone: {p1}'**
+  String reportCustomerLine(String p0, String p1);
+
+  /// No description provided for @reportDateLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Date: {p0}'**
+  String reportDateLine(String p0);
+
+  /// No description provided for @allSystemsClear.
+  ///
+  /// In en, this message translates to:
+  /// **'All Systems Clear'**
+  String get allSystemsClear;
+
+  /// No description provided for @troubleCodesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{p0} Trouble Codes'**
+  String troubleCodesCount(String p0);
+
+  /// No description provided for @voltageLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Voltage: {p0}V'**
+  String voltageLine(String p0);
+
+  /// No description provided for @reportNotesLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Technician Notes: {p0}'**
+  String reportNotesLine(String p0);
+
+  /// No description provided for @exportPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Export PDF Report'**
+  String get exportPdf;
+
+  /// No description provided for @shareWhatsapp.
+  ///
+  /// In en, this message translates to:
+  /// **'Share with Customer via WhatsApp'**
+  String get shareWhatsapp;
+
+  /// No description provided for @vehicleProfiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Egyptian Vehicle Profiles'**
+  String get vehicleProfiles;
+
+  /// No description provided for @searchVehicles.
+  ///
+  /// In en, this message translates to:
+  /// **'Search vehicles (Make, Model, Year, Engine)...'**
+  String get searchVehicles;
+
+  /// No description provided for @tabEgyptianPresets.
+  ///
+  /// In en, this message translates to:
+  /// **'Egyptian Presets'**
+  String get tabEgyptianPresets;
+
+  /// No description provided for @tabGlobalBrands.
+  ///
+  /// In en, this message translates to:
+  /// **'250+ Global Brands'**
+  String get tabGlobalBrands;
+
+  /// No description provided for @noProfilesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No vehicle profiles found in \'{p0}\' matching \'{p1}\''**
+  String noProfilesFound(String p0, String p1);
+
+  /// No description provided for @noBrandsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No brands found for \'{p0}\' matching \'{p1}\''**
+  String noBrandsFound(String p0, String p1);
+
+  /// No description provided for @activeProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Profile'**
+  String get activeProfile;
+
+  /// No description provided for @activateProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate'**
+  String get activateProfile;
+
+  /// No description provided for @fullTest.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Test'**
+  String get fullTest;
+
+  /// No description provided for @engineLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Engine'**
+  String get engineLabel;
+
+  /// No description provided for @transmissionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Transmission'**
+  String get transmissionLabel;
+
+  /// No description provided for @workshopNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Workshop Note'**
+  String get workshopNote;
+
+  /// No description provided for @addCustomPid.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Custom PID'**
+  String get addCustomPid;
+
+  /// No description provided for @egyptianPresetsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{p0} Egyptian Presets'**
+  String egyptianPresetsCount(String p0);
+
+  /// No description provided for @genericUdsObd2.
+  ///
+  /// In en, this message translates to:
+  /// **'Generic UDS / OBD2'**
+  String get genericUdsObd2;
+
+  /// No description provided for @selectModel.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Model'**
+  String get selectModel;
+
+  /// No description provided for @activatedGenericProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Activated generic diagnostic profile for {p0}'**
+  String activatedGenericProfile(String p0);
+
+  /// No description provided for @brandModelsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{p0} Models'**
+  String brandModelsTitle(String p0);
+
+  /// No description provided for @testShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Test'**
+  String get testShort;
+
+  /// No description provided for @readinessMonitors.
+  ///
+  /// In en, this message translates to:
+  /// **'Emissions Readiness Monitors'**
+  String get readinessMonitors;
+
+  /// No description provided for @refreshReadiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Readiness'**
+  String get refreshReadiness;
+
+  /// No description provided for @readinessQuerying.
+  ///
+  /// In en, this message translates to:
+  /// **'Querying I/M Readiness drive cycle monitors (Mode 01 PID 01)...'**
+  String get readinessQuerying;
+
+  /// No description provided for @readinessNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No readiness monitor data retrieved yet'**
+  String get readinessNoData;
+
+  /// No description provided for @readinessAllReady.
+  ///
+  /// In en, this message translates to:
+  /// **'All Drive Cycle Monitors Ready'**
+  String get readinessAllReady;
+
+  /// No description provided for @readinessIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Incomplete Monitors Detected ({p0})'**
+  String readinessIncomplete(String p0);
+
+  /// No description provided for @readinessSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready: {p0} | Incomplete: {p1} | Check Engine: {p2}'**
+  String readinessSummary(String p0, String p1, String p2);
+
+  /// No description provided for @readinessTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Pre-purchase Inspection Tip: If the Check Engine Light is OFF but several monitors show \'Incomplete\', this indicates fault codes were cleared recently to temporarily hide the light without completing a full drive cycle!'**
+  String get readinessTip;
+
+  /// No description provided for @readinessSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Subsystem Readiness Status:'**
+  String get readinessSubtitle;
+
+  /// No description provided for @badgeUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported'**
+  String get badgeUnsupported;
+
+  /// No description provided for @badgeReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready'**
+  String get badgeReady;
+
+  /// No description provided for @badgeIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Incomplete'**
+  String get badgeIncomplete;
+
+  /// No description provided for @refreshEcuDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh ECU Details'**
+  String get refreshEcuDetails;
+
+  /// No description provided for @ecuQuerying.
+  ///
+  /// In en, this message translates to:
+  /// **'Querying VIN and calibration identification numbers (Mode 09)...'**
+  String get ecuQuerying;
+
+  /// No description provided for @ecuModuleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Electronic Control Module:'**
+  String get ecuModuleLabel;
+
+  /// No description provided for @ecuDefaultName.
+  ///
+  /// In en, this message translates to:
+  /// **'Engine Control Module (ECM/PCM)'**
+  String get ecuDefaultName;
+
+  /// No description provided for @notAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Available'**
+  String get notAvailable;
+
+  /// No description provided for @notDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Detected'**
+  String get notDetected;
+
+  /// No description provided for @calIdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Calibration ID (CALID):'**
+  String get calIdLabel;
+
+  /// No description provided for @calIdSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Software revision and firmware version installed on the engine control unit'**
+  String get calIdSubtitle;
+
+  /// No description provided for @cvnLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Calibration Verification Number (CVN):'**
+  String get cvnLabel;
+
+  /// No description provided for @cvnSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cryptographic checksum ensuring software calibration integrity and authenticity'**
+  String get cvnSubtitle;
+
+  /// No description provided for @vinSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard vehicle electronic identification number stored in ECU flash memory'**
+  String get vinSubtitle;
+
+  /// No description provided for @protocolSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Active serial communications bus protocol over OBD-II DLC connector'**
+  String get protocolSubtitle;
+
+  /// No description provided for @ecuTechNoteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Technician Note (ECU Software & Remap Check):'**
+  String get ecuTechNoteTitle;
+
+  /// No description provided for @ecuTechNoteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'CALID and CVN codes are used by service centers to verify whether vehicle software has been altered with aftermarket ECU tunes/remaps, or if an official OEM factory reflash is needed to resolve technical service bulletins.'**
+  String get ecuTechNoteBody;
+
+  /// No description provided for @terminalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'OBD Terminal'**
+  String get terminalTitle;
+
+  /// No description provided for @clearTerminalTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Terminal Logs'**
+  String get clearTerminalTooltip;
+
+  /// No description provided for @terminalReadyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'ELM327 Serial Terminal Ready.\nType an AT or OBD command below or tap a quick shortcut above.'**
+  String get terminalReadyHint;
+
+  /// No description provided for @terminalInputHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter AT or OBD command (e.g. AT RV or 01 0C)...'**
+  String get terminalInputHint;
+
+  /// No description provided for @sendCommandTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Command'**
+  String get sendCommandTooltip;
+
+  /// No description provided for @connectFirstSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Please connect to OBD adapter first'**
+  String get connectFirstSnack;
+
+  /// No description provided for @qcResetAdapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Adapter'**
+  String get qcResetAdapter;
+
+  /// No description provided for @qcReadBattery.
+  ///
+  /// In en, this message translates to:
+  /// **'Read Battery'**
+  String get qcReadBattery;
+
+  /// No description provided for @qcActiveProtocol.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Protocol'**
+  String get qcActiveProtocol;
+
+  /// No description provided for @qcSupportedPids.
+  ///
+  /// In en, this message translates to:
+  /// **'Supported PIDs 1-20'**
+  String get qcSupportedPids;
+
+  /// No description provided for @qcEngineRpm.
+  ///
+  /// In en, this message translates to:
+  /// **'Engine RPM'**
+  String get qcEngineRpm;
+
+  /// No description provided for @qcVehicleSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle Speed'**
+  String get qcVehicleSpeed;
+
+  /// No description provided for @qcReadStoredDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'Read Stored DTCs'**
+  String get qcReadStoredDtcs;
+
+  /// No description provided for @qcReadPendingDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'Read Pending DTCs'**
+  String get qcReadPendingDtcs;
+
+  /// No description provided for @qcReadVin.
+  ///
+  /// In en, this message translates to:
+  /// **'Read VIN'**
+  String get qcReadVin;
+
+  /// No description provided for @mode06Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Mode \$06 Misfire & Component Monitor'**
+  String get mode06Title;
+
+  /// No description provided for @mode06ScanTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan Mode \$06'**
+  String get mode06ScanTooltip;
+
+  /// No description provided for @mode06Summary.
+  ///
+  /// In en, this message translates to:
+  /// **'Mode \$06 Summary: {p0} Monitors ({p1} Out-of-Spec)'**
+  String mode06Summary(String p0, String p1);
+
+  /// No description provided for @mode06Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reads early cylinder misfire counters, catalyst & O2 margins before a Check Engine light triggers.'**
+  String get mode06Subtitle;
+
+  /// No description provided for @mode06ConnectFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect an OBD adapter to query real-time Mode \$06 component monitors.'**
+  String get mode06ConnectFirst;
+
+  /// No description provided for @mode06Scanning.
+  ///
+  /// In en, this message translates to:
+  /// **'Interrogating ECU Mode \$06 Test IDs...'**
+  String get mode06Scanning;
+
+  /// No description provided for @mode06NoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No Mode \$06 test records returned by this ECU for the current filter.'**
+  String get mode06NoResults;
+
+  /// No description provided for @mode06Rescan.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-Scan Mode \$06'**
+  String get mode06Rescan;
+
+  /// No description provided for @filterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get filterAll;
+
+  /// No description provided for @filterMisfires.
+  ///
+  /// In en, this message translates to:
+  /// **'Misfires'**
+  String get filterMisfires;
+
+  /// No description provided for @filterO2Cat.
+  ///
+  /// In en, this message translates to:
+  /// **'O2 & Catalyst'**
+  String get filterO2Cat;
+
+  /// No description provided for @filterFailedOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed Only'**
+  String get filterFailedOnly;
+
+  /// No description provided for @statusNoResult.
+  ///
+  /// In en, this message translates to:
+  /// **'NO RESULT YET'**
+  String get statusNoResult;
+
+  /// No description provided for @statusInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'INFO'**
+  String get statusInfo;
+
+  /// No description provided for @statusPass.
+  ///
+  /// In en, this message translates to:
+  /// **'PASS'**
+  String get statusPass;
+
+  /// No description provided for @statusFail.
+  ///
+  /// In en, this message translates to:
+  /// **'FAIL'**
+  String get statusFail;
+
+  /// No description provided for @minLimitLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Min: {p0} {p1}'**
+  String minLimitLabel(String p0, String p1);
+
+  /// No description provided for @maxLimitLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Max: {p0} {p1}'**
+  String maxLimitLabel(String p0, String p1);
+
+  /// No description provided for @neverCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Never completed since codes were erased'**
+  String get neverCompleted;
+
+  /// No description provided for @constantNoLimits.
+  ///
+  /// In en, this message translates to:
+  /// **'Constant (no limits)'**
+  String get constantNoLimits;
+
+  /// No description provided for @rawUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'(raw)'**
+  String get rawUnit;
+
+  /// No description provided for @sensorWord.
+  ///
+  /// In en, this message translates to:
+  /// **'sensor'**
+  String get sensorWord;
+
+  /// No description provided for @rawLogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Raw log ({p0})'**
+  String rawLogTitle(String p0);
+
+  /// No description provided for @exportTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get exportTooltip;
+
+  /// No description provided for @exportEvidenceTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Export log + feature status'**
+  String get exportEvidenceTooltip;
+
+  /// No description provided for @clearTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get clearTooltip;
+
+  /// No description provided for @noCommandsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No commands sent yet'**
+  String get noCommandsYet;
+
+  /// No description provided for @waitingForData.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting...'**
+  String get waitingForData;
+
+  /// No description provided for @protocolAutoSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto (adapter searches all protocols)'**
+  String get protocolAutoSearch;
+
+  /// No description provided for @hwChipUsb.
+  ///
+  /// In en, this message translates to:
+  /// **'USB / Serial'**
+  String get hwChipUsb;
+
+  /// No description provided for @hwChipBtClassic.
+  ///
+  /// In en, this message translates to:
+  /// **'BT Classic SPP'**
+  String get hwChipBtClassic;
+
+  /// No description provided for @hwChipBle.
+  ///
+  /// In en, this message translates to:
+  /// **'BLE 4.0 / 5.0'**
+  String get hwChipBle;
+
+  /// No description provided for @hwChipWifi.
+  ///
+  /// In en, this message translates to:
+  /// **'Wi-Fi TCP'**
+  String get hwChipWifi;
+
+  /// No description provided for @hwChipAutoVin.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Car VIN'**
+  String get hwChipAutoVin;
+
+  /// No description provided for @statusDisconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected from adapter'**
+  String get statusDisconnected;
+
+  /// No description provided for @statusDisconnectedShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected'**
+  String get statusDisconnectedShort;
 }
 
 class _AppLocalizationsDelegate

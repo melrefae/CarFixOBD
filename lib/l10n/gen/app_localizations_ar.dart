@@ -1128,4 +1128,380 @@ class AppLocalizationsAr extends AppLocalizations {
   String targetValue(Object value) {
     return 'المستهدف: $value';
   }
+
+  @override
+  String get inspectionReports => 'تقارير الفحص';
+
+  @override
+  String get cloudBackupTooltip => 'النسخ الاحتياطي السحابي والمزامنة';
+
+  @override
+  String get searchReportsHint => 'ابحث برقم اللوحة أو الشاسيه أو العميل...';
+
+  @override
+  String get noReportsFound => 'لا توجد تقارير فحص محفوظة';
+
+  @override
+  String get noReportsHint =>
+      'شغّل «الفحص السريع» لإنشاء وحفظ تقارير فحص العملاء';
+
+  @override
+  String get deleteReportTooltip => 'حذف التقرير';
+
+  @override
+  String reportCustomerLine(String p0, String p1) {
+    return 'العميل: $p0 | الهاتف: $p1';
+  }
+
+  @override
+  String reportDateLine(String p0) {
+    return 'التاريخ: $p0';
+  }
+
+  @override
+  String get allSystemsClear => 'كل الأنظمة سليمة';
+
+  @override
+  String troubleCodesCount(String p0) {
+    return 'أعطال: $p0';
+  }
+
+  @override
+  String voltageLine(String p0) {
+    return 'الفولت: $p0';
+  }
+
+  @override
+  String reportNotesLine(String p0) {
+    return 'ملاحظات الفني: $p0';
+  }
+
+  @override
+  String get exportPdf => 'تصدير تقرير PDF';
+
+  @override
+  String get shareWhatsapp => 'مشاركة مع العميل عبر واتساب';
+
+  @override
+  String get vehicleProfiles => 'ملفات السيارات المصرية';
+
+  @override
+  String get searchVehicles =>
+      'ابحث عن سيارة (الماركة، الموديل، السنة، المحرك)...';
+
+  @override
+  String get tabEgyptianPresets => 'إعدادات مصرية جاهزة';
+
+  @override
+  String get tabGlobalBrands => 'أكثر من 250 ماركة عالمية';
+
+  @override
+  String noProfilesFound(String p0, String p1) {
+    return 'لا توجد ملفات سيارات في \'$p0\' تطابق \'$p1\'';
+  }
+
+  @override
+  String noBrandsFound(String p0, String p1) {
+    return 'لا توجد ماركات في \'$p0\' تطابق \'$p1\'';
+  }
+
+  @override
+  String get activeProfile => 'الملف النشط';
+
+  @override
+  String get activateProfile => 'تفعيل';
+
+  @override
+  String get fullTest => 'فحص شامل';
+
+  @override
+  String get engineLabel => 'المحرك';
+
+  @override
+  String get transmissionLabel => 'الفتيس';
+
+  @override
+  String get workshopNote => 'ملاحظة الورشة';
+
+  @override
+  String get addCustomPid => 'إضافة PID مخصص';
+
+  @override
+  String egyptianPresetsCount(String p0) {
+    return '$p0 إعدادات جاهزة';
+  }
+
+  @override
+  String get genericUdsObd2 => 'UDS / OBD2 عام';
+
+  @override
+  String get selectModel => 'اختر الموديل';
+
+  @override
+  String activatedGenericProfile(String p0) {
+    return 'تم تفعيل ملف الفحص العام لـ $p0';
+  }
+
+  @override
+  String brandModelsTitle(String p0) {
+    return 'طرازات $p0';
+  }
+
+  @override
+  String get testShort => 'فحص';
+
+  @override
+  String get readinessMonitors => 'عدادات جاهزية الانبعاثات';
+
+  @override
+  String get refreshReadiness => 'تحديث الجاهزية';
+
+  @override
+  String get readinessQuerying =>
+      'جاري قراءة عدادات جاهزية دورة القيادة (Mode 01 PID 01)...';
+
+  @override
+  String get readinessNoData => 'لا توجد بيانات جاهزية بعد';
+
+  @override
+  String get readinessAllReady => 'كل عدادات دورة القيادة جاهزة';
+
+  @override
+  String readinessIncomplete(String p0) {
+    return 'يوجد عدادات غير مكتملة ($p0)';
+  }
+
+  @override
+  String readinessSummary(String p0, String p1, String p2) {
+    return 'جاهز: $p0 | غير مكتمل: $p1 | لمبة المحرك: $p2';
+  }
+
+  @override
+  String get readinessTip =>
+      'نصيحة فحص قبل الشراء: لو لمبة المحرك مطفية لكن في عدادات «غير مكتملة»، فده معناه إن الأكواد اتمسحت مؤخرًا لإخفاء اللمبة مؤقتًا من غير اكتمال دورة القيادة!';
+
+  @override
+  String get readinessSubtitle => 'حالة جاهزية الأنظمة:';
+
+  @override
+  String get badgeUnsupported => 'غير مدعوم';
+
+  @override
+  String get badgeReady => 'جاهز';
+
+  @override
+  String get badgeIncomplete => 'غير مكتمل';
+
+  @override
+  String get refreshEcuDetails => 'تحديث بيانات الكمبيوتر';
+
+  @override
+  String get ecuQuerying =>
+      'جاري قراءة رقم الشاسيه وأرقام المعايرة (Mode 09)...';
+
+  @override
+  String get ecuModuleLabel => 'وحدة التحكم الإلكتروني:';
+
+  @override
+  String get ecuDefaultName => 'كمبيوتر المحرك (ECM/PCM)';
+
+  @override
+  String get notAvailable => 'غير متاح';
+
+  @override
+  String get notDetected => 'لم يُكتشف';
+
+  @override
+  String get calIdLabel => 'رقم المعايرة (CALID):';
+
+  @override
+  String get calIdSubtitle =>
+      'إصدار السوفتوير والفيرموير المثبت على كمبيوتر المحرك';
+
+  @override
+  String get cvnLabel => 'رقم التحقق من المعايرة (CVN):';
+
+  @override
+  String get cvnSubtitle => 'بصمة تحقق تضمن سلامة وأصالة معايرة السوفتوير';
+
+  @override
+  String get vinSubtitle =>
+      'رقم التعريف الإلكتروني القياسي للسيارة المخزن في ذاكرة الكمبيوتر';
+
+  @override
+  String get protocolSubtitle =>
+      'بروتوكول الاتصال التسلسلي النشط عبر فيشة OBD-II';
+
+  @override
+  String get ecuTechNoteTitle => 'ملاحظة للفني (فحص السوفتوير والريماب):';
+
+  @override
+  String get ecuTechNoteBody =>
+      'أكواد CALID و CVN تستخدمها مراكز الصيانة للتحقق مما إذا كان سوفتوير السيارة اتعدل بريماب خارجي، أو لو محتاج إعادة برمجة وكالة لحل نشرات فنية.';
+
+  @override
+  String get terminalTitle => 'شاشة الأوامر';
+
+  @override
+  String get clearTerminalTooltip => 'مسح سجل الأوامر';
+
+  @override
+  String get terminalReadyHint =>
+      'شاشة أوامر ELM327 جاهزة.\nاكتب أمر AT أو OBD بالأسفل أو اضغط اختصار سريع بالأعلى.';
+
+  @override
+  String get terminalInputHint =>
+      'اكتب أمر AT أو OBD (مثال: AT RV أو 01 0C)...';
+
+  @override
+  String get sendCommandTooltip => 'إرسال الأمر';
+
+  @override
+  String get connectFirstSnack => 'وصّل فيشة الفحص أولاً';
+
+  @override
+  String get qcResetAdapter => 'إعادة تشغيل الفيشة';
+
+  @override
+  String get qcReadBattery => 'قراءة البطارية';
+
+  @override
+  String get qcActiveProtocol => 'البروتوكول النشط';
+
+  @override
+  String get qcSupportedPids => 'الـ PIDs المدعومة 1-20';
+
+  @override
+  String get qcEngineRpm => 'دوران المحرك';
+
+  @override
+  String get qcVehicleSpeed => 'سرعة السيارة';
+
+  @override
+  String get qcReadStoredDtcs => 'قراءة الأعطال المسجلة';
+
+  @override
+  String get qcReadPendingDtcs => 'قراءة الأعطال المعلقة';
+
+  @override
+  String get qcReadVin => 'قراءة الشاسيه';
+
+  @override
+  String get mode06Title => 'اختبارات المكونات والمس فاير (Mode 06)';
+
+  @override
+  String get mode06ScanTooltip => 'فحص Mode 06';
+
+  @override
+  String mode06Summary(String p0, String p1) {
+    return 'نتائج Mode 06: $p0 اختبار ($p1 خارج الحدود)';
+  }
+
+  @override
+  String get mode06Subtitle =>
+      'يكشف عدادات تفويت السلندرات وحالة علبة البيئة والحساسات قبل إضاءة لمبة الأعطال.';
+
+  @override
+  String get mode06ConnectFirst =>
+      'وصّل فيشة الفحص بالسيارة أولاً لقراءة اختبارات Mode 06.';
+
+  @override
+  String get mode06Scanning => 'جاري قراءة اختبارات Mode 06 من الكمبيوتر...';
+
+  @override
+  String get mode06NoResults =>
+      'لا توجد نتائج Mode 06 من الكمبيوتر لهذا الفلتر.';
+
+  @override
+  String get mode06Rescan => 'إعادة فحص Mode 06';
+
+  @override
+  String get filterAll => 'الكل';
+
+  @override
+  String get filterMisfires => 'المس فاير';
+
+  @override
+  String get filterO2Cat => 'الأكسجين وعلبة البيئة';
+
+  @override
+  String get filterFailedOnly => 'الفاشلة فقط';
+
+  @override
+  String get statusNoResult => 'لا نتيجة بعد';
+
+  @override
+  String get statusInfo => 'معلومة';
+
+  @override
+  String get statusPass => 'ناجح';
+
+  @override
+  String get statusFail => 'فاشل';
+
+  @override
+  String minLimitLabel(String p0, String p1) {
+    return 'أدنى: $p0 $p1';
+  }
+
+  @override
+  String maxLimitLabel(String p0, String p1) {
+    return 'أقصى: $p0 $p1';
+  }
+
+  @override
+  String get neverCompleted => 'لم يكتمل منذ مسح الأكواد';
+
+  @override
+  String get constantNoLimits => 'قيمة ثابتة (بدون حدود)';
+
+  @override
+  String get rawUnit => '(خام)';
+
+  @override
+  String get sensorWord => 'حساس';
+
+  @override
+  String rawLogTitle(String p0) {
+    return 'سجل الأوامر ($p0)';
+  }
+
+  @override
+  String get exportTooltip => 'تصدير';
+
+  @override
+  String get exportEvidenceTooltip => 'تصدير السجل مع حالة الميزات';
+
+  @override
+  String get clearTooltip => 'مسح';
+
+  @override
+  String get noCommandsYet => 'لا توجد أوامر بعد';
+
+  @override
+  String get waitingForData => 'بانتظار البيانات...';
+
+  @override
+  String get protocolAutoSearch => 'تلقائي (الفيشة تبحث في كل البروتوكولات)';
+
+  @override
+  String get hwChipUsb => 'USB / سيريال';
+
+  @override
+  String get hwChipBtClassic => 'بلوتوث كلاسيك SPP';
+
+  @override
+  String get hwChipBle => 'بلوتوث BLE 4.0 / 5.0';
+
+  @override
+  String get hwChipWifi => 'واي فاي TCP';
+
+  @override
+  String get hwChipAutoVin => 'قراءة الشاسيه تلقائيًا';
+
+  @override
+  String get statusDisconnected => 'غير متصل بفيشة الفحص';
+
+  @override
+  String get statusDisconnectedShort => 'غير متصل';
 }

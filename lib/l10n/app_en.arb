@@ -378,5 +378,251 @@
   "railPressure": "Common Rail Fuel Pressure",
   "turboBoost": "Turbo Boost Pressure",
   "actualValue": "Actual: {value}",
-  "targetValue": "Target: {value}"
+  "targetValue": "Target: {value}",
+  "inspectionReports": "Inspection Reports",
+  "cloudBackupTooltip": "Cloud Backup & Fleet Sync",
+  "searchReportsHint": "Search by plate number, VIN, or customer...",
+  "noReportsFound": "No saved inspection reports found",
+  "noReportsHint": "Run a 'Quick Scan' to generate and save customer inspection reports",
+  "deleteReportTooltip": "Delete Report",
+  "reportCustomerLine": "Customer: {p0} | Phone: {p1}",
+  "@reportCustomerLine": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "reportDateLine": "Date: {p0}",
+  "@reportDateLine": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "allSystemsClear": "All Systems Clear",
+  "troubleCodesCount": "{p0} Trouble Codes",
+  "@troubleCodesCount": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "voltageLine": "Voltage: {p0}V",
+  "@voltageLine": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "reportNotesLine": "Technician Notes: {p0}",
+  "@reportNotesLine": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "exportPdf": "Export PDF Report",
+  "shareWhatsapp": "Share with Customer via WhatsApp",
+  "vehicleProfiles": "Egyptian Vehicle Profiles",
+  "searchVehicles": "Search vehicles (Make, Model, Year, Engine)...",
+  "tabEgyptianPresets": "Egyptian Presets",
+  "tabGlobalBrands": "250+ Global Brands",
+  "noProfilesFound": "No vehicle profiles found in '{p0}' matching '{p1}'",
+  "@noProfilesFound": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "noBrandsFound": "No brands found for '{p0}' matching '{p1}'",
+  "@noBrandsFound": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "activeProfile": "Active Profile",
+  "activateProfile": "Activate",
+  "fullTest": "Full Test",
+  "engineLabel": "Engine",
+  "transmissionLabel": "Transmission",
+  "workshopNote": "Workshop Note",
+  "addCustomPid": "Add Custom PID",
+  "egyptianPresetsCount": "{p0} Egyptian Presets",
+  "@egyptianPresetsCount": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "genericUdsObd2": "Generic UDS / OBD2",
+  "selectModel": "Select Model",
+  "activatedGenericProfile": "Activated generic diagnostic profile for {p0}",
+  "@activatedGenericProfile": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "brandModelsTitle": "{p0} Models",
+  "@brandModelsTitle": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "testShort": "Test",
+  "readinessMonitors": "Emissions Readiness Monitors",
+  "refreshReadiness": "Refresh Readiness",
+  "readinessQuerying": "Querying I/M Readiness drive cycle monitors (Mode 01 PID 01)...",
+  "readinessNoData": "No readiness monitor data retrieved yet",
+  "readinessAllReady": "All Drive Cycle Monitors Ready",
+  "readinessIncomplete": "Incomplete Monitors Detected ({p0})",
+  "@readinessIncomplete": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "readinessSummary": "Ready: {p0} | Incomplete: {p1} | Check Engine: {p2}",
+  "@readinessSummary": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      },
+      "p2": {
+        "type": "String"
+      }
+    }
+  },
+  "readinessTip": "Pre-purchase Inspection Tip: If the Check Engine Light is OFF but several monitors show 'Incomplete', this indicates fault codes were cleared recently to temporarily hide the light without completing a full drive cycle!",
+  "readinessSubtitle": "Subsystem Readiness Status:",
+  "badgeUnsupported": "Unsupported",
+  "badgeReady": "Ready",
+  "badgeIncomplete": "Incomplete",
+  "refreshEcuDetails": "Refresh ECU Details",
+  "ecuQuerying": "Querying VIN and calibration identification numbers (Mode 09)...",
+  "ecuModuleLabel": "Electronic Control Module:",
+  "ecuDefaultName": "Engine Control Module (ECM/PCM)",
+  "notAvailable": "Not Available",
+  "notDetected": "Not Detected",
+  "calIdLabel": "Calibration ID (CALID):",
+  "calIdSubtitle": "Software revision and firmware version installed on the engine control unit",
+  "cvnLabel": "Calibration Verification Number (CVN):",
+  "cvnSubtitle": "Cryptographic checksum ensuring software calibration integrity and authenticity",
+  "vinSubtitle": "Standard vehicle electronic identification number stored in ECU flash memory",
+  "protocolSubtitle": "Active serial communications bus protocol over OBD-II DLC connector",
+  "ecuTechNoteTitle": "Technician Note (ECU Software & Remap Check):",
+  "ecuTechNoteBody": "CALID and CVN codes are used by service centers to verify whether vehicle software has been altered with aftermarket ECU tunes/remaps, or if an official OEM factory reflash is needed to resolve technical service bulletins.",
+  "terminalTitle": "OBD Terminal",
+  "clearTerminalTooltip": "Clear Terminal Logs",
+  "terminalReadyHint": "ELM327 Serial Terminal Ready.\nType an AT or OBD command below or tap a quick shortcut above.",
+  "terminalInputHint": "Enter AT or OBD command (e.g. AT RV or 01 0C)...",
+  "sendCommandTooltip": "Send Command",
+  "connectFirstSnack": "Please connect to OBD adapter first",
+  "qcResetAdapter": "Reset Adapter",
+  "qcReadBattery": "Read Battery",
+  "qcActiveProtocol": "Active Protocol",
+  "qcSupportedPids": "Supported PIDs 1-20",
+  "qcEngineRpm": "Engine RPM",
+  "qcVehicleSpeed": "Vehicle Speed",
+  "qcReadStoredDtcs": "Read Stored DTCs",
+  "qcReadPendingDtcs": "Read Pending DTCs",
+  "qcReadVin": "Read VIN",
+  "mode06Title": "Mode $06 Misfire & Component Monitor",
+  "mode06ScanTooltip": "Scan Mode $06",
+  "mode06Summary": "Mode $06 Summary: {p0} Monitors ({p1} Out-of-Spec)",
+  "@mode06Summary": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "mode06Subtitle": "Reads early cylinder misfire counters, catalyst & O2 margins before a Check Engine light triggers.",
+  "mode06ConnectFirst": "Connect an OBD adapter to query real-time Mode $06 component monitors.",
+  "mode06Scanning": "Interrogating ECU Mode $06 Test IDs...",
+  "mode06NoResults": "No Mode $06 test records returned by this ECU for the current filter.",
+  "mode06Rescan": "Re-Scan Mode $06",
+  "filterAll": "All",
+  "filterMisfires": "Misfires",
+  "filterO2Cat": "O2 & Catalyst",
+  "filterFailedOnly": "Failed Only",
+  "statusNoResult": "NO RESULT YET",
+  "statusInfo": "INFO",
+  "statusPass": "PASS",
+  "statusFail": "FAIL",
+  "minLimitLabel": "Min: {p0} {p1}",
+  "@minLimitLabel": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "maxLimitLabel": "Max: {p0} {p1}",
+  "@maxLimitLabel": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "neverCompleted": "Never completed since codes were erased",
+  "constantNoLimits": "Constant (no limits)",
+  "rawUnit": "(raw)",
+  "sensorWord": "sensor",
+  "rawLogTitle": "Raw log ({p0})",
+  "@rawLogTitle": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "exportTooltip": "Export",
+  "exportEvidenceTooltip": "Export log + feature status",
+  "clearTooltip": "Clear",
+  "noCommandsYet": "No commands sent yet",
+  "waitingForData": "Waiting...",
+  "protocolAutoSearch": "Auto (adapter searches all protocols)",
+  "hwChipUsb": "USB / Serial",
+  "hwChipBtClassic": "BT Classic SPP",
+  "hwChipBle": "BLE 4.0 / 5.0",
+  "hwChipWifi": "Wi-Fi TCP",
+  "hwChipAutoVin": "Auto Car VIN",
+  "statusDisconnected": "Disconnected from adapter",
+  "statusDisconnectedShort": "Disconnected"
 }
