@@ -9,6 +9,7 @@ import '../../data/models/adapter_profile.dart';
 import '../../data/datasources/wifi_obd_connection.dart';
 import '../providers/obd_state.dart';
 import '../../domain/services/adapter_check.dart';
+import '../../domain/services/uds_read_service.dart';
 
 /// Connection manager screen for Bluetooth Classic, BLE 5.0, Wi-Fi, USB-OTG / Serial, and Universal Auto-Detect
 class ConnectionScreen extends StatefulWidget {
@@ -218,6 +219,37 @@ class _ConnectionScreenState extends State<ConnectionScreen> with SingleTickerPr
                   showDialog(context: context, builder: (_) => AlertDialog(
                     title: const Text('Adapter check'),
                     content: SingleChildScrollView(child: Text(r.toText(), style: const TextStyle(fontSize: 12))),
+                    actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK'))],
+                  ));
+                },
+              ),
+            ),
+          if (state.isConnected)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                icon: const Icon(Icons.memory, size: 18),
+                label: const Text('Read modules, UDS (read-only, CAN only)', style: TextStyle(fontSize: 12)),
+                onPressed: () async {
+                  final d = state.driver;
+                  if (d == null) return;
+                  showDialog(context: context, barrierDismissible: false, builder: (_) => const AlertDialog(content: SizedBox(height: 60, child: Center(child: CircularProgressIndicator()))));
+                  final r = await UdsReadService.run(d);
+                  if (!mounted) return;
+                  Navigator.of(context).pop();
+                  final lines = <String>[r.note, ''];
+                  for (final e in r.ecus.where((e) => e.answered)) {
+                    lines.add('Module ${e.header}');
+                    e.ident.forEach((k, v) => lines.add('  $k: $v'));
+                    if (e.dtcServiceAnswered) {
+                      lines.add(e.dtcs.isEmpty ? '  No fault codes stored' : '  Fault codes:');
+                      for (final c in e.dtcs) { lines.add('   ${c.code} (${c.statusText})'); }
+                    }
+                    if (e.note.isNotEmpty) lines.add('  ${e.note}');
+                  }
+                  showDialog(context: context, builder: (_) => AlertDialog(
+                    title: const Text('Modules (UDS)'),
+                    content: SingleChildScrollView(child: Text(lines.join('\n'), style: const TextStyle(fontSize: 12))),
                     actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK'))],
                   ));
                 },

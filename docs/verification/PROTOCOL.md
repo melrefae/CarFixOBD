@@ -73,3 +73,7 @@ Unit tests with scripted replies only, NOT a real car. Tables (UASID, MID, TID, 
 - Older buses (e.g. Matrix 2007, probably KWP/ISO 9141): Mode 05 O2 sensor tests are read if the car answers (optional); otherwise a note explains why there are no results.
 - All-zero record = "no result yet" (not PASS). Unknown UASID = raw value, flagged. Constants shown as INFO.
 Needs a real-car log.
+
+## Milestone 14 (generic UDS, read-only)
+Scripted tests only, NOT a real car. Connection screen: "Read modules, UDS". Sends only 19 02 FF (fault codes with status) and 22 F190/F187/F189/F191/F18C (identification) to the standard ids 7E0 to 7E7. Nothing is written, cleared or controlled. CAN only: on other buses nothing is sent and the screen says so. Maker-specific module ids (body, ABS, airbag) are not tried. Status bits shown: failed now, pending, confirmed, warning lamp. The third DTC byte is kept raw.
+Needs a real CAN car log.
